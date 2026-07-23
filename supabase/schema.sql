@@ -1,6 +1,12 @@
 -- ============================================================
--- AIRPORTELs SOP Hub — Database schema
--- Run this in the Supabase SQL Editor (Dashboard → SQL → New query).
+-- AIRPORTELs SOP Hub — STANDALONE schema (dedicated Supabase project only)
+--
+-- ⚠️ DO NOT run this on the shared Scheduling project! It creates tables and
+--    functions in the "public" schema (profiles, announcements, is_admin,
+--    handle_new_user, on_auth_user_created) that COLLIDE with the Scheduling
+--    app and will break it. For the shared project use `schema_sop.sql` instead.
+--
+-- Use this file only if the SOP Hub gets its OWN separate Supabase project.
 -- Safe to re-run: uses "if not exists" / "or replace" where possible.
 -- ============================================================
 

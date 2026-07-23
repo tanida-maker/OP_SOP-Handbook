@@ -15,9 +15,9 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, profile } = await getSessionUser();
+  const { user, isAdmin } = await getSessionUser();
   if (!user) redirect("/login?next=/admin");
-  if (profile?.role !== "admin") redirect("/");
+  if (!isAdmin) redirect("/");
 
   return (
     <div className="min-h-screen bg-bg">

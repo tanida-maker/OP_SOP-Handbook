@@ -7,15 +7,11 @@ export default async function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, profile } = await getSessionUser();
-
-  const fullName =
-    profile?.full_name || user?.email?.split("@")[0] || "พนักงาน";
-  const isAdmin = profile?.role === "admin";
+  const { fullName, isAdmin } = await getSessionUser();
 
   return (
     <>
-      <SiteHeader fullName={fullName} isAdmin={isAdmin} />
+      <SiteHeader fullName={fullName ?? "พนักงาน"} isAdmin={isAdmin} />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 md:py-8">
         {children}
       </main>

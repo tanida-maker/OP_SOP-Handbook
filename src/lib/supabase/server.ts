@@ -10,6 +10,8 @@ export async function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      // SOP Hub tables live in the isolated "sop" schema of the shared project.
+      db: { schema: "sop" },
       cookies: {
         getAll() {
           return cookieStore.getAll();
@@ -29,19 +31,25 @@ export async function createClient() {
   );
 }
 
-// Convenience: fetch the current user + profile (role) in one call.
+// Convenience: fetch the current user + whether they are a SOP admin.
+// Admin status comes from sop.is_admin() (backed by the sop.admins table),
+// kept independent from the Scheduling app's own permission system.
 export async function getSessionUser() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { user: null, profile: null, supabase };
+  if (!user) {
+    return { user: null, isAdmin: false, fullName: null as string | null, supabase };
+  }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+  const { data: isAdmin } = await supabase.rpc("is_admin");
+  const meta = user.user_metadata ?? {};
+  const fullName: string =
+    (meta.full_name as string) ||
+    (meta.name as string) ||
+    user.email?.split("@")[0] ||
+    "พนักงาน";
 
-  return { user, profile, supabase };
+  return { user, isAdmin: !!isAdmin, fullName, supabase };
 }

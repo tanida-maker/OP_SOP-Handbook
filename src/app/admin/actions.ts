@@ -6,8 +6,8 @@ import { getSessionUser } from "@/lib/supabase/server";
 type Result = { ok: boolean; error?: string; id?: string; slug?: string };
 
 async function requireAdmin() {
-  const { user, profile, supabase } = await getSessionUser();
-  if (!user || profile?.role !== "admin") {
+  const { user, isAdmin, supabase } = await getSessionUser();
+  if (!user || !isAdmin) {
     throw new Error("ไม่มีสิทธิ์ (admin เท่านั้น)");
   }
   return { supabase, userId: user.id };

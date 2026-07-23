@@ -1,99 +1,88 @@
-# คู่มือเปิดใช้งานจริง (Supabase + Vercel)
+# คู่มือเปิดใช้งานจริง (ใช้ Supabase ร่วมกับแอป Scheduling + Vercel)
 
-ทำตามลำดับนี้ ใช้เวลารวมประมาณ 15–20 นาที
-
----
-
-## ส่วนที่ 1 — Supabase (ฐานข้อมูล + ล็อกอิน + ที่เก็บรูป/วิดีโอ)
-
-### 1.1 สร้างโปรเจกต์
-- ไปที่ https://supabase.com → **Sign in** → **New project**
-- ตั้งชื่อ เช่น `airportels-sop` เลือก Region ใกล้ไทย (`Southeast Asia (Singapore)`)
-- ตั้ง Database password (จดเก็บไว้) → **Create new project** (รอสัก 1–2 นาที)
-
-### 1.2 คัดลอกคีย์
-- เมนูซ้าย → **Project Settings** (รูปเฟือง) → **API**
-- คัดลอก 2 ค่านี้ไว้:
-  - **Project URL** → `https://xxxxx.supabase.co`
-  - **anon public** key (ยาวๆ)
-
-### 1.3 สร้างตาราง + ข้อมูลเริ่มต้น
-- เมนูซ้าย → **SQL Editor** → **New query**
-- เปิดไฟล์ [`supabase/schema.sql`](supabase/schema.sql) คัดลอกทั้งหมด → วาง → **Run** (ต้องขึ้น Success)
-- **New query** อีกครั้ง → เปิดไฟล์ [`supabase/seed_documents.sql`](supabase/seed_documents.sql) (คู่มือที่ย้ายมาจาก PDF) → วาง → **Run**
-
-### 1.4 ตั้งค่าล็อกอิน
-- เมนูซ้าย → **Authentication** → **Providers** → เปิด **Email** (ค่าเริ่มต้นเปิดอยู่)
-- ถ้าอยากให้ทดสอบง่ายช่วงแรก: **Authentication → Sign In / Providers → Email** ปิด "Confirm email" ชั่วคราวได้
-
-### 1.5 สร้างผู้ใช้ + ตั้งเป็นแอดมิน
-- **Authentication → Users → Add user** ใส่อีเมล `op.dept@airportels.asia` + รหัสผ่าน
-- กลับไป **SQL Editor** รันคำสั่งนี้เพื่อตั้งเป็นแอดมิน:
-  ```sql
-  update public.profiles set role = 'admin'
-  where id = (select id from auth.users where email = 'op.dept@airportels.asia');
-  ```
+> **โหมดที่ใช้:** SOP Hub ใช้ **Supabase project เดียวกับแอป Scheduling** โดยแยกตารางไว้ใน
+> schema ชื่อ `sop` (ไม่แตะตารางเดิม `profiles`/`staff`/`announcements`/`wiki`)
+> → พนักงานล็อกอินด้วยบัญชีเดิมได้ทันที (single login)
 
 ---
 
-## ส่วนที่ 2 — รันทดสอบในเครื่อง (ไม่บังคับ แต่แนะนำ)
+## ส่วนที่ 1 — ตั้งค่าฐานข้อมูล (ในโปรเจกต์ Scheduling)
 
-แก้ไฟล์ `.env.local` ในโฟลเดอร์โปรเจกต์ ใส่ค่าจากข้อ 1.2:
+### 1.1 รัน SQL 2 ไฟล์
+เปิดโปรเจกต์ Scheduling ใน Supabase → **SQL Editor → New query**
+
+1. เปิด [`supabase/schema_sop.sql`](supabase/schema_sop.sql) → ก๊อปทั้งหมด → วาง → **Run**
+   (สร้าง schema `sop` + ตาราง + สิทธิ์ + storage + หมวดหมู่ + ตั้งแอดมินให้อัตโนมัติ)
+2. **New query** อีกครั้ง → เปิด [`supabase/seed_documents.sql`](supabase/seed_documents.sql) → วาง → **Run**
+   (ใส่คู่มือ 17 ฉบับที่ย้ายจาก PDF)
+
+> ⚠️ **อย่ารัน** `supabase/schema.sql` (ตัวเก่า) กับโปรเจกต์นี้ — มันสร้างตาราง/ฟังก์ชันใน `public`
+> ที่ชื่อซ้ำกับของ Scheduling และจะทำให้แอป Scheduling พัง ใช้เฉพาะ `schema_sop.sql` เท่านั้น
+
+### 1.2 เปิดใช้งาน schema `sop` ใน API  ← **สำคัญ! ห้ามข้าม**
+**Project Settings → API** → หัวข้อ **Exposed schemas** (หรือ "Data API")
+→ เพิ่ม `sop` เข้าไปในรายการ (ให้มีทั้ง `public`, `graphql_public`, `sop`) → **Save**
+(ถ้าไม่ทำ แอปจะมองไม่เห็นตารางใน schema `sop`)
+
+### 1.3 คัดลอกคีย์
+**Project Settings → API** → ก๊อป **Project URL** และ **anon public** key
+
+### 1.4 แอดมิน
+`schema_sop.sql` ตั้งแอดมินให้อัตโนมัติแล้ว = (ก) ทุกคนที่ `is_admin = true` ในตาราง profiles เดิม
+และ (ข) `op.dept@airportels.asia`, `tanida@airportels.co`
+
+เพิ่มแอดมินคนอื่นภายหลัง (รันใน SQL Editor):
+```sql
+insert into sop.admins (user_id)
+select id from auth.users where email = 'someone@airportels.asia'
+on conflict do nothing;
 ```
-NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+
+---
+
+## ส่วนที่ 2 — รันทดสอบในเครื่อง
+
+แก้ `.env.local` (ค่าจากข้อ 1.3):
+```
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon public key>
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
-แล้วรัน:
 ```bash
 npm run dev
 ```
-เปิด http://localhost:3000 → ล็อกอิน → ควรเห็นคู่มือทั้งหมด และเมนู Admin
+เปิด http://localhost:3000 → ล็อกอินด้วยบัญชีพนักงานที่มีอยู่ → เห็นคู่มือ + เมนู Admin (ถ้าเป็นแอดมิน)
 
 ---
 
 ## ส่วนที่ 3 — Deploy ขึ้น Vercel
 
-### 3.1 push โค้ดขึ้น GitHub
-- สร้าง repo ใหม่ (ว่างๆ) ที่ https://github.com/new เช่นชื่อ `airportels-sop-hub` (ตั้งเป็น Private ได้)
-- ในโฟลเดอร์โปรเจกต์ รัน (แทน `<URL>` ด้วยของ repo คุณ):
-  ```bash
-  git remote add origin <URL ของ repo>
-  git branch -M main
-  git push -u origin main
-  ```
+1. https://vercel.com → **Add New → Project** → Import repo `OP_SOP-Handbook`
+2. Next.js ตรวจเจอเอง — ไม่ต้องแก้ Root Directory
+3. **Environment Variables** ใส่ 3 ตัว:
 
-### 3.2 เชื่อม Vercel
-- ไปที่ https://vercel.com → **Add New… → Project** → **Import** repo ที่เพิ่ง push
-- ในหน้า config → **Environment Variables** ใส่ 3 ตัว:
-  | Name | Value |
-  |---|---|
-  | `NEXT_PUBLIC_SUPABASE_URL` | (Project URL จากข้อ 1.2) |
-  | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | (anon key จากข้อ 1.2) |
-  | `NEXT_PUBLIC_SITE_URL` | `https://<โดเมนที่ Vercel จะให้>` |
-- กด **Deploy** (รอ 1–2 นาที)
+   | Name | Value |
+   |---|---|
+   | `NEXT_PUBLIC_SUPABASE_URL` | Project URL |
+   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon public key |
+   | `NEXT_PUBLIC_SITE_URL` | โดเมนจริงของ Vercel (ใส่ทีหลังได้) |
 
-### 3.3 ตั้ง redirect ให้ล็อกอินทำงานบนโดเมนจริง
-- Supabase → **Authentication → URL Configuration**
-  - **Site URL**: `https://<โดเมนของคุณ>`
-  - **Redirect URLs**: เพิ่ม `https://<โดเมนของคุณ>/auth/callback`
+4. **Deploy**
+5. Supabase → **Authentication → URL Configuration**
+   - เพิ่ม Redirect URL: `https://<โดเมน>/auth/callback`
+   - (Site URL ของ Scheduling เดิมยังอยู่ได้ เพิ่ม redirect ใหม่เข้าไปเฉยๆ)
 
 ---
 
 ## ส่วนที่ 4 — เชื่อมกับแอป Scheduling
-
-เพิ่มปุ่ม/ลิงก์ในแอป scheduling ชี้มาที่โดเมน SOP Hub เช่น:
+เพิ่มลิงก์/ปุ่มในแอป scheduling ชี้มาที่โดเมน SOP Hub:
 ```html
 <a href="https://<โดเมน SOP Hub>" target="_blank">📚 คู่มือการทำงาน (SOP)</a>
 ```
-
-### ล็อกอินเดียวกับ Scheduling (Single Login)
-ถ้าแอป scheduling **ใช้ Supabase Auth อยู่แล้ว**: ให้ SOP Hub ใช้ **Supabase project เดียวกัน**
-(ใส่ URL + anon key ตัวเดียวกันในข้อ 3.2) — ผู้ใช้จะล็อกอินบัญชีเดียวใช้ได้ทั้งสองระบบทันที
-ถ้าใช้ระบบอื่น แจ้งมาได้ จะได้วางแผนวิธีเชื่อมที่เหมาะสม
+เพราะใช้ Supabase project เดียวกัน พนักงานที่ล็อกอิน Scheduling อยู่แล้วจะเข้าดูคู่มือได้เลย
 
 ---
 
-## เพิ่มรูป/วิดีโอในคู่มือ (หลังระบบขึ้นแล้ว)
-คู่มือที่ย้ายจาก PDF จะมีเครื่องหมาย `[📷 ภาพประกอบ: ...]` ตรงจุดที่ควรมีรูป
-เข้า **Admin → คู่มือ → แก้ไข** แล้วใช้ปุ่มแทรกรูป/วิดีโอในตัวแก้ไข วางรูปแทนเครื่องหมายนั้นได้เลย
+## เพิ่มรูป/วิดีโอในคู่มือ
+คู่มือจาก PDF มี marker `[📷 ภาพประกอบ: ...]` (ดูรายการใน `IMAGE_CHECKLIST.md`)
+เข้า **Admin → คู่มือ → แก้ไข** แล้วใช้ปุ่มแทรกรูป/วิดีโอวางแทน marker ได้เลย

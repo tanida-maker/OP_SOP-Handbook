@@ -38,8 +38,7 @@ export default async function SopPage({
 }) {
   const { slug } = await params;
   const supabase = await createClient();
-  const { profile } = await getSessionUser();
-  const isAdmin = profile?.role === "admin";
+  const { isAdmin } = await getSessionUser();
 
   const { data: doc } = await supabase
     .from("documents")
