@@ -1,0 +1,202 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import {
+  GraduationCap,
+  Home,
+  LayoutGrid,
+  LogOut,
+  Megaphone,
+  Menu,
+  Settings,
+  User,
+  X,
+} from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
+import SearchBox from "./SearchBox";
+import { createClient } from "@/lib/supabase/client";
+
+const NAV = [
+  { href: "/", label: "หน้าแรก", icon: Home },
+  { href: "/onboarding", label: "พนักงานใหม่", icon: GraduationCap },
+  { href: "/announcements", label: "ประกาศ", icon: Megaphone },
+];
+
+export default function SiteHeader({
+  fullName,
+  isAdmin,
+}: {
+  fullName: string;
+  isAdmin: boolean;
+}) {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [menu, setMenu] = useState(false);
+
+  async function logout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  }
+
+  return (
+    <header className="sticky top-0 z-40 border-b border-border bg-surface/85 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 shrink-0">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-600 text-white font-extrabold">
+            A
+          </span>
+          <span className="hidden sm:block leading-tight">
+            <span className="block text-sm font-extrabold tracking-tight text-text">
+              AIRPORTELs
+            </span>
+            <span className="block text-[11px] font-medium text-muted">
+              SOP Hub
+            </span>
+          </span>
+        </Link>
+
+        {/* Desktop nav */}
+        <nav className="ml-2 hidden items-center gap-1 md:flex">
+          {NAV.map((n) => (
+            <Link
+              key={n.href}
+              href={n.href}
+              className="rounded-full px-3 py-2 text-sm font-medium text-muted hover:bg-surface-2 hover:text-text transition"
+            >
+              {n.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Search (desktop) */}
+        <div className="ml-auto hidden max-w-xs flex-1 md:block">
+          <SearchBox />
+        </div>
+
+        <div className="ml-auto flex items-center gap-2 md:ml-2">
+          <ThemeToggle />
+
+          {/* User menu (desktop) */}
+          <div className="relative hidden md:block">
+            <button
+              onClick={() => setMenu((v) => !v)}
+              onBlur={() => setTimeout(() => setMenu(false), 150)}
+              className="flex items-center gap-2 rounded-full border border-border bg-surface py-1 pl-1 pr-3 hover:border-brand-300 transition"
+            >
+              <span className="grid h-7 w-7 place-items-center rounded-full bg-brand-100 text-brand-700">
+                <User size={16} />
+              </span>
+              <span className="max-w-[9rem] truncate text-sm font-medium text-text">
+                {fullName}
+              </span>
+            </button>
+            {menu && (
+              <div className="absolute right-0 mt-2 w-52 overflow-hidden rounded-xl border border-border bg-surface shadow-lg">
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    className="flex items-center gap-2 px-4 py-3 text-sm text-text hover:bg-surface-2"
+                  >
+                    <Settings size={16} /> ระบบจัดการ (Admin)
+                  </Link>
+                )}
+                <button
+                  onClick={logout}
+                  className="flex w-full items-center gap-2 px-4 py-3 text-sm text-danger hover:bg-surface-2"
+                >
+                  <LogOut size={16} /> ออกจากระบบ
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setOpen(true)}
+            className="grid h-9 w-9 place-items-center rounded-full border border-border bg-surface text-text md:hidden"
+            aria-label="เมนู"
+          >
+            <Menu size={18} />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile drawer */}
+      {open && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setOpen(false)}
+          />
+          <div className="absolute right-0 top-0 h-full w-80 max-w-[85%] bg-surface p-4 shadow-lg">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="grid h-7 w-7 place-items-center rounded-full bg-brand-100 text-brand-700">
+                  <User size={16} />
+                </span>
+                <span className="text-sm font-semibold text-text">
+                  {fullName}
+                </span>
+              </div>
+              <button
+                onClick={() => setOpen(false)}
+                className="grid h-9 w-9 place-items-center rounded-full border border-border"
+                aria-label="ปิด"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="mb-4" onClick={() => setOpen(false)}>
+              <SearchBox />
+            </div>
+
+            <nav className="flex flex-col gap-1">
+              {NAV.map((n) => (
+                <Link
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
+                >
+                  <n.icon size={18} className="text-brand-600" />
+                  {n.label}
+                </Link>
+              ))}
+              <Link
+                href="/#categories"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
+              >
+                <LayoutGrid size={18} className="text-brand-600" />
+                หมวดหมู่ทั้งหมด
+              </Link>
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
+                >
+                  <Settings size={18} className="text-brand-600" />
+                  ระบบจัดการ (Admin)
+                </Link>
+              )}
+            </nav>
+
+            <button
+              onClick={logout}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-border py-3 text-sm font-medium text-danger hover:bg-surface-2"
+            >
+              <LogOut size={16} /> ออกจากระบบ
+            </button>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
