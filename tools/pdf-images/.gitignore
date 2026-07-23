@@ -1,0 +1,4 @@
+node_modules/
+output/
+pdfs/
+package-lock.json

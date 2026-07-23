@@ -1,0 +1,13 @@
+{
+  "name": "sop-pdf-images",
+  "private": true,
+  "type": "module",
+  "description": "Render AIRPORTELs SOP PDF pages to PNG images (run on a machine WITHOUT Smart App Control).",
+  "scripts": {
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.60",
+    "pdfjs-dist": "^4.7.76"
+  }
+}
