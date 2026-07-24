@@ -1,6 +1,6 @@
-// AIRPORTELs logo — uses the official image asset (public/airportels-logo.avif).
-// Rendered inside a rounded dark tile so a transparent/gold mark stays crisp
-// in both light and dark themes (matches the Scheduling app's brand chip).
+// AIRPORTELs logo — official image asset (public/airportels-logo.avif).
+// The mark is black + gold on a transparent background, so it sits on a WHITE
+// rounded tile (with padding) to stand out clearly in both light and dark themes.
 
 export default function Logo({
   size = 44,
@@ -11,8 +11,8 @@ export default function Logo({
 }) {
   return (
     <span
-      className={`grid shrink-0 place-items-center overflow-hidden rounded-2xl shadow-sm ${className}`}
-      style={{ width: size, height: size, background: "#0b1220" }}
+      className={`grid shrink-0 place-items-center overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/10 ${className}`}
+      style={{ width: size, height: size }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -20,7 +20,7 @@ export default function Logo({
         alt="AIRPORTELs"
         width={size}
         height={size}
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        style={{ width: "82%", height: "82%", objectFit: "contain" }}
       />
     </span>
   );
