@@ -48,7 +48,7 @@ export default function SiteHeader({
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <Logo size={38} />
+          <Logo height={22} />
           <span className="hidden sm:block leading-tight">
             <span className="block text-sm font-extrabold tracking-tight text-text">
               AIRPORTELs

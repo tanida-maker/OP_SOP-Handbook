@@ -57,7 +57,7 @@ export default function LeftRail({
         title="Operations Knowledge Center"
         className="transition hover:opacity-90"
       >
-        <Logo size={44} />
+        <Logo height={16} />
       </Link>
 
       <nav className="mt-8 flex flex-1 flex-col items-center gap-2">

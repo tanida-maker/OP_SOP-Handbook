@@ -1,26 +1,23 @@
-// AIRPORTELs logo — official image asset (public/airportels-logo.avif).
-// The mark is black + gold on a transparent background, so it sits on a WHITE
-// rounded tile (with padding) to stand out clearly in both light and dark themes.
+// AIRPORTELs logo — official image asset shown at its natural (horizontal)
+// aspect ratio on a white plate that hugs it, so the dark+gold mark stays crisp
+// in both themes without being cropped or squeezed into a square.
 
 export default function Logo({
-  size = 44,
+  height = 24,
   className = "",
 }: {
-  size?: number;
+  height?: number;
   className?: string;
 }) {
   return (
     <span
-      className={`grid shrink-0 place-items-center overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/10 ${className}`}
-      style={{ width: size, height: size }}
+      className={`inline-flex items-center justify-center rounded-lg bg-white px-1.5 py-1 shadow-sm ring-1 ring-black/10 ${className}`}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/airportels-logo.avif"
         alt="AIRPORTELs"
-        width={size}
-        height={size}
-        style={{ width: "82%", height: "82%", objectFit: "contain" }}
+        style={{ height, width: "auto", display: "block" }}
       />
     </span>
   );

@@ -11,7 +11,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
           <div className="mb-3 flex justify-center">
-            <Logo size={56} />
+            <Logo height={40} />
           </div>
           <p className="text-sm font-semibold text-brand-600">AIRPORTELs</p>
           <h1 className="text-xl font-extrabold text-text">

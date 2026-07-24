@@ -26,7 +26,7 @@ export default async function AdminLayout({
         {/* Sidebar */}
         <aside className="md:w-60 md:shrink-0">
           <div className="mb-4 flex items-center gap-2">
-            <Logo size={36} />
+            <Logo height={20} />
             <div className="leading-tight">
               <p className="text-sm font-extrabold text-text">ระบบจัดการ</p>
               <p className="text-[11px] text-muted">Knowledge Center Admin</p>
