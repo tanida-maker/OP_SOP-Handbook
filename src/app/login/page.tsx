@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import LoginForm from "./LoginForm";
+import Logo from "@/components/Logo";
 
 export const metadata: Metadata = { title: "เข้าสู่ระบบ" };
 
@@ -9,11 +10,12 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-bg px-4 py-10">
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-brand-600 text-2xl font-extrabold text-white">
-            A
+          <div className="mb-3 flex justify-center">
+            <Logo size={56} />
           </div>
+          <p className="text-sm font-semibold text-brand-600">AIRPORTELs</p>
           <h1 className="text-xl font-extrabold text-text">
-            AIRPORTELs SOP Hub
+            Operations Knowledge Center
           </h1>
           <p className="mt-1 text-sm text-muted">
             เข้าสู่ระบบด้วยบัญชีพนักงาน

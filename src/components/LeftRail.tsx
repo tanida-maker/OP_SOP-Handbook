@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import Logo from "./Logo";
 import { createClient } from "@/lib/supabase/client";
 
 type Item = { href: string; label: string; icon: LucideIcon; badge?: number };
@@ -53,10 +54,10 @@ export default function LeftRail({
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-[76px] flex-col items-center border-r border-border bg-surface py-5 md:flex">
       <Link
         href="/"
-        className="grid h-11 w-11 place-items-center rounded-2xl bg-brand-600 text-lg font-extrabold text-white shadow-sm"
-        title="AIRPORTELs SOP Hub"
+        title="Operations Knowledge Center"
+        className="transition hover:opacity-90"
       >
-        A
+        <Logo size={44} />
       </Link>
 
       <nav className="mt-8 flex flex-1 flex-col items-center gap-2">

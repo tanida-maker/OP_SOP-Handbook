@@ -11,12 +11,12 @@ const notoThai = Noto_Sans_Thai({
 
 export const metadata: Metadata = {
   title: {
-    default: "AIRPORTELs SOP Hub",
-    template: "%s · AIRPORTELs SOP Hub",
+    default: "Operations Knowledge Center · AIRPORTELs",
+    template: "%s · Operations Knowledge Center",
   },
   description:
-    "ศูนย์รวมคู่มือการทำงาน SOP / WI สำหรับพนักงานหน้าสาขา AIRPORTELs",
-  applicationName: "AIRPORTELs SOP Hub",
+    "AIRPORTELs Operations Knowledge Center — ศูนย์รวมคู่มือการทำงาน SOP / WI สำหรับพนักงานหน้าสาขา",
+  applicationName: "Operations Knowledge Center",
 };
 
 export const viewport: Viewport = {

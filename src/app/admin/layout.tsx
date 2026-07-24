@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowLeft, FileText, LayoutDashboard, Megaphone, Tags } from "lucide-react";
 import { getSessionUser } from "@/lib/supabase/server";
+import Logo from "@/components/Logo";
 
 const NAV = [
   { href: "/admin", label: "ภาพรวม", icon: LayoutDashboard },
@@ -25,12 +26,10 @@ export default async function AdminLayout({
         {/* Sidebar */}
         <aside className="md:w-60 md:shrink-0">
           <div className="mb-4 flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-600 text-white font-extrabold">
-              A
-            </span>
+            <Logo size={36} />
             <div className="leading-tight">
               <p className="text-sm font-extrabold text-text">ระบบจัดการ</p>
-              <p className="text-[11px] text-muted">SOP Hub Admin</p>
+              <p className="text-[11px] text-muted">Knowledge Center Admin</p>
             </div>
           </div>
 

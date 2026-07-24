@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import SearchBox from "./SearchBox";
+import Logo from "./Logo";
 import { createClient } from "@/lib/supabase/client";
 
 const NAV = [
@@ -47,15 +48,13 @@ export default function SiteHeader({
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-600 text-white font-extrabold">
-            A
-          </span>
+          <Logo size={38} />
           <span className="hidden sm:block leading-tight">
             <span className="block text-sm font-extrabold tracking-tight text-text">
               AIRPORTELs
             </span>
             <span className="block text-[11px] font-medium text-muted">
-              SOP Hub
+              Operations Knowledge Center
             </span>
           </span>
         </Link>
