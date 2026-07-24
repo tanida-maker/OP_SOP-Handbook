@@ -3,6 +3,7 @@ import { ArrowRight, GraduationCap, Megaphone, Pin } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import KnowledgeBase from "@/components/KnowledgeBase";
 import SearchBox from "@/components/SearchBox";
+import Logo from "@/components/Logo";
 import type { Announcement, Category, DocumentWithCategory } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -37,14 +38,9 @@ export default async function HomePage() {
       <header className="space-y-4">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <span className="mb-2 inline-flex items-center rounded-lg bg-white px-3 py-1.5 shadow-sm ring-1 ring-black/5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/airportels-logo.avif"
-                alt="AIRPORTELs"
-                className="h-7 w-auto"
-              />
-            </span>
+            <div className="mb-2">
+              <Logo height={30} />
+            </div>
             <h1 className="text-3xl font-extrabold tracking-tight text-text">
               คู่มือการทำงาน 📚
             </h1>

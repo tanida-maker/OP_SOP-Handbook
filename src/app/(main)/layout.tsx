@@ -2,6 +2,7 @@ import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import LeftRail from "@/components/LeftRail";
 import { createClient, getSessionUser } from "@/lib/supabase/server";
+import { APP_VERSION } from "@/lib/version";
 
 export default async function MainLayout({
   children,
@@ -32,7 +33,10 @@ export default async function MainLayout({
         </main>
         <footer className="border-t border-border bg-surface">
           <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-sm text-muted md:flex-row md:px-8">
-            <p>© {new Date().getFullYear()} AIRPORTELs — SOP Hub</p>
+            <p>
+              © {new Date().getFullYear()} AIRPORTELs — Operations Knowledge
+              Center · v{APP_VERSION}
+            </p>
             <div className="flex items-center gap-4">
               <Link href="/onboarding" className="hover:text-text">
                 พนักงานใหม่

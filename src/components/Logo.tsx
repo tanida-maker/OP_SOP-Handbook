@@ -1,6 +1,6 @@
-// AIRPORTELs logo — official image asset shown at its natural (horizontal)
-// aspect ratio on a white plate that hugs it, so the dark+gold mark stays crisp
-// in both themes without being cropped or squeezed into a square.
+// AIRPORTELs logo — official GOLD mark (public/airportels-logo-gold.webp).
+// Gold reads best on a dark surface, so it sits on a dark rounded tile that
+// hugs the logo at its natural (horizontal) aspect ratio — crisp in both themes.
 
 export default function Logo({
   height = 24,
@@ -11,11 +11,12 @@ export default function Logo({
 }) {
   return (
     <span
-      className={`inline-flex items-center justify-center rounded-lg bg-white px-1.5 py-1 shadow-sm ring-1 ring-black/10 ${className}`}
+      className={`inline-flex items-center justify-center rounded-lg px-2 py-1.5 shadow-sm ring-1 ring-white/10 ${className}`}
+      style={{ background: "#0b1220" }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/airportels-logo.avif"
+        src="/airportels-logo-gold.webp"
         alt="AIRPORTELs"
         style={{ height, width: "auto", display: "block" }}
       />
