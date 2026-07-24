@@ -37,7 +37,14 @@ export default async function HomePage() {
       <header className="space-y-4">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold text-brand-600">AIRPORTELs</p>
+            <span className="mb-2 inline-flex items-center rounded-lg bg-white px-3 py-1.5 shadow-sm ring-1 ring-black/5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/airportels-logo.avif"
+                alt="AIRPORTELs"
+                className="h-7 w-auto"
+              />
+            </span>
             <h1 className="text-3xl font-extrabold tracking-tight text-text">
               คู่มือการทำงาน 📚
             </h1>
