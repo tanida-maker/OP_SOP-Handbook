@@ -27,7 +27,7 @@ export default async function MainLayout({
         <SiteHeader fullName={fullName ?? "พนักงาน"} isAdmin={isAdmin} />
       </div>
 
-      <div className="flex min-h-screen flex-col md:pl-[76px]">
+      <div className="flex min-h-screen flex-col md:pl-60">
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 md:px-8 md:py-10">
           {children}
         </main>
