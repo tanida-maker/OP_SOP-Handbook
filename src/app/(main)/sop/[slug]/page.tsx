@@ -109,14 +109,6 @@ export default async function SopPage({
           </span>
           <span>เวอร์ชัน {d.version}</span>
         </div>
-        {d.cover_image && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={d.cover_image}
-            alt=""
-            className="w-full rounded-2xl border border-border object-cover"
-          />
-        )}
       </header>
 
       <div className="rounded-2xl border border-border bg-surface p-5 md:p-8">

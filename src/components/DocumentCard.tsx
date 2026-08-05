@@ -19,35 +19,35 @@ export default function DocumentCard({ doc }: { doc: DocumentWithCategory }) {
       href={`/sop/${doc.slug}`}
       className="group flex flex-col rounded-[20px] border border-border bg-surface p-2 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
     >
-      {/* Illustrated pastel header */}
+      {/* Colorful category cover (pastel, by category) */}
       <div
-        className="relative h-32 overflow-hidden rounded-[14px]"
+        className="relative h-36 overflow-hidden rounded-[14px]"
         style={{ background: p.grad }}
       >
-        {/* soft decorative blobs */}
+        {/* layered soft shapes for depth */}
         <span
-          className="absolute -right-6 -top-8 h-24 w-24 rounded-full"
-          style={{ background: "rgba(255,255,255,0.35)" }}
+          className="absolute -right-8 -top-10 h-28 w-28 rounded-full"
+          style={{ background: "rgba(255,255,255,0.32)" }}
         />
         <span
-          className="absolute -bottom-10 right-8 h-20 w-20 rounded-2xl"
-          style={{ background: "rgba(255,255,255,0.22)", rotate: "18deg" }}
+          className="absolute -bottom-12 -left-6 h-28 w-28 rounded-full"
+          style={{ background: "rgba(255,255,255,0.18)" }}
         />
-        {/* watermark category icon */}
-        <div
-          className="absolute bottom-2 right-3 transition group-hover:scale-110"
-          style={{ color: p.ink, opacity: 0.9 }}
-        >
-          {doc.cover_image ? null : <Icon name={doc.category?.icon} size={46} />}
+        <span
+          className="absolute bottom-5 right-9 h-14 w-14 rotate-12 rounded-2xl"
+          style={{ background: "rgba(255,255,255,0.16)" }}
+        />
+
+        {/* big category icon in a soft tile */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span
+            className="grid h-[72px] w-[72px] place-items-center rounded-2xl shadow-sm transition group-hover:scale-110 group-hover:-rotate-3"
+            style={{ background: "rgba(255,255,255,0.6)", color: p.ink }}
+          >
+            <Icon name={doc.category?.icon} size={38} />
+          </span>
         </div>
-        {doc.cover_image && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={doc.cover_image}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        )}
+
         {/* category chip */}
         {doc.category && (
           <span
@@ -59,7 +59,7 @@ export default function DocumentCard({ doc }: { doc: DocumentWithCategory }) {
         )}
         {doc.is_onboarding && (
           <span
-            className="absolute right-3 top-3 rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-bold"
+            className="absolute right-3 top-3 rounded-full bg-white/75 px-2 py-0.5 text-[10px] font-bold"
             style={{ color: p.ink }}
           >
             Onboarding
@@ -79,13 +79,13 @@ export default function DocumentCard({ doc }: { doc: DocumentWithCategory }) {
           <p className="clamp-2 mt-1.5 text-[13px] text-muted">{doc.summary}</p>
         )}
 
-        {/* Footer stats row */}
         <div className="mt-3 flex items-center justify-between border-t border-border pt-2.5 text-xs text-muted">
           <span className="flex items-center gap-1.5">
             <Clock size={13} /> {shortDate(doc.updated_at)}
           </span>
           <span className="flex items-center gap-1 font-semibold text-brand-600">
-            อ่าน <ArrowRight size={13} className="transition group-hover:translate-x-0.5" />
+            อ่าน{" "}
+            <ArrowRight size={13} className="transition group-hover:translate-x-0.5" />
           </span>
         </div>
       </div>
