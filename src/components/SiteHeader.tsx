@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
+  CalendarDays,
   GraduationCap,
   Home,
   LayoutGrid,
@@ -175,6 +176,16 @@ export default function SiteHeader({
                 <LayoutGrid size={18} className="text-brand-600" />
                 หมวดหมู่ทั้งหมด
               </Link>
+              <a
+                href="https://airportels-scheduling.vercel.app"
+                target="_blank"
+                rel="noopener"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
+              >
+                <CalendarDays size={18} className="text-brand-600" />
+                ตารางงาน (Scheduling) ↗
+              </a>
               {isAdmin && (
                 <Link
                   href="/admin"

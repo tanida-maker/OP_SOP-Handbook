@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  CalendarDays,
   GraduationCap,
   Home,
   LayoutGrid,
@@ -12,6 +13,8 @@ import {
   Settings,
   type LucideIcon,
 } from "lucide-react";
+
+const SCHEDULING_URL = "https://airportels-scheduling.vercel.app";
 import ThemeToggle from "./ThemeToggle";
 import Logo from "./Logo";
 import { createClient } from "@/lib/supabase/client";
@@ -86,6 +89,17 @@ export default function LeftRail({
             </Link>
           );
         })}
+
+        {/* External: open the Scheduling app (same login) */}
+        <a
+          href={SCHEDULING_URL}
+          target="_blank"
+          rel="noopener"
+          title="ตารางงาน (Scheduling)"
+          className="relative grid h-11 w-11 place-items-center rounded-2xl text-muted transition hover:bg-surface-2 hover:text-text"
+        >
+          <CalendarDays size={21} />
+        </a>
       </nav>
 
       <div className="mt-4 flex flex-col items-center gap-2">
