@@ -34,6 +34,7 @@ export interface Document {
   status: DocStatus;
   is_onboarding: boolean;
   onboarding_order: number | null;
+  onboarding_roles?: string[] | null;
   version: number;
   updated_at: string;
   created_at: string;

@@ -4,6 +4,7 @@ import { ChevronRight, Clock, Pencil, Tag } from "lucide-react";
 import { createClient, getSessionUser } from "@/lib/supabase/server";
 import ContentRenderer from "@/components/ContentRenderer";
 import DocumentCard from "@/components/DocumentCard";
+import AcknowledgeBar from "@/components/AcknowledgeBar";
 import type { DocumentWithCategory } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -33,12 +34,15 @@ function formatDate(iso: string) {
 
 export default async function SopPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ ob?: string }>;
 }) {
   const { slug } = await params;
+  const { ob } = await searchParams;
   const supabase = await createClient();
-  const { isAdmin } = await getSessionUser();
+  const { user, isAdmin } = await getSessionUser();
 
   const { data: doc } = await supabase
     .from("documents")
@@ -48,6 +52,17 @@ export default async function SopPage({
 
   if (!doc) notFound();
   const d = doc as DocumentWithCategory;
+
+  // Onboarding acknowledge state (only when arriving from a track via ?ob=role)
+  let alreadyAcked = false;
+  if (ob && user) {
+    const { data: ack } = await supabase
+      .from("onboarding_acks")
+      .select("doc_id")
+      .eq("doc_id", d.id)
+      .maybeSingle();
+    alreadyAcked = !!ack;
+  }
 
   // Related docs in the same category.
   const { data: related } = d.category_id
@@ -138,6 +153,10 @@ export default async function SopPage({
             ))}
           </div>
         </section>
+      )}
+
+      {ob && (
+        <AcknowledgeBar docId={d.id} role={ob} alreadyAcked={alreadyAcked} />
       )}
     </article>
   );
