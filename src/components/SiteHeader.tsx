@@ -45,7 +45,8 @@ export default function SiteHeader({
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-surface/85 backdrop-blur">
+    <>
+      <header className="sticky top-0 z-40 border-b border-border bg-surface/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
@@ -125,8 +126,9 @@ export default function SiteHeader({
           </button>
         </div>
       </div>
+      </header>
 
-      {/* Mobile drawer */}
+      {/* Mobile drawer (outside <header> so backdrop-blur doesn't trap position:fixed) */}
       {open && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div
@@ -207,6 +209,6 @@ export default function SiteHeader({
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
