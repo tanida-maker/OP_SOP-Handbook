@@ -40,7 +40,7 @@ update sop.documents set onboarding_roles='{gs}', is_onboarding=true, onboarding
 update sop.documents set onboarding_roles='{cs}', is_onboarding=true, onboarding_order=20 where slug='respond-io-guide';
 update sop.documents set onboarding_roles='{cs}', is_onboarding=true, onboarding_order=30 where slug='3cx-guide';
 update sop.documents set onboarding_roles='{cs}', is_onboarding=true, onboarding_order=40 where slug='online-credit-card-payment';
-update sop.documents set onboarding_roles='{cs}', is_onboarding=true, onboarding_order=50 where slug='cashless-payment-policy';
 update sop.documents set onboarding_roles='{cs}', is_onboarding=true, onboarding_order=60 where slug='delayed-pickup-discount';
+-- NOTE: cashless-payment-policy intentionally NOT in onboarding (removed from CS track).
 
 notify pgrst, 'reload schema';
