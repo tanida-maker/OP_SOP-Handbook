@@ -11,7 +11,8 @@ type Step = Pick<
 >;
 
 const ROLES = [
-  { key: "gs", label: "Guest Service / Porter", emoji: "🧳" },
+  { key: "gs", label: "Guest Service", emoji: "🛎️" },
+  { key: "porter", label: "Porter", emoji: "🧳" },
   { key: "cs", label: "Customer Service", emoji: "🎧" },
 ] as const;
 

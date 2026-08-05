@@ -24,23 +24,27 @@ grant select, insert, delete on sop.onboarding_acks to authenticated;
 update sop.documents set onboarding_roles = '{}', is_onboarding = false, onboarding_order = null
   where is_onboarding = true; -- reset, then reassign below
 
--- shared (both tracks) — read first
-update sop.documents set onboarding_roles='{gs,cs}', is_onboarding=true, onboarding_order=10 where slug='dress-code-guest-service';
+-- shared (all three tracks) — read first
+update sop.documents set onboarding_roles='{gs,porter,cs}', is_onboarding=true, onboarding_order=10 where slug='dress-code-guest-service';
 
--- Guest Service / Porter track
-update sop.documents set onboarding_roles='{gs}', is_onboarding=true, onboarding_order=20 where slug='open-close-counter';
-update sop.documents set onboarding_roles='{gs}', is_onboarding=true, onboarding_order=30 where slug='pos-order-receiving';
-update sop.documents set onboarding_roles='{gs}', is_onboarding=true, onboarding_order=40 where slug='edc-machine';
-update sop.documents set onboarding_roles='{gs}', is_onboarding=true, onboarding_order=50 where slug='luggage-delivery-google-sheet';
-update sop.documents set onboarding_roles='{gs}', is_onboarding=true, onboarding_order=60 where slug='authorized-person-pickup';
-update sop.documents set onboarding_roles='{gs}', is_onboarding=true, onboarding_order=70 where slug='dmk-airport-service';
-update sop.documents set onboarding_roles='{gs}', is_onboarding=true, onboarding_order=80 where slug='emergency-airport';
+-- 1) Guest Service (counter & customer service)
+update sop.documents set onboarding_roles='{gs}',        is_onboarding=true, onboarding_order=20 where slug='open-close-counter';
+update sop.documents set onboarding_roles='{gs}',        is_onboarding=true, onboarding_order=30 where slug='pos-order-receiving';
+update sop.documents set onboarding_roles='{gs}',        is_onboarding=true, onboarding_order=40 where slug='edc-machine';
 
--- Customer Service track
-update sop.documents set onboarding_roles='{cs}', is_onboarding=true, onboarding_order=20 where slug='respond-io-guide';
-update sop.documents set onboarding_roles='{cs}', is_onboarding=true, onboarding_order=30 where slug='3cx-guide';
-update sop.documents set onboarding_roles='{cs}', is_onboarding=true, onboarding_order=40 where slug='online-credit-card-payment';
-update sop.documents set onboarding_roles='{cs}', is_onboarding=true, onboarding_order=60 where slug='delayed-pickup-discount';
--- NOTE: cashless-payment-policy intentionally NOT in onboarding (removed from CS track).
+-- 2) Porter (luggage handling & delivery)
+update sop.documents set onboarding_roles='{porter}',    is_onboarding=true, onboarding_order=25 where slug='dmk-airport-service';
+update sop.documents set onboarding_roles='{porter}',    is_onboarding=true, onboarding_order=35 where slug='luggage-delivery-google-sheet';
+
+-- shared: Guest Service + Porter (both work on-site handovers & emergencies)
+update sop.documents set onboarding_roles='{gs,porter}', is_onboarding=true, onboarding_order=50 where slug='authorized-person-pickup';
+update sop.documents set onboarding_roles='{gs,porter}', is_onboarding=true, onboarding_order=60 where slug='emergency-airport';
+
+-- 3) Customer Service (phone / online support)
+update sop.documents set onboarding_roles='{cs}',        is_onboarding=true, onboarding_order=20 where slug='respond-io-guide';
+update sop.documents set onboarding_roles='{cs}',        is_onboarding=true, onboarding_order=30 where slug='3cx-guide';
+update sop.documents set onboarding_roles='{cs}',        is_onboarding=true, onboarding_order=40 where slug='online-credit-card-payment';
+update sop.documents set onboarding_roles='{cs}',        is_onboarding=true, onboarding_order=50 where slug='delayed-pickup-discount';
+-- NOTE: cashless-payment-policy intentionally NOT in onboarding.
 
 notify pgrst, 'reload schema';
