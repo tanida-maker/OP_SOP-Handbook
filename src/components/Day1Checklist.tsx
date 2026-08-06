@@ -3,23 +3,46 @@
 import { useState, useTransition } from "react";
 import { CheckSquare, ListChecks, Square } from "lucide-react";
 import { toggleChecklistItem } from "@/app/(main)/onboarding/actions";
+import { useT } from "./LanguageProvider";
 
-const ITEMS: { key: string; label: string; hint?: string }[] = [
+const ITEMS: {
+  key: string;
+  th: string;
+  en: string;
+  hintTh?: string;
+  hintEn?: string;
+}[] = [
   {
     key: "access",
-    label: "รับ Access ทุกระบบครบ",
-    hint: "Empeo · Lark · ระบบ POS · Google Sheet สาขา · Scheduling app + SOP Hub",
+    th: "รับ Access ทุกระบบครบ",
+    en: "Get access to all systems",
+    hintTh: "Empeo · Lark · ระบบ POS · Google Sheet สาขา · Scheduling app + SOP Hub",
+    hintEn: "Empeo · Lark · POS · Branch Google Sheet · Scheduling app + SOP Hub",
   },
-  { key: "lark-groups", label: "เข้า Lark group ที่เกี่ยวข้องครบทุกกลุ่ม" },
-  { key: "read-docs", label: "อ่านคู่มือส่งมอบงานในระบบนี้ให้ครบ" },
+  {
+    key: "lark-groups",
+    th: "เข้า Lark group ที่เกี่ยวข้องครบทุกกลุ่ม",
+    en: "Join all relevant Lark groups",
+  },
+  {
+    key: "read-docs",
+    th: "อ่านคู่มือส่งมอบงานในระบบนี้ให้ครบ",
+    en: "Read all handover manuals in this system",
+  },
   {
     key: "one-on-one",
-    label: "นัด 1-on-1 กับ Supervisor (ผู้สอนงาน) ภายในวันแรก",
+    th: "นัด 1-on-1 กับ Supervisor (ผู้สอนงาน) ภายในวันแรก",
+    en: "Schedule a 1-on-1 with your Supervisor on day one",
   },
-  { key: "contacts", label: "ทำความรู้จัก contact person หลักในทีมและสาขา" },
+  {
+    key: "contacts",
+    th: "ทำความรู้จัก contact person หลักในทีมและสาขา",
+    en: "Get to know the key contacts in your team and branch",
+  },
   {
     key: "plan",
-    label: "ตรวจสอบ Onboarding Checklist และวางแผนการเรียนรู้ร่วมกับ Supervisor",
+    th: "ตรวจสอบ Onboarding Checklist และวางแผนการเรียนรู้ร่วมกับ Supervisor",
+    en: "Review the onboarding checklist and plan your learning with your Supervisor",
   },
 ];
 
@@ -28,6 +51,7 @@ export default function Day1Checklist({
 }: {
   checkedKeys: string[];
 }) {
+  const t = useT();
   const [done, setDone] = useState<Set<string>>(new Set(checkedKeys));
   const [, startTransition] = useTransition();
 
@@ -51,9 +75,14 @@ export default function Day1Checklist({
       >
         <ListChecks size={22} />
         <div className="flex-1">
-          <h2 className="font-extrabold">เช็คลิสต์วันแรก (Day 1)</h2>
+          <h2 className="font-extrabold">
+            {t("เช็คลิสต์วันแรก (Day 1)", "Day 1 Checklist")}
+          </h2>
           <p className="text-xs text-brand-100">
-            สิ่งที่ต้องทำให้ครบในวันแรกของการเริ่มงาน
+            {t(
+              "สิ่งที่ต้องทำให้ครบในวันแรกของการเริ่มงาน",
+              "What to complete on your first day"
+            )}
           </p>
         </div>
         <span className="rounded-full bg-white/20 px-3 py-1 text-sm font-bold">
@@ -86,11 +115,11 @@ export default function Day1Checklist({
                       on ? "text-muted line-through" : "text-text"
                     }`}
                   >
-                    {it.label}
+                    {t(it.th, it.en)}
                   </span>
-                  {it.hint && (
+                  {it.hintTh && (
                     <span className="mt-0.5 block text-xs text-muted">
-                      {it.hint}
+                      {t(it.hintTh, it.hintEn ?? it.hintTh)}
                     </span>
                   )}
                 </span>

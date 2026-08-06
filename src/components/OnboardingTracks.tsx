@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Check, ChevronRight, Lock } from "lucide-react";
 import type { Document } from "@/lib/types";
+import { useT } from "./LanguageProvider";
 
 type Step = Pick<
   Document,
@@ -25,6 +26,7 @@ export default function OnboardingTracks({
   ackedIds: string[];
   initialRole?: string;
 }) {
+  const t = useT();
   const [role, setRole] = useState<string>(
     ROLES.some((r) => r.key === initialRole) ? initialRole : "gs"
   );
@@ -68,7 +70,7 @@ export default function OnboardingTracks({
       {/* Progress */}
       <div className="rounded-xl border border-border bg-surface p-4">
         <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="font-medium text-text">ความคืบหน้า</span>
+          <span className="font-medium text-text">{t("ความคืบหน้า", "Progress")}</span>
           <span className="text-muted">
             {doneCount}/{track.length} ({pct}%)
           </span>
@@ -81,7 +83,7 @@ export default function OnboardingTracks({
         </div>
         {pct === 100 && track.length > 0 && (
           <p className="mt-2 text-sm font-semibold text-ok">
-            ✅ เรียนรู้ครบทุกหัวข้อแล้ว ยินดีด้วย!
+            {t("✅ เรียนรู้ครบทุกหัวข้อแล้ว ยินดีด้วย!", "✅ All topics completed. Congratulations!")}
           </p>
         )}
       </div>
@@ -89,7 +91,7 @@ export default function OnboardingTracks({
       {/* Steps (locked until the previous one is acknowledged) */}
       {track.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border bg-surface p-8 text-center text-muted">
-          ยังไม่มีคู่มือสำหรับสายงานนี้
+          {t("ยังไม่มีคู่มือสำหรับสายงานนี้", "No manuals for this role yet")}
         </p>
       ) : (
         <ol className="space-y-3">
@@ -119,7 +121,7 @@ export default function OnboardingTracks({
                 </span>
                 <div className="min-w-0 flex-1">
                   <span className="text-xs font-semibold text-brand-600">
-                    ขั้นที่ {i + 1}
+                    {t("ขั้นที่", "Step")} {i + 1}
                   </span>
                   <p className={`font-semibold ${isDone ? "text-muted" : "text-text"}`}>
                     {d.title}
@@ -130,7 +132,7 @@ export default function OnboardingTracks({
                 </div>
                 {isLocked ? (
                   <span className="flex shrink-0 items-center gap-1 rounded-lg bg-surface-2 px-3 py-2 text-xs font-medium text-muted">
-                    <Lock size={13} /> ล็อก
+                    <Lock size={13} /> {t("ล็อก", "Locked")}
                   </span>
                 ) : (
                   <Link
@@ -141,7 +143,7 @@ export default function OnboardingTracks({
                         : "bg-brand-600 text-white hover:bg-brand-700"
                     }`}
                   >
-                    {isDone ? "ทบทวน" : "เปิดอ่าน"}
+                    {isDone ? t("ทบทวน", "Review") : t("เปิดอ่าน", "Open")}
                     <ChevronRight size={15} />
                   </Link>
                 )}
@@ -152,7 +154,10 @@ export default function OnboardingTracks({
       )}
 
       <p className="text-center text-xs text-muted">
-        ต้องกด “อ่านและรับทราบ” ในแต่ละหัวข้อ จึงจะปลดล็อกหัวข้อถัดไป
+        {t(
+          "ต้องกด “อ่านและรับทราบ” ในแต่ละหัวข้อ จึงจะปลดล็อกหัวข้อถัดไป",
+          "You must tap “Read & Acknowledge” on each topic to unlock the next one"
+        )}
       </p>
     </div>
   );

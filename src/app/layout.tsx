@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "@/components/LanguageProvider";
 
 const notoThai = Noto_Sans_Thai({
   variable: "--font-noto-thai",
@@ -25,13 +26,15 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// Set the theme before hydration to avoid a flash of the wrong theme.
+// Set the theme + language before hydration to avoid a flash of the wrong state.
 const themeScript = `
 (function() {
   try {
     var t = localStorage.getItem('sop-theme');
     if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', t);
+    var l = localStorage.getItem('sop-lang');
+    if (l === 'en' || l === 'th') document.documentElement.setAttribute('lang', l);
   } catch (e) {}
 })();
 `;
@@ -46,7 +49,9 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
     </html>
   );
 }

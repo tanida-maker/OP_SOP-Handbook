@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import KnowledgeBase from "@/components/KnowledgeBase";
 import SearchBox from "@/components/SearchBox";
 import Logo from "@/components/Logo";
+import T from "@/components/T";
 import type { Announcement, Category, DocumentWithCategory } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -42,10 +43,13 @@ export default async function HomePage() {
               <Logo height={30} />
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight text-text">
-              คู่มือการทำงาน 📚
+              <T th="คู่มือการทำงาน 📚" en="Operations Manuals 📚" />
             </h1>
             <p className="mt-1 text-muted">
-              SOP · Work Instruction · คู่มือต่างๆ สำหรับพนักงานหน้าสาขา
+              <T
+                th="SOP · Work Instruction · คู่มือต่างๆ สำหรับพนักงานหน้าสาขา"
+                en="SOP · Work Instructions · manuals for branch staff"
+              />
             </p>
           </div>
         </div>
@@ -69,7 +73,7 @@ export default async function HomePage() {
             {pinned.title}
           </span>
           <span className="hidden shrink-0 text-xs font-medium text-brand-600 sm:block">
-            ดูประกาศ →
+            <T th="ดูประกาศ →" en="View announcement →" />
           </span>
         </Link>
       )}
@@ -84,9 +88,14 @@ export default async function HomePage() {
           <GraduationCap size={28} />
         </span>
         <div className="flex-1">
-          <h2 className="font-extrabold text-brand-900">พนักงานใหม่เริ่มที่นี่</h2>
+          <h2 className="font-extrabold text-brand-900">
+            <T th="พนักงานใหม่เริ่มที่นี่" en="New staff start here" />
+          </h2>
           <p className="text-sm text-brand-800/80">
-            เส้นทางการเรียนรู้แบบเป็นขั้นตอนสำหรับ Onboarding
+            <T
+              th="เส้นทางการเรียนรู้แบบเป็นขั้นตอนสำหรับ Onboarding"
+              en="A step-by-step onboarding learning path"
+            />
           </p>
         </div>
         <ArrowRight className="text-brand-700 transition group-hover:translate-x-1" />

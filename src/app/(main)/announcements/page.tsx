@@ -1,25 +1,32 @@
 import { Megaphone, Pin } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import T from "@/components/T";
 import type { Announcement } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "ประกาศ" };
 
-const LEVEL: Record<string, { ring: string; badge: string; label: string }> = {
+const LEVEL: Record<
+  string,
+  { ring: string; badge: string; th: string; en: string }
+> = {
   info: {
     ring: "border-brand-200",
     badge: "bg-brand-100 text-brand-700",
-    label: "ข้อมูล",
+    th: "ข้อมูล",
+    en: "Info",
   },
   warning: {
     ring: "border-amber-200",
     badge: "bg-amber-100 text-amber-700",
-    label: "ควรทราบ",
+    th: "ควรทราบ",
+    en: "Notice",
   },
   critical: {
     ring: "border-red-200",
     badge: "bg-red-100 text-red-700",
-    label: "สำคัญมาก",
+    th: "สำคัญมาก",
+    en: "Critical",
   },
 };
 
@@ -49,12 +56,14 @@ export default async function AnnouncementsPage() {
         <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-600">
           <Megaphone size={24} />
         </span>
-        <h1 className="text-2xl font-extrabold text-text">ประกาศ</h1>
+        <h1 className="text-2xl font-extrabold text-text">
+          <T th="ประกาศ" en="Announcements" />
+        </h1>
       </header>
 
       {items.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border bg-surface p-8 text-center text-muted">
-          ยังไม่มีประกาศ
+          <T th="ยังไม่มีประกาศ" en="No announcements yet" />
         </p>
       ) : (
         <div className="space-y-4">
@@ -70,7 +79,7 @@ export default async function AnnouncementsPage() {
                   <span
                     className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${lv.badge}`}
                   >
-                    {lv.label}
+                    <T th={lv.th} en={lv.en} />
                   </span>
                   <span className="ml-auto text-xs text-muted">
                     {formatDate(a.published_at)}

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { acknowledgeDoc } from "@/app/(main)/onboarding/actions";
+import { useT } from "./LanguageProvider";
 
 export default function AcknowledgeBar({
   docId,
@@ -15,6 +16,7 @@ export default function AcknowledgeBar({
   alreadyAcked: boolean;
 }) {
   const router = useRouter();
+  const t = useT();
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(alreadyAcked);
 
@@ -34,8 +36,14 @@ export default function AcknowledgeBar({
       <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
         <p className="text-sm font-medium text-brand-900">
           {done
-            ? "✅ คุณได้อ่านและรับทราบคู่มือนี้แล้ว"
-            : "อ่านคู่มือนี้จบแล้ว? กดรับทราบเพื่อปลดล็อกหัวข้อถัดไป"}
+            ? t(
+                "✅ คุณได้อ่านและรับทราบคู่มือนี้แล้ว",
+                "✅ You have read and acknowledged this manual"
+              )
+            : t(
+                "อ่านคู่มือนี้จบแล้ว? กดรับทราบเพื่อปลดล็อกหัวข้อถัดไป",
+                "Finished reading? Acknowledge to unlock the next topic"
+              )}
         </p>
         <button
           onClick={ack}
@@ -47,7 +55,9 @@ export default function AcknowledgeBar({
           ) : (
             <CheckCircle2 size={17} />
           )}
-          {done ? "กลับสู่เส้นทาง" : "อ่านและรับทราบ"}
+          {done
+            ? t("กลับสู่เส้นทาง", "Back to track")
+            : t("อ่านและรับทราบ", "Read & Acknowledge")}
         </button>
       </div>
     </div>

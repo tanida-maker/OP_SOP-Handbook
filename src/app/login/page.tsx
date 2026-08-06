@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import LoginForm from "./LoginForm";
 import Logo from "@/components/Logo";
+import T from "@/components/T";
 
 export const metadata: Metadata = { title: "เข้าสู่ระบบ" };
 
@@ -18,18 +19,27 @@ export default function LoginPage() {
             Operations Knowledge Center
           </h1>
           <p className="mt-1 text-sm text-muted">
-            เข้าสู่ระบบด้วยบัญชีพนักงาน
+            <T th="เข้าสู่ระบบด้วยบัญชีพนักงาน" en="Sign in with your staff account" />
           </p>
         </div>
 
         <div className="rounded-2xl border border-border bg-surface p-6 shadow-md">
-          <Suspense fallback={<div className="text-sm text-muted">กำลังโหลด...</div>}>
+          <Suspense
+            fallback={
+              <div className="text-sm text-muted">
+                <T th="กำลังโหลด..." en="Loading..." />
+              </div>
+            }
+          >
             <LoginForm />
           </Suspense>
         </div>
 
         <p className="mt-4 text-center text-xs text-muted">
-          หากลืมรหัสผ่านหรือยังไม่มีบัญชี กรุณาติดต่อผู้ดูแลระบบ (Admin)
+          <T
+            th="หากลืมรหัสผ่านหรือยังไม่มีบัญชี กรุณาติดต่อผู้ดูแลระบบ (Admin)"
+            en="Forgot your password or don't have an account? Please contact your Admin"
+          />
         </p>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { SearchX } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import DocumentCard from "@/components/DocumentCard";
 import SearchBox from "@/components/SearchBox";
+import T from "@/components/T";
 import type { DocumentWithCategory } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -39,14 +40,19 @@ export default async function SearchPage({
 
       {term && (
         <p className="text-sm text-muted">
-          ผลการค้นหา &quot;{term}&quot; — พบ {docs.length} รายการ
+          <T
+            th={`ผลการค้นหา "${term}" — พบ ${docs.length} รายการ`}
+            en={`Results for "${term}" — ${docs.length} found`}
+          />
         </p>
       )}
 
       {term && docs.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border bg-surface p-12 text-center">
           <SearchX size={40} className="text-muted" />
-          <p className="text-muted">ไม่พบคู่มือที่ตรงกับคำค้นหา</p>
+          <p className="text-muted">
+            <T th="ไม่พบคู่มือที่ตรงกับคำค้นหา" en="No manuals match your search" />
+          </p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

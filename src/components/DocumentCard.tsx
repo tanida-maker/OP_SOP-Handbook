@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Clock } from "lucide-react";
 import Icon from "./Icon";
+import T from "./T";
 import { categoryPastel } from "@/lib/categoryStyle";
 import type { DocumentWithCategory } from "@/lib/types";
 
@@ -70,7 +71,11 @@ export default function DocumentCard({ doc }: { doc: DocumentWithCategory }) {
       {/* Body */}
       <div className="flex flex-1 flex-col px-3 pb-2 pt-3">
         <span className="text-[11px] font-semibold uppercase tracking-wide text-muted">
-          {doc.status === "draft" ? "ฉบับร่าง" : "คู่มือ · SOP"}
+          {doc.status === "draft" ? (
+            <T th="ฉบับร่าง" en="Draft" />
+          ) : (
+            <T th="คู่มือ · SOP" en="Manual · SOP" />
+          )}
         </span>
         <h3 className="clamp-2 mt-1 font-bold leading-snug text-text group-hover:text-brand-700">
           {doc.title}
@@ -84,7 +89,7 @@ export default function DocumentCard({ doc }: { doc: DocumentWithCategory }) {
             <Clock size={13} /> {shortDate(doc.updated_at)}
           </span>
           <span className="flex items-center gap-1 font-semibold text-brand-600">
-            อ่าน{" "}
+            <T th="อ่าน" en="Read" />{" "}
             <ArrowRight size={13} className="transition group-hover:translate-x-0.5" />
           </span>
         </div>

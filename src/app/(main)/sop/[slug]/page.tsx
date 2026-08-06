@@ -5,6 +5,7 @@ import { createClient, getSessionUser } from "@/lib/supabase/server";
 import ContentRenderer from "@/components/ContentRenderer";
 import DocumentCard from "@/components/DocumentCard";
 import AcknowledgeBar from "@/components/AcknowledgeBar";
+import T from "@/components/T";
 import type { DocumentWithCategory } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -81,7 +82,7 @@ export default async function SopPage({
     <article className="mx-auto max-w-3xl space-y-6">
       <nav className="flex flex-wrap items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-text">
-          หน้าแรก
+          <T th="หน้าแรก" en="Home" />
         </Link>
         <ChevronRight size={14} />
         {d.category && (
@@ -101,7 +102,7 @@ export default async function SopPage({
       <header className="space-y-4">
         {d.status === "draft" && (
           <span className="inline-block rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-            ฉบับร่าง (มองเห็นเฉพาะแอดมิน)
+            <T th="ฉบับร่าง (มองเห็นเฉพาะแอดมิน)" en="Draft (admins only)" />
           </span>
         )}
         <div className="flex items-start justify-between gap-4">
@@ -113,16 +114,22 @@ export default async function SopPage({
               href={`/admin/documents/${d.id}`}
               className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-text hover:border-brand-300"
             >
-              <Pencil size={15} /> แก้ไข
+              <Pencil size={15} /> <T th="แก้ไข" en="Edit" />
             </Link>
           )}
         </div>
         {d.summary && <p className="text-lg text-muted">{d.summary}</p>}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
           <span className="flex items-center gap-1.5">
-            <Clock size={15} /> อัปเดต {formatDate(d.updated_at)}
+            <Clock size={15} />{" "}
+            <T
+              th={`อัปเดต ${formatDate(d.updated_at)}`}
+              en={`Updated ${formatDate(d.updated_at)}`}
+            />
           </span>
-          <span>เวอร์ชัน {d.version}</span>
+          <span>
+            <T th={`เวอร์ชัน ${d.version}`} en={`Version ${d.version}`} />
+          </span>
         </div>
       </header>
 
@@ -146,7 +153,9 @@ export default async function SopPage({
 
       {relatedDocs.length > 0 && (
         <section className="space-y-4 pt-4">
-          <h2 className="text-lg font-bold text-text">คู่มือที่เกี่ยวข้อง</h2>
+          <h2 className="text-lg font-bold text-text">
+            <T th="คู่มือที่เกี่ยวข้อง" en="Related manuals" />
+          </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {relatedDocs.map((r) => (
               <DocumentCard key={r.id} doc={r} />

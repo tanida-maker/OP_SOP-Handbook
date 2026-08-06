@@ -6,6 +6,7 @@ import {
   CalendarDays,
   GraduationCap,
   Home,
+  Languages,
   LayoutGrid,
   LogOut,
   Megaphone,
@@ -15,7 +16,9 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import LangToggle from "./LangToggle";
 import Logo from "./Logo";
+import { useT } from "./LanguageProvider";
 import { createClient } from "@/lib/supabase/client";
 
 const SCHEDULING_URL = "https://airportels-scheduling.vercel.app";
@@ -31,15 +34,16 @@ export default function LeftRail({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const t = useT();
 
   const items: Item[] = [
-    { href: "/", label: "หน้าแรก", icon: Home },
-    { href: "/onboarding", label: "พนักงานใหม่", icon: GraduationCap },
-    { href: "/announcements", label: "ประกาศ", icon: Megaphone, badge: announceCount },
-    { href: "/search", label: "ค้นหา", icon: Search },
+    { href: "/", label: t("หน้าแรก", "Home"), icon: Home },
+    { href: "/onboarding", label: t("พนักงานใหม่", "New Staff"), icon: GraduationCap },
+    { href: "/announcements", label: t("ประกาศ", "Announcements"), icon: Megaphone, badge: announceCount },
+    { href: "/search", label: t("ค้นหา", "Search"), icon: Search },
   ];
   if (isAdmin)
-    items.push({ href: "/admin", label: "ระบบจัดการ", icon: Settings });
+    items.push({ href: "/admin", label: t("ระบบจัดการ", "Admin"), icon: Settings });
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -91,7 +95,7 @@ export default function LeftRail({
           className={`${row} text-muted hover:bg-surface-2 hover:text-text`}
         >
           <CalendarDays size={20} className="shrink-0" />
-          <span className="flex-1">ตารางงาน</span>
+          <span className="flex-1">{t("ตารางงาน", "Scheduling")}</span>
           <span className="text-xs text-muted">↗</span>
         </a>
       </nav>
@@ -102,12 +106,18 @@ export default function LeftRail({
           className={`${row} text-muted hover:bg-surface-2 hover:text-text`}
         >
           <LayoutGrid size={20} className="shrink-0" />
-          <span className="flex-1">หมวดหมู่</span>
+          <span className="flex-1">{t("หมวดหมู่", "Categories")}</span>
         </Link>
 
         <div className={`${row} text-muted`}>
+          <Languages size={20} className="shrink-0" />
+          <span className="flex-1">{t("ภาษา", "Language")}</span>
+          <LangToggle />
+        </div>
+
+        <div className={`${row} text-muted`}>
           <Moon size={20} className="shrink-0" />
-          <span className="flex-1">ธีมสว่าง/มืด</span>
+          <span className="flex-1">{t("ธีมสว่าง/มืด", "Light/Dark")}</span>
           <ThemeToggle />
         </div>
 
@@ -116,7 +126,7 @@ export default function LeftRail({
           className={`${row} text-danger hover:bg-red-50`}
         >
           <LogOut size={20} className="shrink-0" />
-          <span className="flex-1 text-left">ออกจากระบบ</span>
+          <span className="flex-1 text-left">{t("ออกจากระบบ", "Log out")}</span>
         </button>
       </div>
     </aside>

@@ -3,18 +3,22 @@
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { useState } from "react";
+import { useT } from "./LanguageProvider";
 
 export default function SearchBox({
   autoFocus = false,
   defaultValue = "",
-  placeholder = "ค้นหา SOP, คู่มือ, ขั้นตอน...",
+  placeholder,
 }: {
   autoFocus?: boolean;
   defaultValue?: string;
   placeholder?: string;
 }) {
   const router = useRouter();
+  const t = useT();
   const [q, setQ] = useState(defaultValue);
+  const ph =
+    placeholder ?? t("ค้นหา SOP, คู่มือ, ขั้นตอน...", "Search SOPs, manuals, steps...");
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -33,7 +37,7 @@ export default function SearchBox({
         autoFocus={autoFocus}
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder={placeholder}
+        placeholder={ph}
         className="w-full rounded-full border border-border bg-surface py-2.5 pl-11 pr-4 text-sm text-text placeholder:text-muted shadow-sm outline-none focus:border-brand-400"
       />
     </form>

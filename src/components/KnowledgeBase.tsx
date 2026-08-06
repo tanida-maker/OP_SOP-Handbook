@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { FileSearch } from "lucide-react";
 import DocumentCard from "./DocumentCard";
+import { useT } from "./LanguageProvider";
 import type { Category, DocumentWithCategory } from "@/lib/types";
 
 export default function KnowledgeBase({
@@ -12,6 +13,7 @@ export default function KnowledgeBase({
   docs: DocumentWithCategory[];
   categories: Category[];
 }) {
+  const t = useT();
   const [active, setActive] = useState<string>("all");
 
   // Only show categories that actually have published docs.
@@ -46,16 +48,19 @@ export default function KnowledgeBase({
     <section id="knowledge" className="scroll-mt-6 space-y-5">
       <div>
         <h2 className="text-2xl font-extrabold tracking-tight text-text">
-          คลังคู่มือการทำงาน
+          {t("คลังคู่มือการทำงาน", "Knowledge Base")}
         </h2>
         <p className="mt-1 text-sm text-muted">
-          เลือกหมวดเพื่อกรอง หรือดูทั้งหมด — {docs.length} คู่มือ
+          {t(
+            `เลือกหมวดเพื่อกรอง หรือดูทั้งหมด — ${docs.length} คู่มือ`,
+            `Filter by category or view all — ${docs.length} manuals`
+          )}
         </p>
       </div>
 
       {/* Filter pills */}
       <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
-        {pill("all", "ทั้งหมด")}
+        {pill("all", t("ทั้งหมด", "All"))}
         {usable.map((c) => pill(c.slug, c.name))}
       </div>
 
@@ -63,7 +68,7 @@ export default function KnowledgeBase({
       {shown.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-surface p-12 text-center">
           <FileSearch size={38} className="text-muted" />
-          <p className="text-muted">ยังไม่มีคู่มือในหมวดนี้</p>
+          <p className="text-muted">{t("ยังไม่มีคู่มือในหมวดนี้", "No manuals in this category yet")}</p>
         </div>
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import Icon from "@/components/Icon";
 import DocumentCard from "@/components/DocumentCard";
+import T from "@/components/T";
 import type { Category, DocumentWithCategory } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -53,7 +54,7 @@ export default async function CategoryPage({
     <div className="space-y-6">
       <nav className="flex items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-text">
-          หน้าแรก
+          <T th="หน้าแรก" en="Home" />
         </Link>
         <ChevronRight size={14} />
         <span className="text-text">{cat.name}</span>
@@ -73,7 +74,7 @@ export default async function CategoryPage({
 
       {documents.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border bg-surface p-8 text-center text-muted">
-          ยังไม่มีคู่มือในหมวดนี้
+          <T th="ยังไม่มีคู่มือในหมวดนี้" en="No manuals in this category yet" />
         </p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -16,15 +16,11 @@ import {
   X,
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import LangToggle from "./LangToggle";
 import SearchBox from "./SearchBox";
 import Logo from "./Logo";
+import { useT } from "./LanguageProvider";
 import { createClient } from "@/lib/supabase/client";
-
-const NAV = [
-  { href: "/", label: "หน้าแรก", icon: Home },
-  { href: "/onboarding", label: "พนักงานใหม่", icon: GraduationCap },
-  { href: "/announcements", label: "ประกาศ", icon: Megaphone },
-];
 
 export default function SiteHeader({
   fullName,
@@ -34,8 +30,15 @@ export default function SiteHeader({
   isAdmin: boolean;
 }) {
   const router = useRouter();
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState(false);
+
+  const NAV = [
+    { href: "/", label: t("หน้าแรก", "Home"), icon: Home },
+    { href: "/onboarding", label: t("พนักงานใหม่", "New Staff"), icon: GraduationCap },
+    { href: "/announcements", label: t("ประกาศ", "Announcements"), icon: Megaphone },
+  ];
 
   async function logout() {
     const supabase = createClient();
@@ -80,6 +83,7 @@ export default function SiteHeader({
         </div>
 
         <div className="ml-auto flex items-center gap-2 md:ml-2">
+          <LangToggle />
           <ThemeToggle />
 
           {/* User menu (desktop) */}
@@ -103,14 +107,14 @@ export default function SiteHeader({
                     href="/admin"
                     className="flex items-center gap-2 px-4 py-3 text-sm text-text hover:bg-surface-2"
                   >
-                    <Settings size={16} /> ระบบจัดการ (Admin)
+                    <Settings size={16} /> {t("ระบบจัดการ (Admin)", "Admin")}
                   </Link>
                 )}
                 <button
                   onClick={logout}
                   className="flex w-full items-center gap-2 px-4 py-3 text-sm text-danger hover:bg-surface-2"
                 >
-                  <LogOut size={16} /> ออกจากระบบ
+                  <LogOut size={16} /> {t("ออกจากระบบ", "Log out")}
                 </button>
               </div>
             )}
@@ -120,7 +124,7 @@ export default function SiteHeader({
           <button
             onClick={() => setOpen(true)}
             className="grid h-9 w-9 place-items-center rounded-full border border-border bg-surface text-text md:hidden"
-            aria-label="เมนู"
+            aria-label={t("เมนู", "Menu")}
           >
             <Menu size={18} />
           </button>
@@ -148,7 +152,7 @@ export default function SiteHeader({
               <button
                 onClick={() => setOpen(false)}
                 className="grid h-9 w-9 place-items-center rounded-full border border-border"
-                aria-label="ปิด"
+                aria-label={t("ปิด", "Close")}
               >
                 <X size={18} />
               </button>
@@ -176,7 +180,7 @@ export default function SiteHeader({
                 className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
               >
                 <LayoutGrid size={18} className="text-brand-600" />
-                หมวดหมู่ทั้งหมด
+                {t("หมวดหมู่ทั้งหมด", "All Categories")}
               </Link>
               <a
                 href="https://airportels-scheduling.vercel.app"
@@ -186,7 +190,7 @@ export default function SiteHeader({
                 className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
               >
                 <CalendarDays size={18} className="text-brand-600" />
-                ตารางงาน (Scheduling) ↗
+                {t("ตารางงาน (Scheduling)", "Scheduling")} ↗
               </a>
               {isAdmin && (
                 <Link
@@ -195,7 +199,7 @@ export default function SiteHeader({
                   className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
                 >
                   <Settings size={18} className="text-brand-600" />
-                  ระบบจัดการ (Admin)
+                  {t("ระบบจัดการ (Admin)", "Admin")}
                 </Link>
               )}
             </nav>
@@ -204,7 +208,7 @@ export default function SiteHeader({
               onClick={logout}
               className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-border py-3 text-sm font-medium text-danger hover:bg-surface-2"
             >
-              <LogOut size={16} /> ออกจากระบบ
+              <LogOut size={16} /> {t("ออกจากระบบ", "Log out")}
             </button>
           </div>
         </div>

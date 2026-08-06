@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Loader2, LogIn, Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { useT } from "@/components/LanguageProvider";
 
 function GoogleIcon() {
   return (
@@ -31,6 +32,7 @@ function GoogleIcon() {
 export default function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
+  const t = useT();
   const next = params.get("next") || "/";
 
   const [email, setEmail] = useState("");
@@ -57,7 +59,10 @@ export default function LoginForm() {
     });
     if (error) {
       setGoogleLoading(false);
-      setMsg({ type: "error", text: "เข้าสู่ระบบด้วย Google ไม่สำเร็จ" });
+      setMsg({
+        type: "error",
+        text: t("เข้าสู่ระบบด้วย Google ไม่สำเร็จ", "Google sign-in failed"),
+      });
     }
     // On success the browser is redirected to Google, so no further action here.
   }
@@ -73,7 +78,10 @@ export default function LoginForm() {
     });
     setLoading(false);
     if (error) {
-      setMsg({ type: "error", text: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" });
+      setMsg({
+        type: "error",
+        text: t("อีเมลหรือรหัสผ่านไม่ถูกต้อง", "Incorrect email or password"),
+      });
       return;
     }
     router.push(next);
@@ -82,7 +90,10 @@ export default function LoginForm() {
 
   async function sendMagicLink() {
     if (!email.trim()) {
-      setMsg({ type: "error", text: "กรุณากรอกอีเมลก่อน" });
+      setMsg({
+        type: "error",
+        text: t("กรุณากรอกอีเมลก่อน", "Please enter your email first"),
+      });
       return;
     }
     setLoading(true);
@@ -95,8 +106,14 @@ export default function LoginForm() {
     setLoading(false);
     setMsg(
       error
-        ? { type: "error", text: "ส่งลิงก์ไม่สำเร็จ กรุณาลองใหม่" }
-        : { type: "ok", text: "ส่งลิงก์เข้าสู่ระบบไปที่อีเมลแล้ว" }
+        ? {
+            type: "error",
+            text: t("ส่งลิงก์ไม่สำเร็จ กรุณาลองใหม่", "Could not send the link. Please try again"),
+          }
+        : {
+            type: "ok",
+            text: t("ส่งลิงก์เข้าสู่ระบบไปที่อีเมลแล้ว", "A sign-in link has been sent to your email"),
+          }
     );
   }
 
@@ -116,19 +133,19 @@ export default function LoginForm() {
         ) : (
           <GoogleIcon />
         )}
-        เข้าสู่ระบบด้วย Google
+        {t("เข้าสู่ระบบด้วย Google", "Sign in with Google")}
       </button>
 
       <div className="flex items-center gap-3">
         <span className="h-px flex-1 bg-border" />
-        <span className="text-xs text-muted">หรือ</span>
+        <span className="text-xs text-muted">{t("หรือ", "or")}</span>
         <span className="h-px flex-1 bg-border" />
       </div>
 
       <form onSubmit={signInPassword} className="space-y-4">
         <div>
           <label className="mb-1 block text-sm font-medium text-text">
-            อีเมล
+            {t("อีเมล", "Email")}
           </label>
           <input
             type="email"
@@ -141,7 +158,7 @@ export default function LoginForm() {
         </div>
         <div>
           <label className="mb-1 block text-sm font-medium text-text">
-            รหัสผ่าน
+            {t("รหัสผ่าน", "Password")}
           </label>
           <input
             type="password"
@@ -175,7 +192,7 @@ export default function LoginForm() {
           ) : (
             <LogIn size={18} />
           )}
-          เข้าสู่ระบบ
+          {t("เข้าสู่ระบบ", "Sign in")}
         </button>
 
         <button
@@ -184,7 +201,7 @@ export default function LoginForm() {
           disabled={busy}
           className="flex w-full items-center justify-center gap-2 rounded-lg border border-border py-2.5 text-sm font-medium text-text transition hover:bg-surface-2 disabled:opacity-60"
         >
-          <Mail size={18} /> ส่งลิงก์เข้าสู่ระบบทางอีเมล
+          <Mail size={18} /> {t("ส่งลิงก์เข้าสู่ระบบทางอีเมล", "Email me a sign-in link")}
         </button>
       </form>
     </div>

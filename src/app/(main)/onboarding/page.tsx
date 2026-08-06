@@ -2,6 +2,7 @@ import { GraduationCap } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import OnboardingTracks from "@/components/OnboardingTracks";
 import Day1Checklist from "@/components/Day1Checklist";
+import T from "@/components/T";
 import type { Document } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -43,10 +44,14 @@ export default async function OnboardingPage({
           <GraduationCap size={28} />
         </span>
         <div>
-          <h1 className="text-2xl font-extrabold text-text">เส้นทางพนักงานใหม่</h1>
+          <h1 className="text-2xl font-extrabold text-text">
+            <T th="เส้นทางพนักงานใหม่" en="New Staff Onboarding" />
+          </h1>
           <p className="mt-1 text-muted">
-            เลือกสายงานของคุณ แล้วอ่าน + กดรับทราบทีละหัวข้อให้ครบ
-            เพื่อเริ่มงานอย่างมั่นใจ
+            <T
+              th="เลือกสายงานของคุณ แล้วอ่าน + กดรับทราบทีละหัวข้อให้ครบ เพื่อเริ่มงานอย่างมั่นใจ"
+              en="Choose your role, then read and acknowledge each topic to start work with confidence"
+            />
           </p>
         </div>
       </header>
@@ -55,10 +60,13 @@ export default async function OnboardingPage({
 
       <div className="pt-2">
         <h2 className="mb-1 text-lg font-bold text-text">
-          เส้นทางเรียนรู้ตามสายงาน
+          <T th="เส้นทางเรียนรู้ตามสายงาน" en="Learning track by role" />
         </h2>
         <p className="mb-4 text-sm text-muted">
-          อ่าน + กดรับทราบทีละหัวข้อให้ครบตามสายงานของคุณ
+          <T
+            th="อ่าน + กดรับทราบทีละหัวข้อให้ครบตามสายงานของคุณ"
+            en="Read and acknowledge each topic for your role"
+          />
         </p>
         <OnboardingTracks docs={steps} ackedIds={ackedIds} initialRole={role} />
       </div>

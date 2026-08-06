@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import LeftRail from "@/components/LeftRail";
+import T from "@/components/T";
 import { createClient, getSessionUser } from "@/lib/supabase/server";
 import { APP_VERSION } from "@/lib/version";
 
@@ -24,7 +25,7 @@ export default async function MainLayout({
 
       {/* Mobile top bar (rail is hidden on mobile) */}
       <div className="md:hidden">
-        <SiteHeader fullName={fullName ?? "พนักงาน"} isAdmin={isAdmin} />
+        <SiteHeader fullName={fullName ?? "Staff"} isAdmin={isAdmin} />
       </div>
 
       <div className="flex min-h-screen flex-col md:pl-60">
@@ -39,10 +40,10 @@ export default async function MainLayout({
             </p>
             <div className="flex items-center gap-4">
               <Link href="/onboarding" className="hover:text-text">
-                พนักงานใหม่
+                <T th="พนักงานใหม่" en="New Staff" />
               </Link>
               <Link href="/announcements" className="hover:text-text">
-                ประกาศ
+                <T th="ประกาศ" en="Announcements" />
               </Link>
             </div>
           </div>
