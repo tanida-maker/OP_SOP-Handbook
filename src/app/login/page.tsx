@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { FileText } from "lucide-react";
 import LoginForm from "./LoginForm";
 import Logo from "@/components/Logo";
 import T from "@/components/T";
@@ -34,6 +35,19 @@ export default function LoginPage() {
             <LoginForm />
           </Suspense>
         </div>
+
+        <a
+          href="/sop-hub-login-guide.pdf"
+          target="_blank"
+          rel="noopener"
+          className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-brand-200 bg-brand-50 py-2.5 text-sm font-semibold text-brand-700 transition hover:border-brand-400 hover:bg-brand-100"
+        >
+          <FileText size={16} />
+          <T
+            th="คู่มือเข้าใช้งานครั้งแรก (PDF)"
+            en="First-time login guide (PDF)"
+          />
+        </a>
 
         <p className="mt-4 text-center text-xs text-muted">
           <T

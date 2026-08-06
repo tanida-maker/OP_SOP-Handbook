@@ -1,4 +1,4 @@
-import { GraduationCap } from "lucide-react";
+import { FileText, GraduationCap } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import OnboardingTracks from "@/components/OnboardingTracks";
 import Day1Checklist from "@/components/Day1Checklist";
@@ -53,6 +53,15 @@ export default async function OnboardingPage({
               en="Choose your role, then read and acknowledge each topic to start work with confidence"
             />
           </p>
+          <a
+            href="/sop-hub-login-guide.pdf"
+            target="_blank"
+            rel="noopener"
+            className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-3 py-1.5 text-sm font-semibold text-brand-700 transition hover:border-brand-400 hover:bg-brand-100"
+          >
+            <FileText size={15} />
+            <T th="คู่มือเข้าใช้งานครั้งแรก (PDF)" en="First-time login guide (PDF)" />
+          </a>
         </div>
       </header>
 
