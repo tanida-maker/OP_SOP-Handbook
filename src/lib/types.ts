@@ -31,6 +31,7 @@ export interface Document {
   content_html: string; // rendered HTML from the editor
   cover_image: string | null;
   tags: string[] | null;
+  doc_code?: string | null; // document control code, e.g. SOP-OPS-016/2025
   status: DocStatus;
   is_onboarding: boolean;
   onboarding_order: number | null;

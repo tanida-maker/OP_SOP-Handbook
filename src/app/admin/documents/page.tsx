@@ -61,6 +61,11 @@ export default async function AdminDocuments() {
                 <tr key={d.id} className="border-b border-border last:border-0">
                   <td className="px-4 py-3">
                     <span className="font-medium text-text">{d.title}</span>
+                    {d.doc_code && (
+                      <span className="ml-2 font-mono text-[11px] text-muted">
+                        {d.doc_code}
+                      </span>
+                    )}
                     {d.is_onboarding && (
                       <span className="ml-2 rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-semibold text-brand-700">
                         Onboarding

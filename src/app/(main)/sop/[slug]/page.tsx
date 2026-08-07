@@ -128,6 +128,11 @@ export default async function SopPage({
         </div>
         {d.summary && <p className="text-lg text-muted">{d.summary}</p>}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
+          {d.doc_code && (
+            <span className="rounded-md border border-border bg-surface-2 px-2 py-0.5 font-mono text-xs font-semibold text-text">
+              {d.doc_code}
+            </span>
+          )}
           <span className="flex items-center gap-1.5">
             <Clock size={15} />{" "}
             <T
