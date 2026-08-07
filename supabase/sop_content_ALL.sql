@@ -1,13 +1,14 @@
 -- ============================================================
--- AIRPORTELs SOP Hub — content migration BATCH 2
---   * Update Terms & Conditions -> 2026 (Thai), archive 2025 (guarded)
---   * Insert 7 new SOP documents (images served from /public/sop/*)
--- Idempotent. Run in the Supabase SQL Editor of the shared project.
--- NOTE: deploy the app first so /sop/<slug>/*.jpg images resolve.
+-- AIRPORTELs SOP Hub — CONSOLIDATED content migration (batch 1 + 2)
+--   * Terms & Conditions -> 2026 bilingual TH/EN (archive 2025, guarded)
+--   * Update late-pickup discount SOP (+figures)
+--   * Insert 12 new SOP documents
+--   * All figures/screenshots served from /public/sop/* (already deployed)
+-- Small + idempotent. Run ONCE in the Supabase SQL Editor.
 -- ============================================================
 begin;
 
--- ===== terms-and-conditions-2025: archive current (guarded) then update to 2026 (TH) =====
+-- ===== terms-and-conditions-2025: archive current (guarded) then update =====
 insert into sop.documents (slug, title, summary, category_id, content_html, cover_image, tags, status, is_onboarding, onboarding_order, version)
 select 'terms-and-conditions-2025-archive', title || ' — เก็บถาวร ปี 2025 (Archive)', summary, category_id, content_html, cover_image,
        coalesce(tags,'{}') || array['archive'], 'draft', false, null, version
@@ -15,9 +16,7 @@ from sop.documents where slug = 'terms-and-conditions-2025'
   and not exists (select 1 from sop.documents where slug = 'terms-and-conditions-2025-archive');
 
 update sop.documents set
-  title = 'ข้อกำหนดและเงื่อนไขการให้บริการ 2026 (Terms & Conditions)',
-  summary = 'ข้อกำหนดและเงื่อนไขมาตรฐานการใช้บริการของบริษัท แอร์พอเทลส์ อินเตอร์เนชันแนล จำกัด ฉบับภาษาไทย ปี 2026 (อัปเดต 29/04/2026) — การยอมรับเงื่อนไข ราคาและการชำระเงิน ความรับผิดชอบ สิ่งของต้องห้าม การจอง/ยกเลิก/คืนเงิน และค่าชดเชย',
-  content_html = '<blockquote><p><strong>อัปเดตล่าสุด:</strong> 29/04/2026 &nbsp;·&nbsp; <strong>ต้นฉบับ:</strong> (TH) Terms and Conditions 2026</p></blockquote>
+  title = 'ข้อกำหนดและเงื่อนไขการให้บริการ 2026 (Terms & Conditions)', summary = 'ข้อกำหนดและเงื่อนไขมาตรฐานการใช้บริการของบริษัท แอร์พอเทลส์ อินเตอร์เนชันแนล จำกัด ปี 2026 (อัปเดต 29/04/2026) — แสดงสองภาษา ไทย/อังกฤษ ตามปุ่มเปลี่ยนภาษา ครอบคลุมการยอมรับเงื่อนไข ราคาและการชำระเงิน ความรับผิดชอบ สิ่งของต้องห้าม การจอง/ยกเลิก/คืนเงิน และค่าชดเชย', content_html = '<style>[lang="en"] .sop-lang-th{display:none}[lang="th"] .sop-lang-en{display:none}</style><div class="sop-lang-th"><blockquote><p><strong>อัปเดตล่าสุด:</strong> 29/04/2026 &nbsp;·&nbsp; เอกสารนี้แสดงสองภาษา — กดปุ่ม <strong>EN/TH</strong> ด้านซ้ายเพื่อสลับภาษา</p></blockquote>
 <h3>Last update: 29/04/26</h3>
 <h3>ข้อกำหนดและเงื่อนไขมาตรฐานการใช้บริการ</h3>
 <p>การยอมรับเงื่อนไขและข้อกำหนดของบริษัท แอร์พอเทลส์ อินเตอร์เนชันแนล จำกัด กรุณาอ่านเงื่อนไขและข้อกำหนดเหล่านี้อย่างละเอียดก่อนที่คุณจะเข้าถึงและใช้บริการของเรา บริการของเรามีให้ บริการเฉพาะในเงื่อนไขที่ผู้เข้าร่วมบริการยอมรับเงื่อนไขและข้อกำหนดของเรา หากคุณไม่เห็นด้วยกับเงื่อนไขต่อไปนี้ กรุณาอย่าเข้าถึงหรือใช้บริการของเรา ขอให้ทราบว่าหากการจองหรือการเข้าร่วมใช้บริการของคุณทำโดยบุคคลที่ สามและเป็นในนามของคุณ นั่นหมายความว่าคุณยอมรับและเคารพเงื่อนไขและข้อกำหนดเหล่านี้รวมถึงนโยบาย</p>
@@ -481,9 +480,843 @@ update sop.documents set
 <p><strong>3. หากยกเลิกการจองหรือคำสั่งซื้อหลังจากเวลาที่กำหนด จะไม่สามารถคืนเงินได้</strong></p>
 <p><strong>4. การคืนเงินจะดำเนินการภายใน 7-14 วันทำการ</strong></p>
 <p><strong>5. การจอง/คำสั่งซื้อจะถือเป็น "ไม่มาใช้บริการ" นับตั้งแต่เวลาที่เริ่มให้บริการที่นัดหมายไว้แล้วไม่มีการใช้งาน</strong></p>
-<p><strong>6. เงื่อนไขเป็นไปตามที่บริษัทกำหนด</strong></p>
-'
+<p><strong>6. เงื่อนไขเป็นไปตามที่บริษัทกำหนด</strong></p></div><div class="sop-lang-en"><blockquote><p><strong>Last updated:</strong> 29/04/2026 &nbsp;·&nbsp; This document is bilingual — use the <strong>EN/TH</strong> button to switch language</p></blockquote>
+<h3>Terms and Conditions</h3>
+<h3>Last update: 29/04/26</h3>
+<p>Acceptance of terms and conditions of AIRPORTELs International Co., Ltd. Please carefully read these terms and conditions before you access and utilize our services. Our services are only available on the condition that any participant of services consent our terms and conditions. If you don’t agree with the following terms, please DO NOT and CANCEL accessing or using our services. Shall you notice that if your booking or participation in your access to or use of services of AIRPORTELs is made by a third party and is on your behalf, it means you agree to and respect these terms and conditions and our Privacy Policy.</p>
+<p>Our services are only available for users who have been the age 18 or older and become legally adult under Thai laws. By using and accessing our website, application, services, you warrant that you are in the age 18 or older; agree and respect our terms and policy; and be able to form a contract with AIRPORTELs International Co., Ltd autonomously.</p>
+<h3>Organization</h3>
+<p>AIRPORTELs International Co., Ltd. is an organization registered in the Kingdom of Thailand under number 0105565098687 and with our registered office at 6 Pailin Park Rattanathibet 28 Bang Krasor Nonthaburi, Nonthaburi, Thailand 11000 (บริษัท แอร์พอเทลส์ อินเตอร์เนชันแนล จำกัด เลข ประจำตัวผู้เสียภาษี 0105565098687 เลขที่ 6 หมู่บ้านไพลินปาร์ค ซอยรัตนาธิเบศร์ 28 แยก 2 ตำบลบางกระสอ อำเภอเมืองนนทบุรี จังหวัดนนทบุรี 11000).</p>
+<h3>Price and billing</h3>
+<p>All pricing, transactions, or any other act related to money will be done ONLY via website and/or e-mail or at our counter (reception desk) in the following list Please be aware that any request for money, benefit, or any other kind of transaction which is not happened at our appointed place or channel IS NOT authorized by us.</p>
+<p>The price of the services is revealed on the list via our channels. We may change the price, but the price will be SET once a booking or reservation has been confirmed, and all the price revealed is VAT INCLUDED. Any additional request which is not included in the same booking or transaction will be seen as a new order, and the price MAY be different. All transaction can be paid by credit card, debit card, and cash and is in THB, THAI BAHT(฿). Accepted payment methods are in the following list.</p>
+<p><strong>1. Online</strong></p>
+<p>1.1 Credit/Debit Card (ONLY for cards issued from VISA, MASTER, and JCB)</p>
+<h3>1.2 Paypal</h3>
+<h3>1.3 Alipay (ONLY for users from Mainland China)</h3>
+<p><strong>2. AIRPORTELs reception (Thailand)</strong></p>
+<ul><li>Cash ONLY in THB, THAI BAHT(฿)</li><li>Credit/Debit Card (ONLY for cards issued from VISA, MASTER, JCB, and UNION PAY)</li><li>Alipay (ONLY for users from Mainland China)</li><li>WeChat Pay (ONLY for users from Mainland China)</li><li>Wireless transfer</li><li>Paypal</li><li>Alipay (China)</li><li>PromptPay (Thailand)</li></ul>
+<p>All process of the service, from booking to billing, should be done under the same name and the same person. A real, physical passport or the other accepted certificates of identification WILL BE asked when doing the transaction. The scale which is used for weighing and formulating the bill is maintained and follow the standard of ISO 9001. As you agree to use the service, you also agree with the results provided by our scale. We will then provide you the accurate invoice with price based on the weight we measured.</p>
+<p>You SHALL always receive payment receipt in hard or soft copy after the transaction is done.</p>
+<h3>Receipt</h3>
+<p>All details and information on the price of service will be revealed in the invoice once billing is confirmed, and NO hidden charge will be included. You have the right to ask for interpretation if any statement from our services is obscure. The entity who uses the service should be the same as the entity who receive the luggage or bag. The price on an invoice (if provided) and aligned receipt should be exactly the same. Receipt(s) will be given ONLY when a transaction is done and acceptance of these terms and conditions provided by you. By receiving a receipt or receipts, you agree that the service is closed.</p>
+<h3>Responsibilities of AIRPORTELs</h3>
+<p>We deliver and provide our services exactly the same as the statement we published via our website, application, and documents at our counter. If we fail to deliver an inbound delivery on our scheduled delivery time, we will give 100% refund to you. If we fail to deliver an outbound delivery on our scheduled delivery time, we will be responsible for the necessary payment to send your luggage to the ultimate destination appointed by you. We will notify you of any change of circumstance and/or content that will affect your behalf of you via the contact(s) you provide.</p>
+<h3>Responsibilities of users</h3>
+<p>You warrant that you DO NOT pack any prohibited item(s), listed in the Prohibited Items section, in your luggage that will be delivered or stored, and the services are used properly. You are responsible for any loss or damage caused by any misuse or breaching of our terms and conditions. The slip of certification and receipt should be taken and preserved by yourself and ready to be checked when you do billing or check out at our counter. You agree that your information provided to us is accurate and acknowledged by yourself, whether it is given by yourself or an authorized entity. Proof or certification (credit/debit card or passport) of your signature or identification MAY be asked by our associates to ensure your identification.</p>
+<h3>Shipping policy and security arrangement</h3>
+<p>All of our services should be used with a lawful purpose. By using our delivery service, you agree to our terms and respect laws of the Kingdom of Thailand. We WILL NOT break your luggage by any illegal purpose, but in certain circumstances, we will collaborate with official or governmental authority of the Kingdom of Thailand for investigation and illegal acts prevention, if any suspicious, illegal, risky, or dangerous items appears when we are notified by Thai official authority or items been found by X-ray scanner or the other non-wrecking investigations. You MAY be asked to let your luggage be checked or investigated by our staff. If you reject to do so, we may refuse to provide you services for security reasons. We have the right to reject and cancel your request, booking, reservation, or any other service if you violate the terms and/or are suspected of any illegal, risky, or dangerous act(s) WITHOUT refund. For security purposes, we MAY collaborate with authorized authorities to investigate any suspicious parcels, bags, or containers in any kind of form we delivered or stored.</p>
+<p>A piece of regular luggage is defined as each edge (Width, Length, and Height) or diameter of the luggage combined in all dimensions, NOT over 200 cm, and the weight of each piece of luggage should not exceed 25KG.</p>
+<h3>Uncontrollable events</h3>
+<p>We shall not be liable for failing to deliver our services and taking care of your luggage in circumstances that are caused by a third party or out of our control as follows:</p>
+<ul><li>Failure to meet aviation security requirements.</li><li>Failure to make your luggage be able to be delivered on time at the airport.</li><li>Failure to make your luggage be able to be delivered on time at the hotel.</li><li>Failure to book, reserve, or cancel our services on time.</li><li>Action(s) of official or governmental entity(s) and authority(s) (E.g. Police force, Customs,</li></ul>
+<p>Airport operator, and Authority of aviation).</p>
+<ul><li>Disruption of regional or national ground and air transportation.</li><li>Natural disaster(s) (E.g. Flood, Earthquake, Tsunami, or Typhoon).</li><li>Uncontrollable circumstances caused by any third party (E.g. Riot, Strike, Fire Disaster,</li></ul>
+<p>Investigation by official or authorized entity(s)).</p>
+<ul><li>Breakage or loss of your luggage or property by the action(s) of a third party which is out of</li></ul>
+<p>our control.</p>
+<h3>Prohibited items</h3>
+<ul><li>Goods containing alcohol.</li><li>Dangerous goods and hazardous materials.</li><li>High-value items such as diamonds, gemstones, and gold.</li><li>Firearms or items are similar to weapons and sharp objects.</li><li>Cash and items that can substitute for cash, such as checks, banknotes, or debt instruments.</li><li>Perishable goods, such as plants, vegetables, fruits, and meat.</li><li>It prohibited plant species and seeds of certain types.</li><li>Obscene materials and all types of pornographic media.</li><li>Biological hazards include saliva, pathogens, bacteria, viruses, radioactive substances, and</li></ul>
+<p>toxins.</p>
+<ul><li>Registered medicinal herbs, such as inhalants and balms.</li><li>Animal products without a license (in some countries).</li><li>All types of coal and batteries.</li><li>Travel bags (not packed in a parcel box), locks, or locked items.</li><li>Tobacco and tobacco products.</li><li>Flammable objects and chemicals are capable of sparking fires and explosions.</li><li>Lottery tickets, lotteries, or any gambling-related media.</li><li>Illegal drugs and narcotics, including methamphetamine, ice, or cannabis.</li><li>Living animals, including fish and birds.</li><li>Personal data documents, such as passports, ID cards, ATM cards, and bank accounts.</li><li>Copyright-infringing goods are counterfeit or trademark-imitating products.</li><li>Religious artifacts, amulets, deity statues, and various antiques.</li><li>Human body parts, including ashes.</li><li>Electronic devices that are fragile and easily damaged, such as mobile phones, laptops,</li></ul>
+<p>monitors, cameras, and other similar items.</p>
+<h3>Liabilities of AIRPORTELs</h3>
+<p>For labeled luggage and confirmed order, we will ensure the delivery or services to be delivered or provided on time and to the accurate destination and consignee. If we fail to provide our promise, the compensation SHOULD NOT exceed the price or in any value of 50,000 Thai Baht</p>
+<h3>for one order.*</h3>
+<p>*For Nationwide within 5 days delivery service (3-5 business days), the maximum compensation is 10,000 THB per order.</p>
+<ul><li>We SHOULD NOT be liable for any FRAGILE or PERISHABLE item(s) or contents of your</li></ul>
+<p>luggage delivered by us.</p>
+<ul><li>We SHOULD NOT be liable for any PROHIBITED item(s) or contents of your luggage delivered</li></ul>
+<p>by us.</p>
+<ul><li>We SHOULD NOT be liable for any circumstance when you breach or violate our terms or Thai</li></ul>
+<p>law(s).</p>
+<ul><li>We SHOULD NOT be liable for any excluded, dangerous, or prohibited item(s) or contents of</li></ul>
+<p>your luggage delivered by us.</p>
+<ul><li>We SHOULD NOT be liable for any of your property or belongings before your luggage or gear</li></ul>
+<p>is given to us in any circumstance.</p>
+<ul><li>We SHOULD NOT be liable for any of your property or belongings after the transaction is</li></ul>
+<p>closed and luggage is retrieved by the customer.</p>
+<ul><li>We SHOULD NOT be liable for any of your property or belongings if any entity, including you,</li></ul>
+<p>shows valid references to retrieve your belongings.</p>
+<ul><li>We SHOULD NOT be liable for any of your property or belongings if any entity, including you,</li></ul>
+<p>retrieves your belongings out of our counter at the destination.</p>
+<ul><li>The sentimental value of items SHOULD NOT be relevant to their valuation.</li><li>Any attachment to the luggage such as name tag, accessory doll, pillow, or small bag, IS NOT</li></ul>
+<p>guaranteed on its conditions or loss.</p>
+<ul><li>In the unfortunate event that your luggage or bag is broken and is confirmed that the loss</li></ul>
+<p>and damage was caused during TRANSPORTATION via VEHICLE by AIRPORTELs International, the compensation will be referred to the following table.</p>
+<h3>Luggage Claim</h3>
+<p>Part of the Luggage Eligi</p>
+<h3>ble</h3>
+<h3>for</h3>
+<h3>Clai</h3>
+<h3>m</h3>
+<h3>Maximum</h3>
+<h3>Compensat</h3>
+<h3>ion (THB)</h3>
+<h3>Conditions / Details Remarks</h3>
+<p>Wheel ✅ 200 (per</p>
+<h3>wheel)</h3>
+<h3>Broken/detached from</h3>
+<h3>frame, unusable</h3>
+<h3>20% depreciation</h3>
+<h3>Scratches and minor dents</h3>
+<p>not covered.</p>
+<h3>Wheel Fork</h3>
+<h3>Wheel Houing</h3>
+<p>✅ 200 (per</p>
+<h3>each)</h3>
+<h3>Detached, unusable</h3>
+<h3>for pulling luggage</h3>
+<h3>20% depreciation</h3>
+<p>Handle / Trolley handle ✅ 500 Broken/detached,</p>
+<h3>unusable</h3>
+<h3>10% depreciation</h3>
+<h3>Does not cover scratches</h3>
+<h3>but only non-usable</h3>
+<h3>condition.</h3>
+<h3>Top carry handle</h3>
+<h3>Side carry handle</h3>
+<p>✅ 500 Broken/detached from</p>
+<h3>luggage</h3>
+<h3>10% depreciation</h3>
+<h3>Backpack straps (if</h3>
+<h3>luggage is in backpack</h3>
+<h3>form)</h3>
+<p>Torn, broken,</p>
+<h3>detached, unusable</h3>
+<h3>Zipper Pulls</h3>
+<h3>Main Opening Zipper</h3>
+<h3>Rubber Gasket</h3>
+<p>✅ 500 Detached, broken, cannot be used,</p>
+<h3>cannot zip/unzip</h3>
+<h3>10% depreciation</h3>
+<h3>Does not cover misaligned</h3>
+<p>zippers.</p>
+<h3>Luggage frame (frame</h3>
+<h3>joint)</h3>
+<p>✅ 400 Broken or bent,</p>
+<h3>misaligned from frame</h3>
+<h3>impact</h3>
+<h3>10% depreciation</h3>
+<h3>Luggage stand / Side</h3>
+<h3>Bumper</h3>
+<p>✅ 300 Broken/detached,</p>
+<h3>unable to stabilize</h3>
+<h3>luggage</h3>
+<h3>10% depreciation</h3>
+<p>Front/Back Shell ✅ 1,000 Corner broken, bent, or deformed due to</p>
+<h3>impact</h3>
+<h3>10% depreciation if crack</h3>
+<h3>is less than 5 mm. 20%</h3>
+<h3>depreciation if crack is 5–</h3>
+<p>10 mm.</p>
+<h3>Minor scratches are</h3>
+<p>excluded. Front/Back Shell ✅ 1,000 Severe deformation,</p>
+<h3>fracture, caused by</h3>
+<p>external impact or</p>
+<h3>AIRPORTELs handling</h3>
+<h3>50–100% depreciation</h3>
+<h3>Does not cover scratches</h3>
+<h3>or minor dents. Not</h3>
+<h3>applicable if luggage is</h3>
+<h3>usable with minor</h3>
+<p>cosmetic damage. Lock system / Zipper lock ✅ 300 Cannot lock/unlock, broken,</p>
+<h3>malfunctioning</h3>
+<h3>10% depreciation</h3>
+<h3>Combination reset by</h3>
+<p>customer is not covered.</p>
+<h3>Deformed luggage</h3>
+<h3>structure</h3>
+<p>✅ 1,000 Severe frame</p>
+<h3>deformation, luggage</h3>
+<h3>cannot be used</h3>
+<p>50% depreciation.</p>
+<h3>Must provide before-and-</h3>
+<p>after photo evidence. Lost luggage ✅ Actual</p>
+<h3>purchase</h3>
+<h3>value but</h3>
+<h3>not</h3>
+<h3>exceeding</h3>
+<h3>5,000 THB</h3>
+<p>Compensation only for</p>
+<h3>luggage transported</h3>
+<p>by AIRPORTELs.</p>
+<h3>Customer must</h3>
+<h3>provide purchase</h3>
+<p>receipt or proof of value.</p>
+<h3>Applies only to luggage</h3>
+<p>sent via hotel, station, or service counter. Inside belongings ❌ - Inside items (clothes,</p>
+<h3>valuables, etc.) are</h3>
+<h3>excluded</h3>
+<p>Customers are advised to pack valuables separately. Minor scratches ❌ - Considered normal</p>
+<h3>wear and tear</h3>
+<h3>-</h3>
+<p>Decorative items (e.g.,</p>
+<h3>keychains, tags)</h3>
+<p>❌ - Does not cover</p>
+<h3>external accessories</h3>
+<h3>attached to luggage</h3>
+<h3>Recommended to remove</h3>
+<p>before check-in/transport.</p>
+<h3>Golf Bag Claim</h3>
+<p>Part of the Golf Bag Eligi</p>
+<h3>ble</h3>
+<h3>for</h3>
+<h3>Clai</h3>
+<h3>m</h3>
+<h3>Maximum</h3>
+<h3>Compensati</h3>
+<h3>on (THB)</h3>
+<h3>Conditions / Details Remarks</h3>
+<h3>Frame/Base/Corner/Stand</h3>
+<h3>of the golf bag</h3>
+<p>✅ 1,000 Broken/detached</p>
+<h3>from frame, unusable</h3>
+<h3>20% depreciation</h3>
+<p>Must provide proof of original condition. Zipper and Runner ✅ 500 Detached, broken,</p>
+<h3>unusable</h3>
+<h3>10% depreciation</h3>
+<p>Must provide proof of original condition.</p>
+<h3>Handle/Strap/Shoulder</h3>
+<h3>strap</h3>
+<p>✅ 1,000 Torn/detached from</p>
+<h3>bag</h3>
+<h3>10–50% depreciation</h3>
+<p>Must provide proof of original condition. External materials e.g.,</p>
+<h3>fabric/leather/plastic</h3>
+<p>✅ 5,000 Severe external damage, e.g., torn,</p>
+<h3>punctured, split due</h3>
+<h3>to transportation</h3>
+<h3>10–50% depreciation</h3>
+<p>Must provide proof of original condition. Deformed structure ✅ 10,000 Frame bent/broken,</p>
+<h3>golf bag cannot be</h3>
+<h3>used</h3>
+<h3>50% depreciation</h3>
+<p>Must provide proof of original condition. Golf clubs ✅ 3,000 Club head/shaft</p>
+<h3>broken, unusable</h3>
+<h3>50% depreciation</h3>
+<p>Must provide proof of</p>
+<h3>original condition. Does</h3>
+<p>not cover minor scratches. Lost golf bag ✅ Actual</p>
+<h3>purchase</h3>
+<h3>value but</h3>
+<h3>not</h3>
+<h3>exceeding</h3>
+<h3>50,000 THB</h3>
+<h3>Must provide</h3>
+<h3>purchase</h3>
+<p>receipt/proof of value.</p>
+<h3>Applies only to golf bags</h3>
+<p>transported via hotel,</p>
+<h3>station, or AIRPORTELs</h3>
+<p>service counter. Minor scratches ❌ - Considered normal</p>
+<h3>wear and tear</h3>
+<h3>-</h3>
+<p>Decorative items (e.g., keychains, tags,</p>
+<h3>accessories)</h3>
+<p>❌ - Does not cover</p>
+<h3>external accessories</h3>
+<h3>attached to the bag</h3>
+<p>Customers are advised to remove before transport.</p>
+<h3>Damage Claim Conditions</h3>
+<ul><li>Customers must file a damage claim within 3 days or 72 hours from the time of luggage</li></ul>
+<p>receipt, or from the time the delivery status in the system shows “Delivered Successfully.” After this period, AIRPORTELs reserves the right to decline any liability for damage or loss.</p>
+<ul><li>If there is no consignee at the destination at the time of delivery, AIRPORTELs reserves the</li></ul>
+<p>right to decline any liability for damage or loss that may occur. The courier will wait for only 15 minutes as per the delivery conditions. If no consignee is present, the order will be considered “No Show” and no refund will be issued.</p>
+<ul><li>For prohibited items or items that AIRPORTELs does not accept for storage or delivery, all</li></ul>
+<p>claims and liability are expressly excluded.</p>
+<h3>Right of customers</h3>
+<ul><li>You have the right to change or cancel your booking or reservation 3 hours of the use time for</li></ul>
+<p>luggage storage and the cut-off time for luggage delivery.</p>
+<h3>*Service hours</h3>
+<h3>*BANGKOK – Thailand local time</h3>
+<ul><li>Suvarnabhumi Airport (BKK) – 24 HRS</li></ul>
+<h3>B Floor, Airport Rail Link, Suvarnabhumi Airport</h3>
+<ul><li>Don Mueang Airport (DMK) – 24 HRS</li></ul>
+<p>1st Floor, Gate 9, Terminal 2, Don Mueang Airport</p>
+<ul><li>MBK Shopping Center – 10:00 – 22:00</li></ul>
+<h3>Zone B, 6th Floor, MBK Center</h3>
+<ul><li>Terminal 21 Asok – 10:00 – 22:00</li></ul>
+<h3>Japan Zone, 1st Floor, Terminal 21 Shopping Mall</h3>
+<ul><li>Central World (Hug Thai zone) – 10:00 – 22:00</li></ul>
+<p>1st floor, Hug Thai Zone, next to ChaTarMue Exit D, Central World</p>
+<ul><li>Central World (Groove zone) – 10:00 – 22:00</li></ul>
+<p>1st floor, Groove Zone, next to close to Superrich, Central World</p>
+<ul><li>Mixt Chatuchuk – Mo-Th 10:00-20:00 / Fr-Su 10:00-21:00</li></ul>
+<h3>B Zone, 2nd Floor, Mixt Chatuchak mall</h3>
+<ul><li>ICONSIAM – 10:00-22:00</li></ul>
+<h3>B2 Floor, SIAM Takashimaya</h3>
+<ul><li>Yaowarat Chinatown – Mo-Fr 10:00-18:00 / Sa 10:00-14:00</li></ul>
+<h3>2nd Floor, Pichaiyat Building</h3>
+<ul><li>EmSphere – 10:00-22:00</li></ul>
+<h3>B1 floor, Lobby B, in front of the elevator</h3>
+<ul><li>Emporium – 10:00-22:00</li></ul>
+<h3>B2 floor, close to the central escalator</h3>
+<h3>*PATTAYA – Thailand local time</h3>
+<ul><li>Terminal 21 Pattaya – Mo-Th 11:00-22:00 / Fr-Su 11:00-23:00</li></ul>
+<p>Paris Zone, G Floor, Terminal 21 Pattaya (beside EVEANDBOY Shop)</p>
+<h3>*CHIANG MAI – Thailand local time</h3>
+<ul><li>Chiang Mai Airport – 06:00-24:00</li></ul>
+<p>1st Floor, located near gate 7 (across from Thai Post Office)</p>
+<h3>*PHUKET – Thailand local time</h3>
+<ul><li>Phuket Airport (Domestic)– 06:00-24:00</li></ul>
+<h3>1st floor, Door 1</h3>
+<ul><li>Phuket Airport (International)– 06:00-24:00</li></ul>
+<h3>1st floor, Door 2</h3>
+<h3>Interpretation and glossary</h3>
+<ul><li>“Luggage”, “luggage”, “Baggage”, “baggage”, “Gear”, and “gear” are any item</li></ul>
+<p>or entity that is asked by our clients/customers to be delivered to an appointed destination and combined on all dimensions NOT over 200 CM AND lighter than 25KG.</p>
+<ul><li>“We”, “we”, “Us”, “us”, “Our”, and “our” stand for AIRPORTELs International</li></ul>
+<p>Co., Ltd.</p>
+<ul><li>“You” and “you” means any participant who accesses, utilizes, and involves Website and</li></ul>
+<p>Services of AIRPORTELs International Co., Ltd.</p>
+<ul><li>“Consignee” and “consignee” means the entity who provides valid references provided</li></ul>
+<p>by AIRPORTELs International and valid passport or Thai ID to retrieve luggage from AIRPORTELs International Co., Ltd.</p>
+<ul><li>“Participant(s)” and “participant(s)” are any individual(s), group(s), organization(s),</li></ul>
+<p>company(s), institute(s), or entity(s) who is on behalf of the activity(s) (including but not limited to transaction(s), information sharing, and business(s)) with AIRPORTELs International Co., Ltd.</p>
+<ul><li>“Services”, “services”, “Service”, and “service” are any activity and support</li></ul>
+<p>provided by AIRPORTELs International Co., Ltd., including but not limited to website, application, and delivery service.</p>
+<ul><li>“Prohibited item(s)” and “prohibited item(s)” include but not limited to any item or</li></ul>
+<p>entity that is risky, dangerous, perishable, potential to be harmful, and/or not allowed to be transported under the regulation of air and ground transportation set by any regulatory or governmental body including but not limited to Civil Aviation Authority and government of the Kingdom of Thailand.</p>
+<ul><li>“Excluded item(s)” and “excluded item(s)” include but not limited to any item or entity</li></ul>
+<p>that is deemed in any type of valuation by the carrier. (E.g. jewellery, antique, fur, stone, cheque, cash in any currency, photographs, fine art, fabric, and fragile or perishable goods.)</p>
+<ul><li>“Passport” and “passport” are the official and legal certification of status issued by</li></ul>
+<p>governmental institute or regulator of the state of the nationality of an entity.</p>
+<ul><li>“Illegal act(s)” include but not limited to any action, activity, or movement prohibited and</li></ul>
+<p>will violate the laws and regulations of Royal Thai Government</p>
+<ul><li>“Dangerous act(s)” is any action, activity, or movement that will cause harm, loss, or</li></ul>
+<p>breach the law(s) or any legislation(s) of the Kingdom of Thailand.</p>
+<ul><li>“Risky act(s)” is potential and/or intended to cause harm, loss, or breach the law(s) or any</li></ul>
+<p>legislation of the Kingdom of Thailand.</p>
+<ul><li>“Inbound delivery” means the luggage delivery from an appointed airport to an appointed</li></ul>
+<p>hotel.</p>
+<ul><li>“Outbound delivery” means the luggage delivery from an appointed hotel to an appointed</li></ul>
+<p>airport.</p>
+<ul><li>“Appointed” and “appointed” are adjectives to describe any entity that is aligned with</li></ul>
+<p>AIRPORTELs International in any type of collaboration.</p>
+<ul><li>“Associate(s)” and “associate(s)” are any staff, employee, or worker who is legally</li></ul>
+<p>contracted with or employed by AIRPORTELs International Co., Ltd. and always in the uniform of AIRPORTELs International Co., Ltd. and his/her name tag during the work.</p>
+<ul><li>“Scheduled delivery time” and “scheduled delivery time” are the appointed and/or</li></ul>
+<p>arranged time point revealed in the published statement of AIRPORTELs International Co., Ltd.</p>
+<ul><li>“Non-wrecking” and “non-wrecking” are adjectives to describe any process, approach,</li></ul>
+<p>or method that will not physically disable, harm, or break the function or appearance of any physical item.</p>
+<h3>Acknowledgment of time</h3>
+<ul><li>All the time, day, and date conditions revealed in this document, customer booking, orders,</li></ul>
+<p>or any other documents provided by AIRPORTELs International Co., Ltd. are in Thailand local time, ICT, UTC/GMT +7 hours.</p>
+<ul><li>In case customers collect their luggage earlier than the reserved date and time without prior</li></ul>
+<p>notice of at least 3 hours, they must be required to wait for the retrieval and verification</p>
+<h3>process. The exact waiting time cannot be guaranteed or expedited.</h3>
+<h3>Valid reference(s)</h3>
+<p>For any service information or controversy, AIRPORTELs International ONLY refers to the e-mail sent from center@airportels.asia, printed retrieval slip, AIRPORTELs International website, AIRPORTELs International management system, or any physical documents provided by AIRPORTELs International authorized associates.</p>
+<h3>Service usage and booking policies</h3>
+<h3>Definition of luggage</h3>
+<ul><li>A piece of NORMAL luggage is defined under the regulations of airlines and can be checked or</li></ul>
+<p>carried on the flight that the customer will take.</p>
+<ul><li>Each piece of regular luggage shall be shorter than 200 CM in all dimensions AND lighter than</li></ul>
+<p>25KG.</p>
+<ul><li>A golf bag and other golf equipment are considered golf bags.</li><li>Any sport equipment excludes golf bags (including but not limited to surf/snowboard, and</li></ul>
+<p>bicycles), instrument (including but not limited to cello, guitar, piano, and drum), and baby carriage/stroller is NOT normal luggage.</p>
+<ul><li>A piece of luggage or item that is not normal luggage is SPECIAL luggage.</li><li>Any luggage should be in pristine condition and can be closed, sealed or zipped accordingly.</li><li>All luggage should be separated rather than being bundled or attached with any other item,</li></ul>
+<p>including but not limited to plastic bags, traveling pillows, and small traveling bag(s).</p>
+<ul><li>As stated in the Prohibited Items section, the luggage SHALL NOT contain any illegal,</li></ul>
+<p>dangerous, prohibited, risky, or suspicious item, and AIRPORTELs International reserve the right to deny any luggage or belonging(s) is out of service conditions.</p>
+<ul><li>Any attachment such as name tag, accessory doll, pillow, or small bag, which is not counted</li></ul>
+<p>as a single piece of luggage, IS NOT guaranteed in terms of its conditions or loss.</p>
+<h3>Booking conditions</h3>
+<ul><li>Order(s) should be placed at least 3 hours before using service and be confirmed by</li></ul>
+<p>AIRPORTELs International.</p>
+<ul><li>AIRPORTELs International reserves the right to reject or subsequently cancel bookings where</li></ul>
+<p>we believe there to be misuse of our services by you or a third party for commercial gain.</p>
+<ul><li>The customer should ensure all the information and contacts are valid and reachable.</li><li>After booking, the latest order information and status can be checked at</li></ul>
+<p>https://app.airportels.asia/tracking by inserting an order ID.</p>
+<ul><li>Booking is confirmed ONLY after the payment is completed, and the customer has received</li></ul>
+<p>confirmation e-mail sent from center@airportels.asia or noreply@airportels.asia.</p>
+<h3>Amendment conditions</h3>
+<ul><li>To change the booking, the request should be placed via e-mail at least 3 hours before using</li></ul>
+<p>the service.</p>
+<ul><li>After confirmation of amendment, the customer SHOULD receive an updated e-mail from</li></ul>
+<p>AIRPORTELs International.</p>
+<ul><li>After the amendment, the latest order information can be checked at</li></ul>
+<p>https://app.airportels.asia/tracking by inserting an order ID.</p>
+<h3>Cancellation and refund conditions</h3>
+<ul><li>To cancel the order with full refund, the request should be placed via e-mail at least 3 hours</li></ul>
+<p>before using the service.</p>
+<ul><li>Booking or order that is cancelled after service using time or 3 hours after using time WILL</li></ul>
+<p>NOT be refunded.</p>
+<ul><li>Refunds will be implemented within 7-14 working days.</li><li>Refunds will ONLY be processed through our accepted wireless transfer channel.</li><li>The booking/order will be considered as “NO SHOW” since the appointed service starting</li></ul>
+<p>time.</p>
+<h3>Notification of change</h3>
+<ul><li>Any update or notification of change of an order/booking will ONLY be notified from</li></ul>
+<p>center@airportels.asia or noreply@airportels.asia.</p>
+<ul><li>After service amendment/change, you shall keep the confirmation e-mail as reference.</li><li>After service cancellation, you will receive the confirmation e-mail as reference.</li><li>AIRPORTELs International WILL change terms and conditions accordingly or periodically.</li></ul>
+<h3>Conditions of in-town delivery service</h3>
+<ul><li>Order(s) and customer booking(s) are always confirmed ONLY AFTER the payment is cleared</li></ul>
+<p>by the customer.</p>
+<ul><li>For scheduled delivery, AIRPORTELs International staff will contact and confirm with the</li></ul>
+<p>front desk of the property, or any entity who will keep the customer belongings until AIRPORTELs International collects. AIRPORTELs International courier, driver, or staff will collect luggage from the property in 1-3 hours AFTER the appointed drop-off time and send it within a day.</p>
+<ul><li>For scheduled delivery, luggage will be delivered to the destination according to the</li></ul>
+<p>schedule and CANNOT be appointed at a certain time.</p>
+<ul><li>For on-demand delivery service, AIRPORTELs International courier, driver, or staff will collect</li></ul>
+<p>luggage from the place 30 minutes BEFORE or AFTER the appointed drop-off time at the gate or lobby of the property for outbound delivery service.</p>
+<ul><li>For fast delivery, luggage can be delivered in 2 hours at the fastest time.</li><li>Fast delivery service is ONLY available for areas in Bangkok, Chiang Mai and, Phuket.</li><li>If the customer puts luggage at the place of delivery late, including but not limited to</li></ul>
+<p>airports, hotels, shopping malls, or homes, AIRPORTELs International will ONLY wait up to 15 minutes.</p>
+<ul><li>15 minutes after the appointed time or in the condition that AIRPORTELs can’t contact the</li></ul>
+<p>customer, the order will become “No Show” and be cancelled WITHOUT refund.</p>
+<ul><li>If AIRPORTELs International courier, driver or staff can’t find the luggage from the booking</li></ul>
+<p>at the appointed location, AIRPORTELs International will use ONLY phone or e-mail to contact the customer.</p>
+<ul><li>AIRPORTELs International SHOULD NOT be liable for any FRAGILE or PERISHABLE item(s) or</li></ul>
+<p>contents of your luggage delivered by us.</p>
+<ul><li>For further details on prohibited items of the standard terms and conditions.</li><li>For destinations in areas attached to Bangkok, additional service charges are applied</li></ul>
+<p>accordingly.</p>
+<ul><li>Special areas attached to Bangkok include the following places:</li><li>Samut Prakan Province</li><li>Pathum Thani Province</li><li>Nonthaburi Province</li><li>Pattaya city</li><li>Chiang Mai areas include the following places:</li><li>Mueang Chiang Mai District</li><li>San Sai District, specifically San Sai Noi, Nong Chom, San Phra Net</li><li>San Kamphaeng District, specifically the San Klang area</li><li>Saraphi District, specifically the sub-districts Chaiyasathan, Nong Phueng, Tha Wang Tan</li><li>Hang Dong District, specifically the sub-districts San Phak Wan, Nong Khwai</li><li>Mae Rim District, specifically the sub-district Don Kaew</li><li>Golf courses around the city, within a 50 km radius from Chiang Mai Airport</li><li>Note: Does not include Doi Suthep, Doi Inthanon, or other mountains</li><li>Phuket areas include the following places:</li><li>Phuket Island (excluding surrounding islands)</li><li>Lo Yung Sub-district, Phang Nga Province</li><li>Khok Kloi Sub-district, Phang Nga Province</li><li>Delivery service is available from 07:00 to 21:00 every day</li></ul>
+<h3>Conditions of Thailand nationwide delivery</h3>
+<ul><li>Additional service fee will be charged if luggage is stored at AIRPORTELs International for</li></ul>
+<p>more than 24 hours.</p>
+<h3>Nationwide next-day delivery service</h3>
+<ul><li>The service is only available for luggage shorter than 200 CM in all dimensions and up to</li></ul>
+<p>25KG.</p>
+<ul><li>For luggage over 25KG, additional 100 THB/KG will be applied.</li><li>If additional weight is less than 1KG, the charge WILL BE counted as 1KG.</li><li>Oversize luggage, such as sport equipment that one of the edge is more than 200 CM in all</li></ul>
+<p>dimensions, IS NOT available for the service.</p>
+<ul><li>The luggage SHOULD BE dropped at AIRPORTELs International 3 hours before the cut-off</li></ul>
+<p>time. (Before 09:00 or 11:00), on the delivery day.</p>
+<ul><li>For nationwide next-day delivery service in Thailand, AIRPORTELs International DO NOT</li></ul>
+<p>guarantee on-time delivery at certain appointed date and time.</p>
+<ul><li>AIRPORTELs International reserve the right to deny any luggage or belonging(s) is out of</li></ul>
+<p>service conditions.</p>
+<ul><li>The service can only be applied at AIRPORTELs International branches and cannot be</li></ul>
+<p>reserved online at this time.</p>
+<ul><li>If there is any prohibited item in the luggage, customer SHALL agree AIRPORTELs</li></ul>
+<p>International to open and take prohibited item to be reserved AND pay for extra service fee aligned to AIRPORTELs International service charge.</p>
+<h3>Nationwide same-day delivery service</h3>
+<ul><li>Service areas: Bangkok, Chiang Mai, and Phuket</li><li>Luggage is delivered according to the delivery schedule.</li><li>If there is any prohibited item in the luggage, customers SHOULD agree to allow AIRPORTELs</li></ul>
+<p>International to open and take prohibited items to be reserved AND pay an extra service fee aligned to AIRPORTELs International service charge.</p>
+<ul><li>Additional charges WILL be applied when the luggage exceeds the limitation of total weight</li></ul>
+<p>of the order.</p>
+<ul><li>AIRPORTELs International SHOULD reserve the right to refuse delivering if any of the luggage</li></ul>
+<p>or belonging(s) is out of condition.</p>
+<ul><li>Prohibited items (Nationwide same-day delivery, Thailand)</li><li>All items all items listed in the Prohibited Items section.</li><li>Goods containing alcohol.</li><li>Dangerous goods and hazardous materials.</li><li>High-value items such as diamonds, gemstones, and gold.</li><li>Firearms or items are similar to weapons and sharp objects.</li><li>Cash and items that can substitute for cash, such as checks, banknotes, or debt</li></ul>
+<p>instruments.</p>
+<ul><li>Perishable goods, such as plants, vegetables, fruits, and meat.</li><li>It prohibited plant species and seeds of certain types.</li><li>Obscene materials and all types of pornographic media.</li><li>Biological hazards include saliva, pathogens, bacteria, viruses, radioactive substances,</li></ul>
+<p>and toxins.</p>
+<ul><li>Registered medicinal herbs, such as inhalants and balms.</li><li>Animal products without a license (in some countries).</li><li>All types of coal and batteries.</li><li>Travel bags (not packed in a parcel box), locks, or locked items.</li><li>Tobacco and tobacco products.</li><li>Flammable objects and chemicals are capable of sparking fires and explosions.</li><li>Lottery tickets, lotteries, or any gambling-related media.</li><li>Illegal drugs and narcotics, including methamphetamine, ice, or cannabis.</li><li>Living animals, including fish and birds.</li><li>Personal data documents, such as passports, ID cards, ATM cards, and bank accounts.</li><li>Copyright-infringing goods are counterfeit or trademark-imitating products.</li><li>Religious artifacts, amulets, deity statues, and various antiques.</li><li>Human body parts, including ashes.</li></ul>
+<h3>Conditions of storage service</h3>
+<ul><li>For orders reserved online, payment of the service is always made ONLY when the booking is</li></ul>
+<p>confirmed, as stated in the Price and Billing section.</p>
+<ul><li>The storage duration is counted since appointed reservation time if the luggage is dropped</li></ul>
+<p>after the appointed time.</p>
+<ul><li>The storage duration is counted since when the luggage is dropped if the luggage is dropped</li></ul>
+<p>before than the appointed time.</p>
+<ul><li>If the luggage is retrieved after the appointed retrieval time, additional service WILL BE</li></ul>
+<p>applied based on the fee of the local branch, as per the rates in the Price List and Promotion Charges section.</p>
+<ul><li>For walk-in orders, payment of the service are always made ONLY when the luggage is</li></ul>
+<p>retrieved except the storage duration is longer than 30 days.</p>
+<ul><li>The customer SHOULD pay all service fees for each piece of luggage if the storage duration is</li></ul>
+<p>longer than 30 days.</p>
+<ul><li>If the luggage is retrieved before the appointed retrieval time, NO refund will be made.</li><li>The customer can ONLY STORE luggage or belongings DURING SERVICE HOURS according to</li></ul>
+<p>the regulations of each AIRPORTELs International branch.</p>
+<ul><li>To extend storage duration, please contact AIRPORTELs International at</li></ul>
+<p>center@airportels.asia and get confirmation ONLY from AIRPORTELs International e-mail, center@airportels.asia.</p>
+<ul><li>AIRPORTELs International sends confirmation of storage duration extension ONLY after a new</li></ul>
+<p>ETP is set AND the service fee during the last ETP and new ETP is paid.</p>
+<ul><li>1 month (30 days) after ETP (estimated time pick-up) and without the extension for storage</li></ul>
+<p>duration, the luggage will be disposed of as the property of AIRPORTELs International.</p>
+<ul><li>The customer SHOULD always get a retrieval slip after storing luggage at AIRPORTELs</li></ul>
+<p>International.</p>
+<ul><li>If the customer wants to pick up any belongings from the luggage during storage, the</li></ul>
+<p>customer SHOULD retrieve all belongings AND close the order. AIRPORTELs International DO NOT accept partial retrieval.</p>
+<ul><li>AIRPORTELs International WILL NOT open customer luggage or take any item from the</li></ul>
+<p>luggage in any condition or upon customer request EXCEPT in cooperation with official or governmental authority under lawful investigation.</p>
+<ul><li>AIRPORTELs International SHOULD NOT be liable for any FRAGILE, PERISHABLE, or</li></ul>
+<h3>PROHIBITED item(s) or contents of your luggage stored in our storage.</h3>
+<ul><li>For storage at AIRPORTELs International branches count one day as 24 hours, since the</li></ul>
+<p>customer stores luggage at AIRPORTELs International branch.</p>
+<h3>Conditions of retrieving luggage</h3>
+<ul><li>The customer SHOULD provide valid references, including passport/Thai ID/Thai Driver</li></ul>
+<p>license AND retrieval slip/e-mail to AIRPORTELs International staff to verify the consignee identity at AIRPORTELs International counter.</p>
+<ul><li>If the customer doesn’t have valid or correct order reference, AIRPORTELs International</li></ul>
+<p>SHALL reserve the rights to deny retrieval request.</p>
+<ul><li>If no request for delivery is placed, the customer can ONLY retrieve luggage or belongings at</li></ul>
+<p>the same branch which the customer uses storage service.</p>
+<ul><li>AIRPORTELs International DO NOT accept any partial retrieval request OR pick up personal</li></ul>
+<p>item(s) from the luggage during storage service.</p>
+<ul><li>The customer can ONLY RETRIEVE luggage or belongings DURING SERVICE HOURS according</li></ul>
+<p>to the regulations of each AIRPORTELs International branch.</p>
+<ul><li>The customer can ONLY RETRIEVE luggage or belongings at AIRPORTELs International</li></ul>
+<p>counter at each destination.</p>
+<ul><li>In case that stored belongings will be retrieved by the other person or any other 3rd party,</li></ul>
+<p>the valid Thai ID or passport information shall be provided by the customer who stores the luggage by e-mail. Valid Thai ID or passport will be requested when the consignee retrieves the belongings. Copy or photo of ID card or passport of the entity IS NOT accepted.</p>
+<h3>Conditions of late retrieval at the AIRPORTELs International counter</h3>
+<ul><li>Starting from the announced closing time of each branch of AIRPORTELs International, 500</li></ul>
+<p>THB/30 mins will be charged if the customer wants to collect luggage after service hours at any of AIRPORTELs International branches. If the excess time is less than 30 minutes, the charge WILL BE counted as 30 minutes.</p>
+<ul><li>AIRPORTELs International SHOULD wait for customers ONLY up to 1 hour since the service</li></ul>
+<p>hour of the branch of AIRPORTELs International ends.</p>
+<ul><li>AIRPORTELs International SHALL wait for customer ONLY only upon customer’s request via</li></ul>
+<p>our channel.</p>
+<ul><li>If customer request to retrieve luggage after service hours but doesn’t come, 500 THB/30</li></ul>
+<p>mins will be added to the order when check out.</p>
+<ul><li>AIRPORTELs International reserves the right to deny the request under any circumstance.</li></ul>
+<h3>*Price list and promotion charges</h3>
+<h3>*Standard storage fee</h3>
+<ul><li>For storage at AIRPORTELs International, one day is counted as 24 hours since the customer</li></ul>
+<p>stores luggage at AIRPORTELs branch.</p>
+<ul><li>A fraction of one day (24 hrs) is considered as one day.</li><li>100 THB/piece of normal luggage, golf bag/24hr. (Suvarnabhumi airport and Donmuang</li></ul>
+<h3>airport Branches.)</h3>
+<ul><li>150 THB/piece of normal luggage, golf bag/24hr. (Other Branches)</li><li>200 THB/One piece of oversize luggage/24hr.</li></ul>
+<h3>*Standard delivery fee</h3>
+<h3>*Bangkok in-town Same Day</h3>
+<ul><li>Scheduled delivery: 299 THB/One piece of normal luggage/way</li><li>Golf bag delivery: 399 THB/piece/way</li><li>Fast delivery: Charge 300 THB/Order</li><li>Special luggage: 599 THB/One piece of special luggage/Way</li></ul>
+<h3>*Chiang Mai in-town Same Day</h3>
+<ul><li>Scheduled delivery: 349 THB/One piece of normal luggage/way</li><li>Golf bag delivery: 399 THB/piece/way</li><li>Fast delivery: Charge 300 THB/Order</li><li>Special luggage: 599 THB/One piece of special luggage/way</li></ul>
+<h3>* Phuket in-town Same Day</h3>
+<ul><li>Scheduled delivery: 349 THB/One piece of normal luggage/way</li><li>Golf bag delivery: 399 THB/piece/way</li><li>Fast delivery: Charge 300 THB/Order</li><li>Special luggage: 599 THB/One piece of special luggage/way</li></ul>
+<h3>*Bangkok-Pattaya delivery service</h3>
+<ul><li>Scheduled delivery: 399 THB/One piece of normal luggage/way</li><li>Golf bag delivery: 499 THB/piece/way</li><li>Fast delivery: Charge 500 THB/Order</li><li>Special luggage: 599 THB/One piece of special luggage/way</li></ul>
+<p>*Nationwide same-day luggage delivery between Bangkok and Chiang Mai, Phuket provinces</p>
+<h3>*Price of luggage</h3>
+<h3>0-14.99 kg. — 599 THB/piece</h3>
+<h3>15-19.99 kg. — 699 THB/piece</h3>
+<h3>20-24.99 kg. — 799 THB/piece</h3>
+<h3>25-30.00 kg. — 899 THB/piece</h3>
+<h3>*Price of golf bag</h3>
+<h3>Bangkok - Chiang Mai</h3>
+<p>Airport in Bangkok CNX Airport 599 Airport in Bangkok Home / Hotel / Golf course in CNX 799 CNX Airport Airport in Bangkok 599 CNX Airport Home / Hotel / Golf course in Bangkok 699 Home / Hotel / Golf course in Bangkok CNX Airport 699 Home / Hotel / Golf course in Bangkok Home / Hotel / Golf course in CNX 899 Home / Hotel / Golf course in CNX Airport in Bangkok 799 Home / Hotel / Golf course in CNX Home / Hotel / Golf course in Bangkok 899</p>
+<h3>Bangkok &lt;&gt; Phuket</h3>
+<p>Airport in Bangkok HKT Airport 599 Airport in Bangkok Home / Hotel / Golf course in HKT 799 HKT Airport Airport in Bangkok 599 HKT Airport Home / Hotel in Bangkok 699 Home / Hotel / Golf course in Bangkok HKT Airport 699 Home / Hotel / Golf course in Bangkok Home / Hotel / Golf course in HKT 899 Home / Hotel / Golf course in HKT Airport in Bangkok 799 Home / Hotel / Golf course in HKT Home / Hotel / Golf course in Bangkok 899 *Nationwide same-day golf bag delivery between Bangkok and Chiang Rai, Khonkaen, Krabi, Hatyai and Samui provinces</p>
+<h3>Bangkok &lt;&gt; Samui</h3>
+<p>Home / Hotel / Golf course in Bangkok Home / Hotel / Golf course in Chiang Rai 1,299 Home / Hotel / Golf course in Bangkok Home / Hotel / Golf course in Khonkaen 1,299 Home / Hotel / Golf course in Bangkok Home / Hotel / Golf course in Krabi 1,299 Home / Hotel / Golf course in Bangkok Home / Hotel / Golf course in Hatyai 1,299 Home / Hotel / Golf course in Bangkok Home / Hotel / Golf course in Samui 1,299 *Nationwide next-day luggage delivery between Chiang Mai and Phuket provinces</p>
+<h3>Chiang Mai &lt;&gt; Phuket</h3>
+<p>CNX Airport HKT Airport 599 HKT Airport CNX Airport 599 CNX Airport Home / Hotel / Golf course in HKT 799 HKT Airport Home / Hotel / Golf course in CNX 799 Home / Hotel / Golf course in CNX Home / Hotel / Golf course in HKT 999 Home / Hotel / Golf course in HKT Home / Hotel / Golf course in CNX 999 *Nationwide within 5 days luggage delivery in Thailand (3-5 business days) Delivery Warrant (Nationwide within 5 days): AIRPORTELs guarantees compensation for damage or loss for this nationwide delivery service, up to a maximum of 10,000 THB per order.</p>
+<p>Claims must be submitted within 72 hours of receiving the luggage and are subject to the</p>
+<h3>conditions in the Claim Tables above.</h3>
+<h3>*Price of luggage</h3>
+<h3>0-14.99 kg. — 349 THB/piece</h3>
+<h3>15-19.99 kg. — 399 THB/piece</h3>
+<h3>20-25 kg. — 499 THB/piece</h3>
+<ul><li>Over 25 KG: 100 THB/KG (Maxinum 30 kg.)</li></ul>
+<h3>*Long term storage package</h3>
+<ul><li>5-7 days storage: 750 THB/one piece of normal luggage, golf bag</li><li>5-7 days storage: 1,000 THB/one piece of special luggage</li><li>26-30 days storage: 3,000 THB/one piece of normal luggage, golf bag</li><li>26-30 days storage: 4,000 THB/one piece of special luggage</li></ul>
+<p>*Long term storage package at DMK Airport and BKK Airport branches</p>
+<ul><li>5-7 days storage: 500 THB/one piece of normal luggage, golf bag</li><li>5-7 days storage: 1,000 THB/one piece of special luggage</li><li>26-30 days storage: 2,000 THB/one piece of normal luggage, golf bag</li><li>26-30 days storage: 4,000 THB/one piece of special luggage</li></ul>
+<p>All free storage services can only be used ONCE with the same luggage OR passport during service hours of the branch on the same day.</p>
+<h3>ToS แบบย่อ</h3>
+<h3>Storage</h3>
+<h3>Items Description</h3>
+<ul><li>1 Day = 24 hrs</li><li>1 week = 5-7 days</li><li>1 Month = 26-30 days (Price will be calculated by number of days)</li><li>Luggage = Normal luggage refers to all sizes of suitcases, all types of bags, backpacks,</li></ul>
+<p>shoulder bags, tote bags, shopping bags, and any items that are in the form of a bag and weigh no more than 25 kg. All dimensions are not over 200 cm.</p>
+<ul><li>Special item = Special item refers to sports equipment (excluding golf bag), musical</li></ul>
+<p>instruments, bicycles (both folding and non-folding), strollers, whether they are bare or packed in boxes, or any items that are not suitcases. All of these are considered special luggage. The dimensions have not yet been determined.</p>
+<h3>Cancellation and refund conditions</h3>
+<p><strong>1. To edit/cancel the order with a full refund, the request should be placed via our channel 3</strong></p>
+<p>hours before.</p>
+<p><strong>2. Booking or order canceled after service using time WILL NOT be refunded.</strong></p>
+<p><strong>3. Refunds will be implemented within 7-14 working days.</strong></p>
+<p><strong>4. The booking/order will be considered a “NO SHOW” since the appointed service starting</strong></p>
+<p>time.</p>
+<p><strong>5. Conditions are as specified by the company.</strong></p>
+<h3>Delivery</h3>
+<h3>Items Description</h3>
+<ul><li>Luggage = Normal luggage refers to all sizes of suitcases, all types of bags, backpacks,</li></ul>
+<p>shoulder bags, tote bags, shopping bags, and any items that are in the form of a bag and weigh no more than 25 kg. All dimensions are not over 200 cm.</p>
+<ul><li>Special item = Special item refers to sports equipment (excluding golf bag), musical</li></ul>
+<p>instruments, bicycles (both folding and non-folding), strollers, whether they are bare or packed in boxes, or any items that are not suitcases. All of these are considered special luggage. The dimensions have not yet been determined.</p>
+<ul><li>Delivery types may need to be opened for inspection to check for prohibited items.</li></ul>
+<h3>Cancellation and refund conditions</h3>
+<p><strong>1. Must book online 3 hours before the cut-off time.</strong></p>
+<p><strong>2. To edit/cancel the order with a full refund, the request should be placed via our channel 3</strong></p>
+<p>hours before.</p>
+<p><strong>3. Booking or order canceled after service using time WILL NOT be refunded.</strong></p>
+<p><strong>4. Refunds will be implemented within 7-14 working days.</strong></p>
+<p><strong>5. The booking/order will be considered a “NO SHOW” since the appointed service starting</strong></p>
+<p>time.</p>
+<p><strong>6. Conditions are as specified by the company.</strong></p></div>'
 where slug = 'terms-and-conditions-2025';
+
+-- ===== delayed-pickup-discount: archive current (guarded) then update =====
+insert into sop.documents (slug, title, summary, category_id, content_html, cover_image, tags, status, is_onboarding, onboarding_order, version)
+select 'delayed-pickup-discount-archive', title || ' — ฉบับก่อนหน้า (Archive)', summary, category_id, content_html, cover_image,
+       coalesce(tags,'{}') || array['archive'], 'draft', false, null, version
+from sop.documents where slug = 'delayed-pickup-discount'
+  and not exists (select 1 from sop.documents where slug = 'delayed-pickup-discount-archive');
+
+update sop.documents set
+  title = 'การจัดการกรณีลูกค้ามารับสัมภาระล่าช้า – เกณฑ์และโครงสร้างส่วนลด', summary = 'ขั้นตอนปฏิบัติมาตรฐาน (SOP-OPS 0016/2025) เมื่อลูกค้ามารับสัมภาระล่าช้า — เกณฑ์พิจารณา (ขนาด/ค่าฝาก/ระยะเวลา) โครงสร้างส่วนลด อำนาจอนุมัติ ตัวอย่างเคส และสคริปต์สื่อสารกับลูกค้า (TH/EN)', content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0016/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 ตุลาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
+<p>อ้างอิง / Reference:</p>
+<ul><li>(TH)Terms and Conditions2026 / (EN)Terms and Conditions2026</li><li>SOP: ของหาย &amp; กระเป๋าถูกทิ้ง</li></ul>
+<h3>วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อกำหนดมาตรฐานการดำเนินการเมื่อลูกค้าไม่สามารถมารับสัมภาระตามกำหนดเวลา โดยมีแนวทางการพิจารณา ส่วนลดที่เป็นธรรม สร้างความพึงพอใจให้ลูกค้า ป้องกันการทิ้งสัมภาระ และคงไว้ซึ่งรายได้ของบริษัท</p>
+<h3>ขอบเขต (Scope)</h3>
+<ul><li>ใช้กับการให้บริการลูกค้าทุกประเภทที่ฝากสัมภาระกับ AIRPORTELs ทั้งสาขาหน้าร้าน และช่องทางออนไลน์</li></ul>
+<h3>(Call Center, Email, Line, Facebook)</h3>
+<ul><li>ครอบคลุมพนักงานทุกตำแหน่งที่เกี่ยวข้อง ได้แก่ Guest Service Staff, Branch Manager และ</li></ul>
+<h3>Cีustomer Service Team</h3>
+<ul><li>ใช้กับทุกกรณีของ การรับกระเป๋าล่าช้า (Delayed Collection) ยกเว้น กรณี ลูกค้าไม่ติดต่อ/ไม่มารับเลย ซึ่ง</li></ul>
+<p>ต้องเข้าสู่ขั้นตอน Lost &amp; Found / Disposal ตามนโยบายบริษัท</p>
+<h3>Discount Policy (Duration ≥ 6 เดือน)</h3>
+<p><strong>1. Criteria (เกณฑ์พิจารณา)</strong></p>
+<p><strong>2. Size Factor : Small / Medium / Large / Oversize or Special</strong></p>
+<p><strong>3. Fee Factor – Low / Medium / High / Very High</strong></p>
+<p><strong>4. Duration Factor (ระยะเวลาฝาก)</strong></p>
+<ul><li>Short-term: ≤ 3 เดือน → ใช้โครงสร้าง Base Table ปกติ</li><li>Mid-term: 3–6 เดือน → ใช้ Base Table + ส่วนลดเพิ่มเล็กน้อย (+5–10%)</li><li>Long-term: ≥ 6 เดือน → เข้าสู่เงื่อนไขพิเศษ (25–50%)</li></ul>
+<h3>Discount Structure</h3>
+<ul><li>Discount Structure (ตามยอดเงิน + ขนาด)</li><li>Duration Adjustment</li><li>≤ 3 เดือน → ใช้ส่วนลดตามตาราง เท่านั้น</li><li>3–6 เดือน → เพิ่มส่วนลดได้ +5–10% จากตารางส่วนลด (รวมแล้วไม่เกิน 30%)</li><li>≥ 6 เดือน → ใช้ Special Duration Discount:</li><li>ส่วนลดรวมอยู่ในช่วง 25–50% (ขึ้นกับขนาด/ยอด/เหตุผลลูกค้า)</li><li>แต่ต้องจ่ายขั้นต่ำ 50% ของยอดเต็ม</li><li>Approval Authority</li><li>ส่วนลดรวม ≤25% → Guest Service Exe. อนุมัติได้</li><li>ส่วนลดรวม &gt;25% ถึง 50% (กรณี ≥ 6 เดือน) → ต้องขออนุมัติจาก ฺOperation Manager</li><li>ส่วนลดรวม &gt;50% → ไม่อนุมัติ ยกเว้นกรณี VIP ( BD / COO / CEO approval)</li><li>Example Cases</li></ul>
+<p>Case 1: ลูกค้า ฝาก 7 เดือน / กระเป๋า Large / ยอดค้าง 22,000 บาท (Very High)</p>
+<ul><li>Base Table = 15%</li><li>Duration ≥ 6 เดือน → ปรับเป็น Special Duration Discount 25–50%</li><li>หาก Operation Manager อนุมัติ → ลดได้สูงสุด 50% (เหลือจ่าย 11,000 บาท)</li></ul>
+<p>Case 2: ลูกค้า ฝาก 8 เดือน / กระเป๋า Small / ยอดค้าง 6,000 บาท (Medium)</p>
+<ul><li>Base Table = 15%</li><li>Duration ≥ 6 เดือน → ปรับใหม่เป็น 25–50%</li><li>อนุมัติ 30% → จ่าย 4,200 บาท (ขั้นต่ำต้องจ่าย 3,000 บาท ตาม rule 50%)</li></ul>
+<h3>Conditions &amp; Required Documents for Discount Consideration</h3>
+<p><strong>1. General Conditions (เงื่อนไขทั่วไป)</strong></p>
+<ul><li>a. ลูกค้าต้อง ติดต่อกลับมา และแสดงความประสงค์จะชำระหรือรับกระเป๋า (ไม่ใช่ abandon case)</li><li>b. ลูกค้าต้องชำระ ขั้นต่ำ 50% ของยอดค้างชำระเต็ม</li><li>c. ส่วนลด ≤25% → อนุมัติได้โดย Guest Service Exe.</li><li>d. ส่วนลด 26–50% → ต้องมี เอกสารหลักฐาน + ส่งรายงานขออนุมัติ Operation Manager</li><li>e. ส่วนลด &gt;50% → อนุมัติได้เฉพาะกรณี VIP / Ex-gratia โดย BD หรือ CEO เท่านั้น</li></ul>
+<p><strong>2. Specific Conditions by Case (กรณีและหลักฐานประกอบ)</strong></p>
+<ul><li>Process &amp; Documentation Flow (ขั้นตอนและการบันทึก)</li><li>Guest Service Staff / Branch Manager</li><li>ตรวจสอบข้อมูลลูกค้า (Size, Fee, Duration)</li><li>ขอเอกสาร/หลักฐานจากลูกค้า (ถ้ามี)</li><li>บันทึกใน Sales report หรือ Incedent report</li><li>GS Team Lead</li><li>ตรวจสอบความถูกต้องของเอกสาร</li><li>อนุมัติทันทีถ้า Discount ≤25%</li><li>ถ้าเกิน 25% → forward Approval Request ไปยัง Operation Manager</li><li>Operation Manager</li><li>ตรวจสอบหลักฐาน, เหตุผลธุรกิจ (retention/VIP/long-term)</li><li>อนุมัติหรือปรับลด % ส่วนลดตาม policy (25–50%)</li><li>บันทึกการอนุมัติใน Sales Report หรือ อาจจัดทำเอกสาร Approve หรือระบบ Approve Lark</li></ul>
+<h3>Criteria: ขนาดสัมภาระ (Size Factor)</h3>
+<h3>ขั้นตอนดำเนินการ (Walk-in vs Call Center/Online)</h3>
+<p><strong>1. กรณีลูกค้า Walk-in</strong></p>
+<p><strong>2. รับคำร้องขอ: พนักงานเคาน์เตอร์สอบถามข้อมูล → เลขฝาก, วันที่ฝาก, ระยะเวลา, เหตุผลที่มารับช้า</strong></p>
+<p><strong>3. ตรวจสอบข้อมูลระบบ:</strong></p>
+<ul><li>ขนาดสัมภาระ (Size Factor)</li><li>ยอดค้างชำระ (Fee Factor)</li><li>ระยะเวลาฝาก (Duration Factor)</li><li>สถานะการติดต่อก่อนหน้า (มี follow-up หรือไม่)</li></ul>
+<p><strong>4. ขอหลักฐาน (ถ้ามี): เช่น เอกสารสายการบิน, ใบรับรองแพทย์ , เอกสารราชการ อื่นๆ (ถ้ามี)</strong></p>
+<p><strong>5. คำนวณค่าฝาก + ส่วนลดตามโครงสร้าง</strong></p>
+<ul><li>ถ้าส่วนลด ≤25% → ประสานงานแจ้ง Guest Service Exe. อนุมัติผ่านกลุ่ม Lark ได้</li><li>ถ้าเกิน 25% → ประสานงานแจ้ง Case + ส่งต่อขออนุมัติไปยัง Operation Manager ผ่านกลุ่ม Lark</li></ul>
+<p><strong>6. แจ้งลูกค้า: สรุปยอดสุทธิที่ต้องจ่าย + เงื่อนไข (เช่น ต้องจ่ายขั้นต่ำ 50%)</strong></p>
+<p><strong>7. ดำเนินการรับชำระ/คืนสัมภาระ</strong></p>
+<p><strong>8. บันทึกใน Sales report /ระบบ: ระบุ case type + ส่วนลดที่อนุมัติ + แนบเอกสาร</strong></p>
+<p>กรณีลูกค้า ติดต่อผ่าน Call Center / Online (โทร, อีเมล, LINE, FB)</p>
+<p><strong>1. รับเรื่อง: CS บันทึกข้อมูลการติดต่อ → เลขฝาก, วันที่ฝาก, เหตุผล</strong></p>
+<p><strong>2. ตรวจสอบข้อมูลในระบบ: ขนาดสัมภาระ / ยอดค้าง / ระยะเวลาฝาก</strong></p>
+<p><strong>3. ขอให้ลูกค้าส่งหลักฐาน (ถ้าต้องใช้)</strong></p>
+<ul><li>ผ่าน Email / Line Official → attach file</li></ul>
+<p><strong>4. คำนวณค่าฝาก + ส่วนลดเบื้องต้น ตามเกณฑ์</strong></p>
+<p><strong>5. ดำเนินการอนุมัติ</strong></p>
+<ul><li>≤25% → CS แจ้ง Guest Service Exe. อนุมัติและ confirm ลูกค้าได้เลย</li><li>25% → CS ต้องทำ “Approval Request Email” ส่ง Operation Manager พร้อมแนบหลักฐาน</li></ul>
+<p><strong>6. แจ้งลูกค้า:</strong></p>
+<ul><li>ถ้าอนุมัติ → ส่งสรุปยอดสุทธิ + ช่องทางการชำระเงิน (โอน/QR/ชำระที่สาขา)</li><li>ถ้ายังรออนุมัติ → แจ้งลูกค้าว่าจะได้รับการยืนยันภายใน [xx] ชั่วโมง</li></ul>
+<p><strong>7. หลังลูกค้าชำระแล้ว → Update ข้อมูลในระบบ + แจ้งสาขาให้เตรียมกระเป๋าเพื่อรับหรือส่งกลับ</strong></p>
+<h3>Script (TH/EN – Updated)</h3>
+<p><strong>1. การรับเรื่องจากลูกค้า</strong></p>
+<p>TH “สวัสดีค่ะ/ครับ ขอบคุณที่ติดต่อ AIRPORTELs รบกวนขอชื่อ-นามสกุล และรหัสการจอง เพื่อให้ทีมงานตรวจ</p>
+<h3>สอบข้อมูลการฝากสัมภาระของคุณลูกค้าค่ะ”</h3>
+<p>EN “Hello, thank you for contacting AIRPORTELs. May I have your full name and booking reference so that we can check your storage details?”</p>
+<p><strong>2. กรณีลูกค้าแจ้งล่วงหน้า</strong></p>
+<p>TH “หากคุณลูกค้าแจ้งล่วงหน้าก่อนถึงวันรับจริง เราสามารถช่วยจัดการได้ค่ะ เช่น เสนอการส่งสัมภาระให้ หรือ</p>
+<h3>พิจารณาลดค่าฝากตามที่กำหนดได้เลยค่ะ”</h3>
+<p>EN “If you inform us in advance before the scheduled pick-up date, we can arrange solutions such as delivery service or apply a discount on your storage fee.”</p>
+<p><strong>3. กรณีไม่แจ้ง แต่มีเหตุสุดวิสัย</strong></p>
+<p>TH “หากคุณลูกค้าไม่สามารถแจ้งล่วงหน้าได้ แต่มีเหตุสุดวิสัยพร้อมเอกสารยืนยัน เช่น ตั๋วเครื่องบินที่เลื่อน/ ยกเลิก หรือใบรับรองแพทย์ เราสามารถลดให้ได้ xx% ค่ะ เนื่องจากค่าฝากแบบรายเดือนเป็นราคาเหมารวมอยู่แล้ว” EN “If you were unable to notify us in advance but have a valid reason with supporting documents (e.g., flight delay/cancellation, medical certificate), we can offer a xx% discount, since monthly storage is already based on a flat rate.”</p>
+<p><strong>4. การแจ้งลูกค้าให้อดทนรอผลการอนุมัติ</strong></p>
+<p>TH “ขอบคุณสำหรับข้อมูลและเอกสารค่ะ ตอนนี้ทีมงานกำลังตรวจสอบและจะรีบแจ้งผลการพิจารณาให้คุณลูกค้า</p>
+<h3>ทราบโดยเร็วที่สุดค่ะ”</h3>
+<p>EN “Thank you for providing the information and documents. Our team is reviewing your case, and we will update you with the decision as soon as possible.”</p>
+<p><strong>5. การแจ้งผลอนุมัติส่วนลด</strong></p>
+<p>TH “เรียนคุณลูกค้า ทางทีมงานได้พิจารณาแล้ว และอนุมัติส่วนลด [XX%] สำหรับค่าฝากสัมภาระในครั้งนี้ค่ะ ขอบคุณที่ไว้วางใจใช้บริการ AIRPORTELs และหวังว่าจะได้ให้บริการอีกในอนาคตนะคะ” EN “Dear Customer, we are pleased to inform you that your discount request has been approved at [XX%] for this storage. Thank you for choosing AIRPORTELs, and we look forward to</p>
+<h3>serving you again.”</h3>
+<p><strong>6. การชวนลูกค้ารีวิว (Google Review)</strong></p>
+<p>TH “หากคุณลูกค้าพึงพอใจกับการบริการ รบกวนช่วยรีวิว AIRPORTELs ทาง Google Review ได้ไหมคะ ความ เห็นของคุณลูกค้ามีคุณค่ามากสำหรับการพัฒนาบริการของเรา” EN “If you are satisfied with our service, we would greatly appreciate it if you could leave us a review on Google. Your feedback means a lot to us” TH "ทางเราขอพิจารณาส่วนลดพิเศษจากราคา xx,xxx บาท เหลือเพียง x,xxx บาทค่ะ และหากคุณลูกค้าได้รับความ พึงพอใจจากการให้บริการของพนักงานและสาขา รบกวนช่วยรีวิวใน Google Map เพื่อเป็นกำลังใจให้ทีมงานด้วยนะ</p>
+<h3>คะ"</h3>
+<p>EN "We are pleased to offer you a special discount from xx,xxx THB to only x,xxx THB If you are satisfied with our staff and service, we would greatly appreciate it if you could leave us a 5-star review on Google Maps to support our team. Thank you very much.</p>
+<h3>ตารางประกอบจากเอกสารต้นฉบับ</h3><figure><img src="/sop/delayed-pickup-discount/p2.jpg" alt="ตารางโครงสร้างส่วนลด (Discount Structure) ตามขนาด × ยอดค่าฝาก" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ตารางโครงสร้างส่วนลด (Discount Structure) ตามขนาด × ยอดค่าฝาก</figcaption></figure><figure><img src="/sop/delayed-pickup-discount/p4.jpg" alt="ตารางเงื่อนไขและเอกสารประกอบตามกรณี (Specific Conditions by Case)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ตารางเงื่อนไขและเอกสารประกอบตามกรณี (Specific Conditions by Case)</figcaption></figure><figure><img src="/sop/delayed-pickup-discount/p5.jpg" alt="เกณฑ์ขนาดสัมภาระ (Size Factor)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>เกณฑ์ขนาดสัมภาระ (Size Factor)</figcaption></figure>'
+where slug = 'delayed-pickup-discount';
+
+-- ===== NEW: safe-luggage-storage =====
+insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
+values ('safe-luggage-storage', 'การจัดเก็บกระเป๋าให้ปลอดภัยภายในพื้นที่ที่บริษัทจัดเตรียมไว้ (Safe Luggage Storage)', 'SOP-OPS 014/2025 — ขั้นตอนมาตรฐานการรับฝาก ติดแท็ก และจัดเก็บกระเป๋าอย่างปลอดภัย การควบคุมกุญแจ การส่งต่อกะ และการตรวจนับ เพื่อลดความเสี่ยงสูญหาย/สับเปลี่ยน/เสียหาย',
+  (select id from sop.categories where slug = 'counter-service'),
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 014/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 15 สิงหาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
+<h3>📌 วัตถุประสงค์ / Purpose</h3>
+<p>กำหนดขั้นตอนมาตรฐานในการรับฝาก ติดแท็ก และ จัดเก็บกระเป๋าอย่างปลอดภัย ภายในพื้นที่ที่บริษัทจัดเตรียมไว้ เพื่อลดความเสี่ยงการ สูญหาย/สับเปลี่ยน/เสียหาย และให้สามารถ ตรวจสอบย้อนกลับ (traceability) ได้ตลอด กระบวนการ.</p>
+<h3>📌 ขอบเขตการใช้งาน / Scope</h3>
+<ul><li>ครอบคลุมทุกสาขาที่มีบริการรับฝากกระเป๋า ทั้ง หน้าเคาน์เตอร์ (Counter) และห้องเก็บของ</li></ul>
+<h3>(Store/Backroom)</h3>
+<ul><li>ขอบเขตการรับผิดชอบ สำหรับพนักงานตำแหน่ง Guest Service / Branch Manager / Porter ทุกคนที่ปฏิบัติ</li></ul>
+<p>งานหน้าสาขา หรือ ดูแลจุดรับฝากสัมภาระและกระเป๋าเดินทาง.</p>
+<h3>คำจำกัดความ (Definitions)</h3>
+<ul><li>POS: ระบบขายหน้าร้าน/ระบบทำรายการฝาก (Point of Sale / Order System)</li><li>Luggage Tag (Tag กระเป๋า): ป้ายแท็กที่พิมพ์จากระบบเพื่อผูกกับกระเป๋าแต่ละใบ</li><li>Received Slip: ใบรับฝากส่งมอบให้ลูกค้า</li><li>Store: ห้อง/พื้นที่เก็บกระเป๋าด้านหลัง</li><li>Counter: พื้นที่หน้าเคาน์เตอร์บริการ</li><li>Porter: พนักงานเฝ้าระวังกระเป๋า (เฉพาะบางสาขา)</li><li>Key Control: การควบคุมการเข้าถึงกุญแจ/คีย์การ์ดในพื้นที่เก็บ</li><li>Handover Log: สมุด/แบบฟอร์มบันทึกส่งต่องานระหว่างกะ หรือส่งต่อภายกลุ่มสื่อสารภายในทีม เช่น</li></ul>
+<h3>Line หรือ Lark</h3>
+<ul><li>Shelf : ชั้นวางกระเป๋า สำหรับจัดเก็บกระเป๋าในพื้นที่สาขา</li></ul>
+<h3>📌 บทบาท/ความรับผิดชอบ (Roles &amp; Responsibilities)</h3>
+<ul><li>Guest Service Staff: ทำรายการใน POS ติดแท็ก จัดเก็บตามประเภทสาขา และ ล็อคพื้นที่ ทุกครั้งหลัง</li></ul>
+<h3>เก็บ</h3>
+<ul><li>Porter (เฉพาะบางสาขา): เฝ้าระวังจุดเก็บ/จุดรับฝากที่กำหนด</li><li>หัวหน้าสาขา/หัวหน้างาน: กำกับดูแลความเรียบร้อย การควบคุมกุญแจ การตรวจสอบประจำวัน และการ</li></ul>
+<h3>รายงานเหตุผิดปกติ</h3>
+<h3>🔁 ขั้นตอนการปฏิบัติ / Procedure</h3>
+<p><strong>1. รับฝากและสร้างออเดอร์ในระบบ POS</strong></p>
+<ul><li>a. รับกระเป๋าจากลูกค้า ตรวจนับจำนวน และตรวจสภาพเบื้องต้น (รอยฉีกขาด/หูหิ้ว/ซิป)</li><li>b. สร้างรายการฝากใน POS ให้ครบถ้วน และ ปิดรายการ (Complete)</li></ul>
+<p><strong>2. พิมพ์สลิปและติดแท็กทุกใบ</strong></p>
+<ul><li>a. เมื่อออเดอร์เสร็จ ระบบจะพิมพ์ Luggage Tag และ Received Slip ตามจำนวนกระเป๋า</li><li>b. ติด Tag ให้ตรงกับออเดอร์และ ครบทุกใบ ก่อนนำไปเก็บ (ตรวจสอบหมายเลขออเดอร์/Tag ซ้ำอีกครั้ง)</li></ul>
+<p><strong>3. การจัดเก็บตามประเภทสาขา (เลือกแนวทางตามสาขาที่ปฏิบัติ)</strong></p>
+<ul><li>a. สาขาที่ไม่มี Store หรือ Store อยู่ไกลจากเคาน์เตอร์</li></ul>
+<p>→ เก็บไว้ใน เขตเคาน์เตอร์ แล้ว ปิดประตูและล็อค ทันทีหลังจัดเก็บ หรือ คลุมผ้าทุกครั้งที่ไม่อยู่ในพื้นที่</p>
+<h3>เคาน์เตอร์</h3>
+<ul><li>b. สาขาที่มี Store ใกล้เคาน์เตอร์</li></ul>
+<p>→ นำกระเป๋าเข้า Store จัดวางตาม โซน/ลำดับเวลาฝาก แล้ว ปิดและล็อคประตู ทุกครั้ง</p>
+<ul><li>c. สาขาที่มี Porter (เช่น สนามบิน)</li></ul>
+<p>→ มอบหมาย Porter เฝ้าระวัง ตามจุดที่กำหนด และประสานงานกับเคาน์เตอร์ ตัวอย่างการกำหนด:</p>
+<ul><li>CTW Hugthai/CTW Groove/PNX/CTPY (ไม่มี Store หรือไกล)</li><li>T21/MBK/MIXT/ICS/EMS/EMP/CNX/HKT/TPY (มี Store ใกล้),</li><li>BKK/DMK (มี Porter)</li></ul>
+<p><strong>4. การวาง/จัดโซนในพื้นที่เก็บ</strong></p>
+<ul><li>a. จัดวางตาม โซนและเวลา (เช่น โซน A = วันนี้เช้า, โซน B = วันนี้บ่าย ฯลฯ) เพื่อค้นหาได้รวดเร็ว</li><li>b. ของหนักวางล่าง / ของเปราะบางวางบน / หลีกเลี่ยงการกดทับ</li><li>c. ห้ามวาง ขวางทางหนีไฟ/บังกล้องวงจรปิด</li></ul>
+<p><strong>5. การออกจากจุดบริการชั่วคราว</strong></p>
+<ul><li>a. หากจำเป็นต้อง ออกจากพื้นที่เคาน์เตอร์ ให้แจ้ง หัวหน้าสาขา/OP Team Lead ผ่าน กลุ่มที่บริษัทกำหนด</li></ul>
+<p>(LINE/Lark ภายในแต่ละสาขา) พร้อมระบุช่วงเวลาไม่อยู่</p>
+<ul><li>กลุ่มไลน์ Respond.io : https://line.me/ti/g/4cn8mCTeFW</li><li>กลุ่มไลน์ AI Gang🧳✈️ : https://line.me/ti/g/Sk3zTEDpd7</li><li>b. ก่อนออกจากพื้นที่ให้ scan หน้าออก และ scan เข้าพื้นที่ หลังจากกลับมา ทุกครั้ง ผ่านระบบ empeo</li><li>c. ล็อคพื้นที่และจัดเจ้าหน้าที่ทดแทน เช่น Porter (ถ้ามี) หรือฝากรปภ. ที่อยู่ใกล้เคียงช่วยเฝ้า</li></ul>
+<p><strong>6. การส่งต่องาน (Handover)</strong></p>
+<ul><li>a. ก่อนเปลี่ยนกะ สรุปจำนวน กระเป๋าที่เก็บ พร้อม ตำแหน่งจัดเก็บ/โซน และความเคลื่อนไหวระหว่างกะ</li><li>b. บันทึกใน Handover Log หรือแจ้งในกลุ่มงานที่กำหนด เพื่อรับทราบร่วมกัน</li></ul>
+<p><strong>7. บันทึกและการควบคุม (Controls)</strong></p>
+<ul><li>a. บันทึกรายการฝาก/แท็ก/ตำแหน่งเก็บใน Storage Log (หรือระบบที่สาขากำหนด)</li><li>b. ตรวจนับประจำวันอย่างน้อย 1 ครั้ง เทียบกับ Storage Log และ POS</li><li>c. Key Control: เก็บ/ส่งมอบกุญแจให้เฉพาะผู้ที่เกี่ยวข้อง, จำกัดผู้มีสิทธิ์เข้าถึง</li></ul>
+<p>กรณีผิดปกติและการจัดการเหตุ (Exceptions &amp; Incident Handling)</p>
+<ul><li>พบแท็กไม่ตรง/แท็กหาย: แยกกระเป๋าออกจากโซนหลัก แจ้งหัวหน้า ตรวจสอบใน POS และ พิมพ์แท็กใหม่</li><li>ผู้ไม่ได้รับอนุญาตเข้าถึงพื้นที่เก็บ: หยุดให้บริการชั่วคราวในโซนดังกล่าว แจ้งหัวหน้า บันทึกเหตุ และประสาน</li></ul>
+<h3>รปภ./CCTV</h3>
+<ul><li>กรณีต้องออกจากพื้นที่เคาน์เตอร์ฉุกเฉิน: ล็อคพื้นที่ หรือ คลุมสัมภาระ ให้มิดชิด แจ้งกลุ่มภายในทันที (ดูข้อ 5)</li><li>กระเป๋าเสียหาย/ข้อร้องเรียน: บันทึกภาพ/รายละเอียด, แจ้งรายละเอียดความเสียหาย / สูญหาย ให้หัวหน้างาน</li></ul>
+<h3>ทราบทันทีและดำเนินการตามนโยบายชดเชย/เคลม</h3>
+<h3>มาตรการความปลอดภัยหลัก (Security Controls)</h3>
+<ul><li>ล็อคพื้นที่เก็บ ทุกครั้งหลังนำเข้า/นำออก</li><li>จัดโซน/ติดป้ายชัดเจน ลดความเสี่ยงสับเปลี่ยน</li><li>CCTV/มุมอับ: รักษามุมกล้องให้เห็นชัด หลีกเลี่ยงการวางสิ่งของบังกล้อง</li><li>Sensitives: แยกเก็บสิ่งของมีค่าตามนโยบายบริษัท (หากมี) และติด Seal/ถ่ายรูปประกอบ</li><li>ทบทวนเหตุฉุกเฉิน: รายไตรมาส (สูญหาย ไฟไหม้ น้ำรั่ว ฯลฯ)</li></ul>
+<h3>ตัวชี้วัดและการตรวจติดตาม (KPIs &amp; Audit)</h3>
+<ul><li>Zero Loss/Damage: เป้าหมาย = 0 เคส/เดือน (ยกเว้นพิสูจน์ได้ว่าเหตุสุดวิสัย)</li><li>Handover Completeness: ส่งมอบงานครบ 100% ของกะ</li><li>Daily Count Compliance: ตรวจนับครบ ≥ 1 ครั้ง/วัน ทุกวันทำการ</li><li>Audit:</li><li>ระดับสาขา: หัวหน้าสาขา สุ่มตรวจรายสัปดาห์ (Storage Log vs. ของจริง)</li><li>ระดับส่วนกลาง: Operations ตรวจเดือนละครั้ง พร้อมทบทวน CCTV มุมวิกฤต</li></ul>
+<h3>✔️ Mini Checklist หน้าเคาน์เตอร์</h3>
+<ul><li>POS เสร็จ → พิมพ์ Tag &amp; Received Slip → ติดแท็ก ครบทุกใบ</li><li>นำเข้าโซนที่ถูกต้อง → ล็อคประตูทุกครั้ง</li><li>ต้องออกจากเคาน์เตอร์ → ปิดล๊อคพื้นที่ และ /หรือ คลุมสัมภาระให้มิดชิด</li></ul>
+<h3>→ แจ้งหัวหน้า/กลุ่มภายในตามระเบียบ</h3>
+<p>→ scan ออก และ เข้า (เมื่อกลับเข้าพื้นที่) ผ่าน empeo ทุกครั้ง</p>
+', array['storage','safety','counter'], 'published', false)
+on conflict (slug) do update set
+  title = excluded.title, summary = excluded.summary,
+  category_id = excluded.category_id, content_html = excluded.content_html,
+  tags = excluded.tags, status = excluded.status;
+
+-- ===== NEW: cross-branch-travel-allowance =====
+insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
+values ('cross-branch-travel-allowance', 'มาตรฐานค่าเดินทางและการปฏิบัติ กรณีโยกย้ายพนักงานไปช่วยงานต่างสาขา', 'SOP-OPS 0015/2025 — มาตรฐานการเบิกค่าเดินทางและแนวทางปฏิบัติเมื่อพนักงานถูกมอบหมายไปช่วยงานสาขาอื่น รวมถึงกรณีวันหยุด นโยบายตำแหน่ง Runner และตารางค่าเดินทางมาตรฐาน',
+  (select id from sop.categories where slug = 'standards'),
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0015/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 ตุลาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
+<h3>วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อกำหนดมาตรฐานการเบิกค่าเดินทางและแนวทางการปฏิบัติสำหรับพนักงาน ที่ถูกมอบหมายให้ไปช่วยงานใน สาขาอื่นที่ไม่ใช่สาขาประจำของตนเอง โดยคำนึงถึงความเป็นธรรม ความโปร่งใส และความสะดวกในการดำเนินงาน</p>
+<h3>ขอบเขตการใช้งาน (Scope)</h3>
+<p>ใช้กับพนักงานทุกตำแหน่งในสาขาห้าง และสาขาบริการทุกแห่งของบริษัทฯ ที่มีการมอบหมายงานข้ามสาขา</p>
+<h3>หลักการปฏิบัติ (Policy &amp; Procedure)</h3>
+<p><strong>1. กรณีปฏิบัติงานในวันทำงานปกติ (Working Day Assignment)</strong></p>
+<ul><li>พนักงานสามารถเบิกค่าเดินทางได้ตามอัตราที่บริษัทกำหนด (อ้างอิง ตารางมาตรฐานค่าเดินทาง)</li><li>ไม่ถือเป็นการทำงานในวันหยุด</li></ul>
+<p><strong>2. กรณีปฏิบัติงานในวันหยุด (Day-off Assignment)</strong></p>
+<h3>พนักงานสามารถเลือกได้ 2 แนวทาง</h3>
+<ul><li>เปลี่ยนวันหยุด (Change Day-off) โดย หัวหน้างานจะจัดตารางวันหยุดชดเชยให้</li><li>รับเป็นค่าแรงวันทำงาน (Workday Payment) เท่ากับอัตราค่าจ้าง 1 วัน</li></ul>
+<p>ทั้งสองกรณี พนักงานยังสามารถ เบิกค่าเดินทางได้ตามที่กำหนด</p>
+<h3>ข้อกำหนดเพิ่มเติมสำหรับตำแหน่ง Runner (Runner Assignment Policy)</h3>
+<p><strong>1. พนักงานตำแหน่ง Runner ต้องสามารถ หมุนเวียน (Rotate) ไปปฏิบัติงานได้ทั้ง สาขาห้าง และ สาขาสนามบิน</strong></p>
+<h3>ตามความจำเป็นของบริษัทฯ</h3>
+<p><strong>2. พนักงานตำแหน่ง Runner ต้องสามารถเข้าปฏิบัติงาน ตามรอบกะ (Shift Duty) ที่กำหนดได้</strong></p>
+<p><strong>3. บริษัทฯ จะจ่าย ค่าเดินทางแบบเหมาจ่าย (Flat-rate Travel Allowance) สำหรับ Runner วันละ 100 บาท ไม่</strong></p>
+<h3>ว่าปฏิบัติงาน ณ สาขาใด</h3>
+<h3>ข้อยกเว้น (Exception)</h3>
+<ul><li>พนักงานที่ลาหยุดกลับต่างจังหวัดหรือต่างประเทศ และได้แจ้งลาล่วงหน้าแล้ว จะไม่ถูกเรียกให้โยกย้ายหรือ</li></ul>
+<h3>Stand by</h3>
+<ul><li>กรณีฉุกเฉิน พนักงานประจำสาขาห้างจะต้องพร้อม Stand by สำหรับการปรับเปลี่ยน/โยกย้าย</li></ul>
+<h3>ตารางมาตรฐานค่าเดินทาง (Standard Travel Allowance)</h3>
+<ul><li>ตารางเปรียบเทียบระยะทาง และค่าเดินทาง</li></ul>
+<h3>ตารางค่าเดินทาง</h3>
+<h3>ตารางค่าเดินทางจากเอกสารต้นฉบับ</h3><figure><img src="/sop/cross-branch-travel-allowance/p3.jpg" alt="ตารางมาตรฐานค่าเดินทาง (ระยะทาง/จำนวนสถานี และอัตราค่าเดินทางระหว่างสาขา)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ตารางมาตรฐานค่าเดินทาง (ระยะทาง/จำนวนสถานี และอัตราค่าเดินทางระหว่างสาขา)</figcaption></figure>', array['travel','allowance','staff','runner'], 'published', false)
+on conflict (slug) do update set
+  title = excluded.title, summary = excluded.summary,
+  category_id = excluded.category_id, content_html = excluded.content_html,
+  tags = excluded.tags, status = excluded.status;
+
+-- ===== NEW: handheld-metal-detector =====
+insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
+values ('handheld-metal-detector', 'การใช้งานเครื่องตรวจจับโลหะแบบพกพา (Handheld Metal Detector)', 'SOP-OPS 010/2025 — วิธีใช้เครื่องตรวจจับโลหะแบบพกพาเพื่อตรวจสอบวัตถุต้องห้ามก่อนรับฝาก/จัดส่งกระเป๋า (ใช้เมื่อเครื่อง X-Ray ใช้งานไม่ได้ หรือเป็นการตรวจเสริม) พร้อมรายการสิ่งของต้องห้าม',
+  (select id from sop.categories where slug = 'counter-service'),
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 010/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 9 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
+<h3>📌 วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อเพิ่มความปลอดภัยในการรับฝาก และจัดส่งกระเป๋าโดยการตรวจสอบวัตถุต้องห้ามที่อาจเป็นอันตรายหรือผิด กฎหมาย โดยใช้เครื่องตรวจจับโลหะแบบพกพาก่อนนำกระเป๋าเข้าสู่กระบวนการจัดเก็บหรือจัดส่ง</p>
+<h3>📌 ขอบเขตการใช้งาน</h3>
+<p>ใช้ในกรณีที่:</p>
+<ul><li>เครื่อง X-Ray อยู่ระหว่างซ่อมแซม หรือไม่สามารถใช้งานได้</li><li>ใช้เป็นเครื่องมือเสริมในการตรวจสอบเบื้องต้น ณ จุดบริการสนามบิน / สาขาหลัก</li></ul>
+<h3>🛠 อุปกรณ์ที่ใช้</h3>
+<ul><li>เครื่องตรวจจับโลหะแบบพกพา (Hand-held Metal Detector)</li><li>CCTV (ระหว่างการตรวจ ให้อยู่ในมุมมองของกล้อง เพื่อป้องกันการงิวาท กรณีพบวัตถุต้องสงสัย)</li></ul>
+<h3>🔄 ขั้นตอนปฏิบัติ (SOP)</h3>
+<p>วิธีการใช้งานเครื่องตรวจจับโลหะแบบพกพา (Handheld Metal Detector)</p>
+<h3>🚫 สิ่งของต้องห้ามที่ไม่รับฝาก / ส่ง</h3>
+<ul><li>สัตว์มีชีวิต / ซากสัตว์</li><li>เงินสด / เช็ค / บัตร</li><li>ของมีค่า เช่น ทองคำ เพชร อัญมณี</li><li>อาวุธ / วัตถุระเบิด / สารเสพติด</li><li>แบตเตอรี่ / ของเหลวไวไฟ</li><li>อาหารเน่าเสีย / ขยะ</li><li>อุปกรณ์อิเล็กทรอนิกส์บางชนิดที่มีแบตเตอรี่</li><li>สิ่งผิดกฎหมายอื่นตามประกาศบริษัท</li></ul>
+<p>หมายเหตุ: หากลูกค้าปฏิเสธการตรวจสอบ ทางบริษัทสามารถขอปฏิเสธการให้บริการได้ทันที เพื่อความปลอดภัย</p>
+<h3>สูงสุด</h3>
+<h3>🚫 สิ่งของต้องห้ามสำหรับการจัดส่ง Nationwide Same-day Delivery</h3>
+<h3>ภาพและป้ายประกอบจากเอกสารต้นฉบับ</h3><figure><img src="/sop/handheld-metal-detector/p2.jpg" alt="ขั้นตอนการใช้งาน และตำแหน่งปุ่มควบคุมของเครื่องตรวจจับโลหะแบบพกพา" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ขั้นตอนการใช้งาน และตำแหน่งปุ่มควบคุมของเครื่องตรวจจับโลหะแบบพกพา</figcaption></figure><figure><img src="/sop/handheld-metal-detector/p4.jpg" alt="ป้ายสิ่งของต้องห้ามในการรับฝาก/จัดส่ง (ไทย/อังกฤษ)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ป้ายสิ่งของต้องห้ามในการรับฝาก/จัดส่ง (ไทย/อังกฤษ)</figcaption></figure>', array['security','inspection','metal-detector','x-ray-backup'], 'published', false)
+on conflict (slug) do update set
+  title = excluded.title, summary = excluded.summary,
+  category_id = excluded.category_id, content_html = excluded.content_html,
+  tags = excluded.tags, status = excluded.status;
+
+-- ===== NEW: manual-baggage-check-xray-down =====
+insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
+values ('manual-baggage-check-xray-down', 'การตรวจสอบสัมภาระแบบชั่วคราว กรณีเครื่อง X-Ray ใช้งานไม่ได้ (Manual Baggage Check)', 'SOP-OPS 009/2025 — ขั้นตอนการตรวจสอบกระเป๋าและสัมภาระลูกค้าด้วยมืออย่างปลอดภัยและโปร่งใส ภายใต้กล้องวงจรปิด ในกรณีเครื่อง X-Ray ขัดข้อง/อยู่ระหว่างซ่อม พร้อมสคริปต์แจ้งลูกค้า (TH/EN)',
+  (select id from sop.categories where slug = 'counter-service'),
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 009/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 7 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
+<h3>Protocol &amp; SOP: Temporary Manual Check Protocol</h3>
+<p>หัวข้อ: การตรวจสอบกระเป๋าและสัมภาระลูกค้าแบบชั่วคราว สถานการณ์: เครื่อง X-Ray ขัดข้องอยู่ระหว่างการซ่อม</p>
+<h3>Manual Baggage Check (ระหว่างเครื่อง X-Ray ชำรุด)</h3>
+<p><strong>1. วัตถุประสงค์ (Objective)</strong></p>
+<ul><li>เพื่อให้การให้บริการยังคงปลอดภัย เป็นมืออาชีพ และมีมาตรฐานภายใต้ข้อจำกัดทางเทคนิค</li><li>เพื่อให้การดำเนินการตรวจสอบสัมภาระของลูกค้าอย่างปลอดภัย มีมาตรฐาน และโปร่งใส ในกรณีที่เครื่อง X-</li></ul>
+<h3>Ray ใช้งานไม่ได้</h3>
+<p><strong>2. ขอบเขต (Scope)</strong></p>
+<p>ใช้สำหรับสาขาสนามบินทุกแห่งของ AIRPORTELs ที่พบปัญหาเครื่อง X-Ray ไม่สามารถใช้งานได้ และอยู่ระหว่างรอ</p>
+<h3>การซ่อม</h3>
+<p><strong>3. อุปกรณ์ที่ใช้ (Required Tools)</strong></p>
+<ul><li>กล้องวงจรปิด (ต้องทำงาน)</li><li>Handheld Metal detector</li><li>พยานร่วม (Guest Service หรือ Porter ที่ทำงานร่วมกันอย่างน้อย 1 คน หรือ CCTV มุมมองชัดเจน)</li></ul>
+<h3>🔁 ขั้นตอนการปฏิบัติ (Step-by-Step)</h3>
+<h3>Step 1: เตรียมพร้อมก่อนเริ่มการตรวจ</h3>
+<ul><li>ยืนยันว่าเครื่อง X-Ray ไม่สามารถใช้งานได้</li><li>แจ้งหัวหน้างาน/ผู้จัดการ และติดป้าย “X-Ray Under Maintenance” ที่จุดให้บริการ</li><li>จัดเตรียมกล้องวงจรปิด (จุดตรวจที่อยู่ในมุมกล้อง) หรือพยานเพื่อทราบ</li><li>เตรียม Hand-held detector ให้พร้อมใช้งาน</li></ul>
+<h3>Step 2: แจ้งลูกค้าอย่างสุภาพ</h3>
+<p>ใช้ Script ด้านล่างนี้ในการพูดกับลูกค้า: 🔸ภาษาไทย: “ขออภัยค่ะ ขณะนี้เครื่อง X-Ray ของเรากำลังอยู่ระหว่างการซ่อมแซม ทางเราจึงต้องใช้วิธีการตรวจสอบสัมภาระ ด้วยมือเพื่อความปลอดภัยค่ะ ซึ่งจะดำเนินการภายใต้กล้องวงจรปิด และใช้ความระมัดระวังสูงสุด เพื่อความ สบายใจของลูกค้า ขออนุญาตเปิดกระเป๋าเพื่อทำการตรวจสอบนะคะ” 🔸English: “We apologize. Our X-Ray machine is currently under maintenance. As a safety measure, we need to manually inspect your luggage under CCTV supervision. We will handle your belongings with the utmost care. May we proceed to open your bag for inspection?”</p>
+<h3>Step 3: ตรวจสอบสัมภาระ (Manual Check)</h3>
+<ul><li>ใช้เครื่องตรวจรอบกระเป๋าเดินทาง ทั้งการฝาก และการส่ง ทุกครั้ง</li><li>กรณีพบวัตถุค้องสงสัย : ขออนุญาตเปิดกระเป๋า เฉพาะต่อหน้าลูกค้าและกล้องวงจรปิด</li><li>ตรวจสอบภายในโดยละเอียด แต่ไม่ละเมิดสิทธิส่วนบุคคล</li><li>ไม่จับต้องทรัพย์สินส่วนตัวโดยไม่จำเป็น หรือให้ลูกค้าเป็นผู้หยิบทรัพย์สินให้ตรวจ</li><li>ใช้ Handheld Metal Detector เพื่อตรวจสอบ (ดำเนินการตาม SOP การใช้งานฯ)</li></ul>
+<p>SOP: การใช้งานเครื่องตรวจจับโลหะแบบพกพา (Hand-Held Metal Detector)</p>
+<h3>Step 4: แจ้งผลการตรวจ</h3>
+<ul><li>แจ้งลูกค้าว่าการตรวจเสร็จเรียบร้อย</li><li>หากทำการเปิดตรวจให้ปิดกระเป๋าให้เรียบร้อยและดำเนินการเก็บ/จัดส่งตามบริการที่ลูกค้าเลือก</li><li>ลูกค้าสามารถขอลงชื่อรับทราบใน Log ได้หากต้องการ</li></ul>
+<h3>Script สำหรับพนักงาน (2 ภาษา)</h3>
+<h3>แนวทางเสริมความปลอดภัย &amp; ความโปร่งใส</h3>
+<ul><li>ตรวจในจุดที่มีกล้องวงจรปิดหรือมีพยานร่วม (หลีกเลี่ยงพื้นที่ปิด)</li><li>ห้ามใช้โทรศัพท์มือถือระหว่างตรวจสอบ</li><li>ห้ามพนักงานทำการตรวจสอบเพียงลำพัง หรือไม่อยู่ในมุมมองของ CCTV</li><li>หากพบสิ่งของต้องสงสัย ให้แจ้งหัวหน้างานทันที</li></ul>
+<h3>แบบฟอร์มบันทึกข้อมูล (Manual Check Log)</h3>
+<h3>Manual Check Log</h3>
+<h3>แบบฟอร์มและป้ายประกอบจากเอกสารต้นฉบับ</h3><figure><img src="/sop/manual-baggage-check-xray-down/p4.jpg" alt="ตัวอย่างแบบฟอร์ม Manual Check Log และป้ายแจ้งลูกค้า (X-Ray Under Maintenance)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ตัวอย่างแบบฟอร์ม Manual Check Log และป้ายแจ้งลูกค้า (X-Ray Under Maintenance)</figcaption></figure>', array['security','inspection','x-ray','contingency'], 'published', false)
+on conflict (slug) do update set
+  title = excluded.title, summary = excluded.summary,
+  category_id = excluded.category_id, content_html = excluded.content_html,
+  tags = excluded.tags, status = excluded.status;
+
+-- ===== NEW: osl-radiation-badge =====
+insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
+values ('osl-radiation-badge', 'การใช้งานและการรับ-ส่งคืนแผ่นวัดรังสี (OSL) สำหรับสาขาสนามบิน', 'SOP-OPS 008/2025 — แนวทางการรับ แจกจ่าย ใช้งาน และส่งคืนแผ่นวัดรังสี (OSL) สำหรับพนักงานสาขาสนามบิน การบันทึกใน Lark การประสานงานกับ OSL/TINT และรอบการเปลี่ยนทุก 3 เดือน',
+  (select id from sop.categories where slug = 'standards'),
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 008/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
+<h3>🎯 วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อกำหนดแนวทางปฏิบัติที่ชัดเจนในการรับ แจกจ่าย ใช้งาน และส่งคืนแผ่นวัดรังสี (OSL) สำหรับพนักงานที่มีความ เสี่ยงต่อการได้รับรังสี โดยเน้นความถูกต้อง ความปลอดภัย และการเก็บข้อมูลเป็นหลักฐานที่ตรวจสอบได้</p>
+<h3>📌 ขอบเขต (Scope)</h3>
+<p>ครอบคลุมถึงพนักงานทุกตำแหน่งที่ปฏิบัติงาน ณ สาขา สนามบิน ที่มีเครื่องสแกน โดยพนักงานที่ได้รับมอบแผ่นวัด รังสี และทีมสนับสนุนที่เกี่ยวข้องกับการเบิก-ส่งคืนอุปกรณ์ และการประสานงานกับหน่วยงานภายนอก (OSL)</p>
+<h3>🔄 ขั้นตอนการปฏิบัติงาน (Step-by-Step Procedures)</h3>
+<p><strong>1. การรับแผ่นวัดรังสีจาก OSL</strong></p>
+<ul><li>หัวหน้าสาขาเป็นผู้รับแผ่นวัดรังสี</li><li>ตรวจสอบรายชื่อและจำนวนว่า ถูกต้อง ครบถ้วน</li><li>ลงบันทึกในระบบ Lark &gt; OSL แผ่นวัดรังสี</li></ul>
+<p><strong>2. การแจกจ่ายแผ่นวัดรังสีให้พนักงาน</strong></p>
+<ul><li>แจกจ่ายแผ่นวัดรังสีให้พนักงาน ตรงตามชื่อบนอุปกรณ์</li><li>พนักงานตรวจสอบชื่อบนแผ่นวัดรังสีว่าตรงกับตนเองหรือไม่</li><li>หากถูกต้อง:</li><li>ถ่ายภาพ แผ่นวัดรังสี</li><li>แนบภาพในแบบฟอร์มรายบุคคลเพื่อเป็นหลักฐาน</li></ul>
+<h3>🔗 ลิงก์ฟอร์ม</h3>
+<p><strong>3. กรณีชื่อผิด / ไม่มีชื่อพนักงาน</strong></p>
+<ul><li>มอบแผ่นวัดรังสีให้พนักงานคนที่ยังไม่มีชื่อใช้งานไปก่อน</li><li>จัดทำเอกสารขอเปลี่ยนชื่อผู้ใช้งาน</li><li>ส่งอีเมลแจ้งไปที่:</li><li>osl@tint.or.th</li><li>CC: supervisor@airportels.co , it@airportels.co ,</li></ul>
+<h3>gsa_alpha@airportels.co</h3>
+<p><strong>4. กรณีพนักงานใหม่ยังไม่มีแผ่นวัดรังสี</strong></p>
+<ul><li>ทำเอกสารขอใช้เพิ่ม</li><li>ส่งอีเมลแจ้งไปที่:</li><li>osl@tint.or.th</li><li>CC: supervisor@airportels.co , it@airportels.co ,</li></ul>
+<h3>gsa_alpha@airportels.co</h3>
+<ul><li>ทาง OSL จะตอบกลับเรื่องการชำระเงิน ให้ดำเนินการเบิกกับฝ่ายบัญชี (ประสานงาน Operation Co. - ป๊อป)</li></ul>
+<p><strong>5. การเปลี่ยนและส่งคืนแผ่นวัดรังสี (ทุก 3 เดือน)</strong></p>
+<ul><li>หัวหน้าสาขารวบรวมแผ่นวัดรังสีของพนักงานทุกคน</li><li>ส่งคืนไปยัง:</li></ul>
+<h3>สำนักงานใหญ่: เลขที่ 9/9 หมู่ที่ 7</h3>
+<h3>ตำบลทรายมูล อำเภอองครักษ์</h3>
+<h3>จังหวัดนครนายก 26120</h3>
+<h3>โทร. 02-401-9889</h3>
+<ul><li>ลงบันทึกใน Lark &gt; OSL แผ่นวัดรังสี โดยจะต้องใส่รายละเอียดให้ครบถ้วน</li><li>ต้องขอใบกำกับภาษีทุกครั้ง (กรณีไม่ได้ใช้บริการ MakeSend)</li><li>ที่อยู่ออกใบกำกับภาษี :</li></ul>
+<p>บริษัท แอร์พอเทลส์ อินเตอร์เนชันแนล จำกัด (สำนักงานใหญ๋) ที่อยู่ : เลขที่ 6 หมู่บ้านไพลินปาร์ค ซอยรัตนาธิเบศร์ 28 แยก 2</p>
+<h3>ต.บางกระสอ อ.เมืองนนทบุรี จ.นนทบุรี 11000</h3>
+<h3>เลขประจำตัวผู้เสัยภาษีอากร : 0-1055-650-9868-7</h3>
+<h3>เบอร์ติดต่อ : +66-2026-6927</h3>
+<h3>📎 เอกสารและลิงก์ประกอบ</h3>
+<ul><li>🔗 แบบฟอร์มรายบุคคล</li><li>🔗 ระบบติดตาม Lark</li></ul>
+', array['osl','radiation','airport','compliance'], 'published', false)
+on conflict (slug) do update set
+  title = excluded.title, summary = excluded.summary,
+  category_id = excluded.category_id, content_html = excluded.content_html,
+  tags = excluded.tags, status = excluded.status;
 
 -- ===== NEW: ntw-5day-booking =====
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
