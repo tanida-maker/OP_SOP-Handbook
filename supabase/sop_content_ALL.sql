@@ -16,6 +16,39 @@ alter table sop.documents add constraint documents_status_check
 -- move any previously-archived rows out of 'draft' into 'archived'
 update sop.documents set status = 'archived' where slug like '%-archive';
 
+-- standardized document control codes (SOP-OPS-NNN/YYYY)
+alter table sop.documents add column if not exists doc_code text;
+update sop.documents set doc_code = 'SOP-OPS-001/2025' where slug = 'dress-code-guest-service';
+update sop.documents set doc_code = 'SOP-OPS-002/2025' where slug = 'cashless-payment-policy';
+update sop.documents set doc_code = 'SOP-OPS-003/2025' where slug = 'open-close-counter';
+update sop.documents set doc_code = 'SOP-OPS-004/2025' where slug = 'emergency-airport';
+update sop.documents set doc_code = 'SOP-OPS-005/2025' where slug = 'emergency-mall';
+update sop.documents set doc_code = 'SOP-OPS-006/2025' where slug = 'inventory-stock-update';
+update sop.documents set doc_code = 'SOP-OPS-007/2025' where slug = 'online-credit-card-payment';
+update sop.documents set doc_code = 'SOP-OPS-008/2025' where slug = 'osl-radiation-badge';
+update sop.documents set doc_code = 'SOP-OPS-009/2025' where slug = 'manual-baggage-check-xray-down';
+update sop.documents set doc_code = 'SOP-OPS-010/2025' where slug = 'handheld-metal-detector';
+update sop.documents set doc_code = 'SOP-OPS-011/2025' where slug = 'pos-order-receiving';
+update sop.documents set doc_code = 'SOP-OPS-012/2025' where slug = 'authorized-person-pickup';
+update sop.documents set doc_code = 'SOP-OPS-013/2025' where slug = 'yoowifi-service';
+update sop.documents set doc_code = 'SOP-OPS-014/2025' where slug = 'safe-luggage-storage';
+update sop.documents set doc_code = 'SOP-OPS-015/2025' where slug = 'cross-branch-travel-allowance';
+update sop.documents set doc_code = 'SOP-OPS-016/2025' where slug = 'delayed-pickup-discount';
+update sop.documents set doc_code = 'SOP-OPS-017/2025' where slug = 'edc-machine';
+update sop.documents set doc_code = 'SOP-OPS-018/2025' where slug = 'same-day-delivery';
+update sop.documents set doc_code = 'SOP-OPS-019/2025' where slug = 'booking-photo-rotate';
+update sop.documents set doc_code = 'SOP-OPS-020/2026' where slug = 'dmk-airport-service';
+update sop.documents set doc_code = 'SOP-OPS-021/2026' where slug = 'lost-found-claim';
+update sop.documents set doc_code = 'SOP-OPS-022/2026' where slug = 'abandoned-luggage-disposal';
+update sop.documents set doc_code = 'SOP-OPS-023/2026' where slug = 'complaint-handling';
+update sop.documents set doc_code = 'SOP-OPS-024/2026' where slug = 'baggage-inspection-lock-report';
+update sop.documents set doc_code = 'SOP-OPS-025/2026' where slug = 'ntw-5day-booking';
+update sop.documents set doc_code = 'SOP-OPS-026/2025' where slug = 'respond-io-guide';
+update sop.documents set doc_code = 'SOP-OPS-027/2025' where slug = '3cx-guide';
+update sop.documents set doc_code = 'SOP-OPS-028/2025' where slug = 'luggage-delivery-google-sheet';
+update sop.documents set doc_code = 'SOP-OPS-028.1/2025' where slug = 'google-sheet-donts';
+update sop.documents set doc_code = 'T&C-2026' where slug = 'terms-and-conditions-2025';
+
 -- ===== terms-and-conditions-2025: archive current (guarded) then update =====
 insert into sop.documents (slug, title, summary, category_id, content_html, cover_image, tags, status, is_onboarding, onboarding_order, version)
 select 'terms-and-conditions-2025-archive', title || ' — เก็บถาวร ปี 2025 (Archive)', summary, category_id, content_html, cover_image,
@@ -256,12 +289,13 @@ values ('cross-branch-travel-allowance', 'มาตรฐานค่าเด�
 <ul><li>ตารางเปรียบเทียบระยะทาง และค่าเดินทาง</li></ul>
 <h3>ตารางค่าเดินทาง</h3>
 <style>
-.travel-tbl{border-collapse:collapse;width:100%;min-width:680px;font-size:12.5px;line-height:1.35}
-.travel-tbl th,.travel-tbl td{border:1px solid var(--color-border,#e5e7eb);padding:6px 8px;text-align:center;color:var(--color-text,#1f2937);vertical-align:top}
-.travel-tbl th{background:var(--color-surface-2,#f1f5f9);font-weight:700}
-.travel-tbl td.rh,.travel-tbl th:first-child{text-align:left;font-weight:700;background:var(--color-surface-2,#f1f5f9);white-space:nowrap}
-.travel-scroll{overflow-x:auto;margin:8px 0 16px;border-radius:8px}
-</style><h3>ตารางมาตรฐานค่าเดินทาง (Standard Travel Allowance)</h3><p><strong>1) ตารางเปรียบเทียบระยะทางและค่าเดินทาง</strong> (จำนวนสถานี BTS/MRT และค่าเดินทางระหว่างสาขา)</p><div class="travel-scroll"><table class="travel-tbl"><thead><tr><th>From \ To</th><th>Emporium</th><th>Emsphere</th><th>T21</th><th>CTW</th><th>MBK</th><th>ICON</th><th>Phoenix Pratunam</th><th>MIXT</th></tr></thead><tbody><tr><td class="rh">Emporium</td><td>-</td><td>เดิน . → 0 บ.</td><td>1 สถานี <br>(Phrom Phong → Asok) 50 บ.</td><td>4 สถานี <br>(Phrom Phong → Chidlom) 70 บ.</td><td>6 สถานี <br>(Phrom Phong → National Stadium) → 70 บ.</td><td>15 สถานี <br>(Phrom Phong → Charoen Nakorn) 100 บ.</td><td>6 สถานี <br>(Ratchathewi → Phrom Phong) 70 บ.</td><td>13 สถานี <br>(Phrom Phong → Mo Chit + Motor Cycle) 100 บ.</td></tr><tr><td class="rh">Emsphere</td><td>เดิน → 0 บ.</td><td>-</td><td>1 สถานี <br>(Phrom Phong → Asok) 50 บ.</td><td>4 สถานี <br>(Phrom Phong → Chidlom) 70 บ.</td><td>6 สถานี <br>(Phrom Phong → National Stadium) → 70 บ.</td><td>15 สถานี <br>(Phrom Phong → Charoen Nakorn) 100 บ.</td><td>6 สถานี <br>(Ratchathewi → Phrom Phong) 70 บ.</td><td>13 สถานี <br>(Phrom Phong → Mo Chit + Motor Cycle) 100 บ.</td></tr><tr><td class="rh">T21</td><td>1 สถานี<br> (Asok → Phrom Phong) 50 บ.</td><td>1 สถานี <br>(Asok → Phrom Phong) → 50 บ.</td><td>-</td><td>4 สถานี <br>(Asok → Chidlom) 50 บ.</td><td>5 สถานี <br>(Asok → National Stadium) → 70 บ.</td><td>14 สถานี <br>(Asok → Charoen Nakorn) 100 บ.</td><td>7 สถานี <br>(Ratchathewi → Asok) 70 บ.</td><td>12 สถานี <br>(Asok → Mo Chit + Motor Cycle) 100 บ.</td></tr><tr><td class="rh">CTW</td><td>5 สถานี <br>(Siam → Phrom Phong) 70 บ.</td><td>5 สถานี <br>(Siam → Phrom Phong) 70 บ.</td><td>4 สถานี (Siam → Asok) 50 บ.</td><td>-</td><td>1 สถานี <br>(Siam → National Stadium) → 50 บ.</td><td>10 สถานี <br>(Siam → Charoen Nakorn) 100 บ.</td><td>เดิน . → 0 บ.</td><td>8 สถานี <br>(Siam → Mo Chit + Motor Cycle) 100 บ.</td></tr><tr><td class="rh">MBK</td><td>5 สถานี <br>(National Stadium → Phrom Phong) 70 บ.</td><td>5 สถานี <br>(National Stadium → Phrom Phong) 70 บ.</td><td>5 สถานี (National Stadium → Asok) 50 บ.</td><td>1 สถานี <br>(National Stadium → Siam) 50 บ.</td><td>-</td><td>11 สถานี <br>(National Stadium → Charoen Nakorn) 100 บ.</td><td>1 สถานี <br>(Ratchathewi → National Stadium) 50 บ.</td><td>9 สถานี <br>(National Stadium → Mo Chit + Motor Cycle) 100 บ.</td></tr><tr><td class="rh">ICON</td><td>15 สถานี <br>(Phrom Phong → Charoen Nakorn) 100 บ.</td><td>15 สถานี <br>(Phrom Phong → Charoen Nakorn) 100 บ.</td><td>14 สถานี (Asok → Charoen Nakorn) 100 บ.</td><td>10 สถานี <br>(Siam → Charoen Nakorn) 100 บ.</td><td>11 สถานี <br>(National Stadium → Charoen Nakorn) 100 บ.</td><td>-</td><td>12 สถานี <br>(Ratchathewi → Charoen Nakorn) 100 บ.</td><td>17 สถานี <br>(Mochit → Charoen Nakorn) 100 บ.</td></tr><tr><td class="rh">Phoenix Pratunam</td><td>6 สถานี <br>(Ratchathewi → Phrom Phong) 70 บ.</td><td>6 สถานี <br>(Ratchathewi → Phrom Phong) 70 บ.</td><td>6 สถานี (Ratchathewi → Asok) 70 บ.</td><td>เดิน . → 0 บ.</td><td>1 สถานี <br>(National Stadium → Ratchathewi + Motor Cycle) <br>50 บ.</td><td>12 สถานี <br>(Ratchathewi → Charoen Nakorn) 100 บ.</td><td>-</td><td>7 สถานี <br>(Ratchathewi → Mo Chit + Motor Cycle) 70 บ</td></tr><tr><td class="rh">MIXT</td><td>13 สถานี<br> (Phrom Phong → Mo Chit + Motor Cycle) 100 บ.</td><td>13 สถานี <br>(Phrom Phong → Mo Chit + Motor Cycle) 100 บ.</td><td>12 สถานี (Asok → Mo Chit + Motor Cycle) 100 บ.</td><td>8 สถานี <br>(Siam → Mo Chit + Motor Cycle) 100 บ.</td><td>9 สถานี <br>(National Stadium → Mo Chit + Motor Cycle) 100 บ.</td><td>17 สถานี <br>( Charoen Nakornt → Mochit + Motor Cycle) 100 บ.</td><td>7 สถานี <br>(Ratchathewi → Mo Chit + Motor Cycle) 70 บ</td><td>-</td></tr></tbody></table></div><p><strong>2) ตารางค่าเดินทาง (บาท)</strong></p><div class="travel-scroll"><table class="travel-tbl"><thead><tr><th>From \ To</th><th>Emporium</th><th>Emsphere</th><th>T21</th><th>CTW</th><th>MBK</th><th>ICON</th><th>Phoenix</th><th>MIXT</th></tr></thead><tbody><tr><td class="rh">Emporium</td><td>-</td><td>0</td><td>50</td><td>70</td><td>70</td><td>100</td><td>70</td><td>100</td></tr><tr><td class="rh">Emsphere</td><td>0</td><td>-</td><td>50</td><td>70</td><td>70</td><td>100</td><td>70</td><td>100</td></tr><tr><td class="rh">T21</td><td>50</td><td>50</td><td>-</td><td>50</td><td>70</td><td>100</td><td>70</td><td>100</td></tr><tr><td class="rh">CTW</td><td>70</td><td>70</td><td>50</td><td>-</td><td>50</td><td>100</td><td>0</td><td>100</td></tr><tr><td class="rh">MBK</td><td>70</td><td>70</td><td>50</td><td>50</td><td>-</td><td>100</td><td>50</td><td>100</td></tr><tr><td class="rh">ICON</td><td>100</td><td>100</td><td>100</td><td>100</td><td>100</td><td>-</td><td>100</td><td>100</td></tr><tr><td class="rh">Phoenix Pratunam</td><td>70</td><td>70</td><td>70</td><td>-</td><td>50</td><td>100</td><td>-</td><td>70</td></tr><tr><td class="rh">MIXT</td><td>100</td><td>100</td><td>100</td><td>100</td><td>100</td><td>100</td><td>70</td><td>-</td></tr></tbody></table></div><p style="font-size:12px;color:var(--color-muted,#6b7280)">※ อัตราค่าเดินทางเหมาจ่ายตามเส้นทางระหว่างสาขา (หน่วย: บาท) — เลื่อนตารางแนวนอนเพื่อดูคอลัมน์ทั้งหมด</p>', array['travel','allowance','staff','runner'], 'published', false)
+.sop-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0 16px;border:1px solid var(--color-border,#e5e7eb);border-radius:10px}
+table.sop-tbl{border-collapse:collapse;font-size:13.5px;line-height:1.5;min-width:100%;background:var(--color-surface,#fff)}
+table.sop-tbl th,table.sop-tbl td{border:1px solid var(--color-border,#e5e7eb);padding:8px 11px;color:var(--color-text,#1f2937);vertical-align:top;text-align:center;max-width:280px}
+table.sop-tbl th{background:var(--color-surface-2,#f1f5f9);font-weight:700;white-space:nowrap}
+table.sop-tbl td.rh,table.sop-tbl th:first-child{text-align:left;font-weight:700;white-space:nowrap;background:var(--color-surface-2,#f1f5f9);position:sticky;left:0;z-index:1}
+.sop-hint{font-size:12px;color:var(--color-muted,#6b7280);margin:2px 0 4px}
+</style><h3>ตารางมาตรฐานค่าเดินทาง (Standard Travel Allowance)</h3><p><strong>1) ตารางเปรียบเทียบระยะทางและค่าเดินทาง</strong> (จำนวนสถานี BTS/MRT และค่าเดินทางระหว่างสาขา)</p><p class="sop-hint">⟷ เลื่อนตารางซ้าย-ขวาเพื่อดูทุกคอลัมน์</p><div class="sop-scroll"><table class="sop-tbl"><thead><tr><th>From \ To</th><th>Emporium</th><th>Emsphere</th><th>T21</th><th>CTW</th><th>MBK</th><th>ICON</th><th>Phoenix Pratunam</th><th>MIXT</th></tr></thead><tbody><tr><td class="rh">Emporium</td><td>-</td><td>เดิน . → 0 บ.</td><td>1 สถานี <br>(Phrom Phong → Asok) 50 บ.</td><td>4 สถานี <br>(Phrom Phong → Chidlom) 70 บ.</td><td>6 สถานี <br>(Phrom Phong → National Stadium) → 70 บ.</td><td>15 สถานี <br>(Phrom Phong → Charoen Nakorn) 100 บ.</td><td>6 สถานี <br>(Ratchathewi → Phrom Phong) 70 บ.</td><td>13 สถานี <br>(Phrom Phong → Mo Chit + Motor Cycle) 100 บ.</td></tr><tr><td class="rh">Emsphere</td><td>เดิน → 0 บ.</td><td>-</td><td>1 สถานี <br>(Phrom Phong → Asok) 50 บ.</td><td>4 สถานี <br>(Phrom Phong → Chidlom) 70 บ.</td><td>6 สถานี <br>(Phrom Phong → National Stadium) → 70 บ.</td><td>15 สถานี <br>(Phrom Phong → Charoen Nakorn) 100 บ.</td><td>6 สถานี <br>(Ratchathewi → Phrom Phong) 70 บ.</td><td>13 สถานี <br>(Phrom Phong → Mo Chit + Motor Cycle) 100 บ.</td></tr><tr><td class="rh">T21</td><td>1 สถานี<br> (Asok → Phrom Phong) 50 บ.</td><td>1 สถานี <br>(Asok → Phrom Phong) → 50 บ.</td><td>-</td><td>4 สถานี <br>(Asok → Chidlom) 50 บ.</td><td>5 สถานี <br>(Asok → National Stadium) → 70 บ.</td><td>14 สถานี <br>(Asok → Charoen Nakorn) 100 บ.</td><td>7 สถานี <br>(Ratchathewi → Asok) 70 บ.</td><td>12 สถานี <br>(Asok → Mo Chit + Motor Cycle) 100 บ.</td></tr><tr><td class="rh">CTW</td><td>5 สถานี <br>(Siam → Phrom Phong) 70 บ.</td><td>5 สถานี <br>(Siam → Phrom Phong) 70 บ.</td><td>4 สถานี (Siam → Asok) 50 บ.</td><td>-</td><td>1 สถานี <br>(Siam → National Stadium) → 50 บ.</td><td>10 สถานี <br>(Siam → Charoen Nakorn) 100 บ.</td><td>เดิน . → 0 บ.</td><td>8 สถานี <br>(Siam → Mo Chit + Motor Cycle) 100 บ.</td></tr><tr><td class="rh">MBK</td><td>5 สถานี <br>(National Stadium → Phrom Phong) 70 บ.</td><td>5 สถานี <br>(National Stadium → Phrom Phong) 70 บ.</td><td>5 สถานี (National Stadium → Asok) 50 บ.</td><td>1 สถานี <br>(National Stadium → Siam) 50 บ.</td><td>-</td><td>11 สถานี <br>(National Stadium → Charoen Nakorn) 100 บ.</td><td>1 สถานี <br>(Ratchathewi → National Stadium) 50 บ.</td><td>9 สถานี <br>(National Stadium → Mo Chit + Motor Cycle) 100 บ.</td></tr><tr><td class="rh">ICON</td><td>15 สถานี <br>(Phrom Phong → Charoen Nakorn) 100 บ.</td><td>15 สถานี <br>(Phrom Phong → Charoen Nakorn) 100 บ.</td><td>14 สถานี (Asok → Charoen Nakorn) 100 บ.</td><td>10 สถานี <br>(Siam → Charoen Nakorn) 100 บ.</td><td>11 สถานี <br>(National Stadium → Charoen Nakorn) 100 บ.</td><td>-</td><td>12 สถานี <br>(Ratchathewi → Charoen Nakorn) 100 บ.</td><td>17 สถานี <br>(Mochit → Charoen Nakorn) 100 บ.</td></tr><tr><td class="rh">Phoenix Pratunam</td><td>6 สถานี <br>(Ratchathewi → Phrom Phong) 70 บ.</td><td>6 สถานี <br>(Ratchathewi → Phrom Phong) 70 บ.</td><td>6 สถานี (Ratchathewi → Asok) 70 บ.</td><td>เดิน . → 0 บ.</td><td>1 สถานี <br>(National Stadium → Ratchathewi + Motor Cycle) <br>50 บ.</td><td>12 สถานี <br>(Ratchathewi → Charoen Nakorn) 100 บ.</td><td>-</td><td>7 สถานี <br>(Ratchathewi → Mo Chit + Motor Cycle) 70 บ</td></tr><tr><td class="rh">MIXT</td><td>13 สถานี<br> (Phrom Phong → Mo Chit + Motor Cycle) 100 บ.</td><td>13 สถานี <br>(Phrom Phong → Mo Chit + Motor Cycle) 100 บ.</td><td>12 สถานี (Asok → Mo Chit + Motor Cycle) 100 บ.</td><td>8 สถานี <br>(Siam → Mo Chit + Motor Cycle) 100 บ.</td><td>9 สถานี <br>(National Stadium → Mo Chit + Motor Cycle) 100 บ.</td><td>17 สถานี <br>( Charoen Nakornt → Mochit + Motor Cycle) 100 บ.</td><td>7 สถานี <br>(Ratchathewi → Mo Chit + Motor Cycle) 70 บ</td><td>-</td></tr></tbody></table></div><p><strong>2) ตารางค่าเดินทาง (บาท)</strong></p><p class="sop-hint">⟷ เลื่อนตารางซ้าย-ขวาเพื่อดูทุกคอลัมน์</p><div class="sop-scroll"><table class="sop-tbl"><thead><tr><th>From \ To</th><th>Emporium</th><th>Emsphere</th><th>T21</th><th>CTW</th><th>MBK</th><th>ICON</th><th>Phoenix</th><th>MIXT</th></tr></thead><tbody><tr><td class="rh">Emporium</td><td>-</td><td>0</td><td>50</td><td>70</td><td>70</td><td>100</td><td>70</td><td>100</td></tr><tr><td class="rh">Emsphere</td><td>0</td><td>-</td><td>50</td><td>70</td><td>70</td><td>100</td><td>70</td><td>100</td></tr><tr><td class="rh">T21</td><td>50</td><td>50</td><td>-</td><td>50</td><td>70</td><td>100</td><td>70</td><td>100</td></tr><tr><td class="rh">CTW</td><td>70</td><td>70</td><td>50</td><td>-</td><td>50</td><td>100</td><td>0</td><td>100</td></tr><tr><td class="rh">MBK</td><td>70</td><td>70</td><td>50</td><td>50</td><td>-</td><td>100</td><td>50</td><td>100</td></tr><tr><td class="rh">ICON</td><td>100</td><td>100</td><td>100</td><td>100</td><td>100</td><td>-</td><td>100</td><td>100</td></tr><tr><td class="rh">Phoenix Pratunam</td><td>70</td><td>70</td><td>70</td><td>-</td><td>50</td><td>100</td><td>-</td><td>70</td></tr><tr><td class="rh">MIXT</td><td>100</td><td>100</td><td>100</td><td>100</td><td>100</td><td>100</td><td>70</td><td>-</td></tr></tbody></table></div><p style="font-size:12px;color:var(--color-muted,#6b7280)">※ อัตราค่าเดินทางเหมาจ่ายตามเส้นทางระหว่างสาขา (หน่วย: บาท)</p>', array['travel','allowance','staff','runner'], 'published', false)
 on conflict (slug) do update set
   title = excluded.title, summary = excluded.summary,
   category_id = excluded.category_id, content_html = excluded.content_html,
@@ -869,153 +903,155 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('complaint-handling', 'ขั้นตอนมาตรฐานการรับมือข้อร้องเรียน (Complaint Handling)', 'SOP-OPS 023/2026 — ขั้นตอนรับเรื่อง จัดการ และแก้ไขข้อร้องเรียนจากลูกค้าทุกช่องทาง (หน้าสาขา / CS Online) โครงสร้างการส่งต่อ (Escalation) Priority Matrix + SLA สคริปต์สื่อสาร และ RCA',
   (select id from sop.categories where slug = 'counter-service'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 023/2026<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 พฤษภาคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
-<h3>🔹 วัตถุประสงค์ / Purpose</h3>
-<p>กำหนดขั้นตอนมาตรฐานในการ รับเรื่อง จัดการ และแก้ไข ข้อร้องเรียนจากลูกค้าของ Airportels ผ่านทุกช่องทาง เพื่อลดความเสียหาย รักษาภาพลักษณ์ และสร้างความพึงพอใจสูงสุด This SOP defines standard steps for receiving, managing, and resolving customer complaints across all channels.</p>
-<h3>🔹 ขอบเขตการใช้งาน / Scope</h3>
-<ul><li>ครอบคลุม 3 ช่องทาง: หน้าสาขา (Walk-in) | Customer Service Online</li><li>ผู้รับผิดชอบ: Guest Service Staff / CS Staff / Branch Manager / CS Team Lead /Operation</li></ul>
-<h3>Co./ Operations Manager</h3>
-<ul><li>ใช้กับทุกสาขาที่ให้บริการรับฝากและจัดส่งกระเป๋า</li></ul>
-<h3>⏸️ คำจำกัดความ / Definitions</h3>
-<ul><li>CS Staff: พนักงาน Customer Service ระดับ Front-line</li><li>CS Team Lead: หัวหน้าทีม Customer Service</li><li>OP Manager: Operations Manager – ผู้มีอำนาจตัดสินใจสูงสุด</li><li>Branch Manager / Ops Co.: หัวหน้าสาขา หรือ Operations Coordinator</li><li>Escalation: การส่งต่อเรื่องร้องเรียนไปยังระดับที่สูงขึ้น</li><li>SLA: Service Level Agreement – ระยะเวลามาตรฐานในการตอบสนอง</li><li>P1/P2/P3: Priority Level (P1=Urgent, P2=High, P3=Standard)</li><li>Complaint Log: แบบบันทึกรายละเอียดเคสข้อร้องเรียน</li></ul>
-<h3>⏸️ บทบาท/ความรับผิดชอบ / Roles &amp; Responsibilities</h3>
-<ul><li>Guest Service Staff / CS Staff: รับเรื่อง ฟัง บันทึก และแก้ไขเบื้องต้น | ส่งต่อเมื่อเกินขีดความสามารถ</li><li>Branch Manager / Ops Coordinator: รับเรื่องระดับ 2 | ตัดสินใจแก้ปัญหา และชดเชยในขอบเขตที่</li></ul>
-<p>กำหนด | รายงาน OP Manager (ช่องทาง Lark Group แต่ละสาขา)</p>
-<ul><li>CS Team Lead: ดูแล CS online | ติดตาม SLA | รายงานสรุปรายสัปดาห์</li><li>Operations Manager: อนุมัติการแก้ไขระดับสูง | อนุมัติค่าชดเชย | ดูแล RCA (Root Cause Analysis) และ</li></ul>
-<h3>มาตรการป้องกัน</h3>
-<h3>⏸️ โครงสร้างการส่งต่อ / Escalation Matrix</h3>
-<p>ช่องทาง / Channel ระดับ 1 / Level 1 ระดับ 2 / Level 2 ระดับ 3 / Level 3 หน้าสาขา / Branch Guest Service Staff Branch Manager /Ops</p>
-<h3>Coordinator</h3>
-<h3>Operations Manager</h3>
-<h3>CS</h3>
-<h3>Online(Email/Chat/Soci</h3>
-<h3>al)</h3>
-<p>CS Staff CS Team Lead Operations Manager หมายเหตุ: Operations Manager = ผู้มีอำนาจตัดสินใจสูงสุดในทุกกรณี</p>
+  '<style>
+.sop-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0 16px;border:1px solid var(--color-border,#e5e7eb);border-radius:10px}
+table.sop-tbl{border-collapse:collapse;font-size:13.5px;line-height:1.5;min-width:100%;background:var(--color-surface,#fff)}
+table.sop-tbl th,table.sop-tbl td{border:1px solid var(--color-border,#e5e7eb);padding:8px 11px;color:var(--color-text,#1f2937);vertical-align:top;text-align:left;max-width:300px}
+table.sop-tbl th{background:var(--color-surface-2,#f1f5f9);font-weight:700;white-space:nowrap;text-align:center}
+table.sop-tbl td:first-child,table.sop-tbl th:first-child{white-space:nowrap;font-weight:700;background:var(--color-surface-2,#f1f5f9);position:sticky;left:0;z-index:1}
+.sop-script{background:var(--color-surface-2,#f5f7fa);border-left:3px solid var(--color-brand-400,#6ea8fe);border-radius:6px;padding:8px 12px;margin:6px 0;font-size:13.5px}
+.sop-script .en{color:var(--color-muted,#6b7280);font-style:italic}
+</style>
+
+<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS-023/2026 &nbsp;·&nbsp; <strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 พฤษภาคม 2569 &nbsp;·&nbsp; <strong>หน่วยงาน:</strong> Operations</p></blockquote>
+
+<h3>🔹 วัตถุประสงค์ (Purpose)</h3>
+<p>กำหนดขั้นตอนมาตรฐานในการ <strong>รับเรื่อง จัดการ และแก้ไข</strong> ข้อร้องเรียนจากลูกค้าของ AIRPORTELs ผ่านทุกช่องทาง เพื่อลดความเสียหาย รักษาภาพลักษณ์ และสร้างความพึงพอใจสูงสุด</p>
+<p class="en" style="color:var(--color-muted,#6b7280)"><em>This SOP defines standard steps for receiving, managing, and resolving customer complaints across all channels.</em></p>
+
+<h3>🔹 ขอบเขต (Scope)</h3>
+<ul>
+<li>ครอบคลุม 3 ช่องทาง: <strong>หน้าสาขา (Walk-in)</strong> · <strong>Customer Service Online</strong> (Email / Chat / Social Media)</li>
+<li>ผู้รับผิดชอบ: Guest Service Staff / CS Staff / Branch Manager / CS Team Lead / Operation Co. / Operations Manager</li>
+<li>ใช้กับทุกสาขาที่ให้บริการรับฝากและจัดส่งกระเป๋า</li>
+</ul>
+
+<h3>⏸️ คำจำกัดความ (Definitions)</h3>
+<ul>
+<li><strong>CS Staff:</strong> พนักงาน Customer Service ระดับ Front-line</li>
+<li><strong>CS Team Lead:</strong> หัวหน้าทีม Customer Service</li>
+<li><strong>OP Manager:</strong> Operations Manager – ผู้มีอำนาจตัดสินใจสูงสุด</li>
+<li><strong>Branch Manager / Ops Co.:</strong> หัวหน้าสาขา หรือ Operations Coordinator</li>
+<li><strong>Escalation:</strong> การส่งต่อเรื่องร้องเรียนไปยังระดับที่สูงขึ้น</li>
+<li><strong>SLA:</strong> Service Level Agreement – ระยะเวลามาตรฐานในการตอบสนอง</li>
+<li><strong>P1 / P2 / P3:</strong> Priority Level (P1 = Urgent, P2 = High, P3 = Standard)</li>
+<li><strong>Complaint Log:</strong> แบบบันทึกรายละเอียดเคสข้อร้องเรียน</li>
+</ul>
+
+<h3>⏸️ บทบาท / ความรับผิดชอบ (Roles &amp; Responsibilities)</h3>
+<ul>
+<li><strong>Guest Service / CS Staff:</strong> รับเรื่อง ฟัง บันทึก และแก้ไขเบื้องต้น | ส่งต่อเมื่อเกินขีดความสามารถ</li>
+<li><strong>Branch Manager / Ops Coordinator:</strong> รับเรื่องระดับ 2 | ตัดสินใจแก้ปัญหาและชดเชยในขอบเขตที่กำหนด | รายงาน OP Manager (ผ่าน Lark Group แต่ละสาขา)</li>
+<li><strong>CS Team Lead:</strong> ดูแล CS Online | ติดตาม SLA | รายงานสรุปรายสัปดาห์</li>
+<li><strong>Operations Manager:</strong> อนุมัติการแก้ไขระดับสูง | อนุมัติค่าชดเชย | ดูแล RCA และมาตรการป้องกัน</li>
+</ul>
+
+<h3>⏸️ โครงสร้างการส่งต่อ (Escalation Matrix)</h3>
+<div class="sop-scroll"><table class="sop-tbl">
+<thead><tr><th>ช่องทาง / Channel</th><th>ระดับ 1 / Level 1</th><th>ระดับ 2 / Level 2</th><th>ระดับ 3 / Level 3</th></tr></thead>
+<tbody>
+<tr><td>หน้าสาขา / Branch</td><td>Guest Service Staff</td><td>Branch Manager / Ops Coordinator</td><td>Operations Manager</td></tr>
+<tr><td>CS Online (Email / Chat / Social)</td><td>CS Staff</td><td>CS Team Lead</td><td>Operations Manager</td></tr>
+</tbody></table></div>
+<p><em>หมายเหตุ: Operations Manager = ผู้มีอำนาจตัดสินใจสูงสุดในทุกกรณี</em></p>
+
 <h3>ช่องทางที่ 1 — หน้าสาขา (Walk-in Complaint)</h3>
-<h3>Channel 1 — Branch / Walk-in</h3>
-<h3>⚙️ ขั้นตอนการรับมือ / Handling Procedure</h3>
-<h3>1</h3>
-<h3>รับเรื่องและฟังอย่างตั้งใจ</h3>
-<h3>Receive &amp; Listen Actively</h3>
-<p>ต้อนรับลูกค้า แนะนำตัว ฟังโดยไม่ขัดจังหวะ จดบันทึกปัญหาสำคัญ Greet customer, introduce yourself, listen without interruption, note key details.</p>
-<h3>2</h3>
-<h3>ยืนยันและสรุปปัญหา</h3>
-<h3>Acknowledge &amp; Summarise</h3>
-<p>ทวนสิ่งที่ลูกค้าแจ้งเพื่อยืนยันความเข้าใจที่ถูกต้อง Repeat the issue back to confirm correct understanding before proceeding.</p>
-<h3>3</h3>
-<h3>ประเมินระดับความเร่งด่วน</h3>
-<h3>Assess Urgency Level</h3>
-<p>ปัญหาทั่วไป → Staff จัดการเอง | ซับซ้อน/อารมณ์สูง → ส่งต่อ Branch Manager Simple: Staff resolves. Complex/emotional: escalate to Branch Manager.</p>
-<h3>4</h3>
-<h3>เสนอทางแก้ไข</h3>
-<h3>Propose Resolution</h3>
-<p>นำเสนอแนวทางในขอบเขตอำนาจ Staff เช่น ขอโทษ ชดเชย จัดการสิ่งของ Offer resolution within staff authority: apology, compensation, item care. 5 บันทึกเรื่องร้องเรียน</p>
-<h3>Log the Complaint</h3>
-<p>กรอก Complaint Form (เมื่อมีระบบแจ้ง) ปัจจุบันให้แจ้งผ่านกลุ่ม Lark ที่ที่กำหนดหลังจบการสนทนา รายละเอียดที่ต้องมีในการแจ้งปัญหา : orderorder no. / Name / Case detail / การแก้ไข หรือการตอบกลับปัญหา เบื้องต้นที่ดำเนินการไปแล้ว / สิ่งที่ลค. ต้องการหรือต่อรอง / ข้อมูลอื่นที่จำเป็นเกี่ยวกับปัญหา เป็นต้น Complete Complaint Log Form immediately after the interaction.</p>
-<h3>6</h3>
-<h3>ติดตามผล</h3>
-<h3>Follow-up</h3>
-<p>แก้ไขทันที → แจ้งลูกค้า | ต้องรอ → แจ้งระยะเวลาที่คาดหวัง Resolved on-spot: confirm with customer. Pending: communicate expected timeline.</p>
-<p><strong>1. การส่งต่อข้อมูล / Escalation Triggers</strong></p>
-<p>เงื่อนไขการส่งต่อ / Escalation Trigger ผู้รับผิดชอบ / Responsible Party ลูกค้าปฏิเสธคำขอโทษ / ต้องการค่าชดเชยCustomer rejects</p>
-<h3>apology or demands compensation</h3>
-<h3>Branch Manager / Ops Coordinator</h3>
-<p>กระเป๋าสูญหาย / เสียหายLost or damaged luggage claim Branch Manager → OP Manager ลูกค้าขู่ร้องเรียนต่อสาธารณะ / กฎหมายThreat of public</p>
-<h3>complaint or legal action</h3>
-<h3>OP Manager ทันที / Immediately</h3>
-<p><strong>2. สคริปต์การสื่อสาร / Communication Scripts</strong></p>
-<ul><li>การเปิดรับเรื่อง / Opening</li></ul>
-<p>💬ภาษาไทย: "สวัสดีครับ/ค่ะ ขอโทษที่ทำให้คุณลำบากใจนะครับ (ค่ะ) ช่วยเล่าให้ฟังหน่อยได้ไหมครับ ว่าเกิดอะไรขึ้น"</p>
-<h3>"ผม/ดิฉัน [ชื่อ] จะดูแลเรื่องนี้เองนะครับ/ค่ะ"</h3>
-<p>English: "Good [morning/afternoon]. I''m so sorry to hear about this. My name is [Name], and</p>
-<h3>I''m here to help."</h3>
-<p>"Could you please walk me through what happened? I want to make sure I fully</p>
-<h3>understand."</h3>
-<ul><li>การขอโทษและเสนอทางออก / Apology &amp; Resolution</li></ul>
-<p>💬ภาษาไทย: "ต้องขอโทษจริงๆ สำหรับความไม่สะดวกที่เกิดขึ้น เราจะ [ระบุแนวทาง] ให้เลยครับ/ค่ะ" "หากใช้เวลานานกว่านี้ ผม/ดิฉันจะแจ้งให้ทราบทันทีนะครับ/ค่ะ" English: "Please accept our sincere apologies. We will [state action] for you right away." "If this takes longer than expected, I will keep you updated every step of the way."</p>
-<h3>ช่องทางที่ 2 — Customer Service Online</h3>
-<p>Channel 2 — Online CS (Email / Chat / Social Media)</p>
-<h3>ขั้นตอนการรับมือ / Handling Procedure</h3>
-<h3>1</h3>
-<h3>ติดตามและรับเรื่อง</h3>
-<h3>Monitor &amp; Receive</h3>
-<p>CS Staff ตรวจสอบ email, chat, social ตาม SLA ที่กำหนด CS Staff monitors all channels per defined SLA intervals.</p>
-<h3>2</h3>
-<h3>ส่งข้อความยืนยันรับเรื่อง</h3>
-<h3>Send Acknowledgement</h3>
-<h3>ตอบรับ ≤1 ชม. (Urgent) / ≤4 ชม. (Standard)</h3>
-<p>Acknowledgement within 1hr (urgent) / 4hrs (standard)</p>
-<h3>3</h3>
-<h3>จัดประเภทและกำหนด Priority</h3>
-<h3>Categorise &amp; Prioritise</h3>
-<p>ใช้ Priority Matrix (P1/P2/P3) เพื่อกำหนดระดับความเร่งด่วน Apply Priority Matrix to assign urgency level (P1 / P2 / P3).</p>
-<h3>4</h3>
-<h3>สืบค้นและประสานงาน</h3>
-<h3>Investigate &amp; Coordinate</h3>
-<p>ตรวจสอบ booking ประสานทีมหน้าสาขา หรือทีมที่เกี่ยวข้อง หากจำเป็น Review booking records; coordinate with Guest Service or relate team as needed.</p>
-<h3>5</h3>
-<h3>แก้ไขและแจ้งผล</h3>
-<h3>Resolve &amp; Communicate</h3>
-<h3>แจ้งผลการแก้ไขผ่านช่องทางเดิมที่ลูกค้าติดต่อมา</h3>
-<p>Inform customer of resolution via the same channel they used.</p>
-<h3>6</h3>
-<h3>ปิดเคสและบันทึกผ่านระบบ Respond</h3>
-<h3>Close &amp; Log</h3>
-<h3>บันทึกเคสในระบบ ระบุวันปิด สาเหตุ และแนวทางแก้ไข</h3>
-<p>Log case closure: date, root cause, and resolution method applied.</p>
-<p><strong>3. Priority Matrix และ SLA</strong></p>
-<h3>Priority ประเภทปัญหา / Issue Type ยืนยัน / Ack. แก้ไข / Resolve</h3>
-<h3>P1 Urgent</h3>
-<h3>กระเป๋าสูญหาย, ความปลอดภัย, กฎหมาย</h3>
-<h3>Lost luggage, safety, legal threat</h3>
-<p>≤ 1 ชม./hr ≤ 4 ชม./hrs</p>
-<h3>P2 High</h3>
-<h3>กระเป๋าเสียหาย, booking ผิด, ชำระผิดพลาด</h3>
-<h3>Damaged item, booking error, payment</h3>
-<h3>issue</h3>
-<p>≤ 2 ชม./hrs ≤ 24 ชม./hrs</p>
-<h3>P3 Standard</h3>
-<h3>ข้อร้องเรียนทั่วไป, นโยบาย, คืนเงิน</h3>
-<h3>General complaint, policy query, refund</h3>
-<p>≤ 4 ชม./hrs ≤ 48 ชม./hrs</p>
-<p><strong>4. ตัวอย่างการตอบกลับ / Response Templates</strong></p>
-<ul><li>ข้อความยืนยันรับเรื่อง / Acknowledgement (Email / Chat)</li></ul>
-<p>📩ภาษาไทย: เรียนคุณ [ชื่อ] – ขอบคุณที่ติดต่อ Airportels นะคะ/ครับ เราได้รับเรื่องร้องเรียนแล้ว และกำลังดำเนินการตรวจสอบ</p>
-<h3>จะติดต่อกลับภายใน [X ชั่วโมง]</h3>
-<p>ด้วยความเคารพ – Customer Service Team, Airportels English: Dear [Name], – Thank you for contacting Airportels. We have received your complaint and are currently looking into the matter. We will get back to you within [X hours].</p>
-<h3>Warm regards – Airportels Customer Service Team</h3>
-<ul><li>สคริปต์ทางโทรศัพท์ / Phone Response Script</li></ul>
-<p>📩ภาษาไทย: "สวัสดีครับ/ค่ะ Airportels Customer Service ผม/ดิฉัน [ชื่อ] ยินดีช่วยเหลือครับ/ค่ะ" หลังฟัง: "ขอบคุณที่แจ้งให้ทราบ ขออภัยในความไม่สะดวก ขอหมายเลขอ้างอิงได้ไหมครับ/ค่ะ" English: "Thank you for calling Airportels Customer Service. This is [Name], how may I help you</p>
-<h3>today?"</h3>
-<p>After listening: "Thank you. I sincerely apologise for the inconvenience. May I have your</p>
-<h3>booking reference?"</h3>
-<p><strong>5. กรณีผิดปกติ / Exceptions &amp; Incident Handling</strong></p>
-<ul><li>ลูกค้าขู่ / ใช้ความรุนแรง: แจ้งรปภ. ทันที อย่าโต้เถียง (กรณีหน้าสาขา) และแจ้ง OP Team Lead</li><li>กระเป๋าสูญหายมูลค่าสูง: ถ่ายภาพ บันทึกรายละเอียด แจ้ง Branch Manager → OP Team Lead ทันที</li></ul>
-<h3>ดำเนินการตามนโยบายชดเชย</h3>
-<ul><li>ลูกค้าจะโพสต์ Social Media เชิงลบ: แจ้ง Branch Manager / CS Team Lead → OP Manager ทันที เพื่อ</li></ul>
-<h3>ประสานตอบสนองเชิงรุก</h3>
-<p><strong>6. การวิเคราะห์สาเหตุ / Root Cause Analysis (RCA)</strong></p>
+<p><strong>⚙️ ขั้นตอนการรับมือ (Handling Procedure)</strong></p>
+<ol>
+<li><strong>รับเรื่องและฟังอย่างตั้งใจ (Receive &amp; Listen Actively)</strong> — ต้อนรับลูกค้า แนะนำตัว ฟังโดยไม่ขัดจังหวะ จดบันทึกปัญหาสำคัญ</li>
+<li><strong>ยืนยันและสรุปปัญหา (Acknowledge &amp; Summarise)</strong> — ทวนสิ่งที่ลูกค้าแจ้งเพื่อยืนยันความเข้าใจที่ถูกต้อง</li>
+<li><strong>ประเมินระดับความเร่งด่วน (Assess Urgency)</strong> — ปัญหาทั่วไป → Staff จัดการเอง | ซับซ้อน/อารมณ์สูง → ส่งต่อ Branch Manager</li>
+<li><strong>เสนอทางแก้ไข (Propose Resolution)</strong> — นำเสนอแนวทางในขอบเขตอำนาจ Staff เช่น ขอโทษ ชดเชย จัดการสิ่งของ</li>
+<li><strong>บันทึกเรื่องร้องเรียน (Log the Complaint)</strong> — แจ้งผ่านกลุ่ม Lark ที่กำหนดหลังจบการสนทนา โดยระบุ: Order No. / ชื่อลูกค้า / รายละเอียดเคส / การแก้ไขเบื้องต้นที่ทำไป / สิ่งที่ลูกค้าต้องการหรือต่อรอง / ข้อมูลอื่นที่จำเป็น</li>
+<li><strong>ติดตามผล (Follow-up)</strong> — แก้ไขทันที → แจ้งลูกค้า | ต้องรอ → แจ้งระยะเวลาที่คาดหวัง</li>
+</ol>
+
+<h4>เงื่อนไขการส่งต่อ (Escalation Triggers)</h4>
+<div class="sop-scroll"><table class="sop-tbl">
+<thead><tr><th>เงื่อนไข / Trigger</th><th>ผู้รับผิดชอบ / Responsible</th></tr></thead>
+<tbody>
+<tr><td>ลูกค้าปฏิเสธคำขอโทษ / ต้องการค่าชดเชย</td><td>Branch Manager / Ops Coordinator</td></tr>
+<tr><td>กระเป๋าสูญหาย / เสียหาย</td><td>Branch Manager → OP Manager</td></tr>
+<tr><td>ลูกค้าขู่ร้องเรียนต่อสาธารณะ / กฎหมาย</td><td>OP Manager ทันที</td></tr>
+</tbody></table></div>
+
+<h4>สคริปต์การสื่อสาร (Communication Scripts)</h4>
+<p><strong>การเปิดรับเรื่อง (Opening)</strong></p>
+<div class="sop-script"><p>💬 “สวัสดีครับ/ค่ะ ขอโทษที่ทำให้คุณลำบากใจนะครับ (ค่ะ) ช่วยเล่าให้ฟังหน่อยได้ไหมครับว่าเกิดอะไรขึ้น … ผม/ดิฉัน [ชื่อ] จะดูแลเรื่องนี้เองนะครับ/ค่ะ”</p><p class="en">“Good [morning/afternoon]. I''m so sorry to hear about this. My name is [Name], and I''m here to help. Could you please walk me through what happened?”</p></div>
+<p><strong>การขอโทษและเสนอทางออก (Apology &amp; Resolution)</strong></p>
+<div class="sop-script"><p>💬 “ต้องขอโทษจริงๆ สำหรับความไม่สะดวกที่เกิดขึ้น เราจะ [ระบุแนวทาง] ให้เลยครับ/ค่ะ หากใช้เวลานานกว่านี้ ผม/ดิฉันจะแจ้งให้ทราบทันที”</p><p class="en">“Please accept our sincere apologies. We will [state action] for you right away. If this takes longer than expected, I will keep you updated.”</p></div>
+
+<h3>ช่องทางที่ 2 — Customer Service Online (Email / Chat / Social Media)</h3>
+<p><strong>ขั้นตอนการรับมือ (Handling Procedure)</strong></p>
+<ol>
+<li><strong>ติดตามและรับเรื่อง (Monitor &amp; Receive)</strong> — CS Staff ตรวจสอบ email, chat, social ตาม SLA ที่กำหนด</li>
+<li><strong>ส่งข้อความยืนยันรับเรื่อง (Send Acknowledgement)</strong> — ตอบรับ ≤ 1 ชม. (Urgent) / ≤ 4 ชม. (Standard)</li>
+<li><strong>จัดประเภทและกำหนด Priority</strong> — ใช้ Priority Matrix (P1/P2/P3)</li>
+<li><strong>สืบค้นและประสานงาน (Investigate &amp; Coordinate)</strong> — ตรวจสอบ booking ประสานทีมหน้าสาขาหรือทีมที่เกี่ยวข้อง</li>
+<li><strong>แก้ไขและแจ้งผล (Resolve &amp; Communicate)</strong> — แจ้งผลผ่านช่องทางเดิมที่ลูกค้าติดต่อมา</li>
+<li><strong>ปิดเคสและบันทึก (Close &amp; Log)</strong> — บันทึกในระบบ Respond: วันปิด สาเหตุ และแนวทางแก้ไข</li>
+</ol>
+
+<h3>Priority Matrix &amp; SLA</h3>
+<div class="sop-scroll"><table class="sop-tbl">
+<thead><tr><th>Priority</th><th>ประเภทปัญหา / Issue Type</th><th>ยืนยัน / Ack.</th><th>แก้ไข / Resolve</th></tr></thead>
+<tbody>
+<tr><td>P1 Urgent</td><td>กระเป๋าสูญหาย, ความปลอดภัย, กฎหมาย (Lost luggage, safety, legal threat)</td><td>≤ 1 ชม.</td><td>≤ 4 ชม.</td></tr>
+<tr><td>P2 High</td><td>กระเป๋าเสียหาย, booking ผิด, ชำระผิดพลาด (Damaged item, booking/payment error)</td><td>≤ 2 ชม.</td><td>≤ 24 ชม.</td></tr>
+<tr><td>P3 Standard</td><td>ข้อร้องเรียนทั่วไป, นโยบาย, คืนเงิน (General complaint, policy, refund)</td><td>≤ 4 ชม.</td><td>≤ 48 ชม.</td></tr>
+</tbody></table></div>
+
+<h3>ตัวอย่างการตอบกลับ (Response Templates)</h3>
+<p><strong>ข้อความยืนยันรับเรื่อง (Email / Chat)</strong></p>
+<div class="sop-script"><p>📩 เรียนคุณ [ชื่อ] – ขอบคุณที่ติดต่อ AIRPORTELs ค่ะ/ครับ เราได้รับเรื่องร้องเรียนแล้ว และกำลังดำเนินการตรวจสอบ จะติดต่อกลับภายใน [X ชั่วโมง] — ด้วยความเคารพ, Customer Service Team</p><p class="en">Dear [Name], Thank you for contacting AIRPORTELs. We have received your complaint and are looking into the matter. We will get back to you within [X hours]. — Warm regards, AIRPORTELs Customer Service Team</p></div>
+<p><strong>สคริปต์ทางโทรศัพท์ (Phone)</strong></p>
+<div class="sop-script"><p>📞 “สวัสดีครับ/ค่ะ AIRPORTELs Customer Service ผม/ดิฉัน [ชื่อ] ยินดีช่วยเหลือครับ/ค่ะ” — หลังฟัง: “ขอบคุณที่แจ้งให้ทราบ ขออภัยในความไม่สะดวก ขอหมายเลขอ้างอิงได้ไหมครับ/ค่ะ”</p><p class="en">“Thank you for calling AIRPORTELs Customer Service. This is [Name], how may I help you today?” — After listening: “I sincerely apologise for the inconvenience. May I have your booking reference?”</p></div>
+
+<h3>กรณีผิดปกติ (Exceptions &amp; Incident Handling)</h3>
+<ul>
+<li><strong>ลูกค้าขู่ / ใช้ความรุนแรง:</strong> แจ้ง รปภ. ทันที อย่าโต้เถียง (กรณีหน้าสาขา) และแจ้ง OP Team Lead</li>
+<li><strong>กระเป๋าสูญหายมูลค่าสูง:</strong> ถ่ายภาพ บันทึกรายละเอียด แจ้ง Branch Manager → OP Team Lead ทันที ดำเนินการตามนโยบายชดเชย</li>
+<li><strong>ลูกค้าจะโพสต์ Social Media เชิงลบ:</strong> แจ้ง Branch Manager / CS Team Lead → OP Manager ทันที เพื่อประสานตอบสนองเชิงรุก</li>
+</ul>
+
+<h3>การวิเคราะห์สาเหตุ (Root Cause Analysis – RCA)</h3>
 <p>หลังปิดเคส P1 และ P2 ทุกเคส ต้องผ่านกระบวนการ RCA ดังนี้:</p>
-<h3>ขั้นตอน RCA / Step ผู้รับผิดชอบ / Owner</h3>
-<p>ระบุสาเหตุหลัก (5 Whys) / Identify root cause via 5 Whys method CS Team Lead / Branch Manager เสนอมาตรการป้องกัน / Propose preventive actions CS Team Lead / Branch Manager อนุมัติและสั่งการApprove &amp; assign action items Operations Manager ติดตามผลภายใน 14 วันFollow-up within 14 business days CS Team Lead</p>
-<p><strong>7. บันทึกและการควบคุม / Documentation &amp; Controls</strong></p>
-<ul><li>ข้อมูลที่ต้องบันทึกทุกเคส / Required fields for every complaint log:</li><li>วันที่-เวลา / Date &amp; Time</li><li>ช่องทาง / Channel (Branch / Online / Google Review)</li><li>ชื่อลูกค้า + เลขการจอง / Customer name &amp; Order no.</li><li>ประเภทปัญหา + Priority Level / Issue category &amp; priority</li><li>การดำเนินการที่ทำ / Actions taken</li><li>ผลลัพธ์ / Outcome &amp; resolution</li><li>ชื่อผู้ปิดเคส / Closed by (name &amp; role)</li><li>รายงานสรุป / Summary Reports:</li><li>รายสัปดาห์: CS Team Lead → OP Manager (จำนวนเคส, SLA compliance, trends)</li><li>รายเดือน: OP Manager รายงาน pattern และมาตรการ preventive ต่อฝ่ายบริหาร</li></ul>
-<p><strong>8. ตัวชี้วัด / KPIs &amp; Audit</strong></p>
-<ul><li>SLA Compliance: P1 ≥ 95% | P2 ≥ 90% | P3 ≥ 85% ภายในระยะเวลามาตรฐาน</li><li>Resolution Rate: แก้ไขได้ใน First Contact ≥ 70%</li><li>Customer Satisfaction: ติดตาม CSAT หลังปิดเคส ≥ 4.0 / 5.0</li><li>Audit: CS Team Lead ทบทวน Complaint Log รายสัปดาห์ | OP Manager รายเดือน</li></ul>
+<div class="sop-scroll"><table class="sop-tbl">
+<thead><tr><th>ขั้นตอน RCA</th><th>ผู้รับผิดชอบ / Owner</th></tr></thead>
+<tbody>
+<tr><td>ระบุสาเหตุหลัก (5 Whys)</td><td>CS Team Lead / Branch Manager</td></tr>
+<tr><td>เสนอมาตรการป้องกัน</td><td>CS Team Lead / Branch Manager</td></tr>
+<tr><td>อนุมัติและสั่งการ</td><td>Operations Manager</td></tr>
+<tr><td>ติดตามผลภายใน 14 วันทำการ</td><td>CS Team Lead</td></tr>
+</tbody></table></div>
+
+<h3>บันทึกและการควบคุม (Documentation &amp; Controls)</h3>
+<p><strong>ข้อมูลที่ต้องบันทึกทุกเคส:</strong> วันที่-เวลา / ช่องทาง (Branch / Online / Google Review) / ชื่อลูกค้า + เลขการจอง / ประเภทปัญหา + Priority / การดำเนินการ / ผลลัพธ์ / ชื่อผู้ปิดเคส</p>
+<p><strong>รายงานสรุป:</strong> รายสัปดาห์ — CS Team Lead → OP Manager (จำนวนเคส, SLA compliance, trends) · รายเดือน — OP Manager รายงาน pattern และมาตรการป้องกันต่อฝ่ายบริหาร</p>
+
+<h3>ตัวชี้วัด (KPIs &amp; Audit)</h3>
+<ul>
+<li><strong>SLA Compliance:</strong> P1 ≥ 95% | P2 ≥ 90% | P3 ≥ 85% ภายในเวลามาตรฐาน</li>
+<li><strong>Resolution Rate:</strong> แก้ไขได้ใน First Contact ≥ 70%</li>
+<li><strong>Customer Satisfaction:</strong> CSAT หลังปิดเคส ≥ 4.0 / 5.0</li>
+<li><strong>Audit:</strong> CS Team Lead ทบทวน Complaint Log รายสัปดาห์ | OP Manager รายเดือน</li>
+</ul>
+
 <h3>✔ Checklist — CS Team &amp; Branch Staff</h3>
-<h3>Quick Reference Checklist</h3>
-<p>☐ รับเรื่องลูกค้า → ฟัง → ยืนยันปัญหา → ประเมิน Priority</p>
-<h3>☐ ตอบรับภายใน SLA กำหนด พร้อมเลขอ้างอิง</h3>
-<h3>☐ แก้ไข หรือ ส่งต่อตาม Escalation Matrix ทันที</h3>
-<h3>☐ บันทึก Complaint Log ทุกเคส (ห้ามข้าม)</h3>
-<h3>☐ ปิดเคส → บันทึกผล → รายงาน Team Lead</h3>
-<h3>☐ P1 / P2: ทำ RCA หลังปิดเคส ภายใน 3 วันทำการ</h3>
-<h3>⏸️ รายละเอียดที่ต้องมีในการแจ้งปัญหา</h3>
-<p>💬รายละเอียดที่ต้องมีในการแจ้งปัญหา : แจ้งผ่าน Lark group แต่ละสาขา (เร่งด่วน ให้โทรแจ้งเบื้องต้น</p>
-<h3>และส่งรายละเอียดตามมา)</h3>
-<ul><li>orderorder no.</li><li>Customer Name</li><li>Case detail (รายละเอียดปัญหา)</li><li>การแก้ไข หรือการตอบกลับปัญหาเบื้องต้น</li><li>มูลค่าความเสีย (ถ้ามี)</li><li>รายละเอียดอื่นๆมี่เกี่ยวข้อง</li></ul>
-<h3>ประวัติการแก้ไข / Document Control</h3>
-<p>Version วันที่ / Date แก้ไขโดย / Author รายละเอียด / Notes 1.0 10 May 2026 Operations Team Initial release / เอกสารฉบับแรก</p>
+<ul>
+<li>☐ รับเรื่องลูกค้า → ฟัง → ยืนยันปัญหา → ประเมิน Priority</li>
+<li>☐ ตอบรับภายใน SLA ที่กำหนด พร้อมเลขอ้างอิง</li>
+<li>☐ แก้ไข หรือส่งต่อตาม Escalation Matrix ทันที</li>
+<li>☐ บันทึก Complaint Log ทุกเคส (ห้ามข้าม)</li>
+<li>☐ ปิดเคส → บันทึกผล → รายงาน Team Lead</li>
+<li>☐ P1 / P2: ทำ RCA หลังปิดเคส ภายใน 3 วันทำการ</li>
+</ul>
+
+<h3>ประวัติการแก้ไข (Document Control)</h3>
+<div class="sop-scroll"><table class="sop-tbl">
+<thead><tr><th>Version</th><th>วันที่ / Date</th><th>แก้ไขโดย / Author</th><th>รายละเอียด / Notes</th></tr></thead>
+<tbody><tr><td>1.0</td><td>10 May 2026</td><td>Operations Team</td><td>Initial release / เอกสารฉบับแรก</td></tr></tbody>
+</table></div>
 ', array['complaint','customer-service','sla','escalation'], 'published', false)
 on conflict (slug) do update set
   title = excluded.title, summary = excluded.summary,
