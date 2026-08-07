@@ -389,7 +389,196 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('ntw-5day-booking', 'ขั้นตอนการจองบริการขนส่งข้ามจังหวัด Nationwide Within 5 Days (NTW)', 'มาตรฐานการปฏิบัติงาน ขั้นตอนการจองบริการ Nationwide Within 5 Days (NTW) — คู่มือทีละขั้นพร้อมภาพหน้าจอการจอง การกรอกข้อมูล และการยืนยันออเดอร์',
   (select id from sop.categories where slug = 'delivery'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0025/2026<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 07 กรกฏาคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>ขั้นตอนการจอง (ภาพจากเอกสารต้นฉบับ)</h3><figure><img src="/sop/ntw-5day-booking/p1.jpg" alt="หน้า 1" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p2.jpg" alt="หน้า 2" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p3.jpg" alt="หน้า 3" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p4.jpg" alt="หน้า 4" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p5.jpg" alt="หน้า 5" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p6.jpg" alt="หน้า 6" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p7.jpg" alt="หน้า 7" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 7</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p8.jpg" alt="หน้า 8" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 8</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p9.jpg" alt="หน้า 9" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 9</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p10.jpg" alt="หน้า 10" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 10</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p11.jpg" alt="หน้า 11" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 11</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p12.jpg" alt="หน้า 12" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 12</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p13.jpg" alt="หน้า 13" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 13</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p14.jpg" alt="หน้า 14" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 14</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p15.jpg" alt="หน้า 15" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 15</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p16.jpg" alt="หน้า 16" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 16</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p17.jpg" alt="หน้า 17" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 17</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p18.jpg" alt="หน้า 18" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 18</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p19.jpg" alt="หน้า 19" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 19</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p20.jpg" alt="หน้า 20" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 20</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p21.jpg" alt="หน้า 21" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 21</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p22.jpg" alt="หน้า 22" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 22</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p23.jpg" alt="หน้า 23" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 23</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p24.jpg" alt="หน้า 24" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 24</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p25.jpg" alt="หน้า 25" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 25</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p26.jpg" alt="หน้า 26" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 26</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p27.jpg" alt="หน้า 27" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 27</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p28.jpg" alt="หน้า 28" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 28</figcaption></figure><figure><img src="/sop/ntw-5day-booking/p29.jpg" alt="หน้า 29" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 29</figcaption></figure>
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0025/2026<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 07 กรกฏาคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ / Purpose</h3>
+<p>เพื่อกำหนดมาตรฐานและขั้นตอนการปฏิบัติงานให้พนักงานหน้าสาขาสามารถดำเนินการจองงานบริการ NTW Within 5 Days (Nationwide Within 5 Days) ได้อย่างถูกต้อง ครบถ้วน และเป็นไปในแนวทางเดียวกันทุกสาขา โดยมีเป้าหมายหลักดังนี้</p>
+<ul><li>ให้พนักงาน Book MS Order ได้ถูกต้อง เพื่อให้ Planner จัดรถเข้ารับกระเป๋าไปส่งต่อได้ทันรอบ</li><li>ลดข้อผิดพลาดในการกรอกข้อมูลลูกค้า ที่อยู่ปลายทาง และการบันทึกข้อมูลใน Google Sheet</li><li>ให้การส่งต่องานระหว่างสาขาต้นทาง สาขา MIXT และทีมปฏิบัติการ (MS/Planner) เป็นระบบและตรวจสอบย้อน</li></ul>
+<p>กลับได้</p>
+<ul><li>ควบคุมระยะเวลาการดำเนินการให้อยู่ในกรอบที่แจ้งลูกค้า (โดยประมาณ 5–7 วัน)</li></ul>
+<h3>ขอบเขตการใช้งาน / Scope</h3>
+<p>SOP ฉบับนี้ครอบคลุมการปฏิบัติงานตั้งแต่รับงานจากลูกค้าที่หน้าสาขา จนถึงการส่งมอบกระเป๋าเข้าสู่กระบวนการ ขนส่ง ประกอบด้วย 3 กระบวนการหลัก</p>
+<ul><li>การจองส่ง NTW 5 Days ต้นทาง: พื้นที่กรุงเทพมหานคร (ส่งเข้าคลัง MAKESEND)</li><li>การจองส่ง NTW 5 Days ต้นทางต่างจังหวัด: สนามบินเชียงใหม่ (CNX), สนามบินภูเก็ต (HKT – Domestic &amp;</li></ul>
+<p>International), Terminal 21 (Pattaya)</p>
+<ul><li>การดำเนินการจองส่ง Goship (Flash Express Bulky) ของสาขา MIXT รวมถึงการเรียกรถเข้ารับ</li></ul>
+<p>ระบบและเครื่องมือที่เกี่ยวข้อง: Airportels POS, ระบบ Postels, Google Sheet “Luggage Delivery Record 2025” (ชีท Intown และ ชีท NTW next day), ระบบ Goship / Flash Express Bulky และกลุ่มไลน์ “OP MS x Ai” ข้อยกเว้น: SOP นี้ไม่ครอบคลุมขั้นตอนภายในของทีม MS/Planner การคิดราคาเชิงลึก หรือการจัดการข้อร้อง เรียนหลังการส่งมอบ ซึ่งอยู่ภายใต้ขั้นตอนเฉพาะของแต่ละทีม</p>
+<h3>บทบาทและความรับผิดชอบ / Roles &amp; Responsibilities</h3>
+<p>ผู้เกี่ยวข้องและหน้าที่รับผิดชอบในกระบวนการ NTW Within 5 Days มีดังนี้</p>
+<h3>บทบาท / Role ความรับผิดชอบหลัก / Key Responsibilities</h3>
+<p>พนักงานหน้าสาขา ต้นทาง กทม. สร้างออร์เดอร์ LUG, จองเลข MS Order, ลงข้อมูล 2 ชีท (Intown + NTW next day), ติด Tag และถ่ายรูปกระเป๋าส่งกลุ่มไลน์ เพื่อส่งของเข้าคลัง MAKESEND พนักงานหน้าสาขา ต่างจังหวัด (CNX / HKT / T21) สร้างออร์เดอร์ LUG, ปักหมุดปลายทางและจองเลข MS Order, ลงข้อมูล 2 ชีท, ห่อ/ แพ็กกระเป๋า, ดาวน์โหลดและปริ้นซ์ Label แปะกระเป๋า, ส่งมอบให้ขนส่ง Third Party พนักงานสาขา MIXT ตรวจสอบชีท NTW next day รายวัน, จองส่ง Goship (Flash Express Bulky), สร้างและตั้งชื่อไฟล์ Label (PDF), เรียกรถเข้ารับ, นำ Tracking No. ลงชีท Planner / พนักงาน MS รับคำสั่งจองรถเข้ารับกระเป๋าจากสาขาไปคลัง MAKESEND, อ่านหมายเหตุ (Note ภาษาอังกฤษ) ในออร์เดอร์, ประสานการแพ็กและส่งต่อ หัวหน้าสาขา / ผู้ควบคุมงาน กำกับให้ปฏิบัติตาม SOP, ตรวจสอบความครบถ้วนของข้อมูลในชีท, จัดการกรณี ปัญหาและการยกเลิก/แก้ไขที่อยู่</p>
+<h3>ขั้นตอนการทำงาน (พร้อมภาพประกอบ) / Work Procedure</h3>
+<p><strong>1. ต้นทาง: พื้นที่กรุงเทพมหานคร (ส่งเข้าคลัง MAKESEND จัดส่งโดย J&amp;T)</strong></p>
+<p>วัตถุประสงค์ย่อย: Book MS Order เพื่อให้ Planner จองรถมารับกระเป๋าไปแพ็กที่คลัง MAKESEND</p>
+<h4>ขั้นที่ 1 — สร้างออร์เดอร์ LUG ใน Airportels POS</h4>
+<ul><li>ขอ Passport หรือบัตรประชาชนของลูกค้า เพื่อสร้างรายการในระบบ</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 1: หน้า Access Customer: สแกน Passport / เลือก ID Card ของลูกค้า</p>
+<ul><li>กรอกข้อมูลลูกค้าให้ครบ: คำนำหน้าชื่อ, ชื่อ–นามสกุล, ตรวจสอบเลขบัตร/Passport ID, สัญชาติ (ตัวย่อตาม</li></ul>
+<p>Passport) แล้วกด Continue</p>
+<figure><img src="/sop/ntw-5day-booking/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 2: กรอกข้อมูลลูกค้า: คำนำหน้า ชื่อ-นามสกุล Passport ID และสัญชาติ แล้วกด Continue</p>
+<ul><li>เลือกสร้าง New Order แล้วเลือก Luggage Delivery Order</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 3: เลือก New Order (มุมขวาล่าง)</p>
+<figure><img src="/sop/ntw-5day-booking/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 4: เลือก Luggage Delivery Order</p>
+<ul><li>ให้ลูกค้าสแกน QR Code กรอก Email/เบอร์โทร; Retrieve Location = Hotel หรือ Home/Airbnb (ยังไม่</li></ul>
+<p>ต้องระบุรายละเอียดสถานที่); Retrieve Date = +7 วันจากวันสร้างออร์เดอร์ และแจ้งลูกค้าว่าใช้เวลา 5–7 วัน</p>
+<figure><img src="/sop/ntw-5day-booking/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 5: ให้ลูกค้าสแกน QR Code / เลือก Retrieve Location (Hotel หรือ Home) และตั้ง Retrieve Date +7 วัน</p>
+<ul><li>ชั่งน้ำหนักและแจ้งราคา จากนั้นกด Service: กรอกราคาตามน้ำหนัก, ใส่จำนวนกระเป๋า, ช่อง Tag ใส่</li></ul>
+<p>“NTW5” และ note (ภาษาอังกฤษเท่านั้น) แล้วกด Continue</p>
+<figure><img src="/sop/ntw-5day-booking/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 6: กด Service: กรอกราคา จำนวนกระเป๋า ใส่ Tag = NTW5 และ Note (ภาษาอังกฤษ)</p>
+<ul><li>ตรวจสอบข้อมูลในหน้า Confirm แล้วยืนยัน จากนั้นคิดเงินตามปกติ เมื่อปริ้นสลิปจะได้หมายเลข LUG</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 7: หน้า Confirm ตรวจสอบข้อมูลก่อนยืนยัน</p>
+<p>ห้ามลืม! สอบถามและจดบันทึกสถานที่ปลายทาง (ชื่อโรงแรม/จังหวัด) และขอเบอร์โทรที่ติดต่อได้จริงจากลูกค้า เสมอ เพื่อใช้กรอกลงชีท NTW ในภายหลัง</p>
+<h4>ขั้นที่ 2 — จองเลข MS Order ในระบบ Postels</h4>
+<ul><li>นำหมายเลข LUG ไปค้นหาในระบบหลังบ้าน (Postels)</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig8.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 8: ระบบ Postels: ค้นหาด้วยหมายเลข LUG</p>
+<ul><li>เลือกเมนู Create Logistic Order</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig9.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 9: เลือกเมนู Create Logistic Order</p>
+<ul><li>เลือก Service type = Nationwide Nextday, เลือกวัน/รอบส่งเข้าคลัง, Branch = Makesend hub (SCG</li></ul>
+<p>Express) บางซ่อน และกดปิด Drop at Destination (คำจะเปลี่ยนเป็น Drop at Storage)</p>
+<figure><img src="/sop/ntw-5day-booking/fig10.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 10: เลือก Nationwide Nextday, Branch = Makesend hub (SCG Express) บางซ่อน, ปิด Drop at</p>
+<p>Destination</p>
+<ul><li>เมื่อขึ้น Drop at Storage แล้วกด +Create</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig11.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 11: เมื่อขึ้น Drop at Storage แล้วกด +Create</p>
+<ul><li>ระบบจะแสดงหมายเลข MS Order ในช่อง Customer’s Note ให้ใช้หมายเลขนี้ดำเนินการต่อ</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig12.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 12: หมายเลข MS Order จะปรากฏในช่อง Customer''s Note</p>
+<h4>ขั้นที่ 3 — บันทึก Google Sheet และส่งเข้ากลุ่มไลน์</h4>
+<ul><li>บันทึกข้อมูลลง Google Sheet “Luggage Delivery Record 2025” ทั้ง 2 ชีท (Intown และ NTW next</li></ul>
+<p>day)</p>
+<ul><li>ชีท NTW next day: ชื่อลูกค้า, ราคา, น้ำหนัก, หมายเลข MS, เบอร์โทร, สถานที่รับ — เว้นว่างเฉพาะช่อง</li></ul>
+<p>Tracking</p>
+<figure><img src="/sop/ntw-5day-booking/fig13.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 13: บันทึกลงชีท NTW next day (เว้นว่างเฉพาะช่อง Tracking)</p>
+<ul><li>ชีท Intown: Service Type = NTW5D, หมายเลข LUG, ชื่อลูกค้า, รอบส่ง, ปลายทาง = MAKESEND</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig14.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 14: บันทึกลงชีท Intown: Service Type = NTW5D, ปลายทาง = MAKESEND</p>
+<ul><li>ติด Tag กระเป๋า ถ่ายรูปส่งกลุ่มไลน์ “OP MS x Ai” แล้ว Reply รูปตัวเอง ระบุ: MS Order / จำนวน / ชื่อ</li></ul>
+<p>ลูกค้า / ลักษณะกระเป๋า / จังหวัดปลายทาง</p>
+<figure><img src="/sop/ntw-5day-booking/fig15.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 15: ถ่ายรูปกระเป๋า (ติด Tag) ส่งกลุ่มไลน์ “OP MS x Ai” แล้ว Reply ระบุรายละเอียด</p>
+<p>หมายเหตุ (กทม.): ของ NTW 5 Days จะถูกส่งเข้าคลัง MAKESEND ก่อนเสมอ เพื่อรอสาขา MIXT จองส่งต่อกับ Third Party — จบกระบวนการของพนักงานหน้าสาขา กทม. โดยสาขา MIXT ดำเนินการต่อในหัวข้อ 4.3</p>
+<p><strong>2. ต้นทางต่างจังหวัด (CNX / HKT / T21 Pattaya) ให้บริการโดย Goship (Flash Express Bulky)</strong></p>
+<p>วัตถุประสงค์ย่อย: Book MS Order เพื่อให้ Planner จองรถมารับกระเป๋าที่แพ็กไว้ไปส่งให้ลูกค้า</p>
+<h4>ขั้นที่ 1 — สร้างออร์เดอร์ LUG ใน Airportels POS</h4>
+<ul><li>ดำเนินการเช่นเดียวกับขั้นที่ 1 ของหัวข้อ 4.1 (ขอเอกสารลูกค้า, กรอกข้อมูล, เลือก Luggage Delivery</li></ul>
+<p>Order, สแกน QR Code, Retrieve Location/Date, ชั่งน้ำหนัก, กด Service ใส่ Tag “NTW5” และ note ภาษาอังกฤษ, คิดเงิน) — ดูภาพที่ 1–7 ประกอบ</p>
+<h4>ขั้นที่ 2 — ใส่สถานที่ปลายทางและจองเลข MS Order ในระบบ Postels</h4>
+<ul><li>นำหมายเลข LUG ค้นหา แล้วในหมวด Order Action กดปุ่ม 3 จุด เลือก Edit เพื่อใส่สถานที่จัดส่ง</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig16.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 16: หมวด Order Action: กดปุ่ม 3 จุด แล้วเลือก Edit</p>
+<ul><li>กรอกรายละเอียดการจัดส่ง: ต้นทาง (เช่น CNX), ปลายทาง (ชื่อโรงแรม/ที่อยู่ลูกค้า), รอบจัดส่ง และวันที่ลูกค้า</li></ul>
+<p>รับ</p>
+<figure><img src="/sop/ntw-5day-booking/fig17.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 17: กรอกสถานที่จัดส่ง: Location (เช่น CNX), Hotel Name และปลายทางลูกค้า</p>
+<ul><li>ปักหมุดสถานที่ปลายทาง (Location / Hotel name) ให้เรียบร้อย</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig18.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 18: ปักหมุดสถานที่ปลายทาง (Location / Hotel name)</p>
+<ul><li>เลือก Create Logistic Order แล้วเลือก Service type = Nationwide Nextday</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig19.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 19: Create Logistic Order: เลือก Service type = Nationwide Nextday</p>
+<ul><li>ตรวจสอบ Origin Location ให้ครบ เลือกวัน/รอบส่ง แล้วกด +Create — ระบบจะแสดงหมายเลข MS Order</li></ul>
+<p>ในช่อง Customer’s Note</p>
+<figure><img src="/sop/ntw-5day-booking/fig20.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 20: ตรวจสอบ Origin Location เลือกวัน/รอบส่ง แล้วกด +Create</p>
+<p>สำคัญ: หากพบที่อยู่ไม่ถูกต้อง ต้องแก้ไขก่อนจองเลข MS ทุกครั้ง และหากจองเลข MS ไปแล้วต้องการแก้ที่อยู่ ให้ แจ้งยกเลิกกับ Planner ก่อน แล้วจึงจองใหม่</p>
+<h4>ขั้นที่ 3 — บันทึกชีท แพ็กกระเป๋า และส่งมอบขนส่ง</h4>
+<ul><li>บันทึกลง Google Sheet ทั้ง 2 ชีท (NTW next day เว้นว่างเฉพาะ Tracking; Intown: NTW5D, LUG, MS,</li></ul>
+<p>ชื่อลูกค้า, รอบส่ง, ปลายทาง = ชื่อสถานที่/โรงแรม/ที่อยู่ปลายทาง)</p>
+<ul><li>ถ่ายรูปกระเป๋าก่อนห่อเก็บไว้เสมอ จากนั้นห่อด้วยบับเบิ้ลแล้วหุ้มกระดาษลัง และติด Tag กระเป๋า</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig21.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 21: ห่อกระเป๋าด้วยบับเบิ้ล</p>
+<figure><img src="/sop/ntw-5day-booking/fig22.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 22: หุ้มด้วยกระดาษลังและติด Tag กระเป๋า</p>
+<p>วิธีห่อกระเป๋าด้วยกระดาษลัง (ทีละขั้นตอน)</p>
+<figure><img src="/sop/ntw-5day-booking/fig23.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 23: ขั้นที่ 1: ติด Tag กระเป๋า และพันด้วยบับเบิ้ล</p>
+<figure><img src="/sop/ntw-5day-booking/fig24.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 24: ขั้นที่ 2: นำแผ่นกระดาษมาพับหุ้มอีกชั้น</p>
+<figure><img src="/sop/ntw-5day-booking/fig25.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 25: ขั้นที่ 3: ตัดกระดาษส่วนเกินให้พอดี</p>
+<figure><img src="/sop/ntw-5day-booking/fig26.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 26: ขั้นที่ 4: หุ้มด้านบนจนเรียบร้อย</p>
+<figure><img src="/sop/ntw-5day-booking/fig27.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 27: ขั้นที่ 5: ติดเทปกาวรอบกล่องให้แน่นหนา</p>
+<figure><img src="/sop/ntw-5day-booking/fig28.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 28: ขั้นที่ 6: ติด Tag / Airway Bill ให้เรียบร้อยก่อนส่ง</p>
+<ul><li>ถ่ายรูปกระเป๋าที่ห่อแล้วส่งกลุ่มไลน์ “OP MS x Ai” และ Reply รูปตัวเอง ระบุตามตัวอย่าง</li></ul>
+<p>ตัวอย่าง: NTW Within 5 Day / MS2510230006984 / 2 ใบ / Miss Cherezaan Ryklief / **ลูกค้ารับวันที่ 02/11/2025</p>
+<figure><img src="/sop/ntw-5day-booking/fig29.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 29: ตัวอย่างการส่งรูป + ข้อความในกลุ่มไลน์ (ต่างจังหวัด)</p>
+<ul><li>รอสาขา MIXT จองส่งกับ Third Party (มี Reply แจ้งกลับในกลุ่ม โดยปกติไม่เกิน 1 วัน)</li><li>จากนั้นดาวน์โหลด Label (.pdf) ปริ้นซ์แปะกระเป๋า แล้วรอขนส่ง Third Party เข้ารับ</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig30.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 30: แปะ Label ที่กระเป๋าเพื่อรอขนส่ง Third Party เข้ารับ</p>
+<p>หมายเหตุ: หากดำเนินการช่วงเช้าและทันรอบส่ง โดยส่วนมากขนส่ง Third Party จะเข้ารับในเย็นวันนั้น — จบ กระบวนการของพนักงานหน้าสาขาต่างจังหวัด</p>
+<p><strong>3. การจองส่ง Goship (Flash Express Bulky) — สาขา MIXT</strong></p>
+<h4>ขั้นที่ 1 — ตรวจสอบงานและจองส่ง Goship</h4>
+<ul><li>ตรวจสอบชีท NTW next day เป็นประจำทุกวัน เพื่อนำข้อมูลไปจองส่ง Goship (Flash Express Bulky)</li><li>เข้าเว็บไซต์ Goship และ Log in ด้วยบัญชีตามสาขาต้นทาง (ดูตารางบัญชีด้านล่าง) แล้วไปที่ สร้างรายการ</li></ul>
+<p>พัสดุ &gt; สร้างรายการพัสดุ บัญชีสำหรับเข้าใช้งานระบบ Goship แยกตามสาขาต้นทาง สาขาต้นทาง ลิงก์เข้าใช้งานร้านค้า User Password T21 พัทยา (TPY) https://T21makesend.gosaas.a pp •••••• (รหัสผ่าน — ดูจากหัวหน้าสาขา) สนามบินภูเก็ต HKT (Dome&amp;Inter) https://HKTDomeinterr.gosaas.</p>
+<p>app HKTDomeinterr@gmail. com •••••• (รหัสผ่าน — ดูจากหัวหน้าสาขา) สนามบินเชียงใหม่ (CNX) https://CNXmakesend.gosaas.a pp •••••• (รหัสผ่าน — ดูจากหัวหน้าสาขา) คลังสินค้า MAKESEND https://WHsmakesend.gosaas. app WHmakesend@gmail.c om •••••• (รหัสผ่าน — ดูจากหัวหน้าสาขา) ข้อมูลลับเฉพาะภายใน: บัญชีและรหัสผ่านข้างต้นเป็นข้อมูลสำหรับใช้งานภายในของแต่ละสาขาเท่านั้น ห้ามเปิดเผย ต่อบุคคลภายนอก และควรจำกัดการเข้าถึงเอกสารฉบับนี้เฉพาะพนักงานที่เกี่ยวข้อง ตรวจสอบสถานะพัสดุ (Flash Express Track &amp; Trace): https://www.flashexpress.co.th/fle/tracking</p>
+<figure><img src="/sop/ntw-5day-booking/fig31.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 31: หน้า Goship: ไปที่ สร้างรายการพัสดุ</p>
+<ul><li>กรอกข้อมูลผู้ส่ง (ต้นทาง) — หากเคยกรอกไว้แล้วเลือกจากรายชื่อเดิมได้ โดยใช้ค่ามาตรฐานดังนี้</li></ul>
+<p>ชื่อผู้ส่ง ชื่อต้นทาง เช่น “สาขาเชียงใหม่-airportels สาขาเชียงใหม่” / “Makesend-Makesend Hub” เบอร์โทรศัพท์ 021072131 (เบอร์ CS ของ Makesend) เลขบัตรประชาชน 1111111111111 ที่อยู่ กรอกตามที่อยู่ต้นทางของสาขา</p>
+<figure><img src="/sop/ntw-5day-booking/fig32.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 32: กรอกข้อมูลผู้ส่ง (ต้นทาง)</p>
+<ul><li>กรอกที่อยู่ปลายทาง (ลูกค้า) — กรณีมากกว่า 1 ใบ ให้ใส่จำนวนต่อท้ายชื่อ</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig33.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 33: กรอกที่อยู่ปลายทาง (ลูกค้า) และขนาด/น้ำหนัก</p>
+<ul><li>เลือกขนส่งเป็น Flash Express Bulky และใส่ขนาด/น้ำหนักตามจริงเท่านั้น (อ้างอิงตารางขนาดด้านล่าง)</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig34.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 34: เลือกขนส่งเป็น Flash Express Bulky และใส่ขนาด/น้ำหนักตามจริง</p>
+<ul><li>เลือกประเภทสินค้าเป็น สินค้าทั่วไป และใส่ลักษณะกระเป๋า (หากหลายใบให้ระบุทีละใบ)</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig35.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 35: เลือกประเภทสินค้าเป็น สินค้าทั่วไป</p>
+<p>ตารางอ้างอิงขนาดกระเป๋า: ขนาดไซส์กระเป๋า ขนาด ก x ย x ส (ซม.) 16–18 นิ้ว 24 x 41 x 43 20 นิ้ว (Carry-On) 35 x 22 x 55 24 นิ้ว 44 x 28 x 67 28 นิ้ว 50 x 33 x 77 30–32 นิ้ว 53 x 35 x 81</p>
+<ul><li>กด สร้างรายการ (จองต่อได้จนครบ) จากนั้นตรวจรายการแล้วกด ยืนยันการชำระเงิน</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig36.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 36: ตรวจรายการแล้วกด ยืนยันการชำระเงิน</p>
+<h4>ขั้นที่ 2 — ปริ้นใบปะหน้าและตั้งชื่อไฟล์ Label</h4>
+<ul><li>ไปที่ การจัดส่ง &gt; ติ๊กถูกหน้ารายการ &gt; พิมพ์เอกสาร &gt; ใบปะหน้าพัสดุ &gt; Flash Express Bulky แล้วเลือกที่อยู่จัด</li></ul>
+<p>ส่ง</p>
+<figure><img src="/sop/ntw-5day-booking/fig37.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 37: ไปที่ การจัดส่ง &gt; พิมพ์เอกสาร &gt; ใบปะหน้าพัสดุ &gt; Flash Express Bulky</p>
+<ul><li>ตัวอย่างใบปะหน้า (Label) ที่ได้</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig38.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 38: ตัวอย่างใบปะหน้า (Label) ที่ปริ้นออกมา</p>
+<ul><li>ดาวน์โหลด Label (PDF) แล้วเปลี่ยนชื่อไฟล์ตามแพทเทิร์น (กรณีต้นทาง กทม. ปลายทางต่างจังหวัด)</li></ul>
+<p>แพทเทิร์น: NTW Within 5 Days ส่งไป[ปลายทาง] [จำนวน] ใบ [วันที่ส่งออกจากสาขา] ผู้รับ [ชื่อ] [เบอร์โทร] ตัวอย่าง: NTW Within 5 Days ส่งไปภูเก็ต 1 ใบ 01/07/2026 ผู้รับ Miss Nongnapat Jantakhun 0611514624</p>
+<figure><img src="/sop/ntw-5day-booking/fig39.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 39: ดาวน์โหลดแล้วคลิกขวา Rename เปลี่ยนชื่อไฟล์ Label ตามแพทเทิร์น</p>
+<h4>ขั้นที่ 3 — ส่งข้อมูลเข้ากลุ่มและบันทึก Tracking</h4>
+<ul><li>ส่งไฟล์ Label (PDF) ที่เปลี่ยนชื่อแล้ว พร้อมรูปกระเป๋า ลงกลุ่มไลน์ “OP MS x Ai” ตามรูปแบบตัวอย่าง แล้ว</li></ul>
+<p>Copy ข้อความส่งอีกครั้งและ Reply ที่รูปภาพ ตัวอย่างข้อความ: NTW Within 5 Days ส่งไปภูเก็ต 2 ใบ 23/06/2026 MS2606230054294 / LUG260623264 / 2 ใบ / Mr KOICHI INOUE / กระเป๋าลากใบใหญ่สีดำ + กล่องพัสดุทรง ยาว Flash Express: TH67018VN0U55B / TH03018VPUAD4B</p>
+<figure><img src="/sop/ntw-5day-booking/fig40.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 40: ส่งไฟล์ Label (PDF) + รูปกระเป๋าในกลุ่ม “OP MS x Ai” แล้ว Reply</p>
+<ul><li>นำ Tracking No. ที่ได้จากการจอง Goship ไปบันทึกลงชีท NTW next day (ช่อง Tracking ที่เว้นว่างไว้)</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig41.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 41: นำ Tracking No. ลงชีท NTW next day (คอลัมน์ Tracking)</p>
+<h4>ขั้นที่ 4 — การเรียกรถเข้ารับ</h4>
+<ul><li>ก่อนเรียกรถทุกครั้ง ไปที่ การตั้งค่า แก้ไขเบอร์โทรในระบบให้เป็นเบอร์ของพนักงานที่ประจำสาขา ณ วันนั้น แล้ว</li></ul>
+<p>กดบันทึก</p>
+<figure><img src="/sop/ntw-5day-booking/fig42.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 42: การตั้งค่า: แก้ไขเบอร์โทรเป็นเบอร์พนักงานประจำสาขา แล้วบันทึก</p>
+<ul><li>ไปที่ การจัดส่ง &gt; ติ๊กเลือกรายการทั้งหมดที่ต้องการ &gt; เรียกรถเข้ารับ &gt; Flash Express Bulky</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig43.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 43: การจัดส่ง: ติ๊กเลือกรายการ &gt; เรียกรถเข้ารับ &gt; Flash Express Bulky</p>
+<ul><li>กดยืนยัน</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig44.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 44: กดยืนยันการเรียกรถ</p>
+<ul><li>ตรวจสอบได้ที่ “ประวัติการเรียกรถเข้ารับ” และหากต้องการยกเลิก ให้กด “x” ด้านขวาแล้วกดยืนยัน</li></ul>
+<figure><img src="/sop/ntw-5day-booking/fig45.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p style="font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px">ภาพที่ 45: ตรวจสอบประวัติการเรียกรถ / กด x เพื่อยกเลิก</p>
+<h3>เอกสารและระบบอ้างอิง / References</h3>
+<ul><li>📦 คู่มือการจอง Goship — Flash Express Bulky</li><li>https://docs.google.com/document/d/16i5o6y5Ku8LRfuxT-</li></ul>
+<p>jeDZqfBaa1cnoyMRSYLurNaGaU/edit?tab=t.0</p>
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="https://t21makesend.gosaas.app/" target="_blank" rel="noopener">https://T21makesend.gosaas.a</a></li><li><a href="mailto:T21TPY@gmail.com" target="_blank" rel="noopener">T21TPY@gmail.com</a></li><li><a href="https://hktdomeinterr.gosaas.app/" target="_blank" rel="noopener">https://HKTDomeinterr.gosaas.</a></li><li><a href="mailto:HKTDomeinterr@gmail.com" target="_blank" rel="noopener">HKTDomeinterr@gmail.</a></li><li><a href="https://cnxmakesend.gosaas.app/" target="_blank" rel="noopener">https://CNXmakesend.gosaas.a</a></li><li><a href="mailto:CNXairport@gmail.com" target="_blank" rel="noopener">CNXairport@gmail.com</a></li><li><a href="https://whsmakesend.gosaas.app/" target="_blank" rel="noopener">https://WHsmakesend.gosaas.</a></li><li><a href="mailto:WHmakesend@gmail.com" target="_blank" rel="noopener">WHmakesend@gmail.c</a></li><li><a href="https://www.flashexpress.co.th/fle/tracking" target="_blank" rel="noopener">ตรวจสอบสถานะพัสดุ (Flash Express Track &amp; Trace)</a></li><li><a href="https://docs.google.com/document/d/16i5o6y5Ku8LRfuxT-jeDZqfBaa1cnoyMRSYLurNaGaU/edit?tab=t.0" target="_blank" rel="noopener">https://docs.google.com/document/d/16i5o6y5Ku8LRfuxT-</a></li></ul>', array['booking','nationwide','delivery','ntw'], 'published', false)
 on conflict (slug) do update set
@@ -401,7 +590,146 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('booking-photo-rotate', 'ขั้นตอนการ Booking อัพโหลดรูป และการแจ้ง Rotate กระเป๋าไปยังคลัง (ฝาก/ส่ง)', 'ขั้นตอนการสร้าง Booking การอัพโหลดรูปกระเป๋า และการแจ้ง Rotate สัมภาระไปยังคลัง ทั้งกรณีฝากและกรณีส่ง — คู่มือทีละขั้นพร้อมภาพหน้าจอ',
   (select id from sop.categories where slug = 'delivery'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 019/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 3 ธันวาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>ขั้นตอนการทำงาน (ภาพจากเอกสารต้นฉบับ)</h3><figure><img src="/sop/booking-photo-rotate/p1.jpg" alt="หน้า 1" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p2.jpg" alt="หน้า 2" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p3.jpg" alt="หน้า 3" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p4.jpg" alt="หน้า 4" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p5.jpg" alt="หน้า 5" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p6.jpg" alt="หน้า 6" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p7.jpg" alt="หน้า 7" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 7</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p8.jpg" alt="หน้า 8" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 8</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p9.jpg" alt="หน้า 9" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 9</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p10.jpg" alt="หน้า 10" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 10</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p11.jpg" alt="หน้า 11" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 11</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p12.jpg" alt="หน้า 12" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 12</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p13.jpg" alt="หน้า 13" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 13</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p14.jpg" alt="หน้า 14" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 14</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p15.jpg" alt="หน้า 15" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 15</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p16.jpg" alt="หน้า 16" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 16</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p17.jpg" alt="หน้า 17" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 17</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p18.jpg" alt="หน้า 18" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 18</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p19.jpg" alt="หน้า 19" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 19</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p20.jpg" alt="หน้า 20" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 20</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p21.jpg" alt="หน้า 21" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 21</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p22.jpg" alt="หน้า 22" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 22</figcaption></figure><figure><img src="/sop/booking-photo-rotate/p23.jpg" alt="หน้า 23" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 23</figcaption></figure>
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 019/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 3 ธันวาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Purpose)</h3>
+<p>เพื่อกำหนดขั้นตอนมาตรฐานในการปฏิบัติงานของพนักงาน Guest Service (GS) / Porter ในการ:</p>
+<ul><li>รับฝากกระเป๋า (Deposit) และจัดทำ Booking ผ่านระบบ POS ให้ถูกต้อง</li><li>อัปโหลดรูปกระเป๋าเข้าในระบบ Postels ทุกครั้งทั้งรายการฝากและส่ง ตามเงื่อนไขแต่ละสาขา</li><li>ประสานงานและดำเนินการ Rotate กระเป๋า สำหรับกระเป๋าที่ฝากมากกว่า 3-5 วันขึ้นไป (ขึ้นอยู่กับความหนาแน่น</li></ul>
+<p>ของพื้นที่จัดเก็บในสาขานั้นๆ) ตามนโยบายความปลอดภัย ของบริษัทฯ</p>
+<ul><li>จัดการขั้นตอน Rotate Out / Rotate In ระหว่างสาขาและคลัง MS ให้เป็นไปอย่างถูกต้อง โปร่งใส สามารถ</li></ul>
+<p>ตรวจสอบย้อนหลังได้</p>
+<ul><li>ลดความผิดพลาดในการจัดเก็บ การรับ-ส่งกระเป๋า และลดความเสี่ยงด้านความปลอดภัย เช่น การสับเปลี่ยนของ</li></ul>
+<p>การสูญหาย หรือข้อร้องเรียนจากลูกค้า</p>
+<ul><li>สร้างมาตรฐานเดียวกันให้ทุกสาขา ทั้งสาขาสนามบิน DMK/BKK และสาขาห้าง/ต่างจังหวัด เพื่อให้ลูกค้าได้รับ</li></ul>
+<p>ประสบการณ์ที่ดีและมีความปลอดภัยสูงสุด</p>
+<h3>ขอบเขต (Scope)</h3>
+<p>SOP นี้ครอบคลุมการปฏิบัติงานของพนักงาน Guest Service ทุกสาขา รวมถึงสาขาที่มี Porter ในขั้นตอนใดขั้น ตอนหนึ่ง โดยครอบคลุมดังนี้:</p>
+<h3>ขอบเขตการทำงาน : SOP นี้ใช้สำหรับ</h3>
+<ul><li>การรับฝากกระเป๋า (Deposit / Check-in)</li><li>การส่งกระเป๋า (Pick-up / Delivery)</li><li>การอัปโหลดรูปในระบบ Postels (ทุก Booking จำเป็นต้องถ่ายรูป)</li><li>การทำรายการ Origin / Rotate Out / Rotate In</li><li>การจัดการกระเป๋าที่ฝาก มากกว่า 3 วันขึ้นไป ซึ่งต้องแจ้งและส่งเข้า คลัง MS</li><li>การเตรียมกระเป๋าสำหรับ MS รับออก และการรับกระเป๋ากลับจาก MS</li><li>การตรวจสอบข้อมูล การอัปเดตรูป และการยืนยันสถานะในระบบ Postels</li></ul>
+<h3>ขอบเขตตามสาขา</h3>
+<p>สาขาสนามบิน DMK / BKK</p>
+<ul><li>ลูกค้าที่ฝากเกิน 3-5 วัน (ขึ้นอยู่กับแนวทางแต่ละสาขา) → ต้องแจ้งลูกค้าว่าจะมีการ Rotate</li><li>รูปถ่ายต้อง Upload ที่ Origin /Rotate Out และ Rotate In ตามขั้นตอน</li><li>ต้องประสาน MS ทุกรายการที่เกิน 3 วัน</li></ul>
+<p>สาขาห้าง / ต่างจังหวัด (Non-airport branches)</p>
+<ul><li>อัปโหลดรูปเฉพาะที่ Origin ทุกกรณี</li></ul>
+<h3>ขอบเขตข้อมูลที่เกี่ยวข้อง : ครอบคลุมการใช้ข้อมูลต่อไปนี้</h3>
+<ul><li>ข้อมูล Booking ลูกค้าในระบบ POS</li><li>ข้อมูล Order ในระบบ Postels</li><li>รูปถ่ายกระเป๋าที่เห็น Tag ชัดเจน และมุมอื่นๆ</li><li>การแจ้งเตือนผ่าน Lark สำหรับ Order ที่มีการเปลี่ยนแปลง</li><li>ไฟล์ AI Luggage Rotation Center ที่ใช้ติดตาม status ของกระเป๋าที่ Rotate</li></ul>
+<p>ผู้มีส่วนเกี่ยวข้อง</p>
+<ul><li>พนักงาน Guest Service ทุกสาขา</li><li>Porter (ในสาขาที่มีบริการ)</li><li>ทีมขนส่ง MS (Makesend)</li><li>Customer Service : กรณีลูกค้าแจ้งเปลี่ยนแปลงผ่าน CS</li></ul>
+<h3>ขั้นตอนการรับฝากกระเป๋า (Deposit)</h3>
+<h3>ขั้นตอนก่อนลงระบบ</h3>
+<p><strong>1. ลูกค้าแจ้งฝากกระเป๋า ให้สอบถามระยะเวลาการฝากทุกครั้ง</strong></p>
+<p><strong>2. หากลูกค้าต้องการฝากเกิน 3 วันขึ้นไป ต้องแจ้งเงื่อนไขดังนี้</strong></p>
+<ul><li>สำหรับสาขา DMK ให้แจ้งทุกครั้งว่าจะมีการ Rotate กระเป๋า ไปเก็บในคลังที่ปลอดภัย กรณีต้องการฝาก 3 วัน</li></ul>
+<p>ขึ้นไป</p>
+<ul><li>หากต้องการรับกระเป๋าก่อนวัน และ เวลาที่ฝาก ให้แจ้งผ่าน Customer Service ล่วงหน้าทุกครั้งอย่างน้อย</li></ul>
+<p>3 ชม. ก่อนเวลาที่ต้องการเข้ามารับ</p>
+<ul><li>หากลูกค้ามารับก่อนกำหนดให้ดำเนินการดังนี้</li><li>กรณีแจ้งล่วงหน้าประสานงาน MS เพื่อนำส่งกระเป๋า แจ้งอย่างน้อย 3 ชม. หากต่ำกว่า 3 ชม. ให้สอบถาม</li></ul>
+<p>ก่อน และแจ้งระยะเวลารอคอยกระเป๋า กับลูกค้า โดยมีเงื่อนไขดังนี้</p>
+<p><strong>1. ถ้าลูกค้ารอได้ แจ้งเคสเร่งด่วนกับ MS ในกลุ่มไลน์ เพื่อประสานงานและดำเนินการจัดส่งโดยเร็วที่สุด</strong></p>
+<p><strong>2. หากลูกค้าต้องเดินทางต่อ สามารถแจ้งนำส่งปลายทางแทนได้ (กรณีจำเป็น และภายในประเทศและ</strong></p>
+<p>พื้นที่กำหนดเท่านั้น)</p>
+<ul><li>กรณีมีรับก่อนวันฝากระยะยาว ที่เก็บเงินแล้ว เช่น แจ้งฝากมากกว่า 26 วัน หรือ ชำระเงินผ่านระบบ</li></ul>
+<p>online : จะไม่มีการ Refund เงินคืนทุกกรณี ถือว่าลูกค้าตกลงฝาก และยอมรับเงินไข</p>
+<ul><li>กรณีลูกค้าฝากกระเป๋าหลายใบ และจะรับบางส่วน หากชำระเงินแล้วจะไม่มีการคืนเงินทุกกรณี</li><li>กรณียังไม่ชำระเงิน ให้ทำจ่าย order เดิมก่อน และทำฝากใหม่ ทำ Booking order ใหม่ เพื่อป้องกัน</li></ul>
+<p>ลูกค้าแอบเอาของออกบางส่วน หรือนำของต้องสงสัยใส่ในกระเป๋าสัมภาระ และอ้างว่าพนักงานเป็นคนทำ</p>
+<ul><li>สำหรับสาขา DMK / HKT / CNX : ให้ทำการตรวจสัมภาระผ่านเครื่อง X-Ray ทุกครั้ง</li></ul>
+<p><strong>3. เมื่อแจ้งเงื่อนไข การให้บริการแล้ว พนักงานขอ Passport หรือ บัตรประชาชน (ID Card)</strong></p>
+<p><strong>4. ดำเนินการ Booking ผ่านระบบ POS</strong></p>
+<figure><img src="/sop/booking-photo-rotate/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>5. กรอกข้อมูลลูกค้าให้ครบถ้วน → กด Continue</strong></p>
+<figure><img src="/sop/booking-photo-rotate/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>6. และกด New Order</strong></p>
+<figure><img src="/sop/booking-photo-rotate/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>7. กด Deposit Order</strong></p>
+<figure><img src="/sop/booking-photo-rotate/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>8. กรอกข้อมูลการฝากกระเป๋าให้ครบถ้วน</strong></p>
+<ul><li>ใส่จำนวนกระเป๋าที่ลูกค้าต้องการฝาก</li><li>ใส่ Tag เป็นวันที่ลูกค้าต้องการรับกระเป๋า</li><li>ใส่วันที่ในปฎิทินที่ลูกค้าต้องการรับกระเป๋า</li><li>นำโทรศัพท์มา Scan QR เพื่อขอข้อมูลลูกค้าเพิ่มเติม</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>9. ขอข้อมูลลูกค้าเพิ่มเติม</strong></p>
+<ul><li>เลือกกด Edit Email and Phone No.</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>เมื่อลูกค้ากรอก Email และ เบอร์โทร แล้วกด OK</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>เมื่อขึ้นหน้า Thankyou แล้วจึงดำเนินการใน POS ต่อ</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig8.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>10. กด Continue</strong></p>
+<figure><img src="/sop/booking-photo-rotate/fig9.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>11. พนักงานตรวจสอบข้อมูลแล้วจึงกด Continue หากต้องการแก้ไขให้กด Back</strong></p>
+<figure><img src="/sop/booking-photo-rotate/fig10.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>12. เมื่อตรวจสอบข้อมูลครบถ้วนแล้วให้กด Confirm</strong></p>
+<figure><img src="/sop/booking-photo-rotate/fig11.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>13. ใส่รหัส PIN</strong></p>
+<figure><img src="/sop/booking-photo-rotate/fig12.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>14. ดำเนินการ Booking เสร็จสิ้นสามารถกด Done ได้เลย</strong></p>
+<figure><img src="/sop/booking-photo-rotate/fig13.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>15. กรณีลูกค้าฝากตั้งแต่ 26 วัน ให้แจ้งลูกค้าชำระเงินทันที พร้อมย้ำเงื่อนไขอีกครั้งกรณีมีการเปลี่ยนแปลง ให้แจ้ง</strong></p>
+<p>ล่วงหน้าอย่างน้อย 3 ชม. ผ่าน Customer Service และ หากชำระเงินแล้วจะไม่มีการคืนเงินทุกกรณี (หากยังไม่ แน่ใจให้แนะนำลูกค้าเลือกฝากแบบรายวัน ที่ไม่ใช่ราคาพิเศษ และ กรณีฝากเกินกำหนดที่แจ้งครั้งแรก ให้ชำระ ส่วนต่างจำนวนวันที่เกินมาแทน)</p>
+<p><strong>16. แจ้งย้ำลูกค้าอีกครั้งก่อนออกจากเคาน์เตอร์ เรื่องการ Rotate กระเป๋า ไปเก็บไว้ในพื้นที่จัดเก็บที่ปลอดถัย (All</strong></p>
+<p>Safe &amp; Secure) เนื่องจากพื้นที่ตรงนี้มีจำกัด การอัพเดตข้อมูล และอัพโหลดรูปภาพในระบบ POSTELS (ขั้นตอน สำคัญ)</p>
+<p><strong>1. เข้าระบบ Postels Welcome Back! Create an Account!</strong></p>
+<ul><li>Login</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig14.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>ค้นหา Order ด้วย Order Number</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig15.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>2. การอัปโหลดรูป (จำเป็นต้องดำเนินการทุก Booking)</strong></p>
+<ul><li>ถ่ายภาพกระเป๋าทุกครั้ง (ทั้งฝาก / ส่ง)</li><li>เลือกประเภท Upload ตามสาขา:</li></ul>
+<p>รายละเอียดการอัปโหลดรูปตามสาขา สาขา DMK และ BKK (สนามบิน)</p>
+<ul><li>Upload ที่ Origin / Rotate Out (ตอนรับฝาก)</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig16.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>สาขาห้าง / ต่างจังหวัด</p>
+<ul><li>Upload เฉพาะที่ Origin ทุกกรณี (ฝาก / ส่ง / ไม่ Rotate)</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig17.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>เมื่อเลือกประเภทแล้ว ให้พนักงานกดถ่ายภาพกระเป๋า (กรณีใช้ผ่านมือถือ / mobile phone) หรือลากรูปจากใน</li></ul>
+<p>อัลบั๊มเครื่อง (กรณีใช้ผ่าน Desktop)</p>
+<ul><li>การถ่ายภาพให้ถ่ายมากกว่า 1 รูป และต้องมีรูปที่เห็น Tag กระเป๋าชัดเจน</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig18.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>24. สามารถตรวจสอบรูปว่าอัพโหลดเรียบร้อยแล้วหรือไม่ผ่านทาง Order Image โดยกดที่ Origin หรือ Rotate</strong></p>
+<p>Out</p>
+<figure><img src="/sop/booking-photo-rotate/fig19.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/booking-photo-rotate/fig20.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>กรณีฝากมากกว่า 3 - 5 วันขึ้นไปให้กด Tab : Rotation Out ด้านบน ตามลูกศร (สำหรับการแจ้ง MS เพื่อส่ง</li></ul>
+<p>กระเป๋าไปคลัง)</p>
+<figure><img src="/sop/booking-photo-rotate/fig21.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>เมื่อดำเนินการเรียบร้อย จะขึ้นข้อความ Rotation Request Success</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig22.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>จัดเตรียมกระเป๋าที่แจ้ง Rotate Out แต่ละวันแยกไว้ตามเวลาที่กำหนด เพื่อรอขนส่ง (MS) มารับไปจัดเก็บที่</li></ul>
+<p>คลัง การรับกระเป๋าที่กลับมาจาก MS (Rotate In)</p>
+<ul><li>เมื่อรับกระเป๋ากลับมา ให้ตรวจเช็ค และถ่ายรูป ให้เห็น Tag กระเป๋า และถ่าย 1-2 มุม กรณีมีความเสียหายจะได้</li></ul>
+<p>สามารถตรวจสอบได้</p>
+<ul><li>สำหรับสาขาที่มี Porter สามารถให้ Porter ที่รับกระเป๋าถ่ายรูป และส่งให้ Guest Service ดำเนินการต่อ หรือ</li></ul>
+<p>Porter สามารถ Serch order ผ่านมือถือ และอัพโหลดรูปได้เอง</p>
+<ul><li>Login เข้า Postels และ Search Order Number ที่ต้องการ</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig23.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>อัพโหลดรูป ที่ Drop down : Rotate In</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig24.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>กดถ่ายภาพกระเป๋า (กรณีใช้ผ่านมือถือ / mobile phone) หรือลากรูปจากในอัลบั๊มเครื่อง (กรณีใช้ผ่าน</li></ul>
+<p>Desktop)</p>
+<figure><img src="/sop/booking-photo-rotate/fig25.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>ตรวจสอบว่า Upload รูปเรียบร้อยแล้วที่ Rotate In</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig26.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>จากนั้นกดที่ Tab : Rotate In ด้านบนตามลูกศร เพื่อยืนยันการรับกระเป๋ากลับเข้าสาขา จาก MS</li></ul>
+<figure><img src="/sop/booking-photo-rotate/fig27.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/booking-photo-rotate/fig28.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>เมื่อดำเนินการเรียบร้อย จะขึ้นข้อความ Rotation Request Success</li></ul>
+<p>การอัพโหลดรูปภาพผ่านมือถือด้วย Postels</p>
+<figure><img src="/sop/booking-photo-rotate/fig29.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>เปิดผ่านมือถือ https://postels.airportels.asia/admin/login</p>
+<figure><img src="/sop/booking-photo-rotate/fig30.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>Login เข้า Postels ด้วยรหัสสาขา</p>
+<figure><img src="/sop/booking-photo-rotate/fig31.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>เลือก Dropdown และเลือกประเภทที่ต้องการ เช่น Origin &amp; Rotate Out สำหรับอัพรูปเพื่อส่งไปคลัง หรือ Rotate In เมื่อรับกระเป๋ากลับเข้ามา</p>
+<figure><img src="/sop/booking-photo-rotate/fig32.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>เลือก Origin &amp; Rotate Out เพื่อถ่ายรูป สำหรับการ Rotate Out - ส่งกระเป๋าไปคลัง</p>
+<figure><img src="/sop/booking-photo-rotate/fig33.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>เลือก Origiin Rotate Out เพื่อถ่ายรูป สำหรับการ Rotate In - ส่งกระเป๋ากลับเข้าสาขา</p>
+<figure><img src="/sop/booking-photo-rotate/fig34.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>เลือก Tab Rotation Out สำหรับแจ้งส่งกระเป๋าเข้า</li></ul>
+<p>คลัง</p>
+<ul><li>เลือก Tab Rotae In สำหรับแจ้งคลังให้นำกระเป๋า</li></ul>
+<p>ส่งคืนสาขา</p>
+<figure><img src="/sop/booking-photo-rotate/fig35.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>เมื่อดำเนินการเรียบร้อย ระบบขึ้น Rotation Request Successfully หมายเหตุ : กรณีมีการเปลี่ยนแปลง order หรือวันรับกระเป๋า จะมีการแจ้งเตือนไปยัง Lark ของสาขาที่เกี่ยวข้อง ตัวอย่างการแจ้งเตือนกรณีมีการเปลี่ยนแปลง Order</p>
+<figure><img src="/sop/booking-photo-rotate/fig36.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>สามารถเช็ค รายการ และ สถานะกระเป๋าที่ Rotate ผ่าน ไฟลล์ Lark : AI Luggage Rotation Center (NEW)</p>
+<figure><img src="/sop/booking-photo-rotate/fig37.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="https://postels.airportels.asia/admin/order/browse/intx2403236" target="_blank" rel="noopener">1. เข้าระบบ Postels Welcome Back! Create an Account!</a></li><li><a href="https://postels.airportels.asia/admin/login" target="_blank" rel="noopener">เว็บไซต์ AIRPORTELs</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/base/QFH0brg1vaOY3us9Czqlf04JgQe?from=from_copylink" target="_blank" rel="noopener">สามารถเช็ค รายการ และ สถานะกระเป๋าที่ Rotate ผ่าน ไฟลล์ Lark</a></li></ul>', array['booking','rotate','warehouse','photo','delivery'], 'published', false)
 on conflict (slug) do update set
@@ -879,198 +1207,644 @@ on conflict (slug) do update set
   category_id = excluded.category_id, content_html = excluded.content_html,
   tags = excluded.tags, status = excluded.status;
 
--- ===== IMAGES: dmk-airport-service (5 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 020/2026<br><strong>วันที่บังคับใช้:</strong> 1 มกราคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/dmk-airport-service/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/dmk-airport-service/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/dmk-airport-service/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/dmk-airport-service/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/dmk-airport-service/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>' where slug = 'dmk-airport-service';
+-- ===== ILLUSTRATED: dmk-airport-service (2 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 020/2026<br><strong>วันที่บังคับใช้:</strong> 1 มกราคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>เวอร์ชัน / Version: ปรับปรุงครั้งที่ 1</p>
+<h3>📌 วัตถุประสงค์ / Purpose</h3>
+<p>เพื่อกำหนดขั้นตอนการรับและส่งมอบกระเป๋าเดินทาง ณ ท่าอากาศยานดอนเมือง ให้เป็นไปตามข้อกำหนดด้านความ ปลอดภัยของการท่าฯ (ทอท.) และใช้เป็นแนวปฏิบัติจริงสำหรับพนักงานหน้าสาขา To establish operational procedures for luggage acceptance and release at Don Mueang Airport in compliance with AOT security regulations.</p>
+<h3>📌ขอบเขตการใช้งาน / Scope</h3>
+<p>ใช้สำหรับพนักงาน AIRPORTELs ประจำสาขาดอนเมือง (DMK) ทุกตำแหน่งที่เกี่ยวข้องกับการรับ ฝาก ส่งมอบ และ ตรวจสอบกระเป๋า Applicable to all AIRPORTELs staff involved in luggage acceptance, storage, delivery, and X-ray screening at DMK.</p>
+<h3>คำจำกัดความ (Definitions)</h3>
+<ul><li>พนักงานหน้าสาขา (Guest Service &amp; Porter ): พนักงานที่ให้บริการลูกค้า ณ จุดบริการ</li><li>ผู้รับมอบฉันทะ: บุคคลที่ได้รับมอบอำนาจเป็นลายลักษณ์อักษรจากเจ้าของกระเป๋า</li><li>ทอท. (AOT): บริษัท ท่าอากาศยานไทย จำกัด (มหาชน)</li></ul>
+<h3>บทบาทและความรับผิดชอบ (Roles &amp; Responsibilities)</h3>
+<p>พนักงานหน้าสาขาทุกตำแหน่ง (Guest Service &amp; Porter)</p>
+<ul><li>ตรวจสอบการจองและเอกสารลูกค้า</li><li>ชี้แจงเงื่อนไขการให้บริการและข้อกำหนดด้านความปลอดภัย</li><li>ปฏิบัติตามขั้นตอน SOP อย่างเคร่งครัด</li><li>หยุดกระบวนการและรายงานเมื่อพบความเสี่ยง</li></ul>
+<p>หัวหน้าสาขา (ฺBranch Manager) / ผู้ควบคุมงาน (Operation Team)</p>
+<ul><li>กำกับดูแลการปฏิบัติงานให้เป็นไปตาม SOP</li><li>ประสานงานกับเจ้าหน้าที่ ทอท. ในกรณีผิดปกติ</li></ul>
+<h3>ขั้นตอนการปฏิบัติงาน (Operational Procedures)</h3>
+<h3>ขั้นตอนการรับฝากกระเป๋า (Luggage Acceptance)</h3>
+<p><strong>1. รับลูกค้าและตรวจสอบการจองในระบบ</strong></p>
+<p><strong>2. ขอเอกสารประจำตัว ID Card / Passport เพื่อบันทึกข้อมูลลงในระบบ POS</strong></p>
+<p><strong>3. ตรวขสอบกระเป่า หรือสัมภาระ ร่วมกับผู้ใช้บริการ ทั้งภายนอก และภายใน</strong></p>
+<p><strong>4. ชี้แจงข้อกำหนดด้านความปลอดภัยของ ทอท. และแจ้งว่ากระเป๋าทุกใบต้องผ่านการตรวจ X-ray</strong></p>
+<p><strong>5. ขอความยินยอมจากลูกค้าเพื่อดำเนินการตรวจ X-ray</strong></p>
+<p><strong>6. หากไม่ยินยอม ให้ปฏิเสธการให้บริการทันที</strong></p>
+<p><strong>7. นำกระเป๋าเข้าตรวจด้วยเครื่อง X-ray โดยผู้ได้รับอนุญาต</strong></p>
+<p><strong>8. จัดประเภทผล X-ray</strong></p>
+<ul><li>Clear: ดำเนินการรับกระเป๋าเข้าระบบ</li><li>Prohibited Item: แยกสิ่งของออก และส่งมอบคืนให้ผู้ใช้บริการ</li><li>Suspicious Item: หยุดกระบวนการ ห้ามเปิดกระเป๋า และประสาน ทอท. ตรวจสอบทันที่เบอร์โทร 02-535</li></ul>
+<p>1616</p>
+<p><strong>9. ติด Tag / Label และบันทึกข้อมูลกระเป๋าในระบบ</strong></p>
+<h3>ขั้นตอนการส่งมอบกระเป๋า (Luggage Release )</h3>
+<p><strong>1. ผู้มารับกระเป๋าแสดงเอกสารรับกระเป๋า</strong></p>
+<p><strong>2. ตรวจสอบว่าผู้รับเป็นเจ้าของกระเป๋าหรือผู้รับมอบฉันทะ</strong></p>
+<p><strong>3. ตรวจสอบเอกสารประจำตัว / หนังสือมอบฉันทะ (ถ้ามี)</strong></p>
+<p><strong>4. ตรวจสอบ Tag / Label ให้ตรงกับข้อมูลในระบบ</strong></p>
+<p><strong>5. ส่งมอบกระเป๋าให้ผู้รับ</strong></p>
+<p><strong>6. บันทึกการส่งมอบในระบบ</strong></p>
+<p>ข้อห้ามและข้อควรระวัง (Prohibitions &amp; Precautions)</p>
+<ul><li>ห้ามรับกระเป๋าที่ไม่ผ่านการตรวจ X-ray</li><li>ห้ามเปิดกระเป๋าด้วยตนเองในทุกกรณี</li><li>ห้ามรับกระเป๋าที่พบสิ่งของต้องห้ามตามข้อกำหนดสนามบิน</li><li>ต้องปฏิบัติตามคำสั่งของเจ้าหน้าที่ ทอท. อย่างเคร่งครัด</li></ul>
+<h3>เอกสารที่เกี่ยวข้อง (Related Documents)</h3>
+<ul><li>SOP การให้บริการรับฝากกระเป๋า ณ ท่าอากาศยานดอนเมือง</li><li>SOP: การให้ผู้อื่นมารับกระเป๋าแทน / Authorized Person Pickup</li></ul>
+<p>รายการสิ่งของต้องห้าม (Prohibited Items) ห้ามจัดส่งสิ่งของดังต่อไปนี้ : Prohibit Items</p>
+<figure><img src="/sop/dmk-airport-service/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>💡หมายเหตุ: ของเหลว (Liquid) สามารถรับได้เฉพาะกรณี</p>
+<ul><li>ไม่เป็นสเปรย์</li><li>บรรจุภัณฑ์ไม่เกิน 100 ml.</li><li>มีฉลากระบุชัดเจนและอยู่ในบรรจุภัณฑ์เดิม ภายใต้เงื่อนไข ไม่เกิน 100 ml.</li></ul>
+<p>📘 สิ่งของที่แตกหักง่าย และเปราะบาง : หากลูกค้ายืนยันต้องการนำส่งให้แจ้งเงื่อนไขให้ชัดเจนทุกครั้ง</p>
+<ul><li>AIRPORTELs are not responsible for fragile, valuable, liquid, electronic, or prohibited items.</li><li>AIRPORTELs จะไม่รับผิดชอบต่อสิ่งของที่เปราะบาง มีค่า เป็นของเหลว เป็นอุปกรณ์อิเล็กทรอนิกส์ หรือสิ่งของ</li></ul>
+<p>ต้องห้าม</p>
+<h3>ข้อกำหนดด้านความปลอดภัย (ทอท.) | AOT Security Requirements</h3>
+<ul><li>กระเป๋าทุกใบต้องผ่านการตรวจด้วยเครื่อง X-ray ก่อนรับเข้าระบบ</li></ul>
+<p>All luggage must undergo X-ray screening prior to acceptance.</p>
+<ul><li>ผู้ใช้งานเครื่อง X-ray ต้องผ่านการอบรมและได้รับอนุญาตจาก ทอท.</li></ul>
+<p>X-ray operators must be certified and authorized by AOT.</p>
+<ul><li>กรณีพบสิ่งของต้องห้ามหรือสิ่งน่าสงสัย ต้องหยุดกระบวนการและประสานเจ้าหน้าที่ ทอท. ทันที ที่เบอร์โทร 02-</li></ul>
+<p>535 1616 Any prohibited or suspicious items must be reported to AOT immediately.</p>
+<figure><img src="/sop/dmk-airport-service/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>การบริการรับฝากกระเป๋า ณ ท่า อากาศยานดอนเมือง.pdf 12.63MB</p>' where slug = 'dmk-airport-service';
 
--- ===== IMAGES: pos-order-receiving (8 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 011/2025<br><strong>เวอร์ชัน:</strong> 2.0<br><strong>วันที่บังคับใช้:</strong> 9 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/pos-order-receiving/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/pos-order-receiving/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/pos-order-receiving/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/pos-order-receiving/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/pos-order-receiving/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>
-<figure><img src="/sop/pos-order-receiving/p6.jpg" alt="หน้า 6" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure>
-<figure><img src="/sop/pos-order-receiving/p7.jpg" alt="หน้า 7" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 7</figcaption></figure>
-<figure><img src="/sop/pos-order-receiving/p8.jpg" alt="หน้า 8" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 8</figcaption></figure>
+-- ===== ILLUSTRATED: pos-order-receiving (12 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 011/2025<br><strong>เวอร์ชัน:</strong> 2.0<br><strong>วันที่บังคับใช้:</strong> 9 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>แก้ไขครั้งที่ 1 / Revised Date: 20 สิงหาคม 2568 : Dev. อัพเดตการเลือก Service Type การจอง MS</p>
+<h3>📌วัตถุประสงค์ (Purpose)</h3>
+<p>เพื่อกำหนดขั้นตอนที่เป็นมาตรฐานในการรับออเดอร์จากลูกค้า ทั้งการฝากกระเป๋าและการส่งกระเป๋า ผ่านระบบ POS และระบบหลังบ้าน เพื่อให้มั่นใจว่าทุกขั้นตอนถูกต้อง ครบถ้วน รวดเร็ว และสามารถตรวจสอบย้อนหลังได้</p>
+<h3>📌ขอบเขต (Scope)</h3>
+<p>SOP นี้ครอบคลุมขั้นตอนการรับออเดอร์ของลูกค้าผ่านระบบ POS :</p>
+<ul><li>ที่หน้าสาขาทุกแห่งของบริษัท</li><li>สำหรับบริการฝากและบริการส่งกระเป๋าเดินทาง หรือสัมภาระ</li><li>ตั้งแต่การกรอกข้อมูลลูกค้าใน POS จนถึงการจองเลข MS (ในกรณีบริการส่ง)</li></ul>
+<h3>ขั้นตอนการปฏิบัติงาน (Work Instructions)</h3>
+<p><strong>1. การรับออเดอร์ผ่านระบบ POS</strong></p>
+<h3>ขั้นตอนที่ 1: เตรียมข้อมูลลูกค้า</h3>
+<ul><li>ขอ Passport หรือ บัตรประชาชน จากลูกค้า</li><li>เข้าระบบ POS</li></ul>
+<figure><img src="/sop/pos-order-receiving/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>ใส่ Passport ID หรือ เลขบัตรประชาชน</li><li>กด Search</li></ul>
+<h3>ขั้นตอนที่ 2: กรอกข้อมูลลูกค้าให้ครบถ้วน</h3>
+<ul><li>เลือกคำนำหน้าชื่อ ให้ถูกต้อง</li><li>กรอก ชื่อ-นามสกุล</li><li>ตรวจสอบว่า เลขที่บัตรประชาชน / Passport ID แสดงถูกต้อง (ระบบจะแสดงข้อมูลตามที่ระบุไว้ในขั้นตอนที่ 1)</li><li>กรอก สัญชาติ (ใช้ตัวย่อตาม Passport)</li><li>กด Continue</li></ul>
+<figure><img src="/sop/pos-order-receiving/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<h3>ขั้นตอนที่ 3: สร้างคำสั่งซื้อ</h3>
+<ul><li>กด New Order</li><li>เลือกประเภทบริการที่ลูกค้าต้องการ:</li><li>บริการฝากกระเป๋า (Deposit Order)</li><li>บริการส่งกระเป๋า (Delivery Order)</li></ul>
+<figure><img src="/sop/pos-order-receiving/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/pos-order-receiving/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>2. รายละเอียดตามประเภทบริการ</strong></p>
+<p>A. บริการฝากกระเป๋า</p>
+<ul><li>กรอก จำนวนกระเป๋า</li><li>ใส่ลำดับ Tag ของกระเป๋า (อิงตามสาขา)</li><li>เลือก วันที่และเวลา ที่ลูกค้าจะมารับ</li><li>สแกน QR Code ให้ลูกค้ากรอก Email และเบอร์โทรศัพท์</li><li>เมื่อระบุข้อมูลครบแล้ว กด Continue</li></ul>
+<figure><img src="/sop/pos-order-receiving/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/pos-order-receiving/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>คิดเงิน (หากต้องการคิดทันที):</p>
+<ul><li>กด Service</li><li>ใส่จำนวนเงิน แล้วกด ADD</li><li>กด Confirm เพื่อสิ้นสุดรายการ</li></ul>
+<p>B. บริการส่งกระเป๋า</p>
+<ul><li>เลือก ปลายทางจัดส่ง</li><li>เลือก วันที่และเวลา ที่ลูกค้าจะมารับ</li><li>สแกน QR Code ให้ลูกค้ากรอก Email และเบอร์โทรศัพท์</li><li>กด Continue</li><li>กด Service เพื่อคิดเงิน</li><li>ใส่จำนวนเงิน แล้วกด ADD</li></ul>
+<figure><img src="/sop/pos-order-receiving/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>กด Continue เพื่อสิ้นสุดรายการ</li></ul>
+<figure><img src="/sop/pos-order-receiving/fig8.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>3. การจองเลข MS (สำหรับบริการส่งเท่านั้น)</strong></p>
+<ul><li>เข้าระบบหลังบ้าน Airportles</li><li>ค้นหาออเดอร์</li><li>กด Create Logistic Order</li></ul>
+<figure><img src="/sop/pos-order-receiving/fig9.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>เลือก Service Type</li></ul>
+<p>พนักงานที่กดจอง ออเดอร์เข้าฝั่ง MS จะต้องเลือก Service Type ที่ต้องการ โดยระบบจะปรับ Tracking prefix ฝั่ง MS ให้เป็นไปตามที่พนักงานระบุไป (จำเป็นต้องระบุ)</p>
+<ul><li>หากมีรายละเอียดเพิ่มเติม : ให้ระบุใน Note เพื่อแจ้งรายละเอียดไปฝั่ง MS ได้ เช่น "ส่งด่วนนะคะ" , "สีแดง</li></ul>
+<p>3ใบ" เป็นต้น (หากไม่มีข้อมูลสามารถปล่อยว่างได้)</p>
+<figure><img src="/sop/pos-order-receiving/fig10.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>ตรวจสอบ ที่อยู่ต้นทาง - ปลายทาง</li><li>เลือกวันจัดส่ง และรอบเวลา 12:00 - 14:00</li><li>เลือก จังหวัด / อำเภอ / รหัสไปรษณีย์ ให้ตรงกับที่อยู่ปลายทาง</li><li>กด Create</li></ul>
+<figure><img src="/sop/pos-order-receiving/fig11.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>สิ้นสุดการทำรายการ</li></ul>
+<figure><img src="/sop/pos-order-receiving/fig12.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>หมายเหตุ:</p>
+<ul><li>หากพบที่อยู่ไม่ถูกต้อง ต้องแก้ไขก่อนจองเลข MS</li><li>เน้นย้ำ!! หากจองเลข MS แล้วต้องการแก้ไขที่อยู่ ให้แจ้งยกเลิกกับ Planner ทุกครั้ง แล้วทำการจองใหม่</li></ul>
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="https://postels.airportels.asia/admin/order/browse" target="_blank" rel="noopener">เข้าระบบหลังบ้าน Airportles</a></li></ul>' where slug = 'pos-order-receiving';
 
--- ===== IMAGES: authorized-person-pickup (7 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 012/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/authorized-person-pickup/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/authorized-person-pickup/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/authorized-person-pickup/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/authorized-person-pickup/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/authorized-person-pickup/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>
-<figure><img src="/sop/authorized-person-pickup/p6.jpg" alt="หน้า 6" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure>
-<figure><img src="/sop/authorized-person-pickup/p7.jpg" alt="หน้า 7" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 7</figcaption></figure>' where slug = 'authorized-person-pickup';
+-- ===== ILLUSTRATED: authorized-person-pickup (3 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 012/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ / Purpose</h3>
+<p>เพื่อกำหนดแนวทางปฏิบัติที่ชัดเจนในการให้ผู้อื่นมารับกระเป๋าแทนเจ้าของอย่างปลอดภัย ลดความเสี่ยงจาก ความผิดพลาด การสูญหาย หรือการแอบอ้าง To provide clear procedures for allowing an authorized person to collect luggage on behalf of the owner, ensuring safety and minimizing risks of loss, errors, or impersonation.</p>
+<h3>📌ขอบเขตการใช้งาน / Scope</h3>
+<p>ใช้กับกรณีที่ลูกค้าไม่สามารถมารับกระเป๋าด้วยตนเอง และมอบหมายให้ผู้อื่นมารับแทน Applicable when the customer cannot pick up the luggage themselves and authorizes another person to do so.</p>
+<h3>เอกสารและหลักฐานที่ต้องตรวจสอบ / Required Documents</h3>
+<p>1.1 เอกสารของผู้รับมอบอำนาจ / Documents of the Authorized Person</p>
+<ul><li>บัตรประชาชน / หนังสือเดินทาง / ใบขับขี่ (ฉบับจริง)</li></ul>
+<p>National ID / Passport / Driver’s License (original copy)</p>
+<ul><li>สำเนาบัตรประชาชน พร้อมลายเซ็นรับรองสำเนาถูกต้อง</li></ul>
+<p>Copy of National ID with certified signature 1.2 เอกสารของผู้มอบอำนาจ / Documents of the Owner</p>
+<ul><li>สำเนาบัตรประชาชน / หนังสือเดินทาง พร้อมลายเซ็นรับรองสำเนาถูกต้อง</li></ul>
+<p>Copy of National ID / Passport with certified signature 1.3 หนังสือมอบอำนาจ / Authorization Letter</p>
+<ul><li>รายละเอียดที่ต้องระบุ เช่น ชื่อ-นามสกุล, เลขบัตรประชาชนของทั้งสองฝ่าย, วัตถุประสงค์, รายละเอียดกระเป๋า,</li></ul>
+<p>วันเวลา, ลายเซ็น, พยาน (ถ้ามี) Must include: Full names, ID numbers of both parties, purpose, bag details, date/time, signatures, witnesses (if possible) 1.4 เอกสารยืนยันการจัดฝาก Receive slip หรือ การส่ง / Delivery Confirmation</p>
+<ul><li>ใบเสร็จ, หมายเลข Tracking, จุดรับ-ส่ง, หลักฐานการชำระเงิน</li></ul>
+<p>Receipt, tracking number, pickup-drop point, proof of payment 1.5 รูปถ่าย / Photos</p>
+<ul><li>รูปถ่ายกระเป๋า และเจ้าของคู่กับกระเป๋า (ถ้ามี)</li></ul>
+<p>Clear photo of the luggage and owner with the luggage (if available)</p>
+<h3>ขั้นตอนการปฏิบัติ / Procedure</h3>
+<p><strong>1. ลูกค้าแจ้งความประสงค์ให้ผู้อื่นมารับกระเป๋าแทน พร้อมส่งเอกสารล่วงหน้า</strong></p>
+<ul><li>Customer informs intention to authorize another person and sends documents in</li></ul>
+<p>advance.</p>
+<p><strong>2. เจ้าหน้าที่ตรวจสอบเอกสาร หากไม่ครบให้แจ้งลูกค้า</strong></p>
+<ul><li>Staff verifies documents. If incomplete, notify the customer.</li></ul>
+<p><strong>3. บันทึกข้อมูลผู้รับมอบอำนาจในระบบหรือแบบฟอร์มควบคุม</strong></p>
+<ul><li>Record authorized person''s information in the system or control form.</li></ul>
+<p><strong>4. ตรวจสอบตัวจริงผู้รับมอบอำนาจในวันรับกระเป๋า</strong></p>
+<ul><li>Verify identity of the authorized person on pickup day.</li></ul>
+<p><strong>5. ถ่ายรูปผู้รับมอบอำนาจกับกระเป๋าไว้เป็นหลักฐาน</strong></p>
+<ul><li>Take a photo of the authorized person with the luggage for records.</li></ul>
+<p><strong>6. ให้เซ็นรับกระเป๋า และแนบสำเนาบัตรประชาชนที่รับรองแล้ว</strong></p>
+<ul><li>Obtain signature and attach a certified copy of the authorized person''s ID.</li></ul>
+<p><strong>7. เจ้าหน้าที่ตรวจสอบสภาพกระเป๋าต่อหน้าผู้รับ</strong></p>
+<ul><li>Staff inspects luggage condition in front of the authorized person.</li></ul>
+<p><strong>8. ข้อควรระวังเพิ่มเติม / Additional Precautions</strong></p>
+<ul><li>แจ้งลูกค้าให้ตรวจสอบนโยบายบริษัทล่วงหน้า</li><li>Inform customer to check company policy in advance.</li><li>ห้ามส่งมอบหากตรวจสอบตัวตนไม่ได้</li><li>Do not release luggage if identity cannot be verified.</li><li>หากสงสัยต้องแจ้งหัวหน้าสาขา</li><li>Report to branch manager if suspicious.</li><li>ถ่ายสำเนาและจัดเก็บเอกสารไว้อย่างน้อย 3 เดือน</li><li>Keep copies of documents for at least 3 months.</li></ul>
+<p>หมายเหตุ / Remarks บริษัทขอสงวนสิทธิ์ในการปฏิเสธการส่งมอบกระเป๋าหากเอกสารไม่ครบถ้วน หรือไม่สามารถยืนยันตัวตนได้ The company reserves the right to deny luggage release if documents are incomplete or identity cannot be verified. กรณีเอกสารไม่ครบ / Missing Document Scenario</p>
+<p><strong>1. ตรวจสอบเอกสารตัวจริง / Verify Original Documents</strong></p>
+<ul><li>ขอให้ผู้รับแสดงเอกสารตัวจริง เช่น บัตรประชาชน หรือหนังสือเดินทาง</li><li>Request to present original documents (e.g., National ID, Passport)</li><li>ถ่ายรูปเอกสารตัวจริงต่อหน้าเจ้าของ</li><li>Take a photo of the original document in the presence of the person</li><li>ขออนุญาตจัดเก็บรูปถ่ายไว้ในระบบหรือแบบฟอร์มควบคุม</li><li>Store the photo in the system or record form with consent</li></ul>
+<p><strong>2. โทรยืนยันกับเจ้าของกระเป๋า / Call the Luggage Owner for Verification</strong></p>
+<ul><li>โทรติดต่อเจ้าของกระเป๋าตามเบอร์ในระบบ เพื่อยืนยันตัวตนของผู้รับแทน</li><li>Call the owner using contact info in the system to confirm the identity of the</li></ul>
+<p>authorized person</p>
+<ul><li>ให้เจ้าของยืนยันข้อมูล เช่น ชื่อ เลขบัตร หรือความสัมพันธ์</li><li>Have the owner confirm the name, ID number, or relationship</li><li>ควรมีพยาน (เจ้าหน้าที่) รับฟังการยืนยัน</li><li>A staff member should witness the confirmation call</li></ul>
+<p><strong>3. บันทึกแบบฟอร์มยินยอม / Fill Consent Form for Exceptional Case</strong></p>
+<ul><li>ให้ผู้รับเซ็นแบบฟอร์ม ''ยินยอมรับกระเป๋าโดยไม่มีสำเนาเอกสาร''</li><li>Let the receiver sign a consent form for collecting luggage without document copies</li><li>แบบฟอร์มต้องระบุข้อมูลผู้รับ เหตุผล ลายเซ็น วันเวลา ภาพถ่ายเอกสาร</li><li>Form must include personal info, reason, signature, timestamp, and document photo</li></ul>
+<p><strong>4. แจ้งหัวหน้าสาขา / Notify Branch Manager</strong></p>
+<ul><li>ต้องได้รับอนุมัติจากหัวหน้าสาขาหรือ Supervisor ก่อนส่งมอบ</li><li>Approval from the branch manager or supervisor is required before releasing luggage</li></ul>
+<p>❌ ห้ามดำเนินการ หาก / DO NOT proceed if:</p>
+<ul><li>ไม่สามารถยืนยันตัวตนจากเจ้าของกระเป๋า /Cannot verify with the owner</li><li>ไม่มีเอกสารตัวจริงใด ๆ / No original documents presented</li><li>มีพฤติกรรมหรือลักษณะน่าสงสัย / Suspicious behavior or inconsistency in information</li></ul>
+<figure><img src="/sop/authorized-person-pickup/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ใบมอบฉันทะ.pdf</p>
+<figure><img src="/sop/authorized-person-pickup/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>หนังสือมอบฉันทะ - Letter of Authorization.pdf</p>
+<figure><img src="/sop/authorized-person-pickup/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = 'authorized-person-pickup';
 
--- ===== IMAGES: open-close-counter (8 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 003<br><strong>เวอร์ชัน:</strong> 2.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/open-close-counter/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/open-close-counter/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/open-close-counter/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/open-close-counter/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/open-close-counter/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>
-<figure><img src="/sop/open-close-counter/p6.jpg" alt="หน้า 6" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure>
-<figure><img src="/sop/open-close-counter/p7.jpg" alt="หน้า 7" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 7</figcaption></figure>
-<figure><img src="/sop/open-close-counter/p8.jpg" alt="หน้า 8" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 8</figcaption></figure>
+-- ===== ILLUSTRATED: open-close-counter (8 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 003<br><strong>เวอร์ชัน:</strong> 2.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>วันที่มีการแก้ไข และปรับปรุง / Updated Date : 23 มกราคม 2569</p>
+<h3>📌 วัตถุประสงค์ (Purpose)</h3>
+<p>เพื่อกำหนดแนวทางปฏิบัติงานที่เป็นมาตรฐานในการ เปิดและปิดเคาน์เตอร์บริการ ทั้งในสาขาห้างสรรพสินค้าและ สนามบิน โดยมีจุดประสงค์เพื่อให้:</p>
+<ul><li>พนักงานสามารถปฏิบัติงานได้อย่างถูกต้อง เป็นขั้นตอน และปลอดภัย</li><li>สร้างความพร้อมในการให้บริการลูกค้าอย่างมีประสิทธิภาพ</li><li>ป้องกันการสูญหายหรือความเสียหายของทรัพย์สินและอุปกรณ์</li><li>สนับสนุนการตรวจสอบคุณภาพงานและความถูกต้องของข้อมูลรายวัน เช่น Check-in, Check-out และยอด</li></ul>
+<p>ขาย</p>
+<h3>📌 ขอบเขต (Scope)</h3>
+<p>แนวปฏิบัตินี้ครอบคลุมการดำเนินงานเฉพาะช่วง ก่อนเริ่มงาน (เปิดเคาน์เตอร์) และ หลังสิ้นสุดการให้บริการ (ปิด เคาน์เตอร์) ของพนักงาน ณ จุดให้บริการ สาขาในห้างสรรพสินค้า / ศูนย์การค้า และ สาขาในสนามบิน ภายใต้ แบรนด์ AIRPORTELs โดยรวมถึง:</p>
+<ul><li>การเข้างานและออกงานผ่านแอปพลิเคชัน EMPEO</li><li>การตรวจสอบและจัดเตรียมอุปกรณ์ประจำจุดบริการ</li><li>การทำความสะอาดและจัดระเบียบพื้นที่ให้บริการ</li><li>การจัดทำและส่งรายงานยอดขายประจำวัน</li><li>การฝากเงินและการจัดการกระเป๋าหรือทรัพย์สินของลูกค้า</li><li>การจัดการกรณีสัมภาระตกค้าง / รอลูกค้าเข้ามารับ หลังเวลาการให้บริการ</li></ul>
+<p>🏬 สำหรับเคาน์เตอร์ในห้างสรรพสินค้า / ศูนย์การค้า (Shopping Mall )</p>
+<h3>🟢 ขั้นตอนการเปิดเคาน์เตอร์</h3>
+<p><strong>1. สแกนหน้าเข้างาน ผ่านแอปพลิเคชัน EMPEO</strong></p>
+<p><strong>2. ตรวจสอบความเรียบร้อยของเคาน์เตอร์</strong></p>
+<ul><li>ปลดล็อคประตู และเปิดผ้าคลุมเคาน์เตอร์</li><li>ตรวจดูวัตถุต้องสงสัยหรือความผิดปกติภายใน และบริเวณรอบเคาน์เตอร์</li></ul>
+<p><strong>3. ทำความสะอาดเคาน์เตอร์</strong></p>
+<ul><li>เช็ดทำความสะอาดเคาน์เตอร์บริการ (จอมอนิเตอร์ / Tablet และพื้นที่โดยรอบไม่ให้มีฝุ่น ขยะ หรือคราบ</li></ul>
+<p>สกปรก)</p>
+<ul><li>กวาด และถูพื้นโดยอุปกรณ์ทำความสะอาดที่จัดเตรียมให้</li></ul>
+<p><strong>4. เปิดอุปกรณ์ให้พร้อมใช้งาน</strong></p>
+<ul><li>คอมพิวเตอร์</li><li>เครื่องพิมพ์</li><li>เครื่อง EDC</li><li>ป้ายไฟ</li><li>จอ LED</li><li>Tablet</li><li>ระบบปรับอากาศ (แอร์)</li><li>ระบบ CCTV : ตรวจสอบว่ากล้องถูกเปิด หรือไม่ดับระหว่างวัน</li></ul>
+<p><strong>5. จัดวาง Tent Card และอุปกรณ์ประชาสัมพันธ์ให้ถูกต้อง ครบถ้วนตามที่กำหนด</strong></p>
+<p><strong>6. ตรวจเช็คสัมภาระ และกระเป๋าลูกค้าคงค้างให้ถูกต้องครบถ้วน</strong></p>
+<ul><li>จัดระเบียบตามลำดับการส่งคืนเพื่อให้สะดวกในการให้บริการระหว่างวัน</li></ul>
+<p><strong>7. ถ่ายรูปเคาน์เตอร์ สำหรับ Check-in ผ่าน Lark OPEN Counter Checklist</strong></p>
+<p><strong>8. เช็คสต๊อคสินค้าและของใช้ทุกวันอาทิตย์ UPDATE STOCK</strong></p>
+<p><strong>9. ตรวจสอบ Stock KKDAY (สำหรับสาขา T21- Asok / CTW - Hugthai)</strong></p>
+<ul><li>Update Report ใน Google Sheet สำหรับแต่ละสาขา</li></ul>
+<figure><img src="/sop/open-close-counter/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>10. เตรียมความพร้อมให้บริการลูกค้า</strong></p>
+<ul><li>ตรวจสอบการแต่งกาย และการแต่งหน้า แขวนบัตรพนักงานให้เรียบร้อย พร้อมให้บริการ</li></ul>
+<p>หมายเหตุ : เพื่อให้พนักงานพร้อมให้บริการตามเวลาเปิดบริการ ควรมาถึงพื้นที่เพื่อเช็คอินก่อนเวลาทำการ 15 นาที</p>
+<h3>🔴 ขั้นตอนการปิดเคาน์เตอร์</h3>
+<p><strong>1. ตรวจสอบสัมภาระตกค้าง</strong></p>
+<p>กรณีมีสัมภาระตกค้าง สำหรับสาขาที่ปิดบริการทุกวัน (สาขาห้าง ฯ และ สนามบินภูเก็ตทั้ง 2 สาขา , สาขาสนามบิน เชียงใหม่) ให้ดำเนินการดังนี้ อย่างเคร่งครัด</p>
+<ul><li>หากมีกระเป๋าที่ลูกค้ายังไม่มารับ ให้แจ้ง CS เพื่อติดต่อลูกค้า</li><li>ให้แจ้งในกลุ่ม Lark สาขา กรณีประสานงาน CS และ ติดต่อลูกค้าแล้ว แต่ยังไม่มารับ (กรณีไม่มีการตอบกลับ</li></ul>
+<p>ข้อความภายใน 15 นาที ให้โทรศัพท์หา OP Team Lead เพื่อประสานงานส่วนที่เกี่ยวข้อง)</p>
+<ul><li>ห้ามพนักงานออกจากพื้นที่ก่อนได้รับการยืนยันจาก OP Team Lead เพื่อป้องกันความเสียหาย กรณีลูกค้า</li></ul>
+<p>มีไฟล์ทบิน และจำเป็นต้องรับกระเป๋าภายในคืนนั้น</p>
+<p><strong>2. นับเงินและส่ง Sales Report ผ่าน Lark Daily Sales Report</strong></p>
+<figure><img src="/sop/open-close-counter/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>3. ปิดอุปกรณ์ต่าง ๆ</strong></p>
+<ul><li>คอมพิวเตอร์</li><li>เครื่องพิมพ์</li><li>เครื่อง EDC</li><li>ป้ายไฟ</li><li>จอ LED</li><li>Tablet</li><li>ระบบปรับอากาศ (แอร์)</li></ul>
+<p><strong>4. ทำความสะอาดเคาน์เตอร์</strong></p>
+<ul><li>เช็ดทำความสะอาดเคาน์เตอร์บริการ (จอมอนิเตอร์ / Tablet และพื้นที่โดยรอบไม่ให้มีฝุ่น ขยะ หรือคราบ</li></ul>
+<p>สกปรก)</p>
+<ul><li>กวาด และถูพื้นโดยอุปกรณ์ทำความสะอาดที่จัดเตรียมให้</li><li>ทิ้งขยะ</li></ul>
+<p><strong>5. เก็บ Tent Card และอุปกรณ์ประชาสัมพันธ์</strong></p>
+<ul><li>ตรวจสอบหากมีชำรุดเสียหาย ให้แจ้งหัวหน้าสาขา เพื่อประสานงานนำชิ้นใหม่ไปเปลี่ยน</li></ul>
+<p><strong>6. ตรวจสอบอุปกรณ์ต่างๆหากมีชำรุดเสียหายให้แจ้งซ่อม</strong></p>
+<ul><li>ช่องทางการแจ้งซ่อม AIMS Help Center</li></ul>
+<p><strong>7. ถ่ายรูปเคาน์เตอร์ สำหรับ Check-out ผ่าน Lark CLOSE Counter Checklist</strong></p>
+<p><strong>8. ตรวจสอบและล็อคเคาน์เตอร์</strong></p>
+<ul><li>คลุมผ้าคลุม และล็อคตู้ ประตูให้เรียบร้อย</li></ul>
+<p><strong>9. สแกนหน้าออกงาน ผ่านแอปพลิเคชั่น EMPEO</strong></p>
+<p><strong>10. ฝากเงินสดเข้าบัญชีบริษัท และแนบหลักฐานการโอนใน Lark</strong></p>
+<figure><img src="/sop/open-close-counter/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>✈️ สำหรับเคาน์เตอร์ในสนามบิน (AIRPORT)</p>
+<h3>🟢 ขั้นตอนการเปิดเคาน์เตอร์</h3>
+<p><strong>1. สแกนหน้าเข้างาน ผ่านแอปพลิเคชั่น EMPEO</strong></p>
+<p><strong>2. ตรวจสอบความเรียบร้อยของเคาน์เตอร์</strong></p>
+<ul><li>ตรวจดูวัตถุต้องสงสัยหรือความผิดปกติภายใน และบริเวณรอบเคาน์เตอร์</li></ul>
+<p><strong>3. ทำความสะอาดเคาน์เตอร์บริการตามรอบที่กำหนด (เช้า , เย็น และระหว่างวัน)</strong></p>
+<ul><li>เช็ดทำความสะอาดเคาน์เตอร์บริการ (จอมอนิเตอร์ / Tablet และพื้นที่โดยรอบไม่ให้มีฝุ่น ขยะ หรือคราบ</li></ul>
+<p>สกปรก)</p>
+<ul><li>กวาด และถูพื้นโดยอุปกรณ์ทำความสะอาดที่จัดเตรียมให้</li></ul>
+<p><strong>4. ถ่ายรูปเคาน์เตอร์ สำหรับ Check- in ผ่าน Lark OPEN Counter Checklist</strong></p>
+<p><strong>5. ตรวจสอบ Stock KKDAY ทั้ง 3 กะ ที่เข้างาน (สำหรับสนามบินสุวรรณภูมิ และดอนเมือง) และส่งรายงานตาม</strong></p>
+<p>ช่องทางดังนี้</p>
+<ul><li>Lark กลุ่ม</li></ul>
+<figure><img src="/sop/open-close-counter/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/open-close-counter/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/open-close-counter/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>6. เตรียมพร้อมให้บริการลูกค้า</strong></p>
+<ul><li>ตรวจสอบการแต่งกาย และการแต่งหน้า แขวนบัตรพนักงาให้เรียบร้อย พร้อมให้บริการ</li></ul>
+<p>หมายเหตุ : เพื่อให้พนักงานพร้อมให้บริการตามเวลาเปิดบริการ ควรมาถึงพื้นที่เพื่อเช็คอิน และรับมอบงาน เพื่อส่งต่อ รอบ ก่อนเวลาทำการ 15 นาที</p>
+<h3>🔴 ขั้นตอนการปิดเคาน์เตอร์</h3>
+<p><strong>1. ตรวจสอบสัมภาระตกค้าง</strong></p>
+<ul><li>กรณีมีสัมภาระตกค้าง สำหรับสาขาที่ปิดบริการทุกวัน (สาขาห้าง ฯ และ สนามบินภูเก็ตทั้ง 2 สาขา , สาขา</li></ul>
+<p>สนามบินเชียงใหม่) ให้ดำเนินการดังนี้ อย่างเคร่งครัด</p>
+<ul><li>มีกระเป๋าที่ลูกค้ายังไม่มารับ ให้แจ้ง CS เพื่อติดต่อลูกค้า (กรณีนอกเวลางาน CS ให้แจ้งในกลุ่ม Lark สาขา</li></ul>
+<p>เพื่อประสานงาน)</p>
+<ul><li>ให้แจ้งในกลุ่ม Lark สาขา กรณีประสานงาน CS และ ติดต่อลูกค้าแล้ว แต่ยังไม่มารับ (กรณีไม่มีการตอบกลับ</li></ul>
+<p>ข้อความภายใน 15 นาที ให้โทรศัพท์หา OP Team Lead เพื่อประสานงานส่วนที่เกี่ยวข้อง)</p>
+<ul><li>ห้ามพนักงานออกจากพื้นที่ก่อนได้รับการยืนยันจาก OP Team Lead เพื่อป้องกันความเสียหาย กรณีลูกค้า</li></ul>
+<p>มีไฟล์ทบิน และจำเป็นต้องรับกระเป๋าภายในคืนนั้น</p>
+<ul><li>สำหรับสาขาที่เปิดบริการ 24 ชม. หากมีการเปลี่ยนกะพนักงาน ให้ส่งต่อข้อมูลงาน และข้อมูลลูกค้ากันให้</li></ul>
+<p>เรียบร้อย กรณีเกิดปัญหา จะได้ตรวจสอบ และแก้ไขปัญหาได้ทันท่วงที</p>
+<p><strong>2. นับเงินและส่ง Sales Report ผ่าน Lark Daily Sales Report</strong></p>
+<figure><img src="/sop/open-close-counter/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>3. ทำความสะอาดเคาน์เตอร์</strong></p>
+<ul><li>เช็ดทำความสะอาดเคาน์เตอร์บริการ (จอมอนิเตอร์ / Tablet และพื้นที่โดยรอบไม่ให้มีฝุ่น ขยะ หรือคราบ</li></ul>
+<p>สกปรก)</p>
+<ul><li>กวาด และถูพื้นโดยอุปกรณ์ทำความสะอาดที่จัดเตรียมให้</li><li>ทิ้งขยะ</li></ul>
+<p><strong>4. ตรวจสอบอุปกรณ์ต่างๆหากมีชำรุดเสียหายให้แจ้งซ่อม</strong></p>
+<ul><li>ช่องทางการแจ้งซ่อม AIMS Help Center</li></ul>
+<p><strong>5. ถ่ายรูปเคาน์เตอร์ สำหรับ Check-out ผ่าน Lark CLOSE Counter Checklist</strong></p>
+<p><strong>6. สแกนหน้าออกงาน ผ่านแอปพลิเคชั่น EMPEO</strong></p>
+<p><strong>7. ฝากเงินสดเข้าบัญชีบริษัท และแนบหลักฐานการโอนใน Lark Daily Sales Report</strong></p>
+<figure><img src="/sop/open-close-counter/fig8.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="https://ssglsj0spi27.sg.larksuite.com/share/base/form/shrlgdvb7YjwI4wYLyl1EglMMtb" target="_blank" rel="noopener">7. ถ่ายรูปเคาน์เตอร์ สำหรับ Check-in ผ่าน Lark OPEN Counter Checklist</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/share/base/form/shrlgoiPdpbc2c8p7CnKE5JFiqo" target="_blank" rel="noopener">8. เช็คสต๊อคสินค้าและของใช้ทุกวันอาทิตย์  UPDATE STOCK</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/share/base/form/shrlg66DrQmhPvml9oPAUtJEijf" target="_blank" rel="noopener">2. นับเงินและส่ง Sales Report ผ่าน Lark Daily Sales Report</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/docx/RqegdFpV7o6g6mxNaHdlhJY9gbd" target="_blank" rel="noopener">ช่องทางการแจ้งซ่อม</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/share/base/form/shrlgQRdC8dnKvx5BDfsaFe3nIf" target="_blank" rel="noopener">7. ถ่ายรูปเคาน์เตอร์ สำหรับ Check-out ผ่าน Lark   CLOSE Counter Checklist</a></li></ul>' where slug = 'open-close-counter';
 
--- ===== IMAGES: yoowifi-service (10 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 013/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 4 สิงหาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/yoowifi-service/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/yoowifi-service/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/yoowifi-service/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/yoowifi-service/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/yoowifi-service/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>
-<figure><img src="/sop/yoowifi-service/p6.jpg" alt="หน้า 6" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure>
-<figure><img src="/sop/yoowifi-service/p7.jpg" alt="หน้า 7" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 7</figcaption></figure>
-<figure><img src="/sop/yoowifi-service/p8.jpg" alt="หน้า 8" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 8</figcaption></figure>
-<figure><img src="/sop/yoowifi-service/p9.jpg" alt="หน้า 9" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 9</figcaption></figure>
-<figure><img src="/sop/yoowifi-service/p10.jpg" alt="หน้า 10" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 10</figcaption></figure>
+-- ===== ILLUSTRATED: yoowifi-service (7 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 013/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 4 สิงหาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ / Purpose</h3>
+<p>เพื่อให้พนักงานหน้าสาขา AIRPORTELs ให้บริการลูกค้า YOOWIFI ได้อย่างมีมาตรฐาน ถูกต้อง และป้องกันความ ผิดพลาดในการส่งมอบอุปกรณ์</p>
+<h3>📌 ขอบเขตการใช้งาน / Scope</h3>
+<p>ใช้สำหรับพนักงาน Guest Service ประจำสาขาของ AIRPORTELs ที่ให้บริการรับ–ส่งอุปกรณ์ YOOWIFI แก่ ลูกค้า ณ จุดให้บริการสนามบินหรือจุดให้บริการอื่นที่ได้รับมอบหมาย</p>
+<ul><li>กรณีที่ลูกค้า: ทำการจองอุปกรณ์ YOOWIFI ล่วงหน้า และมารับอุปกรณ์ที่จุดให้บริการ /ส่งคืนอุปกรณ์หลังใช้</li></ul>
+<p>งานเสร็จสิ้น</p>
+<ul><li>ขั้นการให้บริการครอบคลุม ตั้งแต่ขั้นตอนการแจ้งข้อมูลลูกค้า จนถึงการรับ - ส่งคืนอุปกรณ์</li></ul>
+<h3>🔁 ขั้นตอนการปฏิบัติ / Procedure</h3>
+<p><strong>1. รับแจ้งข้อมูลลูกค้า</strong></p>
+<ul><li>ผู้แจ้ง: ทีม YOOWIFI / คุณเมจิ</li><li>ช่องทาง: LINE กลุ่ม</li><li>รายละเอียดการแจ้ง ดังนี้</li><li>ชื่อ-นามสกุลลูกค้า (Name)</li><li>Passport no.</li><li>Booking no.</li><li>จำนวนเครื่อง (Quantity)</li><li>จุดรับ - คืนเครื่อง (Pick-up point)</li><li>วันที่-เวลารับเครื่อง (Pick-up &amp; Return Date)</li><li>IMEA no. &amp; password: ·  ·  ·  ·  ·  ·</li><li>รายละเอียดอื่นๆ (ถ้ามี)</li><li>แนบลิ้งค์ Google Sheet สำหรับตรวจสอบข้อมูล (รวมกับใน LINE Group) : เพื่อป้องกันข้อมูลตกหล่น หรือ</li></ul>
+<p>แจ้งลำดับการอัพเดตข้อมูล https://docs.google.com/spreadsheets/d/1OFprB9ESYGEukB2dd_TaCu5E8uDCT0q8P4cxcFAv PWY/edit?gid=0#gid=0</p>
+<figure><img src="/sop/yoowifi-service/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/yoowifi-service/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ตัวอย่าง : การแจ้งข้อมูลใน Line Group</p>
+<p><strong>2. พนักงาน Guest Service ตรวจสอบข้อมูลใน Google Sheet</strong></p>
+<ul><li>เข้าลิงก์เอกสาร Google Sheet ที่แจ้งในไลน์</li><li>ตรวจสอบข้อมูลลูกค้า ได้แก่:</li><li>ชื่อ-นามสกุลลูกค้า (Name)</li><li>Passport no.</li><li>Booking no.</li><li>จำนวนเครื่อง (Quantity)</li><li>IMEI no. ให้ตรงกับเครื่องที่จะเตรียม</li></ul>
+<p><strong>3. เตรียมอุปกรณ์ให้พร้อมสำหรับให้บริการ</strong></p>
+<ul><li>ชาร์จแบตเตอรี่อุปกรณ์ให้เต็ม</li><li>ตรวจสอบความเรียบร้อย และความครบถ้วนของอุปกรณ์:</li><li>ตัวเครื่อง WiFi</li><li>สายชาร์จ</li><li>ซองใส่</li><li>เขียน หรือพิมพ์ข้อมูลติดหน้าเครื่อง ให้มีรายละเอียด ดังนี้</li><li>ชื่อ-นามสกุลลูกค้า (Name)</li><li>Booking no.</li><li>Passport no.</li><li>พาสเวิร์ด WiFi (ถ้ามี)</li></ul>
+<figure><img src="/sop/yoowifi-service/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ตัวอย่าง: การจัดเตรียมอุปกรณ์ และปริีนท์ ข้อมูลลูกค้า</p>
+<p><strong>4. ส่งมอบอุปกรณ์ให้ลูกค้า</strong></p>
+<ul><li>ขั้นตอนการยืนยันตัวตน:</li><li>a. ขอให้ลูกค้าแสดง Booking No. หรือหน้าจอการจอง (Reservation Confirmation)</li></ul>
+<figure><img src="/sop/yoowifi-service/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ตัวอย่าง: ข้อมูลการจองจากลูกค้า แสดงแก่เจ้าหน้าที่ Guest Service เมื่อมารับเครื่อง</p>
+<ul><li>b. ถ้าลูกค้าไม่มี Booking No. ให้สอบถามชื่อ-นามสกุลเพื่อค้นหาข้อมูลใน Google sheet</li></ul>
+<p>https://docs.google.com/spreadsheets/d/1OFprB9ESYGEukB2dd_TaCu5E8uDCT0q8P4cxc FAvPWY/edit?gid=0#gid=0</p>
+<ul><li>c. ตรวจสอบพาสปอร์ตลูกค้า</li><li>d. ข้อมูลลูกค้าที่มารับเครื่องฯต้องตรงกับชื่อที่แสดงใน LINE Group/Booking no. /Google sheet ที่ทาง</li></ul>
+<p>คุณเมจิ แจ้ง</p>
+<ul><li>e. เมื่อยืนยันข้อมูลถูกต้อง ตรงกันแล้ว ให้ถ่ายรูปเพื่อแจ้งใน LINE Group :</li><li>ตัวเครื่อง WiFi ที่จะส่งมอบ (ให้เห็น IMEI no. ชัดเจน)</li><li>หน้าพาสปอร์ตของลูกค้า (เฉพาะหน้าแสดงชื่อ-รูปถ่าย)</li><li>ส่งภาพทั้งหมดเข้าใน LINE Group เพื่อยืนยันการส่งมอบ</li></ul>
+<figure><img src="/sop/yoowifi-service/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ตัวอย่าง: การถ่ายรูป และแจ้งข้อมูลใน LINE Group</p>
+<ul><li>f. กรณีลูกค้าไม่ได้มารับด้วยตนเอง หรือให้ผู้อื่นมารับแทน จะมีการแจ้งข้อมูลล่วงหน้าจากคุณเมจิ ใน LINE</li></ul>
+<p>Group ดังนี้</p>
+<figure><img src="/sop/yoowifi-service/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ตัวอย่าง: การแจ้งข้อมูลกรณีให็ผู้อื่นมารับแทนใน LINE Group</p>
+<ul><li>g. กรณีลูกค้าให้ผู้อื่นมารับแทน และไม่มีการแจ้งล่วงหน้าจากคุณเมจิ : ให้สอบถามเข้าไปใน LINE Group เพื่อ</li></ul>
+<p>ตรวจสอบก่อน ทำการจัดเตรียมอุปกรณ์ และส่งมอบ โดยแจ้งลูกค้าดังนี้</p>
+<ul><li>แจ้งให้ลูกค้ารอสักครู่ เพื่อตรวจสอบข้อมูล</li><li>แจ้งระยะเวลาจัดเตรียมอุปกรณ์ (กรณีมีอุปกรณ์อยู่ที่สาขา และข้อมูลตกหล่นจากทางคุณเมจิ)</li><li>ส่งมอบอุปกรณ์ตามขั้นตอนการส่งมอบ และแจ้งข้อมูลลูกค้า พร้อมรูปภาพใน LINE Group</li></ul>
+<p><strong>5. การรับคืนอุปกรณ์ (หากลูกค้ามาคืนที่สาขา)</strong></p>
+<ul><li>ตรวจสอบสภาพเครื่องภายนอก และความครบถ้วนของอุปกรณ์</li><li>ถ่ายภาพตัวเครื่อง WiFi ที่จะรับคืน(ให้เห็น IMEI no. ชัดเจน)</li><li>หน้าพาสปอร์ตของลูกค้า (เฉพาะหน้าแสดงชื่อ-รูปถ่าย)</li><li>ส่งภาพทั้งหมดเข้าใน LINE Group เพื่อยืนยันการรับคืน เพื่อแจ้งการคืนทันที</li></ul>
+<figure><img src="/sop/yoowifi-service/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ตัวอย่าง: การถ่ายรูป และแจ้งข้อมูลใน LINE Group ✅ Checklist สำหรับพนักงาน (ส่งมอบเครื่อง)</p>
+<ul><li>ตรวจสอบข้อมูลใน LINE Group และ Google Sheet</li><li>เตรียมเครื่องครบ / แบตเต็ม</li><li>ลูกค้าแสดง Booking No. หรือหน้าการจอง</li><li>ตรวจสอบพาสปอร์ตให้ข้อมูลถูกต้อง ตรงกับที่คุณเมจิ แจ้ง</li><li>ถ่ายภาพเครื่อง + พาสปอร์ต</li><li>ส่งภาพยืนยันใน LINE กลุ่ม</li></ul>
+<p>⚠️ ข้อควรระวัง</p>
+<ul><li>ห้าม ส่งมอบอุปกรณ์หากไม่สามารถยืนยันตัวตนลูกค้าได้ (ข้อมูลในพาสปอร์ตไม่ตรงกับที่แจ้ง)</li><li>ห้ามลืม ถ่ายภาพทุกครั้งที่มีการมอบหรือรับคืนอุปกรณ์</li><li>ตรวจสอบพาสเวิร์ด (ถ้ามี)และอุปกรณ์ทุกชิ้นก่อนมอบให้ลูกค้า</li></ul>
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="https://docs.google.com/spreadsheets/d/1OFprB9ESYGEukB2dd_TaCu5E8uDCT0q8P4cxcFAvPWY/edit?gid=0#gid=0" target="_blank" rel="noopener">https://docs.google.com/spreadsheets/d/1OFprB9ESYGEukB2dd_TaCu5E8uDCT0q8P4cxcFAv</a></li></ul>' where slug = 'yoowifi-service';
 
--- ===== IMAGES: edc-machine (11 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0017/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 3 ตุลาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/edc-machine/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/edc-machine/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/edc-machine/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/edc-machine/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/edc-machine/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>
-<figure><img src="/sop/edc-machine/p6.jpg" alt="หน้า 6" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure>
-<figure><img src="/sop/edc-machine/p7.jpg" alt="หน้า 7" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 7</figcaption></figure>
-<figure><img src="/sop/edc-machine/p8.jpg" alt="หน้า 8" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 8</figcaption></figure>
-<figure><img src="/sop/edc-machine/p9.jpg" alt="หน้า 9" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 9</figcaption></figure>
-<figure><img src="/sop/edc-machine/p10.jpg" alt="หน้า 10" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 10</figcaption></figure>
-<figure><img src="/sop/edc-machine/p11.jpg" alt="หน้า 11" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 11</figcaption></figure>' where slug = 'edc-machine';
+-- ===== ILLUSTRATED: edc-machine (18 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0017/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 3 ตุลาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อกำหนดขั้นตอนการใช้งานเครื่อง EDC สำหรับการรับชำระเงินด้วยบัตรเครดิต, Thai QR Payment, Alipay, WeChat และการพิมพ์รายงานสรุปยอดประจำวัน ให้เป็นมาตรฐานเดียวกันในทุกสาขา ลดความผิดพลาดและเพิ่ม ประสิทธิภาพในการให้บริการลูกค้า</p>
+<h3>ขอบเขต (Scope)</h3>
+<p>คู่มือการปฏิบัติงานนี้ครอบคลุมถึง</p>
+<ul><li>พนักงานสาขาที่มีหน้าที่รับชำระเงิน</li><li>การรับชำระเงินผ่านเครื่อง EDC ทุกประเภท (Credit Card / QR / e-Wallet / e-payment)</li><li>การจัดการสลิป การยกเลิกรายการ และการสรุปยอดประจำวัน</li></ul>
+<h3>ขั้นตอนการปฏิบัติ (Procedure)</h3>
+<p><strong>1. การเตรียมเครื่อง EDC</strong></p>
+<ul><li>ตรวจสอบว่าเครื่อง EDC ชาร์จไฟเพียงพอ หรือเชื่อมต่อกับแหล่งจ่ายไฟ</li><li>ตรวจสอบสัญญาณ GPRS/Wi-Fi ให้พร้อมใช้งาน</li></ul>
+<p>💳 NOTE: กรณีเครือง EDCไม่จับสัญญาณGPRS,เครืองEDCทํารายการไม่ได้ , เครืองค้าง , หน้าจอค้าง , ให้ทําการ Restart เครือง EDC</p>
+<p><strong>2. การใส่ม้วนสลิป</strong></p>
+<ul><li>เปิดฝาช่องใส่ม้วนกระดาษ</li><li>ใส่ม้วนสลิปโดยให้ด้านกระดาษออกทางด้านบน</li><li>ปิดฝาเครื่อง และดึงกระดาษออกมาเล็กน้อยเพื่อทดสอบ</li></ul>
+<figure><img src="/sop/edc-machine/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ดึงฝาครอบม้วนสลิปขึ้น เพื่อนำแกน กระดาษสลิปของเดิมออก</p>
+<figure><img src="/sop/edc-machine/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ใส่ม้วนกระดาษสลิปใหม่ลงไป พร้อมดึงปลายกระดาษ ออกมาเล็กน้อย แล้วจึงปิดฝาครอบให้สนิทตามเดิม</p>
+<p><strong>3. การรับชำระเงินด้วย QR Payment / Alipay / WeChat</strong></p>
+<ul><li>กดปุ่มเลือกโหมด QR Payment</li><li>ใส่จำนวนเงินที่ต้องการรับ</li><li>ให้ลูกค้าสแกน QR จากหน้าจอเครื่อง</li><li>รอการยืนยัน → หากสำเร็จ เครื่องจะพิมพ์สลิปอัตโนมัติ</li></ul>
+<p>💳NOTE: หากยอดเงินไม่เข้าหรือลูกค้ายังไม่ทํายืนยันการโอนสลิปจะไม่ออกจากตัวเครืองหากต้องการ สแกนจ่ายใหม่ให้กดยกเลิกและกดชําระด้วย QR ใหม</p>
+<figure><img src="/sop/edc-machine/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>1. กด OK ที่เครื่อง EDC</strong></p>
+<figure><img src="/sop/edc-machine/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>2. หน้าจอแสดงให้เลือกประเภทที่ ต้องการ</p>
+<figure><img src="/sop/edc-machine/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>3. กดจำนวนเงินที่ต้องการชำระ</strong></p>
+<figure><img src="/sop/edc-machine/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>4. เครื่อง EDC จะขึ้น QR</strong></p>
+<p>ให้ลูกค้าสแกน</p>
+<figure><img src="/sop/edc-machine/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>5. เมื่อลูกค้าโอนยอดสำเร็จ แล้ว กดยืนยันจะมีใบเสร็จออกมา จากตัวเครื่อง</p>
+<figure><img src="/sop/edc-machine/fig8.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>6. ฉีกสลิปให้ลูกค้า</strong></p>
+<figure><img src="/sop/edc-machine/fig9.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>7. พนักงานเก็บสลิปไว้เป็นหลักฐาน</strong></p>
+<figure><img src="/sop/edc-machine/fig10.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>8. ตัวอย่างหน้าจอสลิปการโอนจากลูกค้า</strong></p>
+<p><strong>4. การรับชำระเงินด้วยบัตรเครดิต</strong></p>
+<ul><li>ใส่จำนวนเงินที่ต้องการรับ</li><li>เสียบ/รูด/แตะบัตรเครดิต ตามที่ระบบรองรับ</li><li>หากต้องใส่รหัส PIN → ให้ลูกค้ากรอกด้วยตนเอง</li><li>เครื่องพิมพ์สลิปออกมา → ตรวจสอบความถูกต้อง</li><li>คืนบัตรและมอบสลิปให้ลูกค้า</li></ul>
+<p><strong>1. หน้าจอเครื่องปกติ</strong></p>
+<p>2. ใส่จำนวนที่ลูกค้าต้องการชำระ ในรูปแบบทศนิยม 2 หลักแล้ว กด OK</p>
+<p><strong>3. สอด รูด หรือแตะบัตร</strong></p>
+<p><strong>4. ตรวจสอบหมายเลขบัตร</strong></p>
+<p>และยอดเงิน 5. เครื่องจะพิมพ์ Sales Slip สำหรับร้านค้า</p>
+<p><strong>6. เครื่องจะพิมพ์ Sales Slip</strong></p>
+<p>สำหรับผู้ถือบัตร ฉีกให้ผู้ถือบัตรเซ็นต์รับรอง และร้าน ค้าเก็บไว้เป็นหลักฐาน ส่งมอบให้ผู้ถือบัตรเก็บไว้เป็นหลัก ฐาน</p>
+<p><strong>5. การยกเลิกรายการ (Void Transaction)</strong></p>
+<ul><li>กดเลือกเมนู ยกเลิกรายการ (Void)</li><li>ใส่หมายเลขอ้างอิงของรายการที่ต้องการยกเลิก</li><li>ยืนยันการทำรายการ → เครื่องพิมพ์สลิปยกเลิก</li></ul>
+<p>💳NOTE : ห้ามคืนเงินสด (เงินทอน) ให้แก่ลูกค้าโดนเด็ดขาด กรณีกดยอดชำระผิด ให้ทำการยกเลิกราย (Void)ผ่านเครื่อง EDC และทำรายการใหม่ ให้ถูกต้อง พร้อมส่งสลิป ทั้งที่ VIOD และ สลิปตัวจริง (ที่ถูก ต้อง แม็กให้ลูกค้า) และพนักงานถ่ายภาพสลิปแนบใน Sales Report ท้ายตารางหลังหมายเหตุ</p>
+<p><strong>1. กด F2 เลือก VOID</strong></p>
+<p><strong>2. กรอกรหัสผ่าน 1111</strong></p>
+<p>กด OK 3. กรอกหมายเลข TRACE # กด OK</p>
+<p><strong>4. กด OK ยืนยัน</strong></p>
+<p><strong>5. กำลังทำรายการ</strong></p>
+<p><strong>6. รายการอนุมัติ</strong></p>
+<p><strong>7. พิมพ์สลิปให้ลูกค้า</strong></p>
+<p>กด OK</p>
+<p><strong>8. เครื่องพิมพ์สลิป</strong></p>
+<p><strong>6. การสรุปยอดประจำวัน (Settlement)</strong></p>
+<ul><li>กดเลือกเมนู สรุปยอด (Settlement)</li><li>รอเครื่องประมวลผล</li><li>เครื่องพิมพ์สรุปยอดออกมา</li><li>ตรวจสอบยอดรวม และเก็บสลิปสรุปไว้เป็นหลักฐาน</li><li>ฉีกสลิปที่ออกมาแต่ละรายการ เช็คยอดเงินว่าครบแล้วจึงนำมาเย็บเข้ากับสลิปรวมทั้งหมด</li></ul>
+<figure><img src="/sop/edc-machine/fig11.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/edc-machine/fig12.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>3. กรอกรหัสผ่าน 1111 กด OK</strong></p>
+<p><strong>1. กด F1 เลือก "โอนยอดเงิน"</strong></p>
+<figure><img src="/sop/edc-machine/fig13.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>2. กด 2 เลือก โอนยอดทั้งหมด</strong></p>
+<figure><img src="/sop/edc-machine/fig14.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>4. กด OK ยืนยัน</strong></p>
+<figure><img src="/sop/edc-machine/fig15.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>5. กำลังทำรายการ</strong></p>
+<figure><img src="/sop/edc-machine/fig16.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>6. ทำรายการโอนยอดสำเร็จ</strong></p>
+<p><strong>7. วิธีการ พิมพ์ซ้ำ สรุปยอด</strong></p>
+<ul><li>การพิมพ์รายงานย้อนหลัง</li><li>กดเลือกเมนู พิมพ์ซ้ำ / รายงาน</li><li>เลือกประเภทที่ต้องการ (เช่น สรุปยอดย้อนหลัง)</li><li>เครื่องจะพิมพ์เอกสารออกมา</li></ul>
+<p>1. กด F4 เลือก “REPRINT” 2. กด 3 เลือก “โอน ยอดล่าสุด”</p>
+<p><strong>3. เลือกรายการ</strong></p>
+<p>4. เครื่องพิมพ์สลิป “โอนยอดล่าสุด” การแก้ไขปัญหาพื้นฐาน (Troubleshooting)</p>
+<ul><li>เครื่องไม่มีสัญญาณ / ค้าง → Restart เครื่อง</li><li>สลิปไม่ออก → ตรวจสอบม้วนกระดาษ</li><li>QR ไม่ขึ้นยอด → กด “ยกเลิก” และทำรายการใหม่</li></ul>
+<p>วิธีการ ตรวจสอบรายการจาก e-Slip ของผู้ชำระ</p>
+<figure><img src="/sop/edc-machine/fig17.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>Response/Error Code ที่พบบ่อย และแนวทางแก้ไข</p>
+<figure><img src="/sop/edc-machine/fig18.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = 'edc-machine';
 
--- ===== IMAGES: online-credit-card-payment (5 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 007/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/online-credit-card-payment/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/online-credit-card-payment/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/online-credit-card-payment/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/online-credit-card-payment/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/online-credit-card-payment/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>
+-- ===== ILLUSTRATED: online-credit-card-payment (8 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 007/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อกำหนดขั้นตอนที่เป็นมาตรฐานในการเรียกเก็บเงินจากลูกค้าผ่านบัตรเครดิตแบบออนไลน์ โดยใช้ระบบหลังบ้าน ของ AIRPORTELs เพื่อให้การรับชำระเป็นไปอย่างถูกต้อง ตรวจสอบได้ และลดข้อผิดพลาด To standardize the steps for requesting online credit card payments via AIRPORTELs'' back- office system, ensuring accuracy and traceability.</p>
+<h3>ขอบเขต (Scope)</h3>
+<p>ใช้สำหรับพนักงานที่ปฏิบัติงานในสาขา หรือตำแหน่งที่เกี่ยวข้องกับการเรียกเก็บเงินจากลูกค้าในกรณีต้องชำระผ่าน ช่องทางออนไลน์ Applicable to branch staff or related roles responsible for collecting customer payments via online channels.</p>
+<h3>ขั้นตอนการดำเนินงาน (Procedure)</h3>
+<ul><li>สำหรับใช้รับชำระผ่านระบบ Online กรณีเครื่อง EDC หน้าสาขามีปัญหา ไม่สามารถใช้งานได้</li><li>🔗 ลิงก์เข้าสู่ระบบหลังบ้าน:</li></ul>
+<p>https://postels.airportels.asia/admin/order/browse</p>
+<figure><img src="/sop/online-credit-card-payment/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>วิธีการดำเนินการตามตัวอย่างดังนี้</p>
+<p><strong>1. ค้นหาออเดอร์ที่หลังบ้าน Airportles</strong></p>
+<p><strong>2. กด Request Payment</strong></p>
+<figure><img src="/sop/online-credit-card-payment/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>3. ใส่จำนวนเงิน และกด Generate Link</strong></p>
+<figure><img src="/sop/online-credit-card-payment/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>4. ลิงค์ช่องทางการจ่ายเงินจะขึ้น</strong></p>
+<figure><img src="/sop/online-credit-card-payment/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>5. Copy link เพื่อไปสร้าง QR Code</strong></p>
+<figure><img src="/sop/online-credit-card-payment/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/online-credit-card-payment/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>6. หลังจากนั้นให้ลูกค้าสแกนจ่ายเครดิตการ์ดแบบ Online</strong></p>
+<figure><img src="/sop/online-credit-card-payment/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>7. เสร็จเรียบร้อย หลังจากนั้นหลังบ้านจะขึ้นประวัติการชำระอัตโนมัติ</strong></p>
+<figure><img src="/sop/online-credit-card-payment/fig8.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>หมายเหตุ : หากยังไม่ขึ้นประวัติการชำระ ให้รีบติดต่อหัวหน้าทันที</p>
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="https://postels.airportels.asia/admin/order/browse" target="_blank" rel="noopener">เว็บไซต์ AIRPORTELs</a></li></ul>' where slug = 'online-credit-card-payment';
 
--- ===== IMAGES: cashless-payment-policy (5 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 002<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 16 มิถุนายน 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/cashless-payment-policy/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/cashless-payment-policy/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/cashless-payment-policy/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/cashless-payment-policy/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/cashless-payment-policy/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>' where slug = 'cashless-payment-policy';
+-- ===== ILLUSTRATED: cashless-payment-policy (6 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 002<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 16 มิถุนายน 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><ul><li>รับชำระเงินสดที่ต่ำกว่า หรือเท่ากับ 100 บาท สำหรับทุกสาขา</li><li>รับชำระเงินสดที่ยอดต่ำกว่า หรือเท่ากับ 150 บาท ขึ้นไป สำหรับสาขาสนามบินภูเก็ต (International &amp;</li></ul>
+<p>Domestic)</p>
+<h3>🔹 วัตถุประสงค์ / Purpose</h3>
+<p>To ensure clear communication and consistent service when enforcing the cashless payment policy. เพื่อให้พนักงานสามารถสื่อสารกับลูกค้าได้อย่างถูกต้องและมีมาตรฐานเดียวกันในการให้บริการช่วงเปลี่ยนผ่านไปสู่ ระบบไร้เงินสด</p>
+<h3>🔹 ขอบเขต / Scope</h3>
+<p>Applicable at all AIRPORTELs counters for all services including luggage storage and delivery. ใช้สำหรับเคาน์เตอร์บริการของ AIRPORTELs ทุกสาขา ทั้งบริการรับฝากและจัดส่งกระเป๋า</p>
+<h3>🔹 ขั้นตอนการปฏิบัติงาน /Procedures</h3>
+<figure><img src="/sop/cashless-payment-policy/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>🔹 หมายเหตุเพิ่มเติม / Additional Notes</p>
+<ul><li>Display the “We''re Going Cashless” poster clearly at the counter.</li></ul>
+<p>ติดโปสเตอร์ “We''re Going Cashless” ให้เห็นชัดเจนหน้าสาขา</p>
+<ul><li>Staff must not request cash for amounts ≥100 THB.</li></ul>
+<p>ห้ามเรียกรับเงินสดหากยอดเท่ากับหรือมากกว่า 100 บาท</p>
+<ul><li>If customer insists on paying cash, politely explain the policy.</li></ul>
+<p>หากลูกค้าต้องการจ่ายเงินสด ให้ชี้แจงด้วยความสุภาพว่าเป็นนโยบายใหม่ของบริษัท 🔹 การจัดการกรณีพิเศษ / Emergency or Exception Handling</p>
+<figure><img src="/sop/cashless-payment-policy/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>🔶 แนวทางการดำเนินการแบบเป็นขั้นตอน</p>
+<h3>(Step-by-Step Handling Process)</h3>
+<figure><img src="/sop/cashless-payment-policy/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>🗨️ Script สำหรับพนักงานบริการลูกค้า (2 ภาษา) 🎯 กรณีทั่วไปที่ลูกค้าปฏิเสธ Cashless: ไทย: “ต้องขออภัยค่ะ ตอนนี้ทางบริษัทเราดำเนินการเปลี่ยนเป็นระบบชำระเงินแบบไร้เงินสด สำหรับยอด 150 บาทขึ้น ไปค่ะ ท่านสามารถชำระผ่านบัตรเครดิต เดบิต หรือ QR พร้อมเพย์ได้เลยค่ะ ไม่มีค่าธรรมเนียมเพิ่มเติมนะคะ 😊 หาก คุณไม่สะดวกตรงไหน ทางเรายินดีช่วยแนะนำวิธีที่สะดวกที่สุดค่ะ” English: “I’m sorry, but for payments of 150 THB or more, we now accept only cashless methods. You can pay by credit card, debit card, or QR code, and there’s no extra fee. If you need help, I’d be happy to assist you with the process 😊.” 🌏 กรณีลูกค้าต่างชาติอยากใช้เงินสดที่แลกมาให้หมด: ไทย: “เข้าใจเลยค่ะว่าลูกค้าอยากใช้เงินสดที่แลกมาให้หมดนะคะ 😊 อย่างไรก็ตาม เนื่องจากนโยบายใหม่ของบริษัท สำหรับยอด 100 บาทขึ้นไป จะรับเฉพาะช่องทางไร้เงินสดค่ะ เราสามารถแนะนำวิธีที่ง่าย เช่น สแกน QR ด้วยมือถือ หรือใช้บัตรเครดิตได้เลยค่ะ หากต้องการเราช่วยแนะนำได้นะคะ” English: “I totally understand that you’d like to use up your Thai currency 😊 However, due to our new policy, we only accept cashless payment for amounts over 100 THB. We can help you pay via QR code or card. Please tell us if you need any help! .”</p>
+<p><strong>1. กำหนดมาตรการรองรับ – กรณีไม่สามารถชำระแบบ Cashless ได้</strong></p>
+<p>(เช่น ระบบล่ม / เครื่องรูดบัตรเสีย / ลูกค้าไม่มีอุปกรณ์ / ไม่มีแอปธนาคารไทย ฯลฯ) ✅ แนวทางสำรอง</p>
+<figure><img src="/sop/cashless-payment-policy/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>🟨 2. มาตรการกรณีลูกค้าปฏิเสธชำระแบบ Cashless (Cashless Policy Exception Guideline)</p>
+<figure><img src="/sop/cashless-payment-policy/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>🟨 3. นโยบาย (Policy Summary) ชื่อ: Cashless Enforcement &amp; Exception Policy ใช้บังคับ: พนักงานทุกคนที่หน้าสาขา 🔸 หลักเกณฑ์:</p>
+<ul><li>ยอดชำระ 100 บาทขึ้นไป ต้องใช้ช่องทางไร้เงินสดเท่านั้น</li><li>ไม่สามารถขอรับเงินสดได้ ยกเว้นในกรณี:</li><li>ระบบล่ม</li><li>ลูกค้าไม่มีช่องทางอื่น และได้รับอนุมัติจากหัวหน้า</li><li>กรณีลูกค้าต่างชาติที่ไม่สามารถดำเนินการผ่านระบบไทยได้จริง</li></ul>
+<p>🟨 4. แบบฟอร์มบันทึกเคสกรณียกเว้น (Exception Handling Form) ใช้บันทึกทุกครั้งที่ต้อง “อนุโลม” การรับเงินสดในระบบ Cashless ในช่อง Remark "หมายเหตุ" ใน Sales Report ตามตัวอย่าง และต้องแจ้งผู้จัดการสาขา (สำหรับสาขาที่มีผู้จัดการ) หรือ Guest Service Excutive (นิว) / Guest Service Assistant (มายด์ หรือ เน) ทุกครั้ง</p>
+<figure><img src="/sop/cashless-payment-policy/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>SOP ที่เกี่ยวข้อง : SOP: ขั้นตอนการชำระเงินด้วยบัตรเครดิตแบบออนไลน์</p>' where slug = 'cashless-payment-policy';
 
--- ===== IMAGES: inventory-stock-update (3 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 006/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/inventory-stock-update/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/inventory-stock-update/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/inventory-stock-update/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>' where slug = 'inventory-stock-update';
+-- ===== ILLUSTRATED: inventory-stock-update (4 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 006/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อควบคุมและติดตามปริมาณสต๊อกของใช้ประจำสาขาให้มีความถูกต้อง ป้องกันของขาด และสนับสนุนการวางแผน จัดส่งสินค้าได้อย่างมีประสิทธิภาพ</p>
+<h3>ขอบเขต (Scope)</h3>
+<p>SOP นี้สำหรับพนักงานตำแหน่ง Guest Service / Branch Manager / Porter ทุกคนที่ปฏิบัติงานหน้าสาขา และ ครอบคลุมขั้นตอนการการดำเนินการดังนี้:</p>
+<ul><li>ตรวจเช็กสต๊อกประจำสัปดาห์</li><li>การอัปเดตข้อมูลลงในระบบ</li><li>การจัดเตรียมและจัดส่งของเข้าแต่ละสาขา</li><li>การรับของและกดรับในระบบโดยพนักงานสาขา</li><li>การจัดส่งน้ำดื่มประจำเดือน</li></ul>
+<h3>ขั้นตอนการดำเนินงาน (Step by Step Process)</h3>
+<p><strong>1. การอัปเดตสต๊อกประจำสัปดาห์</strong></p>
+<figure><img src="/sop/inventory-stock-update/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>2. การเบิกและจัดส่งของให้สาขา</strong></p>
+<figure><img src="/sop/inventory-stock-update/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>3. การรับของเข้าสต๊อกโดยพนักงานสาขา</strong></p>
+<figure><img src="/sop/inventory-stock-update/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>4. การจัดส่งน้ำดื่มประจำเดือน</strong></p>
+<figure><img src="/sop/inventory-stock-update/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>หมายเหตุเพิ่มเติม</p>
+<ul><li>หากพบปัญหาในการใช้งานระบบ หรือยอดคำนวณไม่ถูกต้อง ต้องแจ้งมายด์ทันที ห้าม Update Stock แบบผิด</li></ul>
+<p>มาเด็ดขาด</p>
+<ul><li>พนักงานต้องเช็คจำนวนของจริงทุกครั้งก่อน Update Stock และอัพเดทให้ตรงเวลาตามรอบ เพื่อไม่ให้การจัด</li></ul>
+<p>ส่งล่าช้า</p>
+<ul><li>หากได้รับของแล้ว พนักงานต้องกดรับของทันที ห้าม Update Stock ก่อนกดรับของเด็ดขาด เพราะจะทำให้</li></ul>
+<p>ยอดติดลบ</p>
+<ul><li>หากได้รับจำนวนของที่ส่งไปไม่ถูกต้อง ขาด/เกิน ให้ใส่จำนวนจริงที่ได้รับ เช่น ส่งทิชชู่ไปให้ 5 ม้วน แต่ได้รับจริง 4</li></ul>
+<p>ม้วน ให้ใส่จำนวนที่ได้รับ 4 ม้วน</p>
+<ul><li>หากได้รับของแต่เกิดการชำรุด ให้ใส่จำนวนทั้งหมดที่ได้รับ เช่น ส่งทิชชู่ไปให้ 5 ม้วน แต่เปียกฝน 1 ม้วน ใช้ได้จริง</li></ul>
+<p>4 ม้วน ให้ใส่จำนวนที่ได้รับ 5 ม้วน และโน้ตบอกว่า เปียกฝน 1 ม้วน ใช้ได้จริง 4 ม้วน</p>' where slug = 'inventory-stock-update';
 
--- ===== IMAGES: luggage-delivery-google-sheet (25 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> WI-OPS : 001/2026<br><strong>เวอร์ชัน:</strong> 01<br><strong>วันที่บังคับใช้:</strong> 19 มกราคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/luggage-delivery-google-sheet/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p6.jpg" alt="หน้า 6" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p7.jpg" alt="หน้า 7" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 7</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p8.jpg" alt="หน้า 8" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 8</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p9.jpg" alt="หน้า 9" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 9</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p10.jpg" alt="หน้า 10" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 10</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p11.jpg" alt="หน้า 11" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 11</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p12.jpg" alt="หน้า 12" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 12</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p13.jpg" alt="หน้า 13" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 13</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p14.jpg" alt="หน้า 14" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 14</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p15.jpg" alt="หน้า 15" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 15</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p16.jpg" alt="หน้า 16" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 16</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p17.jpg" alt="หน้า 17" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 17</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p18.jpg" alt="หน้า 18" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 18</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p19.jpg" alt="หน้า 19" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 19</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p20.jpg" alt="หน้า 20" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 20</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p21.jpg" alt="หน้า 21" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 21</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p22.jpg" alt="หน้า 22" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 22</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p23.jpg" alt="หน้า 23" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 23</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p24.jpg" alt="หน้า 24" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 24</figcaption></figure>
-<figure><img src="/sop/luggage-delivery-google-sheet/p25.jpg" alt="หน้า 25" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 25</figcaption></figure>
+-- ===== ILLUSTRATED: luggage-delivery-google-sheet (1 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> WI-OPS : 001/2026<br><strong>เวอร์ชัน:</strong> 01<br><strong>วันที่บังคับใช้:</strong> 19 มกราคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อกำหนดขั้นตอนมาตรฐานในการปฏิบัติงานของพนักงานหน้าสาขา (Guest Service: GS) และ Customer Service (CS) ในการบันทึกข้อมูลการให้บริการขนส่งกระเป๋า และประสานงานกับทีมขนส่ง (MS) อย่างถูกต้อง ครบ ถ้วน และเป็นมาตรฐานเดียวกันทุกสาขา</p>
+<h3>ขอบเขต (Scope)</h3>
+<p>ครอบคลุมพนักงาน Guest Service (GS) ทุกสาขา และทีม Customer Service (CS) ที่เกี่ยวข้องกับการบันทึกออ เดอร์บริการขนส่งกระเป๋า ผ่าน Google Sheet: Luggage Delivery Record เพื่อประสานงานกับทีมขนส่ง (MS) ไฟลล์ที่ใช้บันทึกข้อมูล</p>
+<ul><li>https://docs.google.com/spreadsheets/d/1VsXsby13SyumPxKGZovgp571M7oPQC7ib7NSoD0f</li></ul>
+<p>XJE/edit?gid=0#gid=0 การเลือกแท็บบันทึกข้อมูลใน Google Sheet พนักงานต้องเลือกแท็บให้ตรงกับประเภทบริการเท่านั้น</p>
+<figure><img src="/sop/luggage-delivery-google-sheet/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>แท็บ Intown</p>
+<ul><li>ใช้บันทึกข้อมูลบริการส่ง</li><li>BKK intown</li><li>CNX intown</li><li>HKT intown</li><li>Pattaya (ลงทั้งเส้นทาง Bangkok-Pattaya และ Pattaya-Bangkok)</li></ul>
+<p>คอลัมน์ ข้อมูล ตัวอย่าง A ใส่วันที่รับออเดอร์ B เลือกสถานะการจอง (Booking Status) C ใส่วันที่ส่ง (Delivery Date) D ใส่ชื่อลูกค้า (Customer Name) E เลือก service ให้ตรงกับบริการ (Service type) F ใส่จำนวนกระเป๋า (#Bags) G ใส่เลขออเดอร์พาร์ทเนอร์ของลูกค้า (Order no.) H ใส่เลขออเดอร์ของลูกค้า (AI Order No.) I เลือกประเภทการจัดส่ง (Delivery Type) J ใส่ต้นทาง (From) K เลือกเวลารอบรถรับกระเป๋า (Pick up time) L ใส่ปลายทาง (To) M เลือกประเภทกระเป๋า (Luggage Type) N เลือกช่องทางการจอง (Channel) O เลือกเวลาที่จะถึงปลายทาง (ETA) P ใส่เวลาที่ลูกค้ามารับจริง (Pickup Time) Q ใส่เที่ยวบิน (Flight No.) R เลือกสถานะการจัดส่ง (Delivery Status) S ใส่เลข MS ที่จองไว้ (MS order เท่านั้น) T ใส่ Promotion (Promotion) U ใส่โน้ตจำนวนกระเป๋า ชื่อลูกค้า และโน้ตอื่นๆที่ต้องการแจ้งทาง MS เพิ่ม (Note) แท็บ On Demand</p>
+<ul><li>ใช้บันทึกเฉพาะออเดอร์ที่ส่งแบบไม่ตรงตามตารางเวลา</li></ul>
+<p>คอลัมน์ ข้อมูล ตัวอย่าง A เลือกสถานะการจอง B ใส่วันที่ส่ง (Delivery Date) C ใส่ชื่อลูกค้า (Customer Name) D ใส่จำนวนกระเป๋า (#Bags) E ใส่เลขออเดอร์ของลูกค้า (Order No.) F เลือกประเภทการจัดส่ง (Delivery Type) G ใส่ต้นทาง (From) H ใส่เวลาลูกค้ามาดรอปกระเป๋า (Drop time) I ใส่ปลายทาง (To) J เลือกเวลาที่จะถึงปลายทาง (ETA) K เลือกประเภทกระเป๋า (Luggage Type) L เลือกช่องทางการจอง (Channel) M ใส่เวลาที่ลูกค้ามารับจริง (Pickup Time) N เลือกสถานะการจัดส่ง (Delivery Status) O ใส่โน้ตจำนวนกระเป๋า ชื่อลูกค้า และโน้ตอื่นๆที่ต้องการแจ้งทาง MS เพิ่ม (Note) แท็บ Sameday</p>
+<ul><li>ใช้บันทึกทุกออเดอร์ที่มีการส่งด้วย Cargo (ส่งข้ามจังหวัดทั้ง sameday และ nextday) ทั้งกระเป๋าเดินทาง/ถุง</li></ul>
+<p>กอล์ฟ</p>
+<ul><li>ลงควบคู่กับแท็บ Intown</li></ul>
+<p>คอลัมน์ ข้อมูล ตัวอย่าง A เลือกเส้นทางการส่ง (Route) B เลือกสถานะการจอง (Booking Status) C ใส่เลข MS ที่จองไว้ (MS order) D ใส่ราคาที่เก็บจากลูกค้า (Price) E ใส่เลขออเดอร์ของลูกค้า (Order ID) F ใส่วันที่ลูกค้ามาดรอปกระเป๋า (Drop Date) G ใส่วันที่ส่งกระเป๋า (Delivery Date) H ใส่ชื่อลูกค้า (Customer Name) I ใส่เบอร์โทรศัพท์ของลูกค้า (Phone No.) J ใส่จำนวนกระเป๋า (#Bags) K ใส่น้ำหนักกระเป๋า (Weight) L เลือกประเภทการจัดส่ง (Delivery Type) M ใส่วันที่คาดการณ์ว่าลูกค้าจะได้รับกระเป๋า ETA (Date) N ใส่ต้นทาง (From) O ใส่ที่อยู่ของต้นทาง (Address) P เลือกจังหวัดของต้นทาง (Province) Q ใส่เวลาที่ลูกค้ามาดรอปกระเป๋า (Drop time) R ใส่ปลายทาง อาจจะเป็นชื่อลูกค้าหรือเคาน์เตอร์ (To) S ใส่ที่อยู่ของปลายทาง (Address) T เลือกจังหวัดของปลายทาง (Province) U เลือกประเภทกระเป๋า (Luggage Type) V เลือกช่องทางการจอง (Channel) W ใส่เบอร์โทรผู้ร้บ (Call confirm) X ใส่ชื่อผู้รับ (Name of hotel staff) Y เลือกสถานะการจัดส่ง (Delivery Status) Z ใส่โน้ตจำนวนกระเป๋า ชื่อลูกค้า และโน้ตอื่นๆที่ต้องการแจ้งทาง MS เพิ่ม (Note) แท็บ Next day</p>
+<ul><li>ใช้บันทึกทุกออเดอร์ที่เป็นการส่งแบบ Within 5 days (ส่งด้วย KEX)</li><li>ลงควบคู่กับแท็บ Intown</li></ul>
+<p>คอลัม น์ ข้อมูล ตัวอย่าง A ใส่ลำดับออเดอร์ B เลือกสถานะการจอง (Booking Status) C ใส่เลข MS ที่จองไว้ (MS order) D เลือกสถานะการจองหลังจากจอง KEX เสร็จ (Book Shipsmile) E ใส่ราคาหลังจากจอง KEX เสร็จ (Price sm) F ใส่ราคาที่เก็บจากลูกค้า (Price) G ใส่วันที่ลูกค้ามาดรอปกระเป๋า (Drop Date) H ใส่วันที่ส่งกระเป๋า (Delivery Date) I ใส่ชื่อลูกค้า (Customer Name) J ใส่เบอร์โทรศัพท์ของลูกค้า (Phone No.) K ใส่จำนวนกระเป๋า (#Bags) L เลือกประเภทการจัดส่ง (Delivery Type) M ใส่วันที่คาดการณ์ว่าลูกค้าจะได้รับกระเป๋า ETA (Date) N ใส่ต้นทาง (From) O ใส่ที่อยู่ของต้นทาง (Address) P ใส่จังหวัดของต้นทาง (Province) Q ใส่เวลาที่ลูกค้ามาดรอปกระเป๋า (Drop time) R ใส่ปลายทาง อาจจะเป็นชื่อลูกค้าหรือเคาน์เตอร์ (To) S ใส่ที่อยู่ของปลายทาง (Address) T ใส่จังหวัดของปลายทาง (Province) U ใส่วันที่ลูกค้าได้รับกระเป๋า (Arrived Date) V ใส่น้ำหนักกระเป๋าลูกค้า (Weight) W ใส่ขนาดกระเป๋ากว้าง * ยาว * สูง X เลือกประเภทกระเป๋า (Luggage Type) Y เลือกช่องทางการจอง (Channel) Z ใส่เบอร์โทรผู้ร้บ (Call confirm) AA ใส่ชื่อผู้รับ (Name of hotel staff) AB ใส่ DHL Tracking ปัจจุบันไม่ได้ใช้แล้ว AC ใส่ Orange Tracking AD ใส่ Ninja Tracking ปัจจุบันไม่ได้ใช้แล้ว AE เลือกสถานะการจัดส่ง (Delivery Status) AF ใส่เลขออเดอร์ โน้ตจำนวนกระเป๋า ชื่อลูกค้า และโน้ตอื่นๆที่ต้องการแจ้งทาง MS เพิ่ม (Note)</p>
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="https://docs.google.com/spreadsheets/d/1VsXsby13SyumPxKGZovgp571M7oPQC7ib7NSoD0fXJE/edit?gid=0#gid=0" target="_blank" rel="noopener">https://docs.google.com/spreadsheets/d/1VsXsby13SyumPxKGZovgp571M7oPQC7ib7NSoD0f</a></li></ul>' where slug = 'luggage-delivery-google-sheet';
 
--- ===== IMAGES: emergency-airport (7 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS-EMS:004/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/emergency-airport/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/emergency-airport/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/emergency-airport/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/emergency-airport/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/emergency-airport/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>
-<figure><img src="/sop/emergency-airport/p6.jpg" alt="หน้า 6" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure>
-<figure><img src="/sop/emergency-airport/p7.jpg" alt="หน้า 7" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 7</figcaption></figure>' where slug = 'emergency-airport';
+-- ===== ILLUSTRATED: emergency-airport (4 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS-EMS:004/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อกำหนดแนวทางการปฏิบัติงานสำหรับพนักงานประจำจุดบริการ AIRPORTELs ในพื้นที่สนามบิน ให้สามารถตอบ สนองต่อเหตุฉุกเฉินได้อย่างมีประสิทธิภาพ โดยมีเป้าหมายหลัก ดังนี้:</p>
+<ul><li>รักษาความปลอดภัยของพนักงานและลูกค้าเป็นลำดับแรก</li><li>ลดความเสี่ยงและความเสียหายต่อทรัพย์สินของลูกค้าและบริษัทในระหว่างเกิดเหตุ</li><li>ตอบสนองต่อเหตุฉุกเฉินอย่างมีประสิทธิภาพ รวดเร็ว และเป็นระบบ</li><li>ปฏิบัติงานตามมาตรฐานความปลอดภัยของสนามบินทั้งในระดับท้องถิ่นและสากล</li><li>เสริมสร้างความเชื่อมั่นในบริการ และภาพลักษณ์ด้านความปลอดภัยของบริษัท</li></ul>
+<h3>📌 ขอบเขต (Scope):</h3>
+<p>ใช้สำหรับพนักงานที่ปฏิบัติงานประจำเคาน์เตอร์หรือจุดบริการ AIRPORTELs ในเขตสนามบินทุกแห่ง เมื่อเกิด สถานการณ์ฉุกเฉินที่อาจกระทบต่อความปลอดภัยของบุคคลและทรัพย์สิน การปฏิบัติงานเมื่อเกิดเหตุฉุกเฉิน 💣กรณีที่ 1: พบวัตถุต้องสงสัย / วัตถุอันตราย</p>
+<h3>ขั้นตอนการปฏิบัติ:</h3>
+<ul><li>หยุดการให้บริการทันที</li><li>ห้ามเคลื่อนย้ายวัตถุต้องสงสัย</li><li>แจ้งลูกค้าให้ถอยห่างโดยไม่สร้างความตื่นตระหนก</li><li>แจ้งหน่วยงานที่เกี่ยวข้อง</li><li>โทรแจ้งหน่วยรักษาความปลอดภัยสนามบินทันที</li><li>รายงานหัวหน้า/ผู้จัดการสาขา</li><li>กันพื้นที่</li><li>ห้ามบุคคลอื่นเข้าใกล้วัตถุต้องสงสัย</li><li>หากมีป้ายหรือแถบกั้นความปลอดภัย ใช้ทันที</li><li>ตรวจสอบทรัพย์สิน</li><li>ตรวจสอบกระเป๋าหรือทรัพย์สินของลูกค้าที่ยังอยู่ภายในพื้นที่</li><li>จดบันทึกรายละเอียดของทรัพย์สินที่ยังไม่สามารถเคลื่อนย้ายได้</li><li>อพยพพนักงานและลูกค้า</li><li>ปฏิบัติตามคำแนะนำของเจ้าหน้าที่สนามบินหรือเจ้าหน้าที่รักษาความปลอดภัย</li><li>เดินทางไปยังจุดรวมพลที่กำหนดไว้</li><li>รอคำสั่งเพิ่มเติม</li><li>ห้ามกลับเข้าพื้นที่จนกว่าจะได้รับอนุญาตจากเจ้าหน้าที่</li></ul>
+<p>🌍 กรณีที่ 2: แผ่นดินไหว</p>
+<h3>ขั้นตอนการปฏิบัติ:</h3>
+<ul><li>หลบอยู่ในที่ปลอดภัย</li><li>หาที่กำบัง เช่น ใต้โต๊ะที่แข็งแรง หรือยืนชิดเสา</li><li>ป้องกันศีรษะและคอด้วยมือหรือกระเป๋า</li><li>หลังการสั่นสะเทือนหยุด</li><li>ประเมินความเสียหายเบื้องต้น</li><li>หากพื้นที่ไม่ปลอดภัย เช่น มีเพดานหลุด หรือมีควัน ให้ อพยพทันที</li><li>อพยพพนักงานและลูกค้า</li><li>พาทุกคนไปยังจุดรวมพลนอกอาคาร (ตามที่สนามบินกำหนด)</li><li>ห้ามใช้ลิฟต์โดยเด็ดขาด</li><li>แจ้งหัวหน้างาน / ผู้จัดการ</li><li>รายงานสถานการณ์</li><li>แจ้งจำนวนทีมงานที่อพยพออกมา</li><li>ประสานกับสนามบิน</li><li>ปฏิบัติตามคำแนะนำของหน่วยงานความปลอดภัยสนามบิน</li><li>ตรวจสอบทรัพย์สิน</li><li>หลังได้รับอนุญาตให้กลับเข้าพื้นที่ ตรวจสอบทรัพย์สินของลูกค้าว่ายังอยู่ครบถ้วน</li><li>ตรวจสอบทรัพย์สิน และอุปกรณ์ของบริษัทฯ กรณีได้รับความเสียหายให้รายงานกลับสำนักงานใหญ่ เพื่อ</li></ul>
+<p>จัดหาอุปกรณ์ทดแทนเร่งด่วน หรือ พิจารณาปิดให้บริการ 🌊กรณีที่ 3: เตือนภัยสึนามิ / น้ำท่วม</p>
+<h3>ขั้นตอนการปฏิบัติ:</h3>
+<ul><li>รับฟังประกาศเตือนภัย</li><li>ติดตามประกาศจากสนามบินและหน่วยงานทางการ</li><li>แจ้งลูกค้า</li><li>อธิบายสถานการณ์โดยสุภาพ</li><li>แนะนำให้ลูกค้าเก็บของมีค่าและเตรียมอพยพ</li><li>กรณีเตรียมอพยพ</li><li>หยุดให้บริการ</li><li>เก็บทรัพย์สินลูกค้าในที่สูง หากมีเวลา</li><li>ล็อคพื้นที่เก็บสัมภาระ</li><li>กรณีต้องอพยพทันที</li><li>ปฏิบัติตามเส้นทางอพยพที่กำหนดโดยสนามบิน</li><li>เดินทางไปยังพื้นที่ปลอดภัยบนที่สูง</li><li>แจ้งผู้จัดการ</li><li>รายงานสถานการณ์และจำนวนผู้ที่อพยพ</li></ul>
+<p>🧨กรณีที่ 4: เกิดเหตุก่อการร้าย / แจ้งเหตุวางระเบิด / มีคนใช้อาวุธในพื้นที่สนามบิน</p>
+<h3>ขั้นตอนการปฏิบัติ:</h3>
+<ul><li>หยุดให้บริการทันที</li><li>ปิดเคาน์เตอร์/ล็อกอุปกรณ์</li><li>หยุดรับลูกค้าและแจ้งให้ลูกค้าอยู่ในความสงบ</li><li>ประเมินสถานการณ์เบื้องต้น</li><li>หากได้ยินเสียงระเบิด หรือมีการแจ้งจากสนามบินว่าเกิดเหตุรุนแรง:</li><li>อย่าเข้าใกล้จุดเกิดเหตุ</li><li>ไม่ถ่ายภาพหรือเผยแพร่สถานการณ์ผ่านโซเชียลมีเดีย</li><li>หากเหตุการณ์ยังไม่เกิดแต่มี "การแจ้งเตือนล่วงหน้า" (เช่น มีการโทรขู่วางระเบิด):</li><li>ปฏิบัติตามคำสั่งเจ้าหน้าที่สนามบินทันที</li><li>แจ้งเหตุ</li><li>ติดต่อเจ้าหน้าที่รักษาความปลอดภัยสนามบินหรือเจ้าหน้าที่ตำรวจที่อยู่ใกล้ที่สุด (กรณีเป็นผู้พบเห็น</li></ul>
+<p>เหตุการณ์) ◦ รายงานหัวหน้าสาขาหรือผู้จัดการทันทีผ่านช่องทางฉุกเฉิน</p>
+<ul><li>อพยพอย่างปลอดภัย</li><li>อพยพตามเส้นทางที่สนามบินกำหนดเท่านั้น</li><li>ไม่ใช้ลิฟต์</li><li>หลีกเลี่ยงบริเวณที่มีผู้คนหนาแน่นหรือเสียงปืน/เสียงระเบิด</li><li>หากอยู่ใกล้บริเวณที่มีการยิงหรือเสียงระเบิด:</li><li>หมอบลงกับพื้น หากหลบได้ให้เข้าไปในพื้นที่ปิด / ห้องนิรภัย</li><li>ปิดโทรศัพท์มือถือหรือลดเสียงเพื่อหลีกเลี่ยงการตรวจพบ</li><li>รวบรวมพนักงานและลูกค้า</li><li>หากปลอดภัย ให้รวมกลุ่มและเคลื่อนย้ายไปยัง จุดรวมพลที่ปลอดภัย ตามที่สนามบินกำหนด</li><li>ตรวจสอบจำนวนลูกค้าและพนักงานในความดูแล พร้อมรายงานให้หัวหน้าทราบ</li><li>รอคำสั่งจากเจ้าหน้าที่</li><li>ห้ามกลับเข้าพื้นที่บริการจนกว่าจะได้รับอนุญาตอย่างเป็นทางการ</li><li>เตรียมพร้อมให้ข้อมูล หากเจ้าหน้าที่ต้องการสอบถาม</li><li>บันทึกเหตุการณ์</li><li>บันทึกรายละเอียดเหตุการณ์ทันทีที่ปลอดภัย:</li><li>วัน/เวลา</li><li>ลักษณะเหตุการณ์</li><li>การปฏิบัติของพนักงาน</li><li>รายชื่อพนักงาน/ลูกค้าที่อยู่ในเหตุการณ์</li></ul>
+<p>แนวปฏิบัติสำคัญเพิ่มเติมสำหรับทุกกรณีฉุกเฉิน:</p>
+<ul><li>หลีกเลี่ยงการตัดสินใจโดยลำพัง หากมีหัวหน้าอยู่ ให้รอรับคำสั่ง (เว้นแต่สถานการณ์ต้องรีบอพยพ)</li><li>ความปลอดภัยของ ชีวิต มาก่อน ทรัพย์สิน</li><li>พนักงานควรได้รับการฝึกซ้อมตาม แผนฉุกเฉินสนามบิน อย่างสม่ำเสมอ</li></ul>
+<p>หมายเหตุสำคัญ:</p>
+<ul><li>ทุกเหตุการณ์ต้องมีการจดบันทึกเหตุการณ์ทันทีที่ปลอดภัย หรือรายงานผ่านกลุ่มงาน Lark ขั้นตอนดังนี้</li><li>วัน/เวลา</li><li>รายละเอียดเหตุการณ์</li><li>การแจ้งเหตุ</li><li>การตอบสนอง</li><li>รายการทรัพย์สินที่เสียหาย (ถ้ามี)</li><li>รายงานเหตุการณ์ให้หัวหน้าหน่วยงาน / ผู้จัดการภายใน 1 ชั่วโมงหลังสถานการณ์คลี่คลาย</li></ul>
+<figure><img src="/sop/emergency-airport/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/emergency-airport/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/emergency-airport/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/emergency-airport/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = 'emergency-airport';
 
--- ===== IMAGES: emergency-mall (6 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS-EMS:005/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/emergency-mall/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/emergency-mall/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/emergency-mall/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/emergency-mall/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/emergency-mall/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>
-<figure><img src="/sop/emergency-mall/p6.jpg" alt="หน้า 6" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure>' where slug = 'emergency-mall';
+-- ===== ILLUSTRATED: emergency-mall (4 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS-EMS:005/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อกำหนดแนวทางปฏิบัติงานที่ชัดเจนให้กับพนักงานประจำจุดบริการ ภายในศูนย์การค้า ในกรณีที่เกิดเหตุฉุกเฉิน เช่น การพบวัตถุต้องสงสัย เหตุก่อการร้าย หรือภัยพิบัติทางธรรมชาติ โดยมีเป้าหมายเพื่อ:</p>
+<ul><li>รักษาความปลอดภัยของพนักงานและลูกค้าเป็นลำดับแรก</li><li>ลดความเสี่ยงต่อการสูญเสียหรือความเสียหายต่อทรัพย์สินของลูกค้าและบริษัท</li><li>ตอบสนองต่อเหตุฉุกเฉินอย่างมีประสิทธิภาพ รวดเร็ว และเป็นระบบ</li><li>สร้างความมั่นใจให้กับลูกค้าในการใช้บริการ</li><li>ปฏิบัติสอดคล้องกับนโยบายความปลอดภัยของศูนย์การค้าและหน่วยงานที่เกี่ยวข้อง</li></ul>
+<h3>📌 ขอบเขต (Scope):</h3>
+<p>เอกสารนี้ใช้สำหรับพนักงานประจำเคาน์เตอร์หรือจุดบริการ AIRPORTELs ภายในศูนย์การค้าทุกแห่ง เพื่อให้สามารถ ตอบสนองต่อสถานการณ์ฉุกเฉินได้อย่างมีประสิทธิภาพ ปลอดภัย และลดความเสียหายต่อชีวิตและทรัพย์สิน การปฏิบัติงานเมื่อเกิดเหตุฉุกเฉิน 💣 กรณีที่ 1: พบวัตถุต้องสงสัย / วัตถุอันตราย</p>
+<h3>ขั้นตอนการปฏิบัติ:</h3>
+<ul><li>หยุดการให้บริการทันที</li><li>ห้ามเคลื่อนย้ายวัตถุต้องสงสัย</li><li>แจ้งลูกค้าให้ถอยห่างโดยไม่สร้างความตื่นตระหนก</li><li>แจ้งหน่วยงานที่เกี่ยวข้อง</li><li>โทรแจ้งหน่วยรักษาความปลอดภัยสนามบินทันที</li><li>รายงานหัวหน้า/ผู้จัดการสาขา</li><li>กันพื้นที่</li><li>ห้ามบุคคลอื่นเข้าใกล้วัตถุต้องสงสัย</li><li>หากมีป้ายหรือแถบกั้นความปลอดภัย ใช้ทันที</li><li>ตรวจสอบทรัพย์สิน</li><li>ตรวจสอบกระเป๋าหรือทรัพย์สินของลูกค้าที่ยังอยู่ภายในพื้นที่</li><li>จดบันทึกรายละเอียดของทรัพย์สินที่ยังไม่สามารถเคลื่อนย้ายได้</li><li>อพยพพนักงานและลูกค้า</li><li>ปฏิบัติตามคำแนะนำของเจ้าหน้าที่สนามบินหรือเจ้าหน้าที่รักษาความปลอดภัย</li><li>เดินทางไปยังจุดรวมพลที่กำหนดไว้</li><li>รอคำสั่งเพิ่มเติม</li><li>ห้ามกลับเข้าพื้นที่จนกว่าจะได้รับอนุญาตจากเจ้าหน้าที่</li></ul>
+<p>🚨 กรณีที่ 2: เหตุก่อการร้าย / ใช้อาวุธ / ขู่วางระเบิด</p>
+<h3>ขั้นตอนการปฏิบัติ:</h3>
+<ul><li>การพบเห็นเหตุการณ์ แจ้งเจ้าหน้าที่รักษาความปลอดภัยทันที</li><li>ผ่านเบอร์ภายในของศูนย์ หรือวิทยุสื่อสาร</li><li>หลีกเลี่ยงการเผชิญหน้า</li><li>อย่าเข้าใกล้ผู้ต้องสงสัยหรือพื้นที่ที่มีอาวุธ</li><li>หยุดให้บริการทันที</li><li>ล็อคพื้นที่บริการหากปลอดภัยและทำได้ทัน</li><li>อพยพอย่างสงบ</li><li>ตามเส้นทางที่ปลอดภัยที่สุด ไม่อยู่รวมกันเป็นกลุ่มใหญ่</li><li>ห้ามใช้ลิฟต์</li><li>หมอบ/หลบในที่กำบัง หากได้ยินเสียงปืนหรือระเบิด</li><li>ปิดเสียงโทรศัพท์</li><li>อย่าเคลื่อนไหวหากอยู่ในพื้นที่เสี่ยง</li><li>รายงานหัวหน้าสาขา หรือ ผู้จัดการ</li><li>แจ้งสถานการณ์และพิกัดของตนเอง</li><li>รอคำสั่งจากเจ้าหน้าที่ความมั่นคง/ศูนย์การค้า</li></ul>
+<p>🌍 กรณีที่ 3: แผ่นดินไหว</p>
+<h3>ขั้นตอนการปฏิบัติ:</h3>
+<ul><li>หลบอยู่ในที่ปลอดภัย</li><li>หมอบลงใต้โต๊ะ หรือยืนใกล้เสาแข็งแรง</li><li>ป้องกันศีรษะด้วยมือหรือกระเป๋า</li><li>หลังการสั่นสะเทือนหยุด</li><li>ประเมินความเสียหายเบื้องต้น</li><li>หากพื้นที่ไม่ปลอดภัย เช่น มีเพดานหลุด หรือมีควัน ให้ อพยพทันที</li><li>อพยพพนักงานและลูกค้า</li><li>ใช้บันได ไม่ใช้ลิฟต์</li><li>ไปยังจุดรวมพลตามแผนของศูนย์การค้า</li><li>แจ้งหัวหน้างาน / ผู้จัดการ</li><li>รายงานสถานการณ์</li><li>แจ้งจำนวนทีมงานที่อพยพออกมา</li><li>ตรวจสอบทรัพย์สิน</li><li>หลังได้รับอนุญาตให้กลับเข้าพื้นที่ ตรวจสอบทรัพย์สินของลูกค้าว่ายังอยู่ครบถ้วน</li><li>ตรวจสอบทรัพย์สิน และอุปกรณ์ของบริษัทฯ กรณีได้รับความเสียหายให้รายงานกลับสำนักงานใหญ่ เพื่อ</li></ul>
+<p>จัดหาอุปกรณ์ทดแทนเร่งด่วน หรือ พิจารณาปิดให้บริการ แนวปฏิบัติสำคัญเพิ่มเติมสำหรับทุกกรณีฉุกเฉิน:</p>
+<ul><li>หลีกเลี่ยงการตัดสินใจโดยลำพัง หากมีหัวหน้าอยู่ ให้รอรับคำสั่ง (เว้นแต่สถานการณ์ต้องรีบอพยพ)</li><li>ความปลอดภัยของ ชีวิต มาก่อน ทรัพย์สิน</li><li>พนักงานควรได้รับการฝึกซ้อมแผนฉุกเฉินตามนโยบายศูนย์การค้าอย่างน้อยปีละ 1 ครั้ง</li></ul>
+<p>หมายเหตุสำคัญ :</p>
+<ul><li>ทุกเหตุการณ์ต้องมีการจดบันทึกเหตุการณ์ทันทีที่ปลอดภัย หรือรายงานผ่านกลุ่มงาน Lark ตามขั้นตอนดังนี้</li><li>วัน/เวลา</li><li>รายละเอียดเหตุการณ์</li><li>การแจ้งเหตุ</li><li>การตอบสนอง</li><li>รายการทรัพย์สินที่เสียหาย (ถ้ามี)</li><li>รายงานเหตุการณ์ให้หัวหน้าหน่วยงาน / ผู้จัดการภายใน 1 ชั่วโมงหลังสถานการณ์คลี่คลาย</li></ul>
+<figure><img src="/sop/emergency-mall/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/emergency-mall/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/emergency-mall/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/emergency-mall/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = 'emergency-mall';
 
--- ===== IMAGES: respond-io-guide (30 pages) =====
-update sop.documents set content_html = '<blockquote><p>※ หน้าที่มีข้อมูลรหัสเข้าระบบถูกซ่อนไว้ในภาพเพื่อความปลอดภัย — โปรดดูจากระบบต้นทางโดยตรง</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/respond-io-guide/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p6.jpg" alt="หน้า 6" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 6</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p7.jpg" alt="หน้า 7" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 7</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p8.jpg" alt="หน้า 8" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 8</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p9.jpg" alt="หน้า 9" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 9</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p10.jpg" alt="หน้า 10" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 10</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p11.jpg" alt="หน้า 11" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 11</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p12.jpg" alt="หน้า 12" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 12</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p13.jpg" alt="หน้า 13" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 13</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p14.jpg" alt="หน้า 14" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 14</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p15.jpg" alt="หน้า 15" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 15</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p16.jpg" alt="หน้า 16" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 16</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p17.jpg" alt="หน้า 17" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 17</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p18.jpg" alt="หน้า 18" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 18</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p19.jpg" alt="หน้า 19" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 19</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p20.jpg" alt="หน้า 20" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 20</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p21.jpg" alt="หน้า 21" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 21</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p22.jpg" alt="หน้า 22" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 22</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p23.jpg" alt="หน้า 23" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 23</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p25.jpg" alt="หน้า 25" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 25</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p26.jpg" alt="หน้า 26" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 26</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p27.jpg" alt="หน้า 27" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 27</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p28.jpg" alt="หน้า 28" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 28</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p29.jpg" alt="หน้า 29" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 29</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p30.jpg" alt="หน้า 30" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 30</figcaption></figure>
-<figure><img src="/sop/respond-io-guide/p31.jpg" alt="หน้า 31" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 31</figcaption></figure>' where slug = 'respond-io-guide';
+-- ===== ILLUSTRATED: respond-io-guide (45 figures) =====
+update sop.documents set content_html = '<blockquote><p>※ หน้าที่มีข้อมูลรหัสเข้าระบบถูกซ่อนไว้เพื่อความปลอดภัย — โปรดดูจากระบบต้นทางโดยตรง</p></blockquote><figure><img src="/sop/respond-io-guide/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig8.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig9.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig10.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig11.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig12.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig13.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig14.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig15.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig16.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig17.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig18.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig19.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig20.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig21.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig22.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig23.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig24.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig25.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig26.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig27.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig28.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig29.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig30.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig31.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig32.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig33.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig34.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig35.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig36.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig37.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig38.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig39.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig40.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig41.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig42.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig43.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig44.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/respond-io-guide/fig45.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = 'respond-io-guide';
 
--- ===== IMAGES: 3cx-guide (3 pages) =====
-update sop.documents set content_html = '<h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/3cx-guide/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/3cx-guide/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/3cx-guide/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>' where slug = '3cx-guide';
+-- ===== ILLUSTRATED: 3cx-guide (2 figures) =====
+update sop.documents set content_html = '<figure><img src="/sop/3cx-guide/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/3cx-guide/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = '3cx-guide';
 
--- ===== IMAGES: dress-code-guest-service (5 pages) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 001/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารต้นฉบับ</h3>
-<figure><img src="/sop/dress-code-guest-service/p1.jpg" alt="หน้า 1" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 1</figcaption></figure>
-<figure><img src="/sop/dress-code-guest-service/p2.jpg" alt="หน้า 2" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 2</figcaption></figure>
-<figure><img src="/sop/dress-code-guest-service/p3.jpg" alt="หน้า 3" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 3</figcaption></figure>
-<figure><img src="/sop/dress-code-guest-service/p4.jpg" alt="หน้า 4" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 4</figcaption></figure>
-<figure><img src="/sop/dress-code-guest-service/p5.jpg" alt="หน้า 5" loading="lazy" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>หน้า 5</figcaption></figure>' where slug = 'dress-code-guest-service';
+-- ===== ILLUSTRATED: dress-code-guest-service (8 figures) =====
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 001/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Objective)</h3>
+<p>เพื่อกำหนดมาตรฐานการแต่งกายสำหรับพนักงาน Guest Service ทั้งชายและหญิง ให้ดูเรียบร้อย เหมาะสม และ เป็นมืออาชีพ สร้างความประทับใจแก่ลูกค้า To establish a dress code standard for both male and female Guest Service staff to ensure a neat, appropriate, and professional appearance that creates a positive impression for customers.</p>
+<h3>ขอบเขต (Scope)</h3>
+<p>พนักงานตำแหน่ง Guest Service / Branch Manager / Porter ทุกคนที่ปฏิบัติงานหน้าสาขา หรือให้บริการลูกค้า โดยตรง All Service staff working at branches or in direct customer service roles.</p>
+<p><strong>1. ข้อกำหนดทั่วไป (General Requirements)</strong></p>
+<p>รายการ Item พนักงานชาย Male Staff พนักงานหญิง Female Staff เสื้อ / Shirt เสื้อยูนิฟอร์มบริษัท รีดเรียบ ไม่ยับ เสื้อยูนิฟอร์มบริษัท รีดเรียบ ไม่ยับ กางเกง / Pants กางเกงขายาวสีดำหรือสีตามบริษัท กำหนด ไม่รัดรูป กระโปรง/กางเกงขายาว ทรงสุภาพ ความยาวคลุมเข่า รองเท้า / Shoes รองเท้าหุ้มส้น/ ผ้าใบ สะอาด รองเท้าหุ้มส้น ส้นเตี้ยหรือปานกลาง /ผ้าใบสะอาด ทรงผม / Hair ตัดผมสุภาพ ไม่ย้อมสีฉูดฉาด ไม่ไว้ หนวด/ เครา รวบผมเรียบร้อย สีธรรมชาติ ไม่มีเครื่องประดับเกิน จำเป็น เล็บ / Nails สั้น สะอาด ไม่ทาเล็บ สะอาด สีธรรมชาติ ไม่มีเล็บปลอม หรืออุปกรณ์ที่มี อุปสรรคต่อการทำงาน เครื่องประดับ / Accessories ใส่นาฬิิกาได้ ไม่ควรสวมแหวน/สร้อยที่ โดดเด่น เครื่องประดับเรียบง่าย เช่น ต่างหูเล็ก นาฬิิกา กลิ่นตัว / Body Odor ใช้น้ำหอมอ่อนๆ ไม่มีกลิ่นตัวรบกวนลูกค้า ใช้น้ำหอมเบาๆ ไม่ฉุนจนเกินไป หน้ากากอนามัย / Mask สีสุภาพ ไม่มีลวดลาย (ถ้ามีการกำหนดใช้) สีสุภาพ ไม่มีลวดลาย (ถ้ามีการกำหนดใช้) การแต่งหน้า / Make up สามารถทาแป้ง / ลิปมัน ได้ตามความ เหมาะสม สีสันสุภาพ ไม่จัดจ้านจนเกินไป และ ไม่หน้าสด</p>
+<p><strong>2. ข้อห้าม (Prohibited)</strong></p>
+<ul><li>ห้ามสวมใส่เสื้อผ้าที่ไม่ใช่ยูนิฟอร์มขณะปฏิบัติงาน / Do not wear non-uniform clothing during work</li><li>กรณีฉุกเฉิน อนุโลมให้ใส่เสื้อโปโล คอปกสีดำล้วน หรือ สีกรมท่า ในการปฏิบัติงานได้ โดยต้องแจ้งหัวหน้า</li></ul>
+<p>สาขา หรือผู้ดูแลให้ทราบทุกครั้ง</p>
+<ul><li>ห้ามแต่งหน้า/ทำผม/ทาเล็บในลักษณะที่ไม่สุภาพ /No inappropriate makeup/hair/nail styles</li><li>ห้ามสวมรองเท้าแตะ หรือรองเท้าเปิดส้น / No sandals or open-heel shoes</li><li>ห้ามใส่เครื่องประดับแฟชั่นที่เด่นชัดหรือมีเสียงดังรบกวน / No flashy or noisy fashion accessories</li></ul>
+<p><strong>3. การแขวนบัตรพนักงาน (Staff ID Badge Wearing Guideline)</strong></p>
+<ul><li>พนักงานทุกคนต้องสวมบัตรพนักงานในตำแหน่งที่เห็นได้ชัดขณะปฏิบัติงาน</li></ul>
+<p>All staff must wear ID badges visibly while on duty</p>
+<ul><li>ต้องแขวนไว้บริเวณหน้าอกด้านซ้ายหรือกลางลำตัว ด้วยสายคล้องที่บริษัทจัดให้</li></ul>
+<p>Badge must be hung on the left chest or center using company-provided lanyards</p>
+<ul><li>บัตรต้องสะอาดไม่ชำรุดและไม่ปิดบังข้อมูลสำคัญเช่นรูปถ่ายชื่อหรือรหัสพนักงาน</li><li>บัตรต้อสอด ไม่ชำรุด แลไม่ปิดบัข้อมูลสำ ญ เช่น รูปถ่ย ชื่อ รือรสนั น The badge must be clean, undamaged, and display key information (photo, name, ID)</li><li>ห้ามแก้ไข ดัดแปลง หรือประดับตกแต่งบัตรพนักงานด้วยวัสดุอื่น</li></ul>
+<p>Do not modify, decorate, or cover any part of the badge</p>
+<ul><li>หากบัตรหาย ต้องแจ้งหัวหน้าแผนกทันทีและดำเนินการขอออกบัตรใหม่</li></ul>
+<p>Lost badges must be reported immediately and reissued through proper channels</p>
+<p><strong>4. การตรวจสอบและติดตามผล (Monitoring &amp; Compliance)</strong></p>
+<p>หัวหน้าสาขาและทีมตรวจมาตรฐานจะเป็นผู้ตรวจสอบความเรียบร้อยในการแต่งกายของพนักงานทุกวัน หากพบการ แต่งกายไม่เหมาะสม จะดำเนินการตามขั้นตอนการตักเตือน Branch Supervisors and Standard Audit Teams are responsible for daily monitoring. Non- compliance will be addressed according to the disciplinary procedure.</p>
+<p>ตัวอย่างการแต่งกายพนักงาน ชาย - หญิง และการสวมบัตรพนักงาน</p>
+<figure><img src="/sop/dress-code-guest-service/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/dress-code-guest-service/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/dress-code-guest-service/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/dress-code-guest-service/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>การแต่งหน้า และทรงผม</p>
+<figure><img src="/sop/dress-code-guest-service/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/dress-code-guest-service/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ตัวอย่างเสื้อโปโล คอปกสีดำ และ สีกรมท่า ที่อนุโลมให้ใส่ได้ กรณีฉุกเฉิน</p>
+<figure><img src="/sop/dress-code-guest-service/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>เสื้อโปโล คอปกสีดำ</p>
+<figure><img src="/sop/dress-code-guest-service/fig8.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>เสื้อโปโล คอปกสีกรมท่า</p>' where slug = 'dress-code-guest-service';
 
 notify pgrst, 'reload schema';
 commit;
