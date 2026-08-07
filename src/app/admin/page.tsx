@@ -14,19 +14,18 @@ async function count(table: string, filter?: (q: any) => any) {
 }
 
 export default async function AdminHome() {
-  const [total, published, drafts, cats, anns] = await Promise.all([
-    count("documents"),
+  const [published, archived, cats, anns] = await Promise.all([
     count("documents", (q) => q.eq("status", "published")),
-    count("documents", (q) => q.eq("status", "draft")),
+    count("documents", (q) => q.eq("status", "archived")),
     count("categories"),
     count("announcements"),
   ]);
 
   const stats = [
-    { label: "คู่มือทั้งหมด", value: total, href: "/admin/documents" },
     { label: "เผยแพร่แล้ว", value: published, href: "/admin/documents" },
-    { label: "ฉบับร่าง", value: drafts, href: "/admin/documents" },
+    { label: "เก็บถาวร (Archive)", value: archived, href: "/archive" },
     { label: "หมวดหมู่", value: cats, href: "/admin/categories" },
+    { label: "ประกาศ", value: anns, href: "/admin/announcements" },
   ];
 
   return (

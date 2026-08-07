@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
+  Archive,
   CalendarDays,
   GraduationCap,
   Home,
@@ -192,6 +193,16 @@ export default function SiteHeader({
                 <CalendarDays size={18} className="text-brand-600" />
                 {t("ตารางงาน (Scheduling)", "Scheduling")} ↗
               </a>
+              {isAdmin && (
+                <Link
+                  href="/archive"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
+                >
+                  <Archive size={18} className="text-brand-600" />
+                  {t("คลังเก็บถาวร", "Archive")}
+                </Link>
+              )}
               {isAdmin && (
                 <Link
                   href="/admin"

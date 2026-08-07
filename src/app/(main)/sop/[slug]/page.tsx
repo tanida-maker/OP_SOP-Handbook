@@ -105,6 +105,14 @@ export default async function SopPage({
             <T th="ฉบับร่าง (มองเห็นเฉพาะแอดมิน)" en="Draft (admins only)" />
           </span>
         )}
+        {d.status === "archived" && (
+          <span className="inline-block rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-600">
+            <T
+              th="เก็บถาวร — เอกสารฉบับเก่า (มองเห็นเฉพาะแอดมิน)"
+              en="Archived — superseded version (admins only)"
+            />
+          </span>
+        )}
         <div className="flex items-start justify-between gap-4">
           <h1 className="text-2xl font-extrabold leading-tight text-text md:text-3xl">
             {d.title}

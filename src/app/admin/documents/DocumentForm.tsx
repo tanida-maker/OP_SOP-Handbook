@@ -200,10 +200,16 @@ export default function DocumentForm({
               className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
                 status === "published"
                   ? "bg-green-100 text-green-700"
+                  : status === "archived"
+                  ? "bg-slate-200 text-slate-600"
                   : "bg-amber-100 text-amber-700"
               }`}
             >
-              {status === "published" ? "เผยแพร่แล้ว" : "ฉบับร่าง"}
+              {status === "published"
+                ? "เผยแพร่แล้ว"
+                : status === "archived"
+                ? "เก็บถาวร"
+                : "ฉบับร่าง"}
             </span>
           </div>
 

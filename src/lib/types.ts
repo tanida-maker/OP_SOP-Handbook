@@ -1,7 +1,7 @@
 // Shared domain types for the SOP Hub.
 
 export type Role = "admin" | "staff";
-export type DocStatus = "draft" | "published";
+export type DocStatus = "draft" | "published" | "archived";
 
 export interface Profile {
   id: string;

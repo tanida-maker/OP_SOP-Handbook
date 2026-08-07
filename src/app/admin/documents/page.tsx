@@ -19,6 +19,7 @@ export default async function AdminDocuments() {
   const { data } = await supabase
     .from("documents")
     .select("*, category:categories(id,name,slug,icon,color)")
+    .neq("status", "archived") // archived versions live under /archive
     .order("updated_at", { ascending: false });
 
   const docs = (data ?? []) as DocumentWithCategory[];
@@ -71,13 +72,19 @@ export default async function AdminDocuments() {
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
+                      className={`inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold ${
                         d.status === "published"
                           ? "bg-green-100 text-green-700"
+                          : d.status === "archived"
+                          ? "bg-slate-200 text-slate-600"
                           : "bg-amber-100 text-amber-700"
                       }`}
                     >
-                      {d.status === "published" ? "เผยแพร่" : "ร่าง"}
+                      {d.status === "published"
+                        ? "เผยแพร่แล้ว"
+                        : d.status === "archived"
+                        ? "เก็บถาวร"
+                        : "ฉบับร่าง"}
                     </span>
                   </td>
                   <td className="hidden px-4 py-3 text-muted md:table-cell">

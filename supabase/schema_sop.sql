@@ -56,7 +56,7 @@ create table if not exists sop.documents (
   content_html      text not null default '',
   cover_image       text,
   tags              text[] default '{}',
-  status            text not null default 'draft' check (status in ('draft','published')),
+  status            text not null default 'draft' check (status in ('draft','published','archived')),
   is_onboarding     boolean not null default false,
   onboarding_order  int,
   version           int not null default 1,

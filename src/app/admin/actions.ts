@@ -34,7 +34,7 @@ export interface DocumentInput {
   content_html: string;
   cover_image?: string | null;
   tags?: string[];
-  status: "draft" | "published";
+  status: "draft" | "published" | "archived";
   is_onboarding: boolean;
   onboarding_order?: number | null;
 }

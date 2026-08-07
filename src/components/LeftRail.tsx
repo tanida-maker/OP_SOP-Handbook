@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  Archive,
   CalendarDays,
   GraduationCap,
   Home,
@@ -42,8 +43,10 @@ export default function LeftRail({
     { href: "/announcements", label: t("ประกาศ", "Announcements"), icon: Megaphone, badge: announceCount },
     { href: "/search", label: t("ค้นหา", "Search"), icon: Search },
   ];
-  if (isAdmin)
+  if (isAdmin) {
+    items.push({ href: "/archive", label: t("คลัง", "Archive"), icon: Archive });
     items.push({ href: "/admin", label: t("ระบบจัดการ", "Admin"), icon: Settings });
+  }
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
