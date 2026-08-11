@@ -13,6 +13,7 @@ import {
   Megaphone,
   Menu,
   Settings,
+  Sparkles,
   User,
   X,
 } from "lucide-react";
@@ -164,6 +165,23 @@ export default function SiteHeader({
             </div>
 
             <nav className="flex flex-col gap-1">
+              <a
+                href="https://ssglsj0spi27.sg.larksuite.com/wiki/VTqtwFbXdiUKG0kIlWtlBFJegfh?from=from_copylink"
+                target="_blank"
+                rel="noopener"
+                onClick={() => setOpen(false)}
+                className="mb-1 flex items-center gap-2.5 rounded-lg border border-amber-300 bg-gradient-to-r from-amber-100 to-brand-50 px-3 py-3 text-sm font-bold text-brand-800"
+              >
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-amber-400 text-white">
+                  <Sparkles size={16} />
+                </span>
+                <span className="leading-tight">
+                  AIRPORTELs
+                  <span className="block text-[11px] font-semibold text-brand-600">
+                    {t("บริการ & โปรโมชัน ↗", "Service & Promotion ↗")}
+                  </span>
+                </span>
+              </a>
               {NAV.map((n) => (
                 <Link
                   key={n.href}

@@ -14,6 +14,7 @@ import {
   Moon,
   Search,
   Settings,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
@@ -23,6 +24,8 @@ import { useT } from "./LanguageProvider";
 import { createClient } from "@/lib/supabase/client";
 
 const SCHEDULING_URL = "https://airportels-scheduling.vercel.app";
+const SERVICE_PROMO_URL =
+  "https://ssglsj0spi27.sg.larksuite.com/wiki/VTqtwFbXdiUKG0kIlWtlBFJegfh?from=from_copylink";
 
 type Item = { href: string; label: string; icon: LucideIcon; badge?: number };
 
@@ -67,6 +70,24 @@ export default function LeftRail({
       </Link>
 
       <nav className="flex flex-1 flex-col gap-1 overflow-y-auto">
+        {/* Prominent: AIRPORTELs Service & Promotion (external Lark) */}
+        <a
+          href={SERVICE_PROMO_URL}
+          target="_blank"
+          rel="noopener"
+          className="mb-2 flex items-center gap-2.5 rounded-xl border border-amber-300 bg-gradient-to-r from-amber-100 to-brand-50 px-3 py-2.5 text-sm font-bold text-brand-800 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+        >
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-400 text-white">
+            <Sparkles size={17} />
+          </span>
+          <span className="flex-1 leading-tight">
+            AIRPORTELs
+            <span className="block text-[11px] font-semibold text-brand-600">
+              {t("บริการ & โปรโมชัน ↗", "Service & Promotion ↗")}
+            </span>
+          </span>
+        </a>
+
         {items.map((it) => {
           const active = isActive(it.href);
           return (

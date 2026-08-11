@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, GraduationCap, Megaphone, Pin } from "lucide-react";
+import { ArrowRight, GraduationCap, Megaphone, Pin, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import KnowledgeBase from "@/components/KnowledgeBase";
 import SearchBox from "@/components/SearchBox";
@@ -77,6 +77,31 @@ export default async function HomePage() {
           </span>
         </Link>
       )}
+
+      {/* AIRPORTELs Service & Promotion (external Lark) — prominent */}
+      <a
+        href="https://ssglsj0spi27.sg.larksuite.com/wiki/VTqtwFbXdiUKG0kIlWtlBFJegfh?from=from_copylink"
+        target="_blank"
+        rel="noopener"
+        className="group flex items-center gap-4 overflow-hidden rounded-2xl border border-amber-300 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+        style={{ background: "linear-gradient(135deg,#fff4d6 0%,#ffe9b0 55%,#e4f1ff 100%)" }}
+      >
+        <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-amber-400 text-white shadow">
+          <Sparkles size={28} />
+        </span>
+        <div className="flex-1">
+          <h2 className="font-extrabold text-brand-900">
+            AIRPORTELs Service &amp; Promotion
+          </h2>
+          <p className="text-sm text-brand-800/80">
+            <T
+              th="ข้อมูลบริการและโปรโมชันล่าสุด (สำคัญ) — คลิกเพื่อดูเพิ่มเติม"
+              en="Latest services & promotions (important) — click for details"
+            />
+          </p>
+        </div>
+        <ArrowRight className="text-amber-600 transition group-hover:translate-x-1" />
+      </a>
 
       {/* Onboarding CTA */}
       <Link
