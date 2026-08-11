@@ -17,7 +17,12 @@ export const metadata: Metadata = {
   },
   description:
     "AIRPORTELs Operations Knowledge Center — ศูนย์รวมคู่มือการทำงาน SOP / WI สำหรับพนักงานหน้าสาขา",
-  applicationName: "Operations Knowledge Center",
+  applicationName: "AIRPORTELs SOP Hub",
+  appleWebApp: {
+    capable: true,
+    title: "AIRPORTELs SOP Hub",
+    statusBarStyle: "black-translucent",
+  },
 };
 
 export const viewport: Viewport = {
