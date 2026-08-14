@@ -1666,12 +1666,28 @@ insert into sop.documents (slug, title, summary, category_id, content_html, tags
 values ('lost-found-claim', 'การจัดการของหาย & เคลมความเสียหาย (Lost & Found / Damage Claim)', 'SOP-OPS 021 — ขั้นตอนรับแจ้ง สอบสวน และจัดการกรณีลูกค้าแจ้งของหาย/เสียหายระหว่างใช้บริการ เงื่อนไขการเคลมตาม T&C (แจ้งภายใน 72 ชม.) วงเงินชดเชย และแผนผังขั้นตอนการเคลม',
   (select id from sop.categories where slug = 'counter-service'),
   '<style>
-.prose table.sop-tbl th{white-space:nowrap;text-align:center;font-size:13.5px}
-.prose table.sop-tbl td{min-width:170px;max-width:360px;vertical-align:top;font-size:13.5px;line-height:1.55}
+.prose table.sop-tbl th{white-space:nowrap;text-align:center;font-size:14px}
+.prose table.sop-tbl td{min-width:170px;max-width:360px;vertical-align:top;font-size:14px;line-height:1.6}
 .prose table.sop-tbl td:first-child,.prose table.sop-tbl th:first-child{min-width:140px;white-space:nowrap;font-weight:700;position:sticky;left:0;background:var(--surface-2);z-index:1}
-.sop-note{background:var(--surface-2);border-left:3px solid var(--brand-400,#f59e0b);border-radius:6px;padding:10px 14px;margin:10px 0;font-size:13.5px}
-.sop-flow{background:var(--surface-2);border-radius:8px;padding:2px 16px;margin:10px 0}
-.sop-hint{font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px}
+.sop-note{background:var(--surface-2);border-left:3px solid #f59e0b;border-radius:6px;padding:10px 14px;margin:10px 0;font-size:14.5px;line-height:1.65}
+.sop-flow{background:var(--surface-2);border-radius:10px;padding:4px 18px;margin:12px 0}
+.sop-hint{font-size:13px;color:var(--text-muted,#6b7280);margin:2px 0 8px}
+/* numbered step cards — matches source layout */
+.sop-step{display:grid;grid-template-columns:56px 1fr;border:1px solid var(--border,#e5e7eb);border-radius:12px;margin:14px 0;overflow:hidden;background:transparent}
+.sop-step>.n{display:flex;align-items:center;justify-content:center;background:var(--surface-2);font-weight:800;font-size:22px;color:#1a66e0;border-right:1px solid var(--border,#e5e7eb)}
+.sop-step>.c{padding:14px 18px}
+.sop-step .c h4{margin:0 0 10px;font-size:16px;line-height:1.5}
+.sop-step .c h4 .en{color:var(--text,inherit)}
+.sop-step ul{list-style:none;margin:0;padding:0}
+.sop-step li{position:relative;padding-left:22px;margin:8px 0;font-size:14.5px;line-height:1.7}
+.sop-step li::before{content:"▸";position:absolute;left:2px;top:0;color:#f59e0b;font-weight:700}
+.sop-step .en,.sop-flow .en{color:var(--text-muted,#6b7280)}
+/* danger box — Do NOT Process If */
+.sop-danger{border:1px solid rgba(220,38,38,.38);background:rgba(220,38,38,.07);border-radius:12px;padding:6px 18px 12px;margin:14px 0}
+.sop-danger h3{color:#dc2626;margin:12px 0 8px}
+.sop-danger ul{list-style:none;margin:0;padding:0}
+.sop-danger li{position:relative;padding-left:22px;margin:8px 0;font-size:14.5px;line-height:1.7}
+.sop-danger li::before{content:"▸";position:absolute;left:2px;top:0;color:#dc2626;font-weight:700}
 </style>
 
 <blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 021 &nbsp;·&nbsp; <strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 พฤษภาคม 2569 &nbsp;·&nbsp; <strong>หน่วยงาน:</strong> Operations</p></blockquote>
@@ -1726,57 +1742,73 @@ values ('lost-found-claim', 'การจัดการของหาย & เ
 
 <h3>🔹 ขั้นตอนการปฏิบัติ / Lost &amp; Found Process Steps</h3>
 
-<h4>ขั้นที่ 1 — GS &amp; CS รับแจ้งและบันทึกข้อมูลเบื้องต้น (Receive the Report)</h4>
+<div class="sop-step"><div class="n">1</div><div class="c">
+<h4><strong>GS &amp; CS รับแจ้งและบันทึกข้อมูลเบื้องต้น</strong> &nbsp;/&nbsp; <span class="en"><strong>Receive the Report</strong></span></h4>
 <ul>
-<li>รับทราบรายงานลูกค้าภายในวันทำการเดียวกัน <span style="color:var(--text-muted,#6b7280)">| Acknowledge same business day</span></li>
+<li>รับทราบรายงานลูกค้าภายในวันทำการเดียวกัน &nbsp;<span class="en">| Acknowledge same business day</span></li>
 <li>รวบรวม: ชื่อ-นามสกุล | Order ID | เบอร์ติดต่อ | คำอธิบายของที่หาย | วัน-เวลา-สาขาที่ใช้บริการ</li>
 </ul>
+</div></div>
 
-<h4>ขั้นที่ 2 — ตรวจสอบออร์เดอร์และตัวตน (Verify Order &amp; Identity)</h4>
+<div class="sop-step"><div class="n">2</div><div class="c">
+<h4><strong>ตรวจสอบออร์เดอร์และตัวตน</strong> &nbsp;/&nbsp; <span class="en"><strong>Verify Order &amp; Identity</strong></span></h4>
 <ul>
-<li>ยืนยันการจองผ่านระบบจัดการของ AIRPORTELs <span style="color:var(--text-muted,#6b7280)">| Confirm via AIRPORTELs management system</span></li>
+<li>ยืนยันการจองผ่านระบบจัดการของ AIRPORTELs &nbsp;<span class="en">| Confirm via AIRPORTELs management system</span></li>
 <li>ตรวจสอบรายละเอียดความเสียหาย รูปถ่าย หรือ VDO หลักฐาน</li>
 </ul>
+</div></div>
 
-<h4>ขั้นที่ 3 — ส่ง Claim Form ให้ลูกค้าแจ้งรายละเอียด (Log the Case)</h4>
+<div class="sop-step"><div class="n">3</div><div class="c">
+<h4><strong>ส่ง Claim Form ให้ลูกค้าแจ้งรายละเอียด</strong> &nbsp;/&nbsp; <span class="en"><strong>Log the Case</strong></span></h4>
 <ul>
 <li>ลูกค้ากรอกแบบฟอร์มเพื่อทำการขอเคลม: Order ID | วันที่รับแจ้ง | คำอธิบายของที่หาย | ประเภทบริการ | มูลค่าความเสียหาย | รายละเอียดการคืนเงิน</li>
 </ul>
+</div></div>
 
-<h4>ขั้นที่ 4 — สอบสวนและค้นหา (Investigate)</h4>
+<div class="sop-step"><div class="n">4</div><div class="c">
+<h4><strong>สอบสวนและค้นหา</strong> &nbsp;/&nbsp; <span class="en"><strong>Investigate</strong></span></h4>
 <ul>
 <li>ประสานงานสาขา/คนขับที่เกี่ยวข้อง ตรวจสอบ CCTV หรือบันทึกส่งมอบ</li>
 <li>ยืนยันว่าของอยู่ในความดูแลของ AIRPORTELs ขณะสูญหาย</li>
-<li><strong>เป้าหมาย:</strong> ภายใน 3 วันทำการ <span style="color:var(--text-muted,#6b7280)">/ Target: within 3 business days</span></li>
+<li><strong>เป้าหมาย:</strong> ภายใน 3 วันทำการ &nbsp;<span class="en">/ Target: within 3 business days</span></li>
 </ul>
+</div></div>
 
-<h4>ขั้นที่ 5 — แจ้งผลลัพธ์ (Communicate Outcome)</h4>
+<div class="sop-step"><div class="n">5</div><div class="c">
+<h4><strong>แจ้งผลลัพธ์</strong> &nbsp;/&nbsp; <span class="en"><strong>Communicate Outcome</strong></span></h4>
 <ul>
 <li>ยืนยันเป็นลายลักษณ์อักษรทางอีเมลทุกกรณี</li>
 <li><strong>หากพบ:</strong> แจ้งทันที ส่งมอบคืนที่สาขา หรือจัดส่งให้ | <strong>หากไม่พบ + มีสิทธิ์:</strong> ไปขั้นตอนที่ 6</li>
 <li><strong>หากไม่มีสิทธิ์:</strong> อธิบายเป็นลายลักษณ์อักษรโดยอ้างอิง T&amp;C ชัดเจน</li>
 </ul>
+</div></div>
 
-<h4>ขั้นที่ 6 — ดำเนินการชดเชย กรณีมีสิทธิ์ (Process Compensation — if eligible)</h4>
+<div class="sop-step"><div class="n">6</div><div class="c">
+<h4><strong>ดำเนินการชดเชย (กรณีมีสิทธิ์)</strong> &nbsp;/&nbsp; <span class="en"><strong>Process Compensation — if eligible</strong></span></h4>
 <ul>
 <li>ขอหลักฐานการซื้อ / มูลค่าเดิมจากลูกค้า</li>
 <li><strong>วงเงิน:</strong> 5,000 THB (กระเป๋า) | 50,000 THB (ถุงกอล์ฟ) | 10,000 THB (Nationwide 5 วัน) ต่อออร์เดอร์</li>
 <li>คืนเงินภายใน <strong>7–14 วันทำการ</strong> ผ่าน Wireless Transfer เท่านั้น (T&amp;C)</li>
-<li>ขออนุมัติ Operations Manager ก่อนยืนยันกับลูกค้า</li>
+<li>ขออนุมัติ <strong>Operations Manager</strong> ก่อนยืนยันกับลูกค้า</li>
 </ul>
+</div></div>
 
-<h4>ขั้นที่ 7 — ปิดเคสและบันทึก (Close &amp; Document)</h4>
+<div class="sop-step"><div class="n">7</div><div class="c">
+<h4><strong>ปิดเคสและบันทึก</strong> &nbsp;/&nbsp; <span class="en"><strong>Close &amp; Document</strong></span></h4>
 <ul>
 <li>อัปเดตบันทึกเคส แนบหลักฐานทั้งหมด เก็บอย่างน้อย 90 วัน</li>
 <li><strong>กรณีสงสัยคดีอาญา:</strong> Escalate Operations Manager รายงานถึงผู้บริหาร ประสานกับเจ้าหน้าที่เพื่อดำเนินการตามขั้นตอนที่เกี่ยวข้อง</li>
 </ul>
+</div></div>
 
+<div class="sop-danger">
 <h3>🚫 กรณีที่ไม่ดำเนินการเคลม / Do NOT Process If</h3>
 <ul>
 <li>สูญหายก่อนส่งมอบ / หลังปิดธุรกรรม / บุคคลอื่นแสดง valid references รับไปแล้ว</li>
 <li>ของต้องห้าม / ของยกเว้น / ของในกระเป๋า / ของแต่งกระเป๋า</li>
 <li>เหตุสุดวิสัย (ภัยธรรมชาติ, คำสั่งราชการ, จราจรระงับ) — T&amp;C Uncontrollable Events</li>
 </ul>
+</div>
 
 <h3>🔹 สรุป Flow Claim — AIRPORTELs</h3>
 <p class="sop-hint">ผู้ที่เกี่ยวข้อง: Customer (ลูกค้า) · Guest Service (GS) · Operations (OP) · Customer Service (CS)</p>
