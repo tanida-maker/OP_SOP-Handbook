@@ -1867,9 +1867,7 @@ values ('lost-found-claim', 'การจัดการของหาย & เ
 <table class="sop-tbl"><thead><tr><th>Version</th><th>วันที่ / Date</th><th>แก้ไขโดย / Author</th><th>รายละเอียด / Notes</th></tr></thead><tbody>
 <tr><td>1.0</td><td>10 May 2026</td><td>Operations Team</td><td>Initial release / เอกสารฉบับแรก</td></tr>
 </tbody></table>
-
-<h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
-<ul><li><a href="mailto:center@airportels.asia" target="_blank" rel="noopener">อีเมลจาก center@airportels.asia</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/docx/YpQGdONFSoSPM7xT14ulfCe7gqc?from=from_copylink" target="_blank" rel="noopener">เอกสารประกอบ (Doc)</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/base/AjqWbJszaaLk1hspwmClmhizg2f?from=from_copylink" target="_blank" rel="noopener">ระบบบันทึก/ฟอร์ม (Lark Base)</a></li><li><a href="https://forms.gle/B5dXQkTH73CDtBJJA" target="_blank" rel="noopener">Claim with MS</a></li></ul>', array['lost-found','claim','compensation','damage'], 'published', false)
+', array['lost-found','claim','compensation','damage'], 'published', false)
 on conflict (slug) do update set
   title = excluded.title, summary = excluded.summary,
   category_id = excluded.category_id, content_html = excluded.content_html,
