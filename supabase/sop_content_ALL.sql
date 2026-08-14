@@ -1826,9 +1826,9 @@ values ('lost-found-claim', 'การจัดการของหาย & เ
 
 <h3>📄 เอกสารและแบบฟอร์มประกอบการ Claim</h3>
 <ul>
-<li>Flow Claim and Refund</li>
-<li>Claim and Refund</li>
-<li>Claim with MS</li>
+<li><a href="https://ssglsj0spi27.sg.larksuite.com/docx/YpQGdONFSoSPM7xT14ulfCe7gqc" target="_blank" rel="noopener">Flow Claim and Refund</a> <span style="color:var(--text-muted,#6b7280)">— เอกสารขั้นตอน (Lark Doc)</span></li>
+<li><a href="https://forms.gle/B5dXQkTH73CDtBJJA" target="_blank" rel="noopener">Claim and Refund</a> <span style="color:var(--text-muted,#6b7280)">— แบบฟอร์มขอเคลม (Google Form)</span></li>
+<li><a href="https://ssglsj0spi27.sg.larksuite.com/base/AjqWbJszaaLk1hspwmClmhizg2f" target="_blank" rel="noopener">Claim with MS</a> <span style="color:var(--text-muted,#6b7280)">— ระบบบันทึกเคลม (Lark Base)</span></li>
 </ul>
 
 <h3>🔹 ประวัติการแก้ไข / Document Control</h3>
