@@ -1711,35 +1711,7 @@ values ('lost-found-claim', 'การจัดการของหาย & เ
 <ul><li>อัปเดตบันทึกเคส แนบหลักฐานทั้งหมด เก็บอย่างน้อย 90 วัน</li><li>กรณีสงสัยคดีอาญา: Escalate Operations Manager รายงานถึงผู้บริหาร ประสานกับเจ้าหน้าที่เพื่อดำเนิน</li></ul>
 <p>การตามขั้นตอนที่เกี่ยวข้อง 🚫 กรณีที่ไม่ดำเนินการเคลม / Do NOT Process If:</p>
 <ul><li>สูญหายก่อนส่งมอบ / หลังปิดธุรกรรม / บุคคลอื่นแสดง valid references รับไปแล้ว</li><li>ของต้องห้าม / ของยกเว้น / ของในกระเป๋า / ของแต่งกระเป๋า</li><li>เหตุสุดวิสัย (ภัยธรรมชาติ, คำสั่งราชการ, จราจรระงับ) — T&amp;C Uncontrollable Events</li></ul>
-<h3>🔹สรุป Flow Claim — AIRPORTELs</h3>
-<p>ผู้ที่เกี่ยวข้อง: Customer (ลูกค้า) · Guest Service (GS) · Operations (OP) · Customer Service (CS) ลำดับที่ 1 — รับเรื่องที่สาขา หรือ Online team (Customer → GS or CS)</p>
-<p><strong>1. ลูกค้ามาที่เคาน์เตอร์ → GS ตรวจสอบ</strong></p>
-<ul><li>กรณีลูกค้าแจ้งผ่านช่องทาง Online → CS ตรวจสอบ</li></ul>
-<p><strong>2. GS เปิดคืนกระเป๋า → ลูกค้ารับกระเป๋าคืน</strong></p>
-<p><strong>3. ตรวจสอบว่ากระเป๋ามีความเสียหายหรือไม่</strong></p>
-<ul><li>NO → คืนกระเป๋าให้ลูกค้า (จบ)</li><li>YES → แจ้งความเสียหายกับพนักงาน</li></ul>
-<p>ลำดับที่ 2 — ตรวจสอบและส่งแบบฟอร์ม (GS → CS)</p>
-<p><strong>4. GS / CS ตรวจสอบความเสียหายของกระเป๋า</strong></p>
-<p><strong>5. ประเมินจาก (Policy)</strong></p>
-<ul><li>NO (ไม่ผ่าน) → แจ้งเงื่อนไขให้ลูกค้า</li><li>YES → ส่ง Email ให้ลูกค้ากรอกแบบฟอร์มผ่าน Respond</li></ul>
-<p><strong>6. ลูกค้ากรอกแบบฟอร์มพร้อมส่งหลักฐาน → OP รับผลผ่านฟอร์ม</strong></p>
-<p>ลำดับที่ 3 — พิจารณาและอนุมัติ (OP)</p>
-<p><strong>7. OP ตรวจสอบข้อมูล ครบ/ไม่ครบ</strong></p>
-<ul><li>NO → ส่งให้ CS ขอข้อมูลเพิ่ม → CS Respond กลับ → นำส่งให้ OP ใหม่</li><li>YES → พิจารณากรณี</li></ul>
-<p><strong>8. ตรวจสอบว่ากระเป๋าเสียหายจากการขนส่งหรือไม่</strong></p>
-<ul><li>NO → ตรวจสอบจากกล้องวงจรปิด หรือหลักฐานอื่นๆ</li><li>YES → ทำเอกสารเคลมให้ลูกค้า</li></ul>
-<p>ลำดับที่ 4 — อนุมัติและจ่ายเงิน (OP → CEO → CS)</p>
-<p><strong>9. ตรวจสอบความผิดพลาด — จาก AI หรือพนักงาน</strong></p>
-<ul><li>NO (จาก MS) → บันทึกความเสียหายส่งเคลมกลับไปที่ MS</li><li>YES (AI) → แจกแจงความเสียหายพร้อมแนบเอกสาร ส่งทีม HR, ACC</li></ul>
-<p><strong>10. ส่งเอกสารให้ CS → ลูกค้าผ่าน Respond พร้อมยอดรับ</strong></p>
-<p><strong>11. ส่งเอกสารให้ Operation Manager → เซ็นอนุมัติ → Status ใน Lark เป็น Approver</strong></p>
-<p><strong>12. ส่งเอกสารให้ CEO ผ่านกลุ่ม Business Gank! → เพื่อยืนยันกับลูกค้า</strong></p>
-<p><strong>13. นำเข้าข้อมูลใน CS → ดำเนินการเคลม → CS ส่งหลักฐานการโอนให้ลูกค้า</strong></p>
-<p><strong>14. เปลี่ยน Status ใน Lark เป็น In Paid</strong></p>
-<p><strong>15. กรอกฟอร์มเคลมกรณีความเสียหายเกิดจากการขนส่ง MS → แนบหลักฐานการโอนเงินให้ลูกค้า</strong></p>
-<p>→ END Flow Chart</p>
-<figure><img src="/sop/lost-found-claim/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
-<figure><img src="/sop/lost-found-claim/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<h3>แผนผังขั้นตอนการเคลม (Claim Flow Chart)</h3><p class="sop-hint">⟷ ภาพใหญ่ — เลื่อน/ซูมเพื่อดูรายละเอียด</p><figure><img src="/sop/lost-found-claim/flowchart.png" alt="แผนผังขั้นตอนการเคลม — ลูกค้า / GS / OP / CS" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px;background:#fff" /></figure>
 <h3>เอกสาร และแบบฟอร์ม ประกอบการ Claim</h3>
 <ul><li>Flow Claim and Refund</li><li>Claim and Refund</li><li>Claim with MS</li></ul>
 <h3>ประวัติการแก้ไข / Document Control</h3>
