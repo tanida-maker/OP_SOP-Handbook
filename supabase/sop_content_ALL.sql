@@ -1665,57 +1665,177 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('lost-found-claim', 'การจัดการของหาย & เคลมความเสียหาย (Lost & Found / Damage Claim)', 'SOP-OPS 021 — ขั้นตอนรับแจ้ง สอบสวน และจัดการกรณีลูกค้าแจ้งของหาย/เสียหายระหว่างใช้บริการ เงื่อนไขการเคลมตาม T&C (แจ้งภายใน 72 ชม.) วงเงินชดเชย และแผนผังขั้นตอนการเคลม',
   (select id from sop.categories where slug = 'counter-service'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 021<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 พฤษภาคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><style>
+  '<style>
 .prose table.sop-tbl th{white-space:nowrap;text-align:center;font-size:13.5px}
-.prose table.sop-tbl td{min-width:160px;max-width:340px;vertical-align:top;font-size:13.5px;line-height:1.55}
-.prose table.sop-tbl td:first-child,.prose table.sop-tbl th:first-child{min-width:130px;white-space:nowrap;font-weight:700;position:sticky;left:0;background:var(--surface-2);z-index:1}
+.prose table.sop-tbl td{min-width:170px;max-width:360px;vertical-align:top;font-size:13.5px;line-height:1.55}
+.prose table.sop-tbl td:first-child,.prose table.sop-tbl th:first-child{min-width:140px;white-space:nowrap;font-weight:700;position:sticky;left:0;background:var(--surface-2);z-index:1}
+.sop-note{background:var(--surface-2);border-left:3px solid var(--brand-400,#f59e0b);border-radius:6px;padding:10px 14px;margin:10px 0;font-size:13.5px}
+.sop-flow{background:var(--surface-2);border-radius:8px;padding:2px 16px;margin:10px 0}
+.sop-hint{font-size:12.5px;color:var(--text-muted,#6b7280);margin:2px 0 8px}
 </style>
-<h3>อ้างอิง / Reference:</h3>
-<ul><li>(TH)Terms and Conditions 2026 / (EN)Terms and Conditions 2026</li><li>SOP: เคลมความเสียหาย</li></ul>
+
+<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 021 &nbsp;·&nbsp; <strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 พฤษภาคม 2569 &nbsp;·&nbsp; <strong>หน่วยงาน:</strong> Operations</p></blockquote>
+
+<h3>📎 อ้างอิง / Reference</h3>
+<ul>
+<li>(TH) Terms and Conditions 2026 / (EN) Terms and Conditions 2026</li>
+<li>SOP: เคลมความเสียหาย (Damage Claim)</li>
+</ul>
+
 <h3>🔹 วัตถุประสงค์ / Purpose</h3>
-<p>กำหนดขั้นตอนมาตรฐานในการรับแจ้ง สอบสวน และจัดการกรณีที่ลูกค้าแจ้งว่ากระเป๋าหรือทรัพย์สินสูญหายระหว่าง ใช้บริการ AIRPORTELs เพื่อให้การดำเนินการถูกต้องตาม T&amp;C โปร่งใส และตรวจสอบย้อนกลับได้ To standardize receiving, investigating, and resolving lost item reports during AIRPORTELs service in accordance with official T&amp;C</p>
+<p>กำหนดขั้นตอนมาตรฐานในการ <strong>รับแจ้ง สอบสวน และจัดการ</strong> กรณีที่ลูกค้าแจ้งว่ากระเป๋าหรือทรัพย์สินสูญหายระหว่างใช้บริการ AIRPORTELs เพื่อให้การดำเนินการถูกต้องตาม T&amp;C โปร่งใส และตรวจสอบย้อนกลับได้</p>
+<p style="color:var(--text-muted,#6b7280)"><em>To standardize receiving, investigating, and resolving lost item reports during AIRPORTELs service in accordance with the official T&amp;C.</em></p>
+
 <h3>🔹 ขอบเขต / Scope</h3>
-<ul><li>ครอบคลุมทุกสาขาที่มีบริการรับฝากและจัดส่งกระเป๋า — Applies to all branches with storage and</li></ul>
-<p>delivery services.</p>
-<ul><li>ขอบเขตสำหรับพนักงานหน้าสาขาทุกคน | Applies to all Guest Service Staff, CS Agents, and Branch</li></ul>
-<p>Managers.</p>
-<ul><li>อ้างอิง T&amp;C เรื่องสิทธิ์เคลมและค่าชดเชย | All claim decisions reference the official T&amp;C .</li></ul>
-<p>⚠️ เงื่อนไขการเคลมความเสียหาย : Key T&amp;C References (Last update: 29/04/2026)</p>
-<ul><li>ลูกค้าต้องแจ้งเคลมความเสียหายภายใน 3 วัน หรือ 72 ชั่วโมง นับตั้งแต่ได้รับกระเป๋าคืน หรือนับตั้งแต่สถานะ</li></ul>
-<p>การจัดส่งในระบบแสดงว่า “ส่งสำเร็จ” หากพ้นระยะเวลาดังกล่าว บริษัทฯ ขอสงวนสิทธิ์ไม่รับผิดชอบต่อความ เสียหายหรือสูญหายใดๆ ทั้งสิ้น</p>
-<ul><li>หากปลายทางไม่มีผู้รับกระเป๋า ณ เวลาที่จัดส่ง บริษัทฯ ขอสงวนสิทธิ์ไม่รับผิดชอบต่อความเสียหายหรือสูญหาย</li></ul>
-<p>ใดๆ ที่อาจเกิดขึ้น ทั้งนี้ พนักงานจะรอเพียง 15 นาทีตามเงื่อนไขการจัดส่ง หากไม่มีผู้รับ คำสั่งซื้อจะถือเป็น “ไม่ แสดงตน” และจะไม่มีการคืนเงิน</p>
-<ul><li>หากเป็นสิ่งของ หรือรายการต้องห้าม ที่ทางบริษัทฯ ไม่รับฝากหรือส่ง ขอสงวนสิทธิ์ไม่รับเคลม และไม่รับผิดชอบ</li></ul>
-<p>ใดๆ ทั้งสิ้น</p>
-<ul><li>ค่าชดเชยสูงสุด: 5,000 THB (กระเป๋า) | 50,000 THB (ถุงกอล์ฟ) | 10,000 THB (Nationwide 5 วัน) ต่อ</li></ul>
-<p>ออร์เดอร์</p>
-<ul><li>บริษัทรับพิจารณาเฉพาะหลักฐานที่ออกจากช่องทางของบริษัทโดยตรง ได้แก่</li><li>อีเมลจาก center@airportels.asia</li><li>ใบเสร็จที่พิมพ์จากระบบบริษัท</li><li>ข้อมูลบนเว็บไซต์และระบบจัดการของบริษัท</li><li>เอกสารที่ได้รับจากเจ้าหน้าที่หรือพาร์ทเนอร์ที่ได้รับอนุญาต</li></ul>
+<ul>
+<li>ครอบคลุมทุกสาขาที่มีบริการรับฝากและจัดส่งกระเป๋า <span style="color:var(--text-muted,#6b7280)">— Applies to all branches with storage and delivery services.</span></li>
+<li>ขอบเขตสำหรับพนักงานหน้าสาขาทุกคน <span style="color:var(--text-muted,#6b7280)">— Applies to all Guest Service Staff, CS Agents, and Branch Managers.</span></li>
+<li>อ้างอิง T&amp;C เรื่องสิทธิ์เคลมและค่าชดเชย <span style="color:var(--text-muted,#6b7280)">— All claim decisions reference the official T&amp;C.</span></li>
+</ul>
+
+<h3>⚠️ เงื่อนไขการเคลมความเสียหาย / Key T&amp;C References</h3>
+<p class="sop-hint">อ้างอิง Terms &amp; Conditions 2026 (อัปเดตล่าสุด: 29/04/2026)</p>
+<ul>
+<li>ลูกค้าต้องแจ้งเคลมความเสียหาย <strong>ภายใน 3 วัน หรือ 72 ชั่วโมง</strong> นับตั้งแต่ได้รับกระเป๋าคืน หรือนับตั้งแต่สถานะการจัดส่งในระบบแสดงว่า “ส่งสำเร็จ” — หากพ้นระยะเวลาดังกล่าว บริษัทฯ ขอสงวนสิทธิ์ไม่รับผิดชอบต่อความเสียหายหรือสูญหายใดๆ ทั้งสิ้น</li>
+<li>หากปลายทาง <strong>ไม่มีผู้รับกระเป๋า</strong> ณ เวลาที่จัดส่ง บริษัทฯ ขอสงวนสิทธิ์ไม่รับผิดชอบต่อความเสียหายหรือสูญหายใดๆ ที่อาจเกิดขึ้น — พนักงานจะรอเพียง <strong>15 นาที</strong> ตามเงื่อนไขการจัดส่ง หากไม่มีผู้รับ คำสั่งซื้อจะถือเป็น “ไม่แสดงตน” และจะไม่มีการคืนเงิน</li>
+<li>หากเป็น <strong>สิ่งของหรือรายการต้องห้าม</strong> ที่บริษัทฯ ไม่รับฝากหรือส่ง ขอสงวนสิทธิ์ไม่รับเคลม และไม่รับผิดชอบใดๆ ทั้งสิ้น</li>
+</ul>
+<div class="sop-note"><strong>ค่าชดเชยสูงสุดต่อออร์เดอร์:</strong> 5,000 THB (กระเป๋า) &nbsp;|&nbsp; 50,000 THB (ถุงกอล์ฟ) &nbsp;|&nbsp; 10,000 THB (Nationwide 5 วัน)</div>
+<p>บริษัทรับพิจารณาเฉพาะ <strong>หลักฐานที่ออกจากช่องทางของบริษัทโดยตรง</strong> ได้แก่</p>
+<ul>
+<li>อีเมลจาก <strong>center@airportels.asia</strong></li>
+<li>ใบเสร็จที่พิมพ์จากระบบบริษัท</li>
+<li>ข้อมูลบนเว็บไซต์และระบบจัดการของบริษัท</li>
+<li>เอกสารที่ได้รับจากเจ้าหน้าที่หรือพาร์ทเนอร์ที่ได้รับอนุญาต</li>
+</ul>
+
 <h3>🔹 บทบาทและความรับผิดชอบ / Roles</h3>
-<h3>บทบาทและความรับผิดชอบ (Roles &amp; Responsibilities)</h3><table class="sop-tbl"><thead><tr><th>ตำแหน่ง / Role</th><th>หน้าที่ / Responsibility</th></tr></thead><tbody><tr><td>CS Agent / Guest Service Staff</td><td>รับแจ้ง บันทึกเคส รวบรวมหลักฐาน ประสานงานสาขา และสื่อสารกับลูกค้า</td></tr><tr><td>OP Coordinator / OP Manager</td><td>กำกับการสอบสวน อนุมัติค่าชดเชย ตรวจสอบ CCTV และรายงานความผิดปกติ</td></tr><tr><td>Operations / BD / CLO / MS</td><td>ปิดเคสระดับสูง ประสานหน่วยงานราชการ และทบทวนนโยบายรายไตรมาส</td></tr></tbody></table>
-<p>🔹 ประเภทของสูญหาย / Lost Item Categories</p>
-<h3>ประเภทของสูญหาย (Lost Item Categories)</h3><table class="sop-tbl"><thead><tr><th>ประเภท / Category</th><th>สิทธิ์เคลม</th><th>การดำเนินการ / Action</th></tr></thead><tbody><tr><td>กระเป๋าหายทั้งใบ ระหว่างขนส่งโดย AIRPORTELs / Make Send / Partner</td><td>✅ มีสิทธิ์ (ถ้ายืนยันได้)</td><td>ลูกค้าแจ้งเคลมตามขั้นตอน → ตรวจสอบรายละเอียด → ยืนยัน → ชดเชยตามตารางเคลม (ต้องแสดงใบเสร็จ/หลักฐานครบถ้วน)</td></tr><tr><td>ของหายภายในกระเป๋า</td><td>❌ ไม่ครอบคลุม</td><td>บันทึกเท่านั้น — อ้างอิง T&amp;C 2026 หัวข้อ Liabilities</td></tr><tr><td>ของแต่งกระเป๋า (พวงกุญแจ, ป้าย, หมอน)</td><td>❌ ไม่ครอบคลุม</td><td>T&amp;C 2026 ระบุชัด: ไม่รับประกัน แนะนำถอดออกก่อนใช้บริการ</td></tr><tr><td>ของต้องห้าม / Prohibited items</td><td>❌ ไม่ครอบคลุม</td><td>ไม่ดำเนินการเคลม — อ้างอิง T&amp;C 2026 หัวข้อ Prohibited Items</td></tr></tbody></table>
-<h3>ขั้นตอนการปฏิบัติ Lost &amp; Found Process Steps</h3>
-<p>1. GS &amp; CS รับแจ้งและบันทึกข้อมูลเบื้องต้น / Receive the Report</p>
-<ul><li>รับทราบรายงานลูกค้าภายในวันทำการเดียวกัน | Acknowledge same business day</li><li>รวบรวม: ชื่อ-นามสกุล | Order ID | เบอร์ติดต่อ | คำอธิบายของที่หาย | วัน-เวลา-สาขาที่ใช้บริการ</li></ul>
-<p>2. ตรวจสอบออร์เดอร์และตัวตน / Verify Order &amp; Identity</p>
-<ul><li>ยืนยันการจองผ่านระบบจัดการของ AIRPORTELs | Confirm via AIRPORTELs management system</li><li>ตรวจสอบรายละเอียดความเสียหาย รูปถ่าย หรือ VDO หลักฐาน</li></ul>
-<p>3. ส่ง Claim From ให้ลูกค้าแจ้งรายละเอียด / Log the Case</p>
-<ul><li>ลูกค้ากรอกแบบฟอร์ม เพื่อทำการขอเคลม Order ID | วันที่รับแจ้ง | คำอธิบายของที่หาย | ประเภทบริการ | มูลค่า</li></ul>
-<p>ความเสียหาย | รายละเอียดการคืนเงิน 4. สอบสวนและค้นหา / Investigate</p>
-<ul><li>ประสานงานสาขา/คนขับที่เกี่ยวข้อง ตรวจสอบ CCTV หรือบันทึกส่งมอบ</li><li>ยืนยันว่าของอยู่ในความดูแลของ AIRPORTELs ขณะสูญหาย</li><li>เป้าหมาย: ภายใน 3 วันทำการ / Target: within 3 business days</li></ul>
-<p>5. แจ้งผลลัพธ์ / Communicate Outcome</p>
-<ul><li>ยืนยันเป็นลายลักษณ์อักษรทางอีเมลทุกกรณี</li><li>หากพบ: แจ้งทันที ส่งมอบคืนที่สาขา หรือจัดส่งให้ | หากไม่พบ + มีสิทธิ์: ไปขั้นตอนที่ 6</li><li>หากไม่มีสิทธิ์: อธิบายเป็นลายลักษณ์อักษรโดยอ้างอิง T&amp;C ชัดเจน</li></ul>
-<p>6. ดำเนินการชดเชย (กรณีมีสิทธิ์) / Process Compensation — if eligible</p>
-<ul><li>ขอหลักฐานการซื้อ / มูลค่าเดิมจากลูกค้า</li><li>วงเงิน: 5,000 THB (กระเป๋า) | 50,000 THB (ถุงกอล์ฟ) | 10,000 THB (Nationwide 5 วัน) ต่อออร์เดอร์</li><li>คืนเงินภายใน 7–14 วันทำการ ผ่าน Wireless Transfer เท่านั้น (T&amp;C)</li><li>ขออนุมัติ Operations Manager ก่อนยืนยันกับลูกค้า</li></ul>
-<p>7. ปิดเคสและบันทึก / Close &amp; Document</p>
-<ul><li>อัปเดตบันทึกเคส แนบหลักฐานทั้งหมด เก็บอย่างน้อย 90 วัน</li><li>กรณีสงสัยคดีอาญา: Escalate Operations Manager รายงานถึงผู้บริหาร ประสานกับเจ้าหน้าที่เพื่อดำเนิน</li></ul>
-<p>การตามขั้นตอนที่เกี่ยวข้อง 🚫 กรณีที่ไม่ดำเนินการเคลม / Do NOT Process If:</p>
-<ul><li>สูญหายก่อนส่งมอบ / หลังปิดธุรกรรม / บุคคลอื่นแสดง valid references รับไปแล้ว</li><li>ของต้องห้าม / ของยกเว้น / ของในกระเป๋า / ของแต่งกระเป๋า</li><li>เหตุสุดวิสัย (ภัยธรรมชาติ, คำสั่งราชการ, จราจรระงับ) — T&amp;C Uncontrollable Events</li></ul>
-<h3>แผนผังขั้นตอนการเคลม (Claim Flow Chart)</h3><p class="sop-hint">⟷ ภาพใหญ่ — เลื่อน/ซูมเพื่อดูรายละเอียด</p><figure><img src="/sop/lost-found-claim/flowchart.png" alt="แผนผังขั้นตอนการเคลม — ลูกค้า / GS / OP / CS" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px;background:#fff" /></figure>
-<h3>เอกสาร และแบบฟอร์ม ประกอบการ Claim</h3>
-<ul><li>Flow Claim and Refund</li><li>Claim and Refund</li><li>Claim with MS</li></ul>
-<h3>ประวัติการแก้ไข / Document Control</h3>
-<p>Version วันที่ / Date แก้ไขโดย / Author รายละเอียด / Notes 1.0 10 May 2026 Operations Team Initial release / เอกสารฉบับแรก</p>
+<table class="sop-tbl"><thead><tr><th>ตำแหน่ง / Role</th><th>หน้าที่ / Responsibility</th></tr></thead><tbody>
+<tr><td>CS Agent / Guest Service Staff</td><td>รับแจ้ง บันทึกเคส รวบรวมหลักฐาน ประสานงานสาขา และสื่อสารกับลูกค้า<br><span style="color:var(--text-muted,#6b7280)">Receive, log, collect evidence, coordinate branch, communicate.</span></td></tr>
+<tr><td>OP Coordinator / OP Manager</td><td>กำกับการสอบสวน อนุมัติค่าชดเชย ตรวจสอบ CCTV และรายงานความผิดปกติ<br><span style="color:var(--text-muted,#6b7280)">Supervise investigation, approve compensation, review CCTV.</span></td></tr>
+<tr><td>Operations / BD / CLO / MS</td><td>ปิดเคสระดับสูง ประสานหน่วยงานราชการ และทบทวนนโยบายรายไตรมาส<br><span style="color:var(--text-muted,#6b7280)">Handle escalations, liaise with authorities, quarterly review.</span></td></tr>
+</tbody></table>
+
+<h3>🔹 ประเภทของสูญหาย / Lost Item Categories</h3>
+<table class="sop-tbl"><thead><tr><th>ประเภท / Category</th><th>สิทธิ์เคลม</th><th>การดำเนินการ / Action</th></tr></thead><tbody>
+<tr><td>กระเป๋าหายทั้งใบ ระหว่างขนส่งโดย AIRPORTELs / Make Send / Partner <br><span style="color:var(--text-muted,#6b7280)">Whole luggage lost during transport</span></td><td>✅ มีสิทธิ์ ถ้ายืนยันได้ และดำเนินการตามกระบวนการ</td><td>ลูกค้าแจ้งเคลมตามขั้นตอน → ตรวจสอบรายละเอียด → ยืนยัน → ชดเชยตามตาราง (ต้องแสดงใบเสร็จ / หลักฐานครบถ้วน)</td></tr>
+<tr><td>ของหายภายในกระเป๋า <br><span style="color:var(--text-muted,#6b7280)">Missing item inside luggage</span></td><td>❌ ไม่ครอบคลุม</td><td>บันทึกเท่านั้น — อ้างอิง T&amp;C 2026 หัวข้อ Liabilities</td></tr>
+<tr><td>ของแต่งกระเป๋า (พวงกุญแจ, ป้าย, หมอน) <br><span style="color:var(--text-muted,#6b7280)">Attachments / accessories</span></td><td>❌ ไม่ครอบคลุม</td><td>T&amp;C 2026 ระบุชัด: ไม่รับประกัน แนะนำถอดออกก่อนใช้บริการ</td></tr>
+<tr><td>ของต้องห้าม / Prohibited items</td><td>❌ ไม่ครอบคลุม</td><td>ไม่ดำเนินการเคลม — อ้างอิง T&amp;C 2026 หัวข้อ Prohibited Items</td></tr>
+</tbody></table>
+
+<h3>🔹 ขั้นตอนการปฏิบัติ / Lost &amp; Found Process Steps</h3>
+
+<h4>ขั้นที่ 1 — GS &amp; CS รับแจ้งและบันทึกข้อมูลเบื้องต้น (Receive the Report)</h4>
+<ul>
+<li>รับทราบรายงานลูกค้าภายในวันทำการเดียวกัน <span style="color:var(--text-muted,#6b7280)">| Acknowledge same business day</span></li>
+<li>รวบรวม: ชื่อ-นามสกุล | Order ID | เบอร์ติดต่อ | คำอธิบายของที่หาย | วัน-เวลา-สาขาที่ใช้บริการ</li>
+</ul>
+
+<h4>ขั้นที่ 2 — ตรวจสอบออร์เดอร์และตัวตน (Verify Order &amp; Identity)</h4>
+<ul>
+<li>ยืนยันการจองผ่านระบบจัดการของ AIRPORTELs <span style="color:var(--text-muted,#6b7280)">| Confirm via AIRPORTELs management system</span></li>
+<li>ตรวจสอบรายละเอียดความเสียหาย รูปถ่าย หรือ VDO หลักฐาน</li>
+</ul>
+
+<h4>ขั้นที่ 3 — ส่ง Claim Form ให้ลูกค้าแจ้งรายละเอียด (Log the Case)</h4>
+<ul>
+<li>ลูกค้ากรอกแบบฟอร์มเพื่อทำการขอเคลม: Order ID | วันที่รับแจ้ง | คำอธิบายของที่หาย | ประเภทบริการ | มูลค่าความเสียหาย | รายละเอียดการคืนเงิน</li>
+</ul>
+
+<h4>ขั้นที่ 4 — สอบสวนและค้นหา (Investigate)</h4>
+<ul>
+<li>ประสานงานสาขา/คนขับที่เกี่ยวข้อง ตรวจสอบ CCTV หรือบันทึกส่งมอบ</li>
+<li>ยืนยันว่าของอยู่ในความดูแลของ AIRPORTELs ขณะสูญหาย</li>
+<li><strong>เป้าหมาย:</strong> ภายใน 3 วันทำการ <span style="color:var(--text-muted,#6b7280)">/ Target: within 3 business days</span></li>
+</ul>
+
+<h4>ขั้นที่ 5 — แจ้งผลลัพธ์ (Communicate Outcome)</h4>
+<ul>
+<li>ยืนยันเป็นลายลักษณ์อักษรทางอีเมลทุกกรณี</li>
+<li><strong>หากพบ:</strong> แจ้งทันที ส่งมอบคืนที่สาขา หรือจัดส่งให้ | <strong>หากไม่พบ + มีสิทธิ์:</strong> ไปขั้นตอนที่ 6</li>
+<li><strong>หากไม่มีสิทธิ์:</strong> อธิบายเป็นลายลักษณ์อักษรโดยอ้างอิง T&amp;C ชัดเจน</li>
+</ul>
+
+<h4>ขั้นที่ 6 — ดำเนินการชดเชย กรณีมีสิทธิ์ (Process Compensation — if eligible)</h4>
+<ul>
+<li>ขอหลักฐานการซื้อ / มูลค่าเดิมจากลูกค้า</li>
+<li><strong>วงเงิน:</strong> 5,000 THB (กระเป๋า) | 50,000 THB (ถุงกอล์ฟ) | 10,000 THB (Nationwide 5 วัน) ต่อออร์เดอร์</li>
+<li>คืนเงินภายใน <strong>7–14 วันทำการ</strong> ผ่าน Wireless Transfer เท่านั้น (T&amp;C)</li>
+<li>ขออนุมัติ Operations Manager ก่อนยืนยันกับลูกค้า</li>
+</ul>
+
+<h4>ขั้นที่ 7 — ปิดเคสและบันทึก (Close &amp; Document)</h4>
+<ul>
+<li>อัปเดตบันทึกเคส แนบหลักฐานทั้งหมด เก็บอย่างน้อย 90 วัน</li>
+<li><strong>กรณีสงสัยคดีอาญา:</strong> Escalate Operations Manager รายงานถึงผู้บริหาร ประสานกับเจ้าหน้าที่เพื่อดำเนินการตามขั้นตอนที่เกี่ยวข้อง</li>
+</ul>
+
+<h3>🚫 กรณีที่ไม่ดำเนินการเคลม / Do NOT Process If</h3>
+<ul>
+<li>สูญหายก่อนส่งมอบ / หลังปิดธุรกรรม / บุคคลอื่นแสดง valid references รับไปแล้ว</li>
+<li>ของต้องห้าม / ของยกเว้น / ของในกระเป๋า / ของแต่งกระเป๋า</li>
+<li>เหตุสุดวิสัย (ภัยธรรมชาติ, คำสั่งราชการ, จราจรระงับ) — T&amp;C Uncontrollable Events</li>
+</ul>
+
+<h3>🔹 สรุป Flow Claim — AIRPORTELs</h3>
+<p class="sop-hint">ผู้ที่เกี่ยวข้อง: Customer (ลูกค้า) · Guest Service (GS) · Operations (OP) · Customer Service (CS)</p>
+
+<div class="sop-flow">
+<h4>ลำดับที่ 1 — รับเรื่องที่สาขา หรือ Online team (Customer → GS or CS)</h4>
+<ol>
+<li>ลูกค้ามาที่เคาน์เตอร์ → GS ตรวจสอบ <br>• กรณีลูกค้าแจ้งผ่านช่องทาง Online → CS ตรวจสอบ</li>
+<li>GS เปิดคืนกระเป๋า → ลูกค้ารับกระเป๋าคืน</li>
+<li>ตรวจสอบว่ากระเป๋ามีความเสียหายหรือไม่<br>◦ <strong>NO</strong> → คืนกระเป๋าให้ลูกค้า (จบ)<br>◦ <strong>YES</strong> → แจ้งความเสียหายกับพนักงาน</li>
+</ol>
+</div>
+
+<div class="sop-flow">
+<h4>ลำดับที่ 2 — ตรวจสอบและส่งแบบฟอร์ม (GS → CS)</h4>
+<ol start="4">
+<li>GS / CS ตรวจสอบความเสียหายของกระเป๋า</li>
+<li>ประเมินจาก (Policy)<br>◦ <strong>NO</strong> (ไม่ผ่าน) → แจ้งเงื่อนไขให้ลูกค้า<br>◦ <strong>YES</strong> → ส่ง Email ให้ลูกค้ากรอกแบบฟอร์มผ่าน Respond</li>
+<li>ลูกค้ากรอกแบบฟอร์มพร้อมส่งหลักฐาน → OP รับผลผ่านฟอร์ม</li>
+</ol>
+</div>
+
+<div class="sop-flow">
+<h4>ลำดับที่ 3 — พิจารณาและอนุมัติ (OP)</h4>
+<ol start="7">
+<li>OP ตรวจสอบข้อมูล ครบ/ไม่ครบ<br>◦ <strong>NO</strong> → ส่งให้ CS ขอข้อมูลเพิ่ม → CS Respond กลับ → นำส่งให้ OP ใหม่<br>◦ <strong>YES</strong> → พิจารณากรณี</li>
+<li>ตรวจสอบว่ากระเป๋าเสียหายจากการขนส่งหรือไม่<br>◦ <strong>NO</strong> → ตรวจสอบจากกล้องวงจรปิด หรือหลักฐานอื่นๆ<br>◦ <strong>YES</strong> → ทำเอกสารเคลมให้ลูกค้า</li>
+</ol>
+</div>
+
+<div class="sop-flow">
+<h4>ลำดับที่ 4 — อนุมัติและจ่ายเงิน (OP → CEO → CS)</h4>
+<ol start="9">
+<li>ตรวจสอบความผิดพลาด — จาก AI หรือพนักงาน<br>◦ <strong>NO</strong> (จาก MS) → บันทึกความเสียหายส่งเคลมกลับไปที่ MS<br>◦ <strong>YES</strong> (AI) → แจกแจงความเสียหายพร้อมแนบเอกสาร ส่งทีม HR, ACC</li>
+<li>ส่งเอกสารให้ CS → ลูกค้าผ่าน Respond พร้อมยอดรับ</li>
+<li>ส่งเอกสารให้ Operation Manager → เซ็นอนุมัติ → Status ใน Lark เป็น Approver</li>
+<li>ส่งเอกสารให้ CEO ผ่านกลุ่ม Business Gank! → เพื่อยืนยันกับลูกค้า</li>
+<li>นำเข้าข้อมูลใน CS → ดำเนินการเคลม → CS ส่งหลักฐานการโอนให้ลูกค้า</li>
+<li>เปลี่ยน Status ใน Lark เป็น In Paid</li>
+<li>กรอกฟอร์มเคลมกรณีความเสียหายเกิดจากการขนส่ง MS → แนบหลักฐานการโอนเงินให้ลูกค้า → <strong>END</strong></li>
+</ol>
+</div>
+
+<h3>🗺️ แผนผังขั้นตอนการเคลม (Claim Flow Chart)</h3>
+<p class="sop-hint">⟷ ภาพใหญ่ — เลื่อน/ซูมเพื่อดูรายละเอียด</p>
+<figure><img src="/sop/lost-found-claim/flowchart.png" alt="แผนผังขั้นตอนการเคลม — ลูกค้า / GS / OP / CS" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px;background:#fff" /></figure>
+
+<h3>📄 เอกสารและแบบฟอร์มประกอบการ Claim</h3>
+<ul>
+<li>Flow Claim and Refund</li>
+<li>Claim and Refund</li>
+<li>Claim with MS</li>
+</ul>
+
+<h3>🔹 ประวัติการแก้ไข / Document Control</h3>
+<table class="sop-tbl"><thead><tr><th>Version</th><th>วันที่ / Date</th><th>แก้ไขโดย / Author</th><th>รายละเอียด / Notes</th></tr></thead><tbody>
+<tr><td>1.0</td><td>10 May 2026</td><td>Operations Team</td><td>Initial release / เอกสารฉบับแรก</td></tr>
+</tbody></table>
+
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="mailto:center@airportels.asia" target="_blank" rel="noopener">อีเมลจาก center@airportels.asia</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/docx/YpQGdONFSoSPM7xT14ulfCe7gqc?from=from_copylink" target="_blank" rel="noopener">เอกสารประกอบ (Doc)</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/base/AjqWbJszaaLk1hspwmClmhizg2f?from=from_copylink" target="_blank" rel="noopener">ระบบบันทึก/ฟอร์ม (Lark Base)</a></li><li><a href="https://forms.gle/B5dXQkTH73CDtBJJA" target="_blank" rel="noopener">Claim with MS</a></li></ul>', array['lost-found','claim','compensation','damage'], 'published', false)
 on conflict (slug) do update set
