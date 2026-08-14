@@ -663,8 +663,7 @@ from sop.documents where slug = 'delayed-pickup-discount'
   and not exists (select 1 from sop.documents where slug = 'delayed-pickup-discount-archive');
 
 update sop.documents set
-  title = 'การจัดการกรณีลูกค้ามารับสัมภาระล่าช้า – เกณฑ์และโครงสร้างส่วนลด', summary = 'ขั้นตอนปฏิบัติมาตรฐาน (SOP-OPS 0016/2025) เมื่อลูกค้ามารับสัมภาระล่าช้า — เกณฑ์พิจารณา (ขนาด/ค่าฝาก/ระยะเวลา) โครงสร้างส่วนลด อำนาจอนุมัติ ตัวอย่างเคส และสคริปต์สื่อสารกับลูกค้า (TH/EN)', content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0016/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 ตุลาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
-<p>อ้างอิง / Reference:</p>
+  title = 'การจัดการกรณีลูกค้ามารับสัมภาระล่าช้า – เกณฑ์และโครงสร้างส่วนลด', summary = 'ขั้นตอนปฏิบัติมาตรฐาน (SOP-OPS 0016/2025) เมื่อลูกค้ามารับสัมภาระล่าช้า — เกณฑ์พิจารณา (ขนาด/ค่าฝาก/ระยะเวลา) โครงสร้างส่วนลด อำนาจอนุมัติ ตัวอย่างเคส และสคริปต์สื่อสารกับลูกค้า (TH/EN)', content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0016/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 ตุลาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>อ้างอิง / Reference:</h3>
 <ul><li>(TH)Terms and Conditions2026 / (EN)Terms and Conditions2026</li><li>SOP: ของหาย &amp; กระเป๋าถูกทิ้ง</li></ul>
 <h3>วัตถุประสงค์ (Objective)</h3>
 <p>เพื่อกำหนดมาตรฐานการดำเนินการเมื่อลูกค้าไม่สามารถมารับสัมภาระตามกำหนดเวลา โดยมีแนวทางการพิจารณา ส่วนลดที่เป็นธรรม สร้างความพึงพอใจให้ลูกค้า ป้องกันการทิ้งสัมภาระ และคงไว้ซึ่งรายได้ของบริษัท</p>
@@ -674,25 +673,28 @@ update sop.documents set
 <ul><li>ครอบคลุมพนักงานทุกตำแหน่งที่เกี่ยวข้อง ได้แก่ Guest Service Staff, Branch Manager และ</li></ul>
 <p>Cีustomer Service Team</p>
 <ul><li>ใช้กับทุกกรณีของ การรับกระเป๋าล่าช้า (Delayed Collection) ยกเว้น กรณี ลูกค้าไม่ติดต่อ/ไม่มารับเลย ซึ่ง</li></ul>
-<p>ต้องเข้าสู่ขั้นตอน Lost &amp; Found / Disposal ตามนโยบายบริษัท</p>
-<h3>Discount Policy (Duration ≥ 6 เดือน)</h3>
+<p>ต้องเข้าสู่ขั้นตอน Lost &amp; Found / Disposal ตามนโยบายบริษัท Discount Policy (Duration ≥ 6 เดือน)</p>
 <p><strong>1. Criteria (เกณฑ์พิจารณา)</strong></p>
 <p><strong>2. Size Factor : Small / Medium / Large / Oversize or Special</strong></p>
 <p><strong>3. Fee Factor – Low / Medium / High / Very High</strong></p>
 <p><strong>4. Duration Factor (ระยะเวลาฝาก)</strong></p>
 <ul><li>Short-term: ≤ 3 เดือน → ใช้โครงสร้าง Base Table ปกติ</li><li>Mid-term: 3–6 เดือน → ใช้ Base Table + ส่วนลดเพิ่มเล็กน้อย (+5–10%)</li><li>Long-term: ≥ 6 เดือน → เข้าสู่เงื่อนไขพิเศษ (25–50%)</li></ul>
-<h3>Discount Structure</h3>
-<ul><li>Discount Structure (ตามยอดเงิน + ขนาด)</li><li>Duration Adjustment</li><li>≤ 3 เดือน → ใช้ส่วนลดตามตาราง เท่านั้น</li><li>3–6 เดือน → เพิ่มส่วนลดได้ +5–10% จากตารางส่วนลด (รวมแล้วไม่เกิน 30%)</li><li>≥ 6 เดือน → ใช้ Special Duration Discount:</li><li>ส่วนลดรวมอยู่ในช่วง 25–50% (ขึ้นกับขนาด/ยอด/เหตุผลลูกค้า)</li><li>แต่ต้องจ่ายขั้นต่ำ 50% ของยอดเต็ม</li><li>Approval Authority</li><li>ส่วนลดรวม ≤25% → Guest Service Exe. อนุมัติได้</li><li>ส่วนลดรวม &gt;25% ถึง 50% (กรณี ≥ 6 เดือน) → ต้องขออนุมัติจาก ฺOperation Manager</li><li>ส่วนลดรวม &gt;50% → ไม่อนุมัติ ยกเว้นกรณี VIP ( BD / COO / CEO approval)</li><li>Example Cases</li></ul>
+<p>Discount Structure</p>
+<ul><li>Discount Structure (ตามยอดเงิน + ขนาด)</li></ul>
+<figure><img src="/sop/delayed-pickup-discount/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<ul><li>Duration Adjustment</li><li>≤ 3 เดือน → ใช้ส่วนลดตามตาราง เท่านั้น</li><li>3–6 เดือน → เพิ่มส่วนลดได้ +5–10% จากตารางส่วนลด (รวมแล้วไม่เกิน 30%)</li><li>≥ 6 เดือน → ใช้ Special Duration Discount:</li><li>ส่วนลดรวมอยู่ในช่วง 25–50% (ขึ้นกับขนาด/ยอด/เหตุผลลูกค้า)</li><li>แต่ต้องจ่ายขั้นต่ำ 50% ของยอดเต็ม</li><li>Approval Authority</li><li>ส่วนลดรวม ≤25% → Guest Service Exe. อนุมัติได้</li><li>ส่วนลดรวม &gt;25% ถึง 50% (กรณี ≥ 6 เดือน) → ต้องขออนุมัติจาก ฺOperation Manager</li><li>ส่วนลดรวม &gt;50% → ไม่อนุมัติ ยกเว้นกรณี VIP ( BD / COO / CEO approval)</li><li>Example Cases</li></ul>
 <p>Case 1: ลูกค้า ฝาก 7 เดือน / กระเป๋า Large / ยอดค้าง 22,000 บาท (Very High)</p>
 <ul><li>Base Table = 15%</li><li>Duration ≥ 6 เดือน → ปรับเป็น Special Duration Discount 25–50%</li><li>หาก Operation Manager อนุมัติ → ลดได้สูงสุด 50% (เหลือจ่าย 11,000 บาท)</li></ul>
 <p>Case 2: ลูกค้า ฝาก 8 เดือน / กระเป๋า Small / ยอดค้าง 6,000 บาท (Medium)</p>
 <ul><li>Base Table = 15%</li><li>Duration ≥ 6 เดือน → ปรับใหม่เป็น 25–50%</li><li>อนุมัติ 30% → จ่าย 4,200 บาท (ขั้นต่ำต้องจ่าย 3,000 บาท ตาม rule 50%)</li></ul>
-<h3>Conditions &amp; Required Documents for Discount Consideration</h3>
+<p>Conditions &amp; Required Documents for Discount Consideration</p>
 <p><strong>1. General Conditions (เงื่อนไขทั่วไป)</strong></p>
 <ul><li>a. ลูกค้าต้อง ติดต่อกลับมา และแสดงความประสงค์จะชำระหรือรับกระเป๋า (ไม่ใช่ abandon case)</li><li>b. ลูกค้าต้องชำระ ขั้นต่ำ 50% ของยอดค้างชำระเต็ม</li><li>c. ส่วนลด ≤25% → อนุมัติได้โดย Guest Service Exe.</li><li>d. ส่วนลด 26–50% → ต้องมี เอกสารหลักฐาน + ส่งรายงานขออนุมัติ Operation Manager</li><li>e. ส่วนลด &gt;50% → อนุมัติได้เฉพาะกรณี VIP / Ex-gratia โดย BD หรือ CEO เท่านั้น</li></ul>
 <p><strong>2. Specific Conditions by Case (กรณีและหลักฐานประกอบ)</strong></p>
+<figure><img src="/sop/delayed-pickup-discount/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <ul><li>Process &amp; Documentation Flow (ขั้นตอนและการบันทึก)</li><li>Guest Service Staff / Branch Manager</li><li>ตรวจสอบข้อมูลลูกค้า (Size, Fee, Duration)</li><li>ขอเอกสาร/หลักฐานจากลูกค้า (ถ้ามี)</li><li>บันทึกใน Sales report หรือ Incedent report</li><li>GS Team Lead</li><li>ตรวจสอบความถูกต้องของเอกสาร</li><li>อนุมัติทันทีถ้า Discount ≤25%</li><li>ถ้าเกิน 25% → forward Approval Request ไปยัง Operation Manager</li><li>Operation Manager</li><li>ตรวจสอบหลักฐาน, เหตุผลธุรกิจ (retention/VIP/long-term)</li><li>อนุมัติหรือปรับลด % ส่วนลดตาม policy (25–50%)</li><li>บันทึกการอนุมัติใน Sales Report หรือ อาจจัดทำเอกสาร Approve หรือระบบ Approve Lark</li></ul>
-<h3>Criteria: ขนาดสัมภาระ (Size Factor)</h3>
+<p>Criteria: ขนาดสัมภาระ (Size Factor)</p>
+<figure><img src="/sop/delayed-pickup-discount/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <h3>ขั้นตอนดำเนินการ (Walk-in vs Call Center/Online)</h3>
 <p><strong>1. กรณีลูกค้า Walk-in</strong></p>
 <p><strong>2. รับคำร้องขอ: พนักงานเคาน์เตอร์สอบถามข้อมูล → เลขฝาก, วันที่ฝาก, ระยะเวลา, เหตุผลที่มารับช้า</strong></p>
@@ -715,7 +717,7 @@ update sop.documents set
 <p><strong>6. แจ้งลูกค้า:</strong></p>
 <ul><li>ถ้าอนุมัติ → ส่งสรุปยอดสุทธิ + ช่องทางการชำระเงิน (โอน/QR/ชำระที่สาขา)</li><li>ถ้ายังรออนุมัติ → แจ้งลูกค้าว่าจะได้รับการยืนยันภายใน [xx] ชั่วโมง</li></ul>
 <p><strong>7. หลังลูกค้าชำระแล้ว → Update ข้อมูลในระบบ + แจ้งสาขาให้เตรียมกระเป๋าเพื่อรับหรือส่งกลับ</strong></p>
-<h3>Script (TH/EN – Updated)</h3>
+<p>Script (TH/EN – Updated)</p>
 <p><strong>1. การรับเรื่องจากลูกค้า</strong></p>
 <p>TH “สวัสดีค่ะ/ครับ ขอบคุณที่ติดต่อ AIRPORTELs รบกวนขอชื่อ-นามสกุล และรหัสการจอง เพื่อให้ทีมงานตรวจ สอบข้อมูลการฝากสัมภาระของคุณลูกค้าค่ะ” EN “Hello, thank you for contacting AIRPORTELs. May I have your full name and booking reference so that we can check your storage details?”</p>
 <p><strong>2. กรณีลูกค้าแจ้งล่วงหน้า</strong></p>
@@ -727,16 +729,14 @@ update sop.documents set
 <p><strong>5. การแจ้งผลอนุมัติส่วนลด</strong></p>
 <p>TH “เรียนคุณลูกค้า ทางทีมงานได้พิจารณาแล้ว และอนุมัติส่วนลด [XX%] สำหรับค่าฝากสัมภาระในครั้งนี้ค่ะ ขอบคุณที่ไว้วางใจใช้บริการ AIRPORTELs และหวังว่าจะได้ให้บริการอีกในอนาคตนะคะ” EN “Dear Customer, we are pleased to inform you that your discount request has been approved at [XX%] for this storage. Thank you for choosing AIRPORTELs, and we look forward to serving you again.”</p>
 <p><strong>6. การชวนลูกค้ารีวิว (Google Review)</strong></p>
-<p>TH “หากคุณลูกค้าพึงพอใจกับการบริการ รบกวนช่วยรีวิว AIRPORTELs ทาง Google Review ได้ไหมคะ ความ เห็นของคุณลูกค้ามีคุณค่ามากสำหรับการพัฒนาบริการของเรา” EN “If you are satisfied with our service, we would greatly appreciate it if you could leave us a review on Google. Your feedback means a lot to us” TH "ทางเราขอพิจารณาส่วนลดพิเศษจากราคา xx,xxx บาท เหลือเพียง x,xxx บาทค่ะ และหากคุณลูกค้าได้รับความ พึงพอใจจากการให้บริการของพนักงานและสาขา รบกวนช่วยรีวิวใน Google Map เพื่อเป็นกำลังใจให้ทีมงานด้วยนะ คะ" EN "We are pleased to offer you a special discount from xx,xxx THB to only x,xxx THB If you are satisfied with our staff and service, we would greatly appreciate it if you could leave us a 5-star review on Google Maps to support our team. Thank you very much.</p>
-<h3>ตารางประกอบจากเอกสารต้นฉบับ</h3><figure><img src="/sop/delayed-pickup-discount/p2.jpg" alt="ตารางโครงสร้างส่วนลด (Discount Structure) ตามขนาด × ยอดค่าฝาก" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ตารางโครงสร้างส่วนลด (Discount Structure) ตามขนาด × ยอดค่าฝาก</figcaption></figure><figure><img src="/sop/delayed-pickup-discount/p4.jpg" alt="ตารางเงื่อนไขและเอกสารประกอบตามกรณี (Specific Conditions by Case)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ตารางเงื่อนไขและเอกสารประกอบตามกรณี (Specific Conditions by Case)</figcaption></figure><figure><img src="/sop/delayed-pickup-discount/p5.jpg" alt="เกณฑ์ขนาดสัมภาระ (Size Factor)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>เกณฑ์ขนาดสัมภาระ (Size Factor)</figcaption></figure>'
+<p>TH “หากคุณลูกค้าพึงพอใจกับการบริการ รบกวนช่วยรีวิว AIRPORTELs ทาง Google Review ได้ไหมคะ ความ เห็นของคุณลูกค้ามีคุณค่ามากสำหรับการพัฒนาบริการของเรา” EN “If you are satisfied with our service, we would greatly appreciate it if you could leave us a review on Google. Your feedback means a lot to us” TH "ทางเราขอพิจารณาส่วนลดพิเศษจากราคา xx,xxx บาท เหลือเพียง x,xxx บาทค่ะ และหากคุณลูกค้าได้รับความ พึงพอใจจากการให้บริการของพนักงานและสาขา รบกวนช่วยรีวิวใน Google Map เพื่อเป็นกำลังใจให้ทีมงานด้วยนะ คะ" EN "We are pleased to offer you a special discount from xx,xxx THB to only x,xxx THB If you are satisfied with our staff and service, we would greatly appreciate it if you could leave us a 5-star review on Google Maps to support our team. Thank you very much.</p>'
 where slug = 'delayed-pickup-discount';
 
 -- ===== NEW: safe-luggage-storage =====
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('safe-luggage-storage', 'การจัดเก็บกระเป๋าให้ปลอดภัยภายในพื้นที่ที่บริษัทจัดเตรียมไว้ (Safe Luggage Storage)', 'SOP-OPS 014/2025 — ขั้นตอนมาตรฐานการรับฝาก ติดแท็ก และจัดเก็บกระเป๋าอย่างปลอดภัย การควบคุมกุญแจ การส่งต่อกะ และการตรวจนับ เพื่อลดความเสี่ยงสูญหาย/สับเปลี่ยน/เสียหาย',
   (select id from sop.categories where slug = 'counter-service'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 014/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 15 สิงหาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
-<h3>📌 วัตถุประสงค์ / Purpose</h3>
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 014/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 15 สิงหาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ / Purpose</h3>
 <p>กำหนดขั้นตอนมาตรฐานในการรับฝาก ติดแท็ก และ จัดเก็บกระเป๋าอย่างปลอดภัย ภายในพื้นที่ที่บริษัทจัดเตรียมไว้ เพื่อลดความเสี่ยงการ สูญหาย/สับเปลี่ยน/เสียหาย และให้สามารถ ตรวจสอบย้อนกลับ (traceability) ได้ตลอด กระบวนการ.</p>
 <h3>📌 ขอบเขตการใช้งาน / Scope</h3>
 <ul><li>ครอบคลุมทุกสาขาที่มีบริการรับฝากกระเป๋า ทั้ง หน้าเคาน์เตอร์ (Counter) และห้องเก็บของ</li></ul>
@@ -787,7 +787,6 @@ values ('safe-luggage-storage', 'การจัดเก็บกระเป�
 <p>✔️ Mini Checklist หน้าเคาน์เตอร์</p>
 <ul><li>POS เสร็จ → พิมพ์ Tag &amp; Received Slip → ติดแท็ก ครบทุกใบ</li><li>นำเข้าโซนที่ถูกต้อง → ล็อคประตูทุกครั้ง</li><li>ต้องออกจากเคาน์เตอร์ → ปิดล๊อคพื้นที่ และ /หรือ คลุมสัมภาระให้มิดชิด</li></ul>
 <p>→ แจ้งหัวหน้า/กลุ่มภายในตามระเบียบ → scan ออก และ เข้า (เมื่อกลับเข้าพื้นที่) ผ่าน empeo ทุกครั้ง</p>
-
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="https://line.me/ti/g/4cn8mCTeFW" target="_blank" rel="noopener">กลุ่มไลน์ Respond.io</a></li><li><a href="https://line.me/ti/g/Sk3zTEDpd7" target="_blank" rel="noopener">กลุ่มไลน์ AI Gang🧳✈️</a></li></ul>', array['storage','safety','counter'], 'published', false)
 on conflict (slug) do update set
@@ -839,8 +838,7 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('handheld-metal-detector', 'การใช้งานเครื่องตรวจจับโลหะแบบพกพา (Handheld Metal Detector)', 'SOP-OPS 010/2025 — วิธีใช้เครื่องตรวจจับโลหะแบบพกพาเพื่อตรวจสอบวัตถุต้องห้ามก่อนรับฝาก/จัดส่งกระเป๋า (ใช้เมื่อเครื่อง X-Ray ใช้งานไม่ได้ หรือเป็นการตรวจเสริม) พร้อมรายการสิ่งของต้องห้าม',
   (select id from sop.categories where slug = 'counter-service'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 010/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 9 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
-<h3>📌 วัตถุประสงค์ (Objective)</h3>
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 010/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 9 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ (Objective)</h3>
 <p>เพื่อเพิ่มความปลอดภัยในการรับฝาก และจัดส่งกระเป๋าโดยการตรวจสอบวัตถุต้องห้ามที่อาจเป็นอันตรายหรือผิด กฎหมาย โดยใช้เครื่องตรวจจับโลหะแบบพกพาก่อนนำกระเป๋าเข้าสู่กระบวนการจัดเก็บหรือจัดส่ง</p>
 <h3>📌 ขอบเขตการใช้งาน</h3>
 <p>ใช้ในกรณีที่:</p>
@@ -848,12 +846,18 @@ values ('handheld-metal-detector', 'การใช้งานเครื่�
 <h3>🛠 อุปกรณ์ที่ใช้</h3>
 <ul><li>เครื่องตรวจจับโลหะแบบพกพา (Hand-held Metal Detector)</li><li>CCTV (ระหว่างการตรวจ ให้อยู่ในมุมมองของกล้อง เพื่อป้องกันการงิวาท กรณีพบวัตถุต้องสงสัย)</li></ul>
 <h3>🔄 ขั้นตอนปฏิบัติ (SOP)</h3>
+<figure><img src="/sop/handheld-metal-detector/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <p>วิธีการใช้งานเครื่องตรวจจับโลหะแบบพกพา (Handheld Metal Detector)</p>
+<figure><img src="/sop/handheld-metal-detector/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/handheld-metal-detector/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/handheld-metal-detector/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/handheld-metal-detector/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <h3>🚫 สิ่งของต้องห้ามที่ไม่รับฝาก / ส่ง</h3>
 <ul><li>สัตว์มีชีวิต / ซากสัตว์</li><li>เงินสด / เช็ค / บัตร</li><li>ของมีค่า เช่น ทองคำ เพชร อัญมณี</li><li>อาวุธ / วัตถุระเบิด / สารเสพติด</li><li>แบตเตอรี่ / ของเหลวไวไฟ</li><li>อาหารเน่าเสีย / ขยะ</li><li>อุปกรณ์อิเล็กทรอนิกส์บางชนิดที่มีแบตเตอรี่</li><li>สิ่งผิดกฎหมายอื่นตามประกาศบริษัท</li></ul>
 <p>หมายเหตุ: หากลูกค้าปฏิเสธการตรวจสอบ ทางบริษัทสามารถขอปฏิเสธการให้บริการได้ทันที เพื่อความปลอดภัย สูงสุด</p>
 <h3>🚫 สิ่งของต้องห้ามสำหรับการจัดส่ง Nationwide Same-day Delivery</h3>
-<h3>ภาพและป้ายประกอบจากเอกสารต้นฉบับ</h3><figure><img src="/sop/handheld-metal-detector/p2.jpg" alt="ขั้นตอนการใช้งาน และตำแหน่งปุ่มควบคุมของเครื่องตรวจจับโลหะแบบพกพา" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ขั้นตอนการใช้งาน และตำแหน่งปุ่มควบคุมของเครื่องตรวจจับโลหะแบบพกพา</figcaption></figure><figure><img src="/sop/handheld-metal-detector/p4.jpg" alt="ป้ายสิ่งของต้องห้ามในการรับฝาก/จัดส่ง (ไทย/อังกฤษ)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ป้ายสิ่งของต้องห้ามในการรับฝาก/จัดส่ง (ไทย/อังกฤษ)</figcaption></figure>', array['security','inspection','metal-detector','x-ray-backup'], 'published', false)
+<figure><img src="/sop/handheld-metal-detector/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/handheld-metal-detector/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>', array['security','inspection','metal-detector','x-ray-backup'], 'published', false)
 on conflict (slug) do update set
   title = excluded.title, summary = excluded.summary,
   category_id = excluded.category_id, content_html = excluded.content_html,
@@ -863,10 +867,7 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('manual-baggage-check-xray-down', 'การตรวจสอบสัมภาระแบบชั่วคราว กรณีเครื่อง X-Ray ใช้งานไม่ได้ (Manual Baggage Check)', 'SOP-OPS 009/2025 — ขั้นตอนการตรวจสอบกระเป๋าและสัมภาระลูกค้าด้วยมืออย่างปลอดภัยและโปร่งใส ภายใต้กล้องวงจรปิด ในกรณีเครื่อง X-Ray ขัดข้อง/อยู่ระหว่างซ่อม พร้อมสคริปต์แจ้งลูกค้า (TH/EN)',
   (select id from sop.categories where slug = 'counter-service'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 009/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 7 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
-<h3>Protocol &amp; SOP: Temporary Manual Check Protocol</h3>
-<p>หัวข้อ: การตรวจสอบกระเป๋าและสัมภาระลูกค้าแบบชั่วคราว สถานการณ์: เครื่อง X-Ray ขัดข้องอยู่ระหว่างการซ่อม</p>
-<h3>Manual Baggage Check (ระหว่างเครื่อง X-Ray ชำรุด)</h3>
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 009/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 7 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>Protocol &amp; SOP: Temporary Manual Check Protocol หัวข้อ: การตรวจสอบกระเป๋าและสัมภาระลูกค้าแบบชั่วคราว สถานการณ์: เครื่อง X-Ray ขัดข้องอยู่ระหว่างการซ่อม Manual Baggage Check (ระหว่างเครื่อง X-Ray ชำรุด)</p>
 <p><strong>1. วัตถุประสงค์ (Objective)</strong></p>
 <ul><li>เพื่อให้การให้บริการยังคงปลอดภัย เป็นมืออาชีพ และมีมาตรฐานภายใต้ข้อจำกัดทางเทคนิค</li><li>เพื่อให้การดำเนินการตรวจสอบสัมภาระของลูกค้าอย่างปลอดภัย มีมาตรฐาน และโปร่งใส ในกรณีที่เครื่อง X-</li></ul>
 <p>Ray ใช้งานไม่ได้</p>
@@ -884,12 +885,14 @@ values ('manual-baggage-check-xray-down', 'การตรวจสอบสั�
 <p>SOP: การใช้งานเครื่องตรวจจับโลหะแบบพกพา (Hand-Held Metal Detector)</p>
 <h3>Step 4: แจ้งผลการตรวจ</h3>
 <ul><li>แจ้งลูกค้าว่าการตรวจเสร็จเรียบร้อย</li><li>หากทำการเปิดตรวจให้ปิดกระเป๋าให้เรียบร้อยและดำเนินการเก็บ/จัดส่งตามบริการที่ลูกค้าเลือก</li><li>ลูกค้าสามารถขอลงชื่อรับทราบใน Log ได้หากต้องการ</li></ul>
-<h3>Script สำหรับพนักงาน (2 ภาษา)</h3>
+<p>Script สำหรับพนักงาน (2 ภาษา)</p>
+<figure><img src="/sop/manual-baggage-check-xray-down/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <p>แนวทางเสริมความปลอดภัย &amp; ความโปร่งใส</p>
 <ul><li>ตรวจในจุดที่มีกล้องวงจรปิดหรือมีพยานร่วม (หลีกเลี่ยงพื้นที่ปิด)</li><li>ห้ามใช้โทรศัพท์มือถือระหว่างตรวจสอบ</li><li>ห้ามพนักงานทำการตรวจสอบเพียงลำพัง หรือไม่อยู่ในมุมมองของ CCTV</li><li>หากพบสิ่งของต้องสงสัย ให้แจ้งหัวหน้างานทันที</li></ul>
 <h3>แบบฟอร์มบันทึกข้อมูล (Manual Check Log)</h3>
-<h3>Manual Check Log</h3>
-<h3>แบบฟอร์มและป้ายประกอบจากเอกสารต้นฉบับ</h3><figure><img src="/sop/manual-baggage-check-xray-down/p4.jpg" alt="ตัวอย่างแบบฟอร์ม Manual Check Log และป้ายแจ้งลูกค้า (X-Ray Under Maintenance)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ตัวอย่างแบบฟอร์ม Manual Check Log และป้ายแจ้งลูกค้า (X-Ray Under Maintenance)</figcaption></figure>', array['security','inspection','x-ray','contingency'], 'published', false)
+<figure><img src="/sop/manual-baggage-check-xray-down/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>Manual Check Log</p>
+<figure><img src="/sop/manual-baggage-check-xray-down/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>', array['security','inspection','x-ray','contingency'], 'published', false)
 on conflict (slug) do update set
   title = excluded.title, summary = excluded.summary,
   category_id = excluded.category_id, content_html = excluded.content_html,
@@ -899,8 +902,7 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('osl-radiation-badge', 'การใช้งานและการรับ-ส่งคืนแผ่นวัดรังสี (OSL) สำหรับสาขาสนามบิน', 'SOP-OPS 008/2025 — แนวทางการรับ แจกจ่าย ใช้งาน และส่งคืนแผ่นวัดรังสี (OSL) สำหรับพนักงานสาขาสนามบิน การบันทึกใน Lark การประสานงานกับ OSL/TINT และรอบการเปลี่ยนทุก 3 เดือน',
   (select id from sop.categories where slug = 'standards'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 008/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
-<h3>🎯 วัตถุประสงค์ (Objective)</h3>
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 008/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>🎯 วัตถุประสงค์ (Objective)</h3>
 <p>เพื่อกำหนดแนวทางปฏิบัติที่ชัดเจนในการรับ แจกจ่าย ใช้งาน และส่งคืนแผ่นวัดรังสี (OSL) สำหรับพนักงานที่มีความ เสี่ยงต่อการได้รับรังสี โดยเน้นความถูกต้อง ความปลอดภัย และการเก็บข้อมูลเป็นหลักฐานที่ตรวจสอบได้</p>
 <h3>📌 ขอบเขต (Scope)</h3>
 <p>ครอบคลุมถึงพนักงานทุกตำแหน่งที่ปฏิบัติงาน ณ สาขา สนามบิน ที่มีเครื่องสแกน โดยพนักงานที่ได้รับมอบแผ่นวัด รังสี และทีมสนับสนุนที่เกี่ยวข้องกับการเบิก-ส่งคืนอุปกรณ์ และการประสานงานกับหน่วยงานภายนอก (OSL)</p>
@@ -924,7 +926,6 @@ values ('osl-radiation-badge', 'การใช้งานและการร
 <p>บริษัท แอร์พอเทลส์ อินเตอร์เนชันแนล จำกัด (สำนักงานใหญ๋) ที่อยู่ : เลขที่ 6 หมู่บ้านไพลินปาร์ค ซอยรัตนาธิเบศร์ 28 แยก 2 ต.บางกระสอ อ.เมืองนนทบุรี จ.นนทบุรี 11000 เลขประจำตัวผู้เสัยภาษีอากร : 0-1055-650-9868-7 เบอร์ติดต่อ : +66-2026-6927</p>
 <h3>📎 เอกสารและลิงก์ประกอบ</h3>
 <ul><li>🔗 แบบฟอร์มรายบุคคล</li><li>🔗 ระบบติดตาม Lark</li></ul>
-
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="https://ssglsj0spi27.sg.larksuite.com/base/LFiobaSkxaTjDOsPafYlKBdFgQd?from=from_copylink" target="_blank" rel="noopener">ลงบันทึกในระบบ Lark &gt;</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/share/base/form/shrlgcckxw4dqOU5oyQ1FaLCYme" target="_blank" rel="noopener">ลิงก์ฟอร์ม</a></li><li><a href="mailto:osl@tint.or.th" target="_blank" rel="noopener">osl@tint.or.th</a></li></ul>', array['osl','radiation','airport','compliance'], 'published', false)
 on conflict (slug) do update set
@@ -1293,23 +1294,27 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('same-day-delivery', 'บริการขนส่งสัมภาระภายในวันเดียวกัน (Same Day Delivery)', 'SOP-OPS 018/2025 — มาตรฐานการให้บริการ Same Day Delivery (กรุงเทพฯ เชียงใหม่ ภูเก็ต) เงื่อนไขการให้บริการ รายการสิ่งของต้องห้าม เงื่อนไขความรับผิดชอบ และสคริปต์สื่อสารกับลูกค้า',
   (select id from sop.categories where slug = 'delivery'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 018/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 พฤศจิกายน 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
-<h3>📌 วัตถุประสงค์ / Purpose</h3>
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 018/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 พฤศจิกายน 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ / Purpose</h3>
 <p>เพื่อกำหนดแนวทางและขั้นตอนการให้บริการขนส่งสัมภาระภายในวันเดียวกัน (Same Day Delivery) ให้เป็นไปตามมาตรฐานของบริษัท AIRPORTELS INTERNATIONAL จำกัด โดยมุ่งเน้นความถูกต้อง ปลอดภัย และความพึงพอใจของลูกค้า To define the operational standard for Same Day Delivery Service under AIRPORTELS INTERNATIONAL ensuring accuracy, safety, and customer satisfaction.</p>
 <h3>📌 ขอบเขตการใช้งาน / Scope</h3>
 <p>ใช้สำหรับพนักงานหน้าสาขา (Branch Staff) ที่ให้บริการลูกค้าในพื้นที่ กรุงเทพฯ, เชียงใหม่ และภูเก็ต เฉพาะกรณีบริการจัดส่งสัมภาระภายในวันเดียวกัน (Same Day Delivery) Applicable to all front-line branch staff handling Same Day Delivery services in Bangkok, Chiang Mai, and Phuket branches only.</p>
-<h3>เงื่อนไขการให้บริการ (Service Conditions)</h3>
+<p>เงื่อนไขการให้บริการ (Service Conditions)</p>
 <ul><li>บริการเฉพาะพื้นที่ให้บริการที่กำหนด</li><li>กระเป๋าจะถูกจัดส่งตามรอบเวลา (Delivery Schedule) ของแต่ละสาขา</li><li>ลูกค้าต้องยินยอมให้ตรวจสอบสัมภาระกรณีพบสิ่งต้องห้าม</li><li>บริษัทมีสิทธิ์ปฏิเสธการจัดส่งในกรณีที่สัมภาระไม่เป็นไปตามเงื่อนไข</li><li>Available only in designated service areas</li><li>Delivery will follow the daily schedule</li><li>Customer must consent to bag inspection for prohibited items</li><li>Company reserves the right to refuse service for non-compliant items</li></ul>
-<p>🔒 รายการสิ่งของต้องห้าม (Prohibited Items) ห้ามจัดส่งสิ่งของดังต่อไปนี้ : Prohibit Items 💡หมายเหตุ: ของเหลว (Liquid) สามารถรับได้เฉพาะกรณี</p>
+<p>🔒 รายการสิ่งของต้องห้าม (Prohibited Items) ห้ามจัดส่งสิ่งของดังต่อไปนี้ : Prohibit Items</p>
+<figure><img src="/sop/same-day-delivery/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>💡หมายเหตุ: ของเหลว (Liquid) สามารถรับได้เฉพาะกรณี</p>
 <ul><li>ไม่เป็นสเปรย์</li><li>บรรจุภัณฑ์ไม่เกิน 100 ml.</li><li>มีฉลากระบุชัดเจนและอยู่ในบรรจุภัณฑ์เดิม ภายใต้เงื่อนไข ไม่เกิน 100 ml.</li></ul>
 <p>📘 สิ่งของที่แตกหักง่าย และเปราะบาง : หากลูกค้ายืนยันต้องการนำส่งให้แจ้งเงื่อนไขให้ชัดเจนทุกครั้ง</p>
 <ul><li>AIRPORTELs are not responsible for fragile, valuable, liquid, electronic, or prohibited items.</li><li>AIRPORTELs จะไม่รับผิดชอบต่อสิ่งของที่เปราะบาง มีค่า เป็นของเหลว เป็นอุปกรณ์อิเล็กทรอนิกส์ หรือสิ่งของ</li></ul>
 <p>ต้องห้าม</p>
 <h3>ขั้นตอนการปฏิบัติงาน (Operational Procedure)</h3>
+<figure><img src="/sop/same-day-delivery/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <p>หมายเหตุเพิ่มเติม (Additional Notes)</p>
 <ul><li>หากลูกค้าถามว่า “ทำไมของบางอย่างโหลดขึ้นเครื่องได้ แต่ส่งกับเราไม่ได้”</li></ul>
 <p>พนักงานสามารถอธิบายได้ว่า = “เพราะลูกค้าตรวจของเองตอนเช็กอินและนำขึ้นเครื่องด้วยตนเอง แต่บริการขนส่งเป็นการฝากให้บริษัทดำเนินการแทน ซึ่งมีกฎควบคุมตามมาตรฐานคาร์โก้ SAME DAY DELIVERY – SCRIPT SHEET (TH–EN)</p>
-<h3>⚖️ เงื่อนไขความรับผิดชอบ (Responsibility Condition)</h3>
+<figure><img src="/sop/same-day-delivery/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>⚖️ เงื่อนไขความรับผิดชอบ (Responsibility Condition)</p>
+<figure><img src="/sop/same-day-delivery/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <p>🎯 Tips สำหรับพนักงาน</p>
 <ul><li>ใช้คำพูดที่สุภาพ และทวนคำลูกค้าก่อนดำเนินการ</li><li>พูดช้า ชัด ยิ้มในน้ำเสียง (Smile through your voice)</li><li>หากไม่แน่ใจ ให้ขออนุญาตเช็กข้อมูลก่อนตอบเสมอ เช่น</li><li>“ขออนุญาตเช็กข้อมูลให้ก่อนนะคะ รอสักครู่ค่ะ”</li></ul>
 <p>“Let me double-check that information for you, just a moment please.”</p>
@@ -1322,7 +1327,8 @@ values ('same-day-delivery', 'บริการขนส่งสัมภา�
 <ul><li>หากลูกค้าสงสัย ให้แสดงเอกสารเงื่อนไขการให้บริการ (Service Terms) เพื่อประกอบคำอธิบาย</li></ul>
 <h3>ข้อกำหนดและเงื่อนไขการใช้บริการ</h3>
 <p>Luggage Delivery &amp; Storage in Thailand</p>
-<h3>ภาพและสคริปต์จากเอกสารต้นฉบับ</h3><figure><img src="/sop/same-day-delivery/p2.jpg" alt="เงื่อนไขและรายการสิ่งของต้องห้าม (Prohibited Items)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>เงื่อนไขและรายการสิ่งของต้องห้าม (Prohibited Items)</figcaption></figure><figure><img src="/sop/same-day-delivery/p3.jpg" alt="ขั้นตอนการปฏิบัติงาน" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>ขั้นตอนการปฏิบัติงาน</figcaption></figure><figure><img src="/sop/same-day-delivery/p4.jpg" alt="เงื่อนไขความรับผิดชอบ / Script Sheet (TH–EN)" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>เงื่อนไขความรับผิดชอบ / Script Sheet (TH–EN)</figcaption></figure><figure><img src="/sop/same-day-delivery/p5.jpg" alt="Tips และสคริปต์สำหรับพนักงาน" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>Tips และสคริปต์สำหรับพนักงาน</figcaption></figure>
+<figure><img src="/sop/same-day-delivery/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/same-day-delivery/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="https://share.google/hwblfzEndAJvbucDd" target="_blank" rel="noopener">ข้อกำหนดและเงื่อนไขการใช้บริการ</a></li><li><a href="https://www.airportels.asia/?_gl=1%2Akxwthw%2A_ga%2AOTM5ODkwNTQuMTc2MDY5NTcyMA..%2A_ga_H1D2K8LK0B%2AczE3NjE4ODQxODUkbzIkZzAkdDE3NjE4ODQxODUkajYwJGwwJGgxODcyOTk4MTQ5" target="_blank" rel="noopener">Luggage Delivery &amp; Storage in Thailand</a></li></ul>', array['delivery','same-day','prohibited-items'], 'published', false)
 on conflict (slug) do update set
@@ -1334,8 +1340,7 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('baggage-inspection-lock-report', 'มาตรการจัดการกระเป๋าและสัมภาระ: การเปิดตรวจ การล็อก และการรายงานความผิดปกติ', 'SOP-OPS 0024/2026 — มาตรการปกป้องทรัพย์สินลูกค้า: ห้ามเปิด/รื้อค้นโดยไม่ได้รับอนุญาต ขั้นตอนการตรวจค้นสิ่งของต้องห้ามอย่างโปร่งใส การล็อกด้วย Cable Tie และการรายงานความผิดปกติของสัมภาระ',
   (select id from sop.categories where slug = 'counter-service'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0024/2026<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 26 พฤษภาคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
-<h3>เอกสารที่เกี่ยวข้อง :</h3>
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0024/2026<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 26 พฤษภาคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>เอกสารที่เกี่ยวข้อง :</h3>
 <ul><li>SOP การจัดเก็บกระเป๋าให้ปลอดภัยในพื้นที่จัดเตรียม</li></ul>
 <h3>วัตถุประสงค์ (Objective)</h3>
 <ul><li>เพื่อกำหนดมาตรการปกป้องทรัพย์สินของลูกค้าและความเป็นส่วนตัว โดยห้ามพนักงานเปิดหรือรื้อค้นกระเป๋า</li></ul>
@@ -1369,6 +1374,7 @@ values ('baggage-inspection-lock-report', 'มาตรการจัดกา�
 <p><strong>2. กรณียังไม่ได้ล็อก: หากกระเป๋ายังไม่ได้ล็อก ให้ดำเนินการตามตัวเลือกใดตัวเลือกหนึ่ง:</strong></p>
 <ul><li>แจ้งให้ลูกค้าทำการล็อกกระเป๋า สำหนับกระเป๋าลูกค้า ที่มีอุปกรณ์ล็อค หรือ ระบบ TSA Lock</li><li>ใช้ Cable Tie AIRPORTELs ล็อกซิปกระเป๋าให้ลูกค้า (แจ้งให้ลูกค้าทราบด้วยทุกครั้ง) หรือ ส่งมอบ Cable Tie</li></ul>
 <p>ให้ลูกค้าทำการล๊อคด้วยตนเอง รูปแบบ Cable Tie AIRPORTELs</p>
+<figure><img src="/sop/baggage-inspection-lock-report/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <p><strong>4. กรณีพบความผิดปกติของสัมภาระ</strong></p>
 <p>สัญญาณที่พนักงานต้องระวัง เช่น มีเสียงผิดปกติ ลักษณะภายนอกผิดปกติ หรือน้ำหนักผิดสัดส่วน</p>
 <h3>ขั้นตอนเมื่อพบความผิดปกติ:</h3>
@@ -1390,8 +1396,7 @@ values ('baggage-inspection-lock-report', 'มาตรการจัดกา�
 <p>ตำแหน่ง หน้าที่รับผิดชอบ Branch Manager / GS / Porter ปฏิบัติตาม Flow ข้างต้นอย่างเคร่งครัด ห้ามเปิดกระเป๋าเองโดยไม่ได้รับอนุญาต แจ้งทีมผ่าน Lark เมื่อพบความผิดปกติ Branch Manager กำกับดูแลให้พนักงานในสาขาปฏิบัติตาม SOP นี้ รายงานต่อ Operations Manager กรณีเกิด เหตุ Team Lead (Operation Co. / Operation Manager) รับเรื่องแจ้งความผิดปกติ ประเมินสถานการณ์ อนุมัติการตรวจค้น ดูแลให้มีการบันทึก VDO และ รายงานผล Operations Manager เป็นผู้รับผิดชอบนโยบายนี้ อนุมัติการแก้ไข SOP และดำเนินการทางวินัยร่วมกับ HR กรณีฝ่าฝืน</p>
 <h3>การทบทวนและปรับปรุง</h3>
 <ul><li>ทบทวนเอกสารนี้ทุก 6 เดือน หรือเมื่อมีการเปลี่ยนแปลงนโยบายของบริษัท</li><li>Operations Manager เป็นผู้รับผิดชอบในการอนุมัติการแก้ไขทุกครั้ง</li><li>แจ้งพนักงานทุกคนผ่านระบบ Lark เมื่อมีการปรับปรุงเวอร์ชันใหม่</li></ul>
-<p>AIRPORTELs | SOP: OP-LUG-001 | เวอร์ชัน 1.0 | Branch Operations</p>
-<h3>แผนผังการทำงาน (Flow) จากเอกสารต้นฉบับ</h3><figure><img src="/sop/baggage-inspection-lock-report/p3.jpg" alt="การตรวจสอบการล็อก และรูปแบบ Cable Tie AIRPORTELs" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>การตรวจสอบการล็อก และรูปแบบ Cable Tie AIRPORTELs</figcaption></figure><figure><img src="/sop/baggage-inspection-lock-report/p5.jpg" alt="Flow: รับฝากกระเป๋า และตรวจค้นกรณีลูกค้ามาด้วยตนเอง" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>Flow: รับฝากกระเป๋า และตรวจค้นกรณีลูกค้ามาด้วยตนเอง</figcaption></figure><figure><img src="/sop/baggage-inspection-lock-report/p6.jpg" alt="Flow: ตรวจค้นกรณีกระเป๋าถูกส่ง และกรณีพบความผิดปกติ" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>Flow: ตรวจค้นกรณีกระเป๋าถูกส่ง และกรณีพบความผิดปกติ</figcaption></figure>', array['security','inspection','lock','incident','cable-tie'], 'published', false)
+<p>AIRPORTELs | SOP: OP-LUG-001 | เวอร์ชัน 1.0 | Branch Operations</p>', array['security','inspection','lock','incident','cable-tie'], 'published', false)
 on conflict (slug) do update set
   title = excluded.title, summary = excluded.summary,
   category_id = excluded.category_id, content_html = excluded.content_html,
@@ -1558,8 +1563,7 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('abandoned-luggage-disposal', 'การจัดการและการกำจัดสัมภาระที่ถูกทิ้ง (Abandoned Luggage Disposal)', 'SOP-OPS 021 — ขั้นตอนจัดการสัมภาระที่ลูกค้าไม่ติดต่อ/ไม่มารับ/ทอดทิ้ง ต่อจาก SOP-OPS:016 เส้นเวลาติดตาม 3 ครั้ง (Day 1–25) การกำหนดสถานะ Abandoned (Day 30) ช่องทางการกำจัด (บริจาค/ขายทอดตลาด/ทำลาย) และสคริปต์สื่อสาร',
   (select id from sop.categories where slug = 'delivery'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 021<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 พฤษภาคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
-<p>อ้างอิง / Reference:</p>
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 021<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 พฤษภาคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>อ้างอิง / Reference:</h3>
 <ul><li>(TH)Terms and Conditions2026 / (EN)Terms and Conditions2026</li><li>SOP : การจัดการกรณีลูกค้ามารับสัมภาระล่าช้า – เกณฑ์และโครงสร้างส่วนลด</li></ul>
 <h3>🔹 วัตถุประสงค์ / Purpose</h3>
 <p>กำหนดขั้นตอนมาตรฐานการจัดการสัมภาระที่ลูกค้าไม่ติดต่อ ไม่มารับ หรือทอดทิ้ง ภายหลังจาก SOP-OPS:016 (Delayed Collection) ไม่สามารถติดต่อลูกค้าได้ เพื่อคุ้มครองสิทธิ์ของบริษัท ป้องกันพื้นที่จัดเก็บเต็ม และดำเนิน การทางกฎหมายอย่างถูกต้อง To define the standard procedure for handling luggage that is unclaimed, abandoned, or where the customer has failed to respond — following escalation from SOP-OPS:016. This protects company rights, prevents storage capacity issues, and ensures legally compliant disposal.</p>
@@ -1615,17 +1619,9 @@ values ('abandoned-luggage-disposal', 'การจัดการและก�
 <ul><li>หากลูกค้าติดต่อมาหลัง Disposal แล้ว: แจ้งสถานะและให้ Disposal Record</li><li>ไม่มีภาระผูกพันทางการเงินแก่บริษัทหลัง Disposal ตาม T&amp;C | No financial obligation after disposal per</li></ul>
 <p>T&amp;C</p>
 <ul><li>หากลูกค้าโต้แย้ง: Escalate ถึง BD/CEO + Legal (ถ้าจำเป็น)</li></ul>
-<h3>ช่องทาง Disposal และตารางอนุมัติ Disposal Options &amp; Approval Authority</h3>
+<p>ช่องทาง Disposal และตารางอนุมัติ Disposal Options &amp; Approval Authority</p>
 <ul><li>ช่องทาง Disposal / Disposal Channels</li></ul>
-<h3>ช่องทาง / Channel เงื่อนไข / Condition ผู้อนุมัติ /</h3>
-<p>Approver หมายเหตุ / Notes 🎁 บริจาค / Donate สัมภาระสภาพดี ไม่มีมูลค่าตลาด สูง | ลูกค้าไม่ติดต่อครบ Notice Period Good condition, low market value, notice period elapsed OP Manager บันทึกองค์กรที่รับบริจาค + ภาพถ่าย Log receiving org + photo 🔨 ขายทอดตลาด / Auction สัมภาระมีมูลค่า (กระเป๋าแบรนด์, ถุงกอล์ฟ) | ยอด ค้างสูง High-value items, significant outstanding fee BD / CEO รายได้หักค่าฝากก่อน ส่วนที่เหลือ (ถ้า มี) เก็บไว้ 90 วัน Revenue offsets fees; remainder held 90 days 🗑️ ทำลาย / Destroy สัมภาระสภาพแย่ / เสื่อมสภาพ / มี ของต้องห้าม / ไม่สามารถบริจาค หรือขายได้ CLO + ถ่ายรูป บันทึกเหตุผล + ถ่ายวิดีโอขณะทำลาย Damaged, contains</p>
-<h3>prohibited items, unsellable</h3>
-<p>Document reason + video during destruction 📦 เก็บต่อ /Pending กรณี VIP / Corporate / กำลังอยู่ ในกระบวนการกฎหมาย VIP/Corporate or legal proceedings in progress CEO / BD / Legal กำหนดระยะเวลาเก็บต่อและเงื่อนไข ชัดเจน</p>
-<h3>ตารางอนุมัติส่วนลด (เชื่อมต่อจาก SOP-OPS:016) /</h3>
-<h3>Discount Approval Matrix - from SOP-OPS:016</h3>
-<p>ส่วนลด /</p>
-<h3>Discount Level</h3>
-<p>ระยะเวลาฝาก ผู้อนุมัติ เงื่อนไข ≤ 25% ทุกช่วงเวลา Guest Service Exe. อนุมัติผ่านกลุ่ม Lark ได้ทันที &gt;25% ถึง 50% ≥ 6 เดือน (Long- term) Operation Manager ต้องมีเอกสาร + Approval Request Email + หลักฐาน | ขั้นต่ำชำระ 50% ของยอดเต็ม &gt;50% VIP / Ex-Gratia เท่านั้น BD / COO / CEO ไม่อนุมัติในกรณีทั่วไป | เฉพาะ VIP Corporate หรือกรณีพิเศษที่ CEO พิจารณา 📌 ตัวอย่างกรณี / Example Cases 📑Case 1: Long-term + ลูกค้ากลับมาก่อน Disposal</p>
+<p>ช่องทาง / Channel เงื่อนไข / Condition ผู้อนุมัติ / Approver หมายเหตุ / Notes 🎁 บริจาค / Donate สัมภาระสภาพดี ไม่มีมูลค่าตลาด สูง | ลูกค้าไม่ติดต่อครบ Notice Period Good condition, low market value, notice period elapsed OP Manager บันทึกองค์กรที่รับบริจาค + ภาพถ่าย Log receiving org + photo 🔨 ขายทอดตลาด / Auction สัมภาระมีมูลค่า (กระเป๋าแบรนด์, ถุงกอล์ฟ) | ยอด ค้างสูง High-value items, significant outstanding fee BD / CEO รายได้หักค่าฝากก่อน ส่วนที่เหลือ (ถ้า มี) เก็บไว้ 90 วัน Revenue offsets fees; remainder held 90 days 🗑️ ทำลาย / Destroy สัมภาระสภาพแย่ / เสื่อมสภาพ / มี ของต้องห้าม / ไม่สามารถบริจาค หรือขายได้ CLO + ถ่ายรูป บันทึกเหตุผล + ถ่ายวิดีโอขณะทำลาย Damaged, contains prohibited items, unsellable Document reason + video during destruction 📦 เก็บต่อ /Pending กรณี VIP / Corporate / กำลังอยู่ ในกระบวนการกฎหมาย VIP/Corporate or legal proceedings in progress CEO / BD / Legal กำหนดระยะเวลาเก็บต่อและเงื่อนไข ชัดเจน ตารางอนุมัติส่วนลด (เชื่อมต่อจาก SOP-OPS:016) / Discount Approval Matrix - from SOP-OPS:016 ส่วนลด / Discount Level ระยะเวลาฝาก ผู้อนุมัติ เงื่อนไข ≤ 25% ทุกช่วงเวลา Guest Service Exe. อนุมัติผ่านกลุ่ม Lark ได้ทันที &gt;25% ถึง 50% ≥ 6 เดือน (Long- term) Operation Manager ต้องมีเอกสาร + Approval Request Email + หลักฐาน | ขั้นต่ำชำระ 50% ของยอดเต็ม &gt;50% VIP / Ex-Gratia เท่านั้น BD / COO / CEO ไม่อนุมัติในกรณีทั่วไป | เฉพาะ VIP Corporate หรือกรณีพิเศษที่ CEO พิจารณา 📌 ตัวอย่างกรณี / Example Cases 📑Case 1: Long-term + ลูกค้ากลับมาก่อน Disposal</p>
 <ul><li>ฝาก 7 เดือน | กระเป๋า Large | ยอดค้าง 22,000 THB (Very High)</li><li>Base Table = 15% → Duration ≥ 6 เดือน → Special Discount 25–50%</li><li>OP Manager อนุมัติ 50% → จ่าย 11,000 THB (ขั้นต่ำ 50% ตาม Rule) | → Approved 50%,</li></ul>
 <p>pay 11,000 THB</p>
 <ul><li>⚑ ต้องแนบเอกสาร + ส่ง Approval Request ก่อนยืนยันลูกค้า</li></ul>
@@ -1636,14 +1632,8 @@ values ('abandoned-luggage-disposal', 'การจัดการและก�
 <h3>เอกสารและ Scripts Required Documents &amp; Communication Scripts</h3>
 <h3>📌 เอกสารที่ต้องใช้ / Required Documents</h3>
 <h3>เอกสาร / Document ใช้ช่วง / When จัดทำโดย / By เก็บที่ / Stored In</h3>
-<p>Contact Attempt Log Follow-up ทุก ครั้ง (Day 1–25) GS / CS CRM / Lark Formal Notice Email Day 15 CS Email Sent Folder + Lark Final Notice (Email + LINE) Day 25 OP Manager Email + LINE Screenshot + Lark Abandonment Report Day 30 OP Manager Lark Base + อีเมล CEO/BD Disposal Record + Photos หลัง Disposal OP Manager Lark Base + เก็บ 1 ปี</p>
-<h3>Approval Request Email ส่วนลด &gt;25%</h3>
-<p>หรือ Disposal CS / OP Manager Email Chain + Lark</p>
-<h3>📌 Scripts การสื่อสาร / Communication Scripts</h3>
-<p>1️⃣การรับเรื่องจากลูกค้า (เริ่มต้น) TH สวัสดีค่ะ/ครับ ขอบคุณที่ติดต่อ AIRPORTELs รบกวนขอชื่อ-นามสกุล และรหัสการจอง เพื่อให้ทีม งานตรวจสอบข้อมูลการฝากสัมภาระของคุณลูกค้าค่ะ EN Hello, thank you for contacting AIRPORTELs. May I have your full name and</p>
-<h3>booking reference so our team can check your storage details?</h3>
-<p>2️⃣กรณีลูกค้าแจ้งล่วงหน้า TH หากคุณลูกค้าแจ้งล่วงหน้าก่อนถึงวันรับจริง เราสามารถช่วยจัดการได้ค่ะ เช่น เสนอการส่งสัมภาระ ให้ หรือพิจารณาลดค่าฝากตามที่กำหนดได้เลยค่ะ EN If you inform us in advance, we can arrange solutions such as delivery or apply a</p>
-<h3>discount on your storage fee per our policy.</h3>
+<p>Contact Attempt Log Follow-up ทุก ครั้ง (Day 1–25) GS / CS CRM / Lark Formal Notice Email Day 15 CS Email Sent Folder + Lark Final Notice (Email + LINE) Day 25 OP Manager Email + LINE Screenshot + Lark Abandonment Report Day 30 OP Manager Lark Base + อีเมล CEO/BD Disposal Record + Photos หลัง Disposal OP Manager Lark Base + เก็บ 1 ปี Approval Request Email ส่วนลด &gt;25% หรือ Disposal CS / OP Manager Email Chain + Lark 📌 Scripts การสื่อสาร / Communication Scripts 1️⃣การรับเรื่องจากลูกค้า (เริ่มต้น) TH สวัสดีค่ะ/ครับ ขอบคุณที่ติดต่อ AIRPORTELs รบกวนขอชื่อ-นามสกุล และรหัสการจอง เพื่อให้ทีม งานตรวจสอบข้อมูลการฝากสัมภาระของคุณลูกค้าค่ะ EN Hello, thank you for contacting AIRPORTELs. May I have your full name and booking reference so our team can check your storage details?</p>
+<p>2️⃣กรณีลูกค้าแจ้งล่วงหน้า TH หากคุณลูกค้าแจ้งล่วงหน้าก่อนถึงวันรับจริง เราสามารถช่วยจัดการได้ค่ะ เช่น เสนอการส่งสัมภาระ ให้ หรือพิจารณาลดค่าฝากตามที่กำหนดได้เลยค่ะ EN If you inform us in advance, we can arrange solutions such as delivery or apply a discount on your storage fee per our policy.</p>
 <p>3️⃣ กรณีไม่แจ้ง แต่มีเหตุสุดวิสัย TH หากคุณลูกค้าไม่สามารถแจ้งล่วงหน้าได้ แต่มีเหตุสุดวิสัยพร้อมเอกสารยืนยัน เช่น ตั๋วเครื่องบินที่ เลื่อน/ยกเลิก หรือใบรับรองแพทย์ เราสามารถพิจารณาส่วนลดให้ได้ค่ะ รบกวนส่งเอกสารมาที่อีเมลหรือ LINE ของเราด้วยนะคะ EN If you couldn''t notify us due to force majeure and have supporting documents (flight cancellation, medical certificate), we can consider a discount. Please send documents via email or LINE.</p>
 <p>4️⃣ แจ้งผลอนุมัติส่วนลด TH เรียนคุณลูกค้า ทางทีมงานได้พิจารณาแล้ว และอนุมัติส่วนลด [XX%] สำหรับค่าฝากสัมภาระในครั้ง นี้ค่ะ ขอบคุณที่ไว้วางใจใช้บริการ AIRPORTELs EN Dear Customer, we are pleased to inform you that your discount request has been approved at [XX%]. Thank you for choosing AIRPORTELs.</p>
 <p>5️⃣ แจ้งสถานะ Abandoned (หลัง Disposal) TH เรียนคุณลูกค้า สัมภาระของท่านได้ผ่านกระบวนการแจ้งเตือนครบ 3 ครั้ง และครบระยะเวลา Notice Period 30 วันแล้ว ทางบริษัทจึงได้ดำเนินการตาม T&amp;C เรียบร้อยแล้ว หากต้องการเอกสารประกอบ กรุณาติดต่อทีมงานค่ะ EN Dear Customer, your luggage has completed the 3-notice follow-up process and the 30-day Notice Period. The disposal has been completed per our T&amp;C. Please contact us if you require documentation.</p>
@@ -1660,11 +1650,10 @@ values ('abandoned-luggage-disposal', 'การจัดการและก�
 <p>กรณี / Case ส่วนลดที่ได้รับ เอกสารที่ต้องแสดง แจ้งล่วงหน้าก่อนวันรับ ตามตาราง Base Table ไม่ต้องมีเอกสารพิเศษ ไม่แจ้ง มีเหตุสุดวิสัย พิจารณาตามกรณี ตั๋วสายการบิน / ใบรับรองแพทย์ / หนังสือราชการ Long-term ≥ 6 เดือน 25–50% (ขั้นต่ำจ่าย 50%) ประวัติการฝาก + เหตุผล + อนุมัติ OP Manager VIP / Corporate พิจารณาเป็นกรณี Email ฝ่ายการตลาด/BD | Customer profile ไม่ตรงเงื่อนไข ไม่มีส่วนลด ต้องชำระเต็มจำนวน</p>
 <p><strong>4. ติดต่อ AIRPORTELs / Contact Us</strong></p>
 <ul><li>Official notifications from: center@airportels.asia</li><li>Website: www.airportels.asia | T&amp;C: www.airportels.asia/terms-conditions/</li><li>Hours: ตามเวลาทำการของสาขา | Branch operating hours apply</li></ul>
-<h3>✔ Checklist สำหรับลูกค้า (กรณีเกินกำหนดรับ)</h3>
-<p>☐ ติดต่อ AIRPORTELs ทันทีที่ทราบว่าไม่สามารถมารับได้ตามกำหนด ☐ เตรียมเอกสารหลักฐาน (ถ้ามีเหตุสุดวิสัย): ตั๋วสายการบิน / ใบรับรองแพทย์ / เอกสารราชการ ☐ ยืนยันวันที่จะมารับกระเป๋า หรือขอให้จัดส่งถึงที่ ☐ หากได้รับ Formal Notice Email → ตอบกลับทันทีอย่าเพิกเฉย ☐ หากต้องการข้อมูล Disposal Record → ติดต่อ Customer Service</p>
+<figure><img src="/sop/abandoned-luggage-disposal/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>✔ Checklist สำหรับลูกค้า (กรณีเกินกำหนดรับ) ☐ ติดต่อ AIRPORTELs ทันทีที่ทราบว่าไม่สามารถมารับได้ตามกำหนด ☐ เตรียมเอกสารหลักฐาน (ถ้ามีเหตุสุดวิสัย): ตั๋วสายการบิน / ใบรับรองแพทย์ / เอกสารราชการ ☐ ยืนยันวันที่จะมารับกระเป๋า หรือขอให้จัดส่งถึงที่ ☐ หากได้รับ Formal Notice Email → ตอบกลับทันทีอย่าเพิกเฉย ☐ หากต้องการข้อมูล Disposal Record → ติดต่อ Customer Service</p>
 <h3>ประวัติการแก้ไข / Document Control</h3>
 <p>Version วันที่ / Date แก้ไขโดย / Author รายละเอียด / Notes 1.0 10 May 2026 Operations Team Initial release / เอกสารฉบับแรก</p>
-
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
 <ul><li><a href="mailto:ops@airportels.com" target="_blank" rel="noopener">ขอ  Disposal Record ได้ที่ ops@airportels.com</a></li></ul>', array['abandoned','disposal','storage','lost-found'], 'published', false)
 on conflict (slug) do update set
@@ -1676,18 +1665,22 @@ on conflict (slug) do update set
 insert into sop.documents (slug, title, summary, category_id, content_html, tags, status, is_onboarding)
 values ('lost-found-claim', 'การจัดการของหาย & เคลมความเสียหาย (Lost & Found / Damage Claim)', 'SOP-OPS 021 — ขั้นตอนรับแจ้ง สอบสวน และจัดการกรณีลูกค้าแจ้งของหาย/เสียหายระหว่างใช้บริการ เงื่อนไขการเคลมตาม T&C (แจ้งภายใน 72 ชม.) วงเงินชดเชย และแผนผังขั้นตอนการเคลม',
   (select id from sop.categories where slug = 'counter-service'),
-  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 021<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 พฤษภาคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote>
-<p>อ้างอิง / Reference:</p>
-<ul><li>(TH)Terms and Conditions2025 / (EN)Terms and Conditions2025</li><li>SOP: เคลมความเสียหาย</li></ul>
+  '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 021<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 พฤษภาคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><style>
+.prose table.sop-tbl th{white-space:nowrap;text-align:center;font-size:13.5px}
+.prose table.sop-tbl td{min-width:160px;max-width:340px;vertical-align:top;font-size:13.5px;line-height:1.55}
+.prose table.sop-tbl td:first-child,.prose table.sop-tbl th:first-child{min-width:130px;white-space:nowrap;font-weight:700;position:sticky;left:0;background:var(--surface-2);z-index:1}
+</style>
+<h3>อ้างอิง / Reference:</h3>
+<ul><li>(TH)Terms and Conditions 2026 / (EN)Terms and Conditions 2026</li><li>SOP: เคลมความเสียหาย</li></ul>
 <h3>🔹 วัตถุประสงค์ / Purpose</h3>
 <p>กำหนดขั้นตอนมาตรฐานในการรับแจ้ง สอบสวน และจัดการกรณีที่ลูกค้าแจ้งว่ากระเป๋าหรือทรัพย์สินสูญหายระหว่าง ใช้บริการ AIRPORTELs เพื่อให้การดำเนินการถูกต้องตาม T&amp;C โปร่งใส และตรวจสอบย้อนกลับได้ To standardize receiving, investigating, and resolving lost item reports during AIRPORTELs service in accordance with official T&amp;C</p>
 <h3>🔹 ขอบเขต / Scope</h3>
 <ul><li>ครอบคลุมทุกสาขาที่มีบริการรับฝากและจัดส่งกระเป๋า — Applies to all branches with storage and</li></ul>
-<h3>delivery services.</h3>
+<p>delivery services.</p>
 <ul><li>ขอบเขตสำหรับพนักงานหน้าสาขาทุกคน | Applies to all Guest Service Staff, CS Agents, and Branch</li></ul>
 <p>Managers.</p>
 <ul><li>อ้างอิง T&amp;C เรื่องสิทธิ์เคลมและค่าชดเชย | All claim decisions reference the official T&amp;C .</li></ul>
-<h3>⚠️ เงื่อนไขการเคลมความเสียหาย : Key T&amp;C References (Last update: 29/04/2026)</h3>
+<p>⚠️ เงื่อนไขการเคลมความเสียหาย : Key T&amp;C References (Last update: 29/04/2026)</p>
 <ul><li>ลูกค้าต้องแจ้งเคลมความเสียหายภายใน 3 วัน หรือ 72 ชั่วโมง นับตั้งแต่ได้รับกระเป๋าคืน หรือนับตั้งแต่สถานะ</li></ul>
 <p>การจัดส่งในระบบแสดงว่า “ส่งสำเร็จ” หากพ้นระยะเวลาดังกล่าว บริษัทฯ ขอสงวนสิทธิ์ไม่รับผิดชอบต่อความ เสียหายหรือสูญหายใดๆ ทั้งสิ้น</p>
 <ul><li>หากปลายทางไม่มีผู้รับกระเป๋า ณ เวลาที่จัดส่ง บริษัทฯ ขอสงวนสิทธิ์ไม่รับผิดชอบต่อความเสียหายหรือสูญหาย</li></ul>
@@ -1698,11 +1691,9 @@ values ('lost-found-claim', 'การจัดการของหาย & เ
 <p>ออร์เดอร์</p>
 <ul><li>บริษัทรับพิจารณาเฉพาะหลักฐานที่ออกจากช่องทางของบริษัทโดยตรง ได้แก่</li><li>อีเมลจาก center@airportels.asia</li><li>ใบเสร็จที่พิมพ์จากระบบบริษัท</li><li>ข้อมูลบนเว็บไซต์และระบบจัดการของบริษัท</li><li>เอกสารที่ได้รับจากเจ้าหน้าที่หรือพาร์ทเนอร์ที่ได้รับอนุญาต</li></ul>
 <h3>🔹 บทบาทและความรับผิดชอบ / Roles</h3>
-<p>ตำแหน่ง / Role หน้าที่ / Responsibility CS Agent / Guest Service Staff รับแจ้ง บันทึกเคส รวบรวมหลักฐาน ประสานงานสาขา สื่อสารกับลูกค้า Receive, log, collect evidence, coordinate branch, communicate. OP Coordinator / OP Manager กำกับการสอบสวน อนุมัติค่าชดเชย ตรวจสอบ CCTV รายงานผิดปกติ Supervise investigation, approve compensation, review CCTV.</p>
-<p>Operations /BD / CLO MS ปิดเคสระดับสูง ประสานหน่วยงานราชการ ทบทวนนโยบายรายไตรมาส Handle escalations, liaise with authorities, quarterly review.</p>
-<h3>🔹 ประเภทของสูญหาย / Lost Item Categories</h3>
-<h3>ประเภท / Category สิทธิ์เคลม การดำเนินการ / Action</h3>
-<p>กระเป๋าหายทั้งใบ ระหว่างขนส่ง โดย AIRPORTELs / Make Send or Partner Whole luggage lost during transport ✅ มีสิทธิ์ถ้ายืนยันได้ และดำเนินการตาม กระบวนการ ลูกค้าแจ้งเคลมตามขั้นตอน → ตรวจสอบรายละเอียด → ยืนยัน → ชดเชยตามตาราง (ต้องแสดงใบเสร็จ / หลักฐานครบถ้วน) ของหายภายในกระเป๋า Missing item inside luggage ❌ ไม่ครอบคลุม บันทึกเท่านั้น อ้างอิงT&amp;C Section: Liabilities ของแต่งกระเป๋า (พวงกุญแจ, ป้าย, หมอน) Attachments/accessories ❌ ไม่ครอบคลุม T&amp;C ระบุชัด: ไม่รับประกัน แนะนำถอดออกก่อนใช้บริการ ของต้องห้าม / Prohibited items ❌ ไม่ครอบคลุม ไม่ดำเนินการเคลม อ้างอิง T&amp;C Prohibited Items Section</p>
+<h3>บทบาทและความรับผิดชอบ (Roles &amp; Responsibilities)</h3><table class="sop-tbl"><thead><tr><th>ตำแหน่ง / Role</th><th>หน้าที่ / Responsibility</th></tr></thead><tbody><tr><td>CS Agent / Guest Service Staff</td><td>รับแจ้ง บันทึกเคส รวบรวมหลักฐาน ประสานงานสาขา และสื่อสารกับลูกค้า</td></tr><tr><td>OP Coordinator / OP Manager</td><td>กำกับการสอบสวน อนุมัติค่าชดเชย ตรวจสอบ CCTV และรายงานความผิดปกติ</td></tr><tr><td>Operations / BD / CLO / MS</td><td>ปิดเคสระดับสูง ประสานหน่วยงานราชการ และทบทวนนโยบายรายไตรมาส</td></tr></tbody></table>
+<p>🔹 ประเภทของสูญหาย / Lost Item Categories</p>
+<h3>ประเภทของสูญหาย (Lost Item Categories)</h3><table class="sop-tbl"><thead><tr><th>ประเภท / Category</th><th>สิทธิ์เคลม</th><th>การดำเนินการ / Action</th></tr></thead><tbody><tr><td>กระเป๋าหายทั้งใบ ระหว่างขนส่งโดย AIRPORTELs / Make Send / Partner</td><td>✅ มีสิทธิ์ (ถ้ายืนยันได้)</td><td>ลูกค้าแจ้งเคลมตามขั้นตอน → ตรวจสอบรายละเอียด → ยืนยัน → ชดเชยตามตารางเคลม (ต้องแสดงใบเสร็จ/หลักฐานครบถ้วน)</td></tr><tr><td>ของหายภายในกระเป๋า</td><td>❌ ไม่ครอบคลุม</td><td>บันทึกเท่านั้น — อ้างอิง T&amp;C 2026 หัวข้อ Liabilities</td></tr><tr><td>ของแต่งกระเป๋า (พวงกุญแจ, ป้าย, หมอน)</td><td>❌ ไม่ครอบคลุม</td><td>T&amp;C 2026 ระบุชัด: ไม่รับประกัน แนะนำถอดออกก่อนใช้บริการ</td></tr><tr><td>ของต้องห้าม / Prohibited items</td><td>❌ ไม่ครอบคลุม</td><td>ไม่ดำเนินการเคลม — อ้างอิง T&amp;C 2026 หัวข้อ Prohibited Items</td></tr></tbody></table>
 <h3>ขั้นตอนการปฏิบัติ Lost &amp; Found Process Steps</h3>
 <p>1. GS &amp; CS รับแจ้งและบันทึกข้อมูลเบื้องต้น / Receive the Report</p>
 <ul><li>รับทราบรายงานลูกค้าภายในวันทำการเดียวกัน | Acknowledge same business day</li><li>รวบรวม: ชื่อ-นามสกุล | Order ID | เบอร์ติดต่อ | คำอธิบายของที่หาย | วัน-เวลา-สาขาที่ใช้บริการ</li></ul>
@@ -1746,21 +1737,24 @@ values ('lost-found-claim', 'การจัดการของหาย & เ
 <p><strong>13. นำเข้าข้อมูลใน CS → ดำเนินการเคลม → CS ส่งหลักฐานการโอนให้ลูกค้า</strong></p>
 <p><strong>14. เปลี่ยน Status ใน Lark เป็น In Paid</strong></p>
 <p><strong>15. กรอกฟอร์มเคลมกรณีความเสียหายเกิดจากการขนส่ง MS → แนบหลักฐานการโอนเงินให้ลูกค้า</strong></p>
-<p>→ END</p>
+<p>→ END Flow Chart</p>
+<figure><img src="/sop/lost-found-claim/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/lost-found-claim/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <h3>เอกสาร และแบบฟอร์ม ประกอบการ Claim</h3>
 <ul><li>Flow Claim and Refund</li><li>Claim and Refund</li><li>Claim with MS</li></ul>
 <h3>ประวัติการแก้ไข / Document Control</h3>
 <p>Version วันที่ / Date แก้ไขโดย / Author รายละเอียด / Notes 1.0 10 May 2026 Operations Team Initial release / เอกสารฉบับแรก</p>
-<h3>แผนผังขั้นตอนการเคลม (Flow Chart) จากเอกสารต้นฉบับ</h3><figure><img src="/sop/lost-found-claim/p5.jpg" alt="แผนผังขั้นตอนการเคลม (Flow Chart) — ส่วนที่ 1" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>แผนผังขั้นตอนการเคลม (Flow Chart) — ส่วนที่ 1</figcaption></figure><figure><img src="/sop/lost-found-claim/p6.jpg" alt="แผนผังขั้นตอนการเคลม (Flow Chart) — ส่วนที่ 2" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>แผนผังขั้นตอนการเคลม (Flow Chart) — ส่วนที่ 2</figcaption></figure><figure><img src="/sop/lost-found-claim/p7.jpg" alt="แผนผังขั้นตอนการเคลม (Flow Chart) — ส่วนที่ 3" style="max-width:100%;border:1px solid #e5e7eb;border-radius:8px" /><figcaption>แผนผังขั้นตอนการเคลม (Flow Chart) — ส่วนที่ 3</figcaption></figure>
 <h3>🔗 ลิงก์ที่เกี่ยวข้อง (Links)</h3>
-<ul><li><a href="mailto:center@airportels.asia" target="_blank" rel="noopener">อีเมลจาก center@airportels.asia</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/docx/YpQGdONFSoSPM7xT14ulfCe7gqc?from=from_copylink" target="_blank" rel="noopener">เปิดลิงก์ (Open link)</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/base/AjqWbJszaaLk1hspwmClmhizg2f?from=from_copylink" target="_blank" rel="noopener">เปิดลิงก์ (Open link)</a></li><li><a href="https://forms.gle/B5dXQkTH73CDtBJJA" target="_blank" rel="noopener">Claim with MS</a></li></ul>', array['lost-found','claim','compensation','damage'], 'published', false)
+<ul><li><a href="mailto:center@airportels.asia" target="_blank" rel="noopener">อีเมลจาก center@airportels.asia</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/docx/YpQGdONFSoSPM7xT14ulfCe7gqc?from=from_copylink" target="_blank" rel="noopener">เอกสารประกอบ (Doc)</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/base/AjqWbJszaaLk1hspwmClmhizg2f?from=from_copylink" target="_blank" rel="noopener">ระบบบันทึก/ฟอร์ม (Lark Base)</a></li><li><a href="https://forms.gle/B5dXQkTH73CDtBJJA" target="_blank" rel="noopener">Claim with MS</a></li></ul>', array['lost-found','claim','compensation','damage'], 'published', false)
 on conflict (slug) do update set
   title = excluded.title, summary = excluded.summary,
   category_id = excluded.category_id, content_html = excluded.content_html,
   tags = excluded.tags, status = excluded.status;
 
 -- ===== ILLUSTRATED: dmk-airport-service (2 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 020/2026<br><strong>วันที่บังคับใช้:</strong> 1 มกราคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>เวอร์ชัน / Version: ปรับปรุงครั้งที่ 1</p>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 020/2026<br><strong>วันที่บังคับใช้:</strong> 1 มกราคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP : AIRPORT LUGGAGE STORAGE / DELIVERY SERVICE AT DMK AIPORT</p>
+<h3>ขั้นตอนการรับ–ส่งมอบกระเป๋าเดินทาง สาขาสนามบินดอนเมือง</h3>
+<p>เวอร์ชัน / Version: ปรับปรุงครั้งที่ 1</p>
 <h3>📌 วัตถุประสงค์ / Purpose</h3>
 <p>เพื่อกำหนดขั้นตอนการรับและส่งมอบกระเป๋าเดินทาง ณ ท่าอากาศยานดอนเมือง ให้เป็นไปตามข้อกำหนดด้านความ ปลอดภัยของการท่าฯ (ทอท.) และใช้เป็นแนวปฏิบัติจริงสำหรับพนักงานหน้าสาขา To establish operational procedures for luggage acceptance and release at Don Mueang Airport in compliance with AOT security regulations.</p>
 <h3>📌ขอบเขตการใช้งาน / Scope</h3>
@@ -1814,7 +1808,7 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <p>การบริการรับฝากกระเป๋า ณ ท่า อากาศยานดอนเมือง.pdf 12.63MB</p>' where slug = 'dmk-airport-service';
 
 -- ===== ILLUSTRATED: pos-order-receiving (12 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 011/2025<br><strong>เวอร์ชัน:</strong> 2.0<br><strong>วันที่บังคับใช้:</strong> 9 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>แก้ไขครั้งที่ 1 / Revised Date: 20 สิงหาคม 2568 : Dev. อัพเดตการเลือก Service Type การจอง MS</p>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 011/2025<br><strong>เวอร์ชัน:</strong> 2.0<br><strong>วันที่บังคับใช้:</strong> 9 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: การรับออเดอร์ลูกค้าผ่านระบบ POS (Order Receiving Process) แก้ไขครั้งที่ 1 / Revised Date: 20 สิงหาคม 2568 : Dev. อัพเดตการเลือก Service Type การจอง MS</p>
 <h3>📌วัตถุประสงค์ (Purpose)</h3>
 <p>เพื่อกำหนดขั้นตอนที่เป็นมาตรฐานในการรับออเดอร์จากลูกค้า ทั้งการฝากกระเป๋าและการส่งกระเป๋า ผ่านระบบ POS และระบบหลังบ้าน เพื่อให้มั่นใจว่าทุกขั้นตอนถูกต้อง ครบถ้วน รวดเร็ว และสามารถตรวจสอบย้อนหลังได้</p>
 <h3>📌ขอบเขต (Scope)</h3>
@@ -1863,7 +1857,8 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <ul><li><a href="https://postels.airportels.asia/admin/order/browse" target="_blank" rel="noopener">เข้าระบบหลังบ้าน Airportles</a></li></ul>' where slug = 'pos-order-receiving';
 
 -- ===== ILLUSTRATED: authorized-person-pickup (3 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 012/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ / Purpose</h3>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 012/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: การให้ผู้อื่นมารับกระเป๋าแทน / Authorized Person Pickup</p>
+<h3>📌 วัตถุประสงค์ / Purpose</h3>
 <p>เพื่อกำหนดแนวทางปฏิบัติที่ชัดเจนในการให้ผู้อื่นมารับกระเป๋าแทนเจ้าของอย่างปลอดภัย ลดความเสี่ยงจาก ความผิดพลาด การสูญหาย หรือการแอบอ้าง To provide clear procedures for allowing an authorized person to collect luggage on behalf of the owner, ensuring safety and minimizing risks of loss, errors, or impersonation.</p>
 <h3>📌ขอบเขตการใช้งาน / Scope</h3>
 <p>ใช้กับกรณีที่ลูกค้าไม่สามารถมารับกระเป๋าด้วยตนเอง และมอบหมายให้ผู้อื่นมารับแทน Applicable when the customer cannot pick up the luggage themselves and authorizes another person to do so.</p>
@@ -1919,7 +1914,7 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <figure><img src="/sop/authorized-person-pickup/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = 'authorized-person-pickup';
 
 -- ===== ILLUSTRATED: open-close-counter (8 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 003<br><strong>เวอร์ชัน:</strong> 2.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>วันที่มีการแก้ไข และปรับปรุง / Updated Date : 23 มกราคม 2569</p>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 003<br><strong>เวอร์ชัน:</strong> 2.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: ขั้นตอนการเปิด และปิดเคาน์เตอร์ สำหรับสาขา ห้างสรรพสินค้า และสนามบิน) วันที่มีการแก้ไข และปรับปรุง / Updated Date : 23 มกราคม 2569</p>
 <h3>📌 วัตถุประสงค์ (Purpose)</h3>
 <p>เพื่อกำหนดแนวทางปฏิบัติงานที่เป็นมาตรฐานในการ เปิดและปิดเคาน์เตอร์บริการ ทั้งในสาขาห้างสรรพสินค้าและ สนามบิน โดยมีจุดประสงค์เพื่อให้:</p>
 <ul><li>พนักงานสามารถปฏิบัติงานได้อย่างถูกต้อง เป็นขั้นตอน และปลอดภัย</li><li>สร้างความพร้อมในการให้บริการลูกค้าอย่างมีประสิทธิภาพ</li><li>ป้องกันการสูญหายหรือความเสียหายของทรัพย์สินและอุปกรณ์</li><li>สนับสนุนการตรวจสอบคุณภาพงานและความถูกต้องของข้อมูลรายวัน เช่น Check-in, Check-out และยอด</li></ul>
@@ -2021,7 +2016,8 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <ul><li><a href="https://ssglsj0spi27.sg.larksuite.com/share/base/form/shrlgdvb7YjwI4wYLyl1EglMMtb" target="_blank" rel="noopener">7. ถ่ายรูปเคาน์เตอร์ สำหรับ Check-in ผ่าน Lark OPEN Counter Checklist</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/share/base/form/shrlgoiPdpbc2c8p7CnKE5JFiqo" target="_blank" rel="noopener">8. เช็คสต๊อคสินค้าและของใช้ทุกวันอาทิตย์  UPDATE STOCK</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/share/base/form/shrlg66DrQmhPvml9oPAUtJEijf" target="_blank" rel="noopener">2. นับเงินและส่ง Sales Report ผ่าน Lark Daily Sales Report</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/docx/RqegdFpV7o6g6mxNaHdlhJY9gbd" target="_blank" rel="noopener">ช่องทางการแจ้งซ่อม</a></li><li><a href="https://ssglsj0spi27.sg.larksuite.com/share/base/form/shrlgQRdC8dnKvx5BDfsaFe3nIf" target="_blank" rel="noopener">7. ถ่ายรูปเคาน์เตอร์ สำหรับ Check-out ผ่าน Lark   CLOSE Counter Checklist</a></li></ul>' where slug = 'open-close-counter';
 
 -- ===== ILLUSTRATED: yoowifi-service (7 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 013/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 4 สิงหาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ / Purpose</h3>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 013/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 4 สิงหาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: การให้บริการลูกค้า YOOWIFI สำหรับพนักงาน AIRPORTELs</p>
+<h3>📌 วัตถุประสงค์ / Purpose</h3>
 <p>เพื่อให้พนักงานหน้าสาขา AIRPORTELs ให้บริการลูกค้า YOOWIFI ได้อย่างมีมาตรฐาน ถูกต้อง และป้องกันความ ผิดพลาดในการส่งมอบอุปกรณ์</p>
 <h3>📌 ขอบเขตการใช้งาน / Scope</h3>
 <p>ใช้สำหรับพนักงาน Guest Service ประจำสาขาของ AIRPORTELs ที่ให้บริการรับ–ส่งอุปกรณ์ YOOWIFI แก่ ลูกค้า ณ จุดให้บริการสนามบินหรือจุดให้บริการอื่นที่ได้รับมอบหมาย</p>
@@ -2070,7 +2066,8 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <ul><li><a href="https://docs.google.com/spreadsheets/d/1OFprB9ESYGEukB2dd_TaCu5E8uDCT0q8P4cxcFAvPWY/edit?gid=0#gid=0" target="_blank" rel="noopener">https://docs.google.com/spreadsheets/d/1OFprB9ESYGEukB2dd_TaCu5E8uDCT0q8P4cxcFAv</a></li></ul>' where slug = 'yoowifi-service';
 
 -- ===== ILLUSTRATED: edc-machine (18 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0017/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 3 ตุลาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Objective)</h3>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 0017/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 3 ตุลาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: การใช้งานเครื่อง EDC (การรับชำระผ่านบัตร เครดิต, QR Payment, Alipay, WeChat) EDC Machine Operation for Credit Card, QR Payment, and Digital Wallet Payments (Alipay, WeChat)</p>
+<h3>วัตถุประสงค์ (Objective)</h3>
 <p>เพื่อกำหนดขั้นตอนการใช้งานเครื่อง EDC สำหรับการรับชำระเงินด้วยบัตรเครดิต, Thai QR Payment, Alipay, WeChat และการพิมพ์รายงานสรุปยอดประจำวัน ให้เป็นมาตรฐานเดียวกันในทุกสาขา ลดความผิดพลาดและเพิ่ม ประสิทธิภาพในการให้บริการลูกค้า</p>
 <h3>ขอบเขต (Scope)</h3>
 <p>คู่มือการปฏิบัติงานนี้ครอบคลุมถึง</p>
@@ -2152,7 +2149,8 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <figure><img src="/sop/edc-machine/fig18.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = 'edc-machine';
 
 -- ===== ILLUSTRATED: online-credit-card-payment (8 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 007/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Objective)</h3>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 007/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: ขั้นตอนการชำระเงินด้วยบัตรเครดิตแบบ ออนไลน์ Online Credit Card Payment Process</p>
+<h3>วัตถุประสงค์ (Objective)</h3>
 <p>เพื่อกำหนดขั้นตอนที่เป็นมาตรฐานในการเรียกเก็บเงินจากลูกค้าผ่านบัตรเครดิตแบบออนไลน์ โดยใช้ระบบหลังบ้าน ของ AIRPORTELs เพื่อให้การรับชำระเป็นไปอย่างถูกต้อง ตรวจสอบได้ และลดข้อผิดพลาด To standardize the steps for requesting online credit card payments via AIRPORTELs'' back- office system, ensuring accuracy and traceability.</p>
 <h3>ขอบเขต (Scope)</h3>
 <p>ใช้สำหรับพนักงานที่ปฏิบัติงานในสาขา หรือตำแหน่งที่เกี่ยวข้องกับการเรียกเก็บเงินจากลูกค้าในกรณีต้องชำระผ่าน ช่องทางออนไลน์ Applicable to branch staff or related roles responsible for collecting customer payments via online channels.</p>
@@ -2180,7 +2178,8 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <ul><li><a href="https://postels.airportels.asia/admin/order/browse" target="_blank" rel="noopener">เว็บไซต์ AIRPORTELs</a></li></ul>' where slug = 'online-credit-card-payment';
 
 -- ===== ILLUSTRATED: cashless-payment-policy (6 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 002<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 16 มิถุนายน 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><ul><li>รับชำระเงินสดที่ต่ำกว่า หรือเท่ากับ 100 บาท สำหรับทุกสาขา</li><li>รับชำระเงินสดที่ยอดต่ำกว่า หรือเท่ากับ 150 บาท ขึ้นไป สำหรับสาขาสนามบินภูเก็ต (International &amp;</li></ul>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 002<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 16 มิถุนายน 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: นโยบายการชำระเงินแบบไร้เงินสด Going Cashless Payment Policy นโยบายการชำระเงินแบบไร้เงินสด</p>
+<ul><li>รับชำระเงินสดที่ต่ำกว่า หรือเท่ากับ 100 บาท สำหรับทุกสาขา</li><li>รับชำระเงินสดที่ยอดต่ำกว่า หรือเท่ากับ 150 บาท ขึ้นไป สำหรับสาขาสนามบินภูเก็ต (International &amp;</li></ul>
 <p>Domestic)</p>
 <h3>🔹 วัตถุประสงค์ / Purpose</h3>
 <p>To ensure clear communication and consistent service when enforcing the cashless payment policy. เพื่อให้พนักงานสามารถสื่อสารกับลูกค้าได้อย่างถูกต้องและมีมาตรฐานเดียวกันในการให้บริการช่วงเปลี่ยนผ่านไปสู่ ระบบไร้เงินสด</p>
@@ -2212,7 +2211,8 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <p>SOP ที่เกี่ยวข้อง : SOP: ขั้นตอนการชำระเงินด้วยบัตรเครดิตแบบออนไลน์</p>' where slug = 'cashless-payment-policy';
 
 -- ===== ILLUSTRATED: inventory-stock-update (4 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 006/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Objective)</h3>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 006/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: การอัปเดตสต๊อกและการรับของประจำสาขา (Inventory)</p>
+<h3>วัตถุประสงค์ (Objective)</h3>
 <p>เพื่อควบคุมและติดตามปริมาณสต๊อกของใช้ประจำสาขาให้มีความถูกต้อง ป้องกันของขาด และสนับสนุนการวางแผน จัดส่งสินค้าได้อย่างมีประสิทธิภาพ</p>
 <h3>ขอบเขต (Scope)</h3>
 <p>SOP นี้สำหรับพนักงานตำแหน่ง Guest Service / Branch Manager / Porter ทุกคนที่ปฏิบัติงานหน้าสาขา และ ครอบคลุมขั้นตอนการการดำเนินการดังนี้:</p>
@@ -2239,7 +2239,8 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <p>4 ม้วน ให้ใส่จำนวนที่ได้รับ 5 ม้วน และโน้ตบอกว่า เปียกฝน 1 ม้วน ใช้ได้จริง 4 ม้วน</p>' where slug = 'inventory-stock-update';
 
 -- ===== ILLUSTRATED: luggage-delivery-google-sheet (1 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> WI-OPS : 001/2026<br><strong>เวอร์ชัน:</strong> 01<br><strong>วันที่บังคับใช้:</strong> 19 มกราคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Objective)</h3>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> WI-OPS : 001/2026<br><strong>เวอร์ชัน:</strong> 01<br><strong>วันที่บังคับใช้:</strong> 19 มกราคม 2569<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>คู่มือการบันทึกออเดอร์บริการขนส่งกระเป๋าผ่าน Google Sheet (Luggage Delivery Record)</p>
+<h3>วัตถุประสงค์ (Objective)</h3>
 <p>เพื่อกำหนดขั้นตอนมาตรฐานในการปฏิบัติงานของพนักงานหน้าสาขา (Guest Service: GS) และ Customer Service (CS) ในการบันทึกข้อมูลการให้บริการขนส่งกระเป๋า และประสานงานกับทีมขนส่ง (MS) อย่างถูกต้อง ครบ ถ้วน และเป็นมาตรฐานเดียวกันทุกสาขา</p>
 <h3>ขอบเขต (Scope)</h3>
 <p>ครอบคลุมพนักงาน Guest Service (GS) ทุกสาขา และทีม Customer Service (CS) ที่เกี่ยวข้องกับการบันทึกออ เดอร์บริการขนส่งกระเป๋า ผ่าน Google Sheet: Luggage Delivery Record เพื่อประสานงานกับทีมขนส่ง (MS) ไฟลล์ที่ใช้บันทึกข้อมูล</p>
@@ -2261,7 +2262,8 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <ul><li><a href="https://docs.google.com/spreadsheets/d/1VsXsby13SyumPxKGZovgp571M7oPQC7ib7NSoD0fXJE/edit?gid=0#gid=0" target="_blank" rel="noopener">https://docs.google.com/spreadsheets/d/1VsXsby13SyumPxKGZovgp571M7oPQC7ib7NSoD0f</a></li></ul>' where slug = 'luggage-delivery-google-sheet';
 
 -- ===== ILLUSTRATED: emergency-airport (4 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS-EMS:004/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ (Objective)</h3>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS-EMS:004/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: การปฏิบัติงานกรณีเกิดเหตุฉุกเฉิน ณ จุด บริการ ภายในสนามบินฯ</p>
+<h3>📌 วัตถุประสงค์ (Objective)</h3>
 <p>เพื่อกำหนดแนวทางการปฏิบัติงานสำหรับพนักงานประจำจุดบริการ AIRPORTELs ในพื้นที่สนามบิน ให้สามารถตอบ สนองต่อเหตุฉุกเฉินได้อย่างมีประสิทธิภาพ โดยมีเป้าหมายหลัก ดังนี้:</p>
 <ul><li>รักษาความปลอดภัยของพนักงานและลูกค้าเป็นลำดับแรก</li><li>ลดความเสี่ยงและความเสียหายต่อทรัพย์สินของลูกค้าและบริษัทในระหว่างเกิดเหตุ</li><li>ตอบสนองต่อเหตุฉุกเฉินอย่างมีประสิทธิภาพ รวดเร็ว และเป็นระบบ</li><li>ปฏิบัติงานตามมาตรฐานความปลอดภัยของสนามบินทั้งในระดับท้องถิ่นและสากล</li><li>เสริมสร้างความเชื่อมั่นในบริการ และภาพลักษณ์ด้านความปลอดภัยของบริษัท</li></ul>
 <h3>📌 ขอบเขต (Scope):</h3>
@@ -2289,7 +2291,8 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <figure><img src="/sop/emergency-airport/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = 'emergency-airport';
 
 -- ===== ILLUSTRATED: emergency-mall (4 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS-EMS:005/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>📌 วัตถุประสงค์ (Objective)</h3>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS-EMS:005/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: การปฏิบัติงานกรณีเกิดเหตุฉุกเฉินสำหรับจุด บริการภายในศูนย์การค้าฯ</p>
+<h3>📌 วัตถุประสงค์ (Objective)</h3>
 <p>เพื่อกำหนดแนวทางปฏิบัติงานที่ชัดเจนให้กับพนักงานประจำจุดบริการ ภายในศูนย์การค้า ในกรณีที่เกิดเหตุฉุกเฉิน เช่น การพบวัตถุต้องสงสัย เหตุก่อการร้าย หรือภัยพิบัติทางธรรมชาติ โดยมีเป้าหมายเพื่อ:</p>
 <ul><li>รักษาความปลอดภัยของพนักงานและลูกค้าเป็นลำดับแรก</li><li>ลดความเสี่ยงต่อการสูญเสียหรือความเสียหายต่อทรัพย์สินของลูกค้าและบริษัท</li><li>ตอบสนองต่อเหตุฉุกเฉินอย่างมีประสิทธิภาพ รวดเร็ว และเป็นระบบ</li><li>สร้างความมั่นใจให้กับลูกค้าในการใช้บริการ</li><li>ปฏิบัติสอดคล้องกับนโยบายความปลอดภัยของศูนย์การค้าและหน่วยงานที่เกี่ยวข้อง</li></ul>
 <h3>📌 ขอบเขต (Scope):</h3>
@@ -2312,58 +2315,152 @@ update sop.documents set content_html = '<blockquote><p><strong>รหัสเ�
 <figure><img src="/sop/emergency-mall/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = 'emergency-mall';
 
 -- ===== ILLUSTRATED: respond-io-guide (45 figures) =====
-update sop.documents set content_html = '<blockquote><p>※ หน้าที่มีข้อมูลรหัสเข้าระบบถูกซ่อนไว้เพื่อความปลอดภัย — โปรดดูจากระบบต้นทางโดยตรง</p></blockquote><figure><img src="/sop/respond-io-guide/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+update sop.documents set content_html = '<blockquote><p>※ มีข้อมูลบัญชีเข้าระบบ KKDAY สำหรับใช้งานภายในเท่านั้น — ระบบต้องเข้าสู่ระบบก่อนเข้าถึง</p></blockquote><p>HOW TO USE RESPOND.IO Table of content 1 การใช้งานเบื้องต้น 9 การส่งข้อความขอรูปภาพ ในกรณีส่งกระเป๋าเดินทาง 13 วิธีการลง Order ลูกค้าที่จอง ผ่าน Airportels 19 วิธีการลง Order ลูกค้าที่จอง ผ่าน Partner การใช้งานเบื้องต้น</p>
+<figure><img src="/sop/respond-io-guide/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <figure><img src="/sop/respond-io-guide/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>1. เข้าไปที่เว็บไซต์ respond.io</strong></p>
+<p>วิธี Login เข้าระบบ</p>
+<p><strong>2. ใส่ username และ password ที่บริษัทได้สร้างให้</strong></p>
+<p><strong>3. คลิก sign in เพื่อเข้าสู่ระบบ</strong></p>
+<p>สามารถค้นหา respond.io ผ่าน Google 2 วิธี Add new contact และส่งข้อความ</p>
+<p><strong>1. คลิกไปที่ไอค่อน</strong></p>
+<p>เพื่อ add new contact</p>
 <figure><img src="/sop/respond-io-guide/fig3.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>2. ใส่ ชื่อ-นามสกุลลูกค้า และเพิ่ม Email address</strong></p>
+<p><strong>3. คลิก Add เพื่อเป็นการสร้าง contact ใหม่</strong></p>
 <figure><img src="/sop/respond-io-guide/fig4.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>3</p>
 <figure><img src="/sop/respond-io-guide/fig5.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>Airportels center@airportels.com 5 4 6</p>
+<p><strong>4. พิมพ์ชื่อเรื่องได้ที่ Subject ก่อนส่งข้อความ</strong></p>
+<p><strong>5. พิมพ์เนื้อหาที่ต้องการส่งลงไปที่ Massage และ กดส่งข้อความ</strong></p>
+<p><strong>6. เมื่อกดส่งข้อความเรียบร้อยแล้ว คลิกไปที่ Close conversation เพื่อจบบทสนทนา</strong></p>
+<p>4</p>
 <figure><img src="/sop/respond-io-guide/fig6.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>PATTERN ในการตอบข้อความลูกค้า ส าหรับการตอบข้อความ จะมี Pattern พื้นฐาน ทั้งภาษาไทย และ ภาษอังกฤษ อยู่ที่ Airportels CS (Respond.io) Sheet ส าหรับ ตอบข้อความที่มีการถามเข้ามาบ่อยครั้ง เพื่อความรวดเร็ว และ ง่าย ต่อการพูดคุย โดยที่ 1. จะเป็นหัวข้อส าหรับการส่งข้อความ 2. ข้อความรายละเอียดต่างๆ ถ้าเป็นค าถามนอกเหนือจากแพทเทิร์นที่ให้ไว้ สามารถตอบกลับ ได้ตามพื้นฐานความรู้เกี่ยวกับบริษัท 1 2 5 1 2 3 Filter by คือระบบคัดกรองข้อความ ของลูกค้า ว่าเป็นข้อความ ใหม่ หรือข้อความเก่า</p>
+<p><strong>1. All status จะแสดงข้อความของลูกค้าทุกรูปแบบ ทั้ง</strong></p>
+<p>ข้อความใหม่ หรือ ข้อความเก่า</p>
+<p><strong>2. Open จะแสดงข้อความที่เข้ามาใหม่ หรือข้อความที่ยัง</strong></p>
+<p>ไม่ได้มีการปิดแชท</p>
+<p><strong>3. Close จะแสดงข้อความที่ได้รับการตอบกลับ หรือ</strong></p>
+<p>ได้รับการปิดแชทแล้ว 6</p>
 <figure><img src="/sop/respond-io-guide/fig7.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>INBOX 1. All คือข้อความทั้งหมด ที่มี การตอบกลับและยังไม่ได้รับ การตอบกลับ 2. Mine เมื่อลูกค้าตอบกลับ ข้อความที่เราได้มีการพูดคุย จะแสดงที่หน้านี้ 2 1 Search ช่อง Search สามารถใช้ค้นหาได้ทั้ง Email หรือชื่อผู้ใช้งาน 7 ช่องทางการติดต่อ AIRPORTELs center@airportels.asia 02 026 6927 www.airportels.asia @airportels +66864183484 8 การส่งข้อความขอรูปภาพ ในกรณีส่งกระเป๋าเดินทาง</p>
 <figure><img src="/sop/respond-io-guide/fig8.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <figure><img src="/sop/respond-io-guide/fig9.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>1. เข้าไปที่ Luggage Delivery Order</strong></p>
+<p><strong>2. น าเลขที่ขึ้นต้นด้วย LUG หรือ INTX ไปค้นหาที่เว็บ Postels</strong></p>
 <figure><img src="/sop/respond-io-guide/fig10.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <figure><img src="/sop/respond-io-guide/fig11.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>3. เมื่อน าเลขไปค้นหาแล้ว ให้ดูที่ Customer Information น า Email ไปสร้าง new account ใน respond.io</strong></p>
+<p>10 24KK228985002</p>
 <figure><img src="/sop/respond-io-guide/fig12.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>4. น า Email ค้นหาที่ช่อง Search เพื่อค้นหาว่ามีการสร้าง Account ไว้หรือไม่ ถ้าไม่มี Account ให้ท าการสร้างก่อนส่ง ข้อความ ถ้ามีแล้วให้กดเข้าในแชทได้เลย</p>
 <figure><img src="/sop/respond-io-guide/fig13.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>5. ให้เข้าไปที่หน้า Airportels CS (Respond.io) หาหัวข้อ Please take a picture of your luggage when you drop your luggage. (หัวข้อการส่งรูป)</strong></p>
+<p>11</p>
 <figure><img src="/sop/respond-io-guide/fig14.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>6. น าหัวข้อใส่ที่ Subject และ ใส่รายละเอียดด้านล่าง โดย รายละเอียด</strong></p>
+<p>- Order ID - วันที่ที่ต้องการส่ง - สถานที่ส่ง - สถานที่รับ หลังจากใส่รายละเอียดเรียบร้อยแล้วให้กดส่งข้อความ</p>
 <figure><img src="/sop/respond-io-guide/fig15.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>7. หลังจากนั้นให้กดที่ Clos conversation (ปุ่มเขียว) เพื่อเป็น การจบบทสนทนา</strong></p>
+<p>12 วิธีการลง Order ลูกค้าที่ จองผ่าน Airportels</p>
 <figure><img src="/sop/respond-io-guide/fig16.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>วิธีการลง Order ลูกค้าที่จองผ่าน Airportels ส าหรับลูกค้าที่จอง Storage และ Delivery ผ่านระบบ AIRPORTELs นั้น ข้อมูลของลูกค้าถูกส่งมา ทาง respond.io โดยน าข้อมูลดังกล่าวมาใส่ใน Google Sheet เพื่อเก็บรวบรวม วิธีการลงข้อมูลลูกค้า</p>
 <figure><img src="/sop/respond-io-guide/fig17.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>Show original email</p>
+<p><strong>1. คลิกที่ show original email</strong></p>
 <figure><img src="/sop/respond-io-guide/fig18.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>2. ระบบจะแสดงข้อมูลลูกค้าทั้งหมด</strong></p>
+<p>14</p>
 <figure><img src="/sop/respond-io-guide/fig19.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ในระบบจะแสดงข้อมูลของลูกค้า ได้แก่ - Order No. - Passport ID - E-mail - วันที่ลูกค้าจองเข้ามาในระบบ - ชื่อลูกค้า - วันและเวลาที่ฝาก-รับ - ราคา - จ านวนกระเป๋า รายละเอียดข้อมูลลูกค้า</p>
+<p><strong>3. น าข้อมูลทั้งหมด ลงใน Google Sheet (AIRPORTELs partner''s orders ) ในหน้า Airportels website</strong></p>
 <figure><img src="/sop/respond-io-guide/fig20.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>15 16 Delivery Order</p>
 <figure><img src="/sop/respond-io-guide/fig21.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <figure><img src="/sop/respond-io-guide/fig22.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>INTX (In town) ส่งภายในกรุงเทพ NTW (Nationwide) ส่งไปต่างจังหวัด ส าหรับ Delivery Order จะแตกต่างจาก Storage เพราะจะมีการลง Order ทั้ง 2 ชีท ได้แก่ AIRPORTELs partner''s orders ในหน้า Airportels Website ให้น ามาใส่ใน Luggage Delivery Record ให้ถูกต้อง และ ลงตามวันที่ลูกค้าต้องการ จัดส่ง ส าหรับ เคส In-town ให้ดูเรื่องเวลาตัดรอบ ถ้านอกเหนือเวลาตัดรอบ ให้ลงใน หน้า On Demand</p>
 <figure><img src="/sop/respond-io-guide/fig23.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <figure><img src="/sop/respond-io-guide/fig24.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>1. (AIRPORTELs partner''s orders ) ในหน้า Airportels website</strong></p>
+<p><strong>2. (Luggage Delivery Record) ในหน้า Intown-TPY</strong></p>
+<p>17 18 ในส่วนของ Nationwide ให้ลงทั้งหมด 3 tab ได้แก่</p>
+<p><strong>1. AIRPORTELs partner''s orders ในหน้า Airportels Website เพื่อจัดส่งเข้า</strong></p>
+<p>คลัง</p>
+<p><strong>2. Luggage Delivery Record ในหน้า Intown-TPY และ NTW next day</strong></p>
+<p>หรือ NTW same day</p>
 <figure><img src="/sop/respond-io-guide/fig25.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>1. (Luggage Delivery Record) ในหน้า Next day</strong></p>
 <figure><img src="/sop/respond-io-guide/fig26.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>2. (Luggage Delivery Record) ในหน้า Same day</strong></p>
+<p>วิธีการลง Order ลูกค้าที่ จองผ่าน Partner</p>
 <figure><img src="/sop/respond-io-guide/fig27.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>วิธีการลง Order ลูกค้าที่จอง ผ่าน Partner</p>
 <figure><img src="/sop/respond-io-guide/fig28.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>KKDAY Storage Delivery</p>
 <figure><img src="/sop/respond-io-guide/fig29.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>KLOOK Storage Delivery</p>
 <figure><img src="/sop/respond-io-guide/fig30.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>REDICAL Storage 20</p>
 <figure><img src="/sop/respond-io-guide/fig31.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>Show original email วิธีการลงข้อมูลลูกค้า</p>
+<p><strong>1. คลิกที่ show original email</strong></p>
+<p>21</p>
+<p><strong>2. ระบบจะแสดงข้อมูลลูกค้าทั้งหมด</strong></p>
 <figure><img src="/sop/respond-io-guide/fig32.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>KKDAY Storage Delivery ส าหรับ Order ที่จองผ่าน KKDAY ให้เข้าระบบ หลังบ้านของทาง KKDAY [ scm.kkday.com ] Username- operator@airportels.asia password- Airportels123456</p>
+<p><strong>1. เมื่อเข้าเว็บไซต์ กดที่ Log in</strong></p>
+<p><strong>2. ใส่ทั้ง Username และ password หลังจากนั้น กดไปที่ Log in Username- operator@airportels.asia password- Airportels123456</strong></p>
+<p>22</p>
 <figure><img src="/sop/respond-io-guide/fig33.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>กดที่ Order</p>
+<p><strong>4. น าเลข Order ใส่ไปที่ Booking No.</strong></p>
+<p><strong>3. กดไปที่ Order</strong></p>
 <figure><img src="/sop/respond-io-guide/fig34.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>23</p>
 <figure><img src="/sop/respond-io-guide/fig35.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>5. กดไปที่ Order detail</strong></p>
 <figure><img src="/sop/respond-io-guide/fig36.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>6. ระบบจะขึ้นข้อมูลลูกค้าทั้งหมด</strong></p>
+<p>24</p>
 <figure><img src="/sop/respond-io-guide/fig37.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
 <figure><img src="/sop/respond-io-guide/fig38.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>KLOOK Storage Delivery RADICAL Storage 25 26</p>
+<p><strong>3. น าข้อมูลทั้งหมด ลงใน Google Sheet (AIRPORTELs partner''s orders ) ในหน้า Partner Storage ส าหรับลูกค้า จองบริการฝาก</strong></p>
 <figure><img src="/sop/respond-io-guide/fig39.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>4. น าข้อมูลทั้งหมด ลงใน Google Sheet (AIRPORTELs partner''s orders ) ในหน้า Partner Delivery ส าหรับลูกค้า จองบริการส่ง</strong></p>
 <figure><img src="/sop/respond-io-guide/fig40.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>ส าหรับ Delivery Order จะแตกต่างจาก Storage เพราะจะมีการลง Order ทั้ง 2 ชีท ได้แก่ AIRPORTELs partner''s orders ในหน้า Partner Deliveryให้น ามา ใส่ใน Luggage Delivery Record ให้ถูกต้อง และ ลงตามวันที่ลูกค้าต้องการจัดส่ง ส าหรับ เคส In-town ให้ดูเรื่องเวลาตัดรอบ ถ้านอกเหนือเวลาตัดรอบ ให้ลงในหน้า On Demand</p>
 <figure><img src="/sop/respond-io-guide/fig41.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>1. (AIRPORTELs partner''s orders ) ในหน้า Partner Delivery</strong></p>
+<p><strong>2. (Luggage Delivery Record) ในหน้า Intown-TPY</strong></p>
+<p>27</p>
 <figure><img src="/sop/respond-io-guide/fig42.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>28 ในส่วนของ Nationwide ให้ลงทั้งหมด 3 tab ได้แก่</p>
+<p><strong>1. AIRPORTELs partner''s orders ในหน้า Airportels Website เพื่อจัดส่งเข้า</strong></p>
+<p>คลัง</p>
+<p><strong>2. Luggage Delivery Record ในหน้า Intown-TPY และ NTW next day</strong></p>
+<p>หรือ NTW same day</p>
 <figure><img src="/sop/respond-io-guide/fig43.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>1. (Luggage Delivery Record) ในหน้า Next day</strong></p>
 <figure><img src="/sop/respond-io-guide/fig44.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p><strong>2. (Luggage Delivery Record) ในหน้า Same day</strong></p>
+<p>RESPOND.IO</p>
 <figure><img src="/sop/respond-io-guide/fig45.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = 'respond-io-guide';
 
 -- ===== ILLUSTRATED: 3cx-guide (2 figures) =====
-update sop.documents set content_html = '<figure><img src="/sop/3cx-guide/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
-<figure><img src="/sop/3cx-guide/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>' where slug = '3cx-guide';
+update sop.documents set content_html = '<p>AIRPORTELS INTERNATIONAL CO., Ltd. 6 Pailin Park village, Soi Rattanathibet 28 Yak 2, Bang Kraso, Mueang Nonthaburi, Nonthaburi 11000 Tel.02-0266927</p>
+<p><strong>1. Install “3CX” on your phone (Work on internet)</strong></p>
+<p><strong>2. Scan qr code</strong></p>
+<p>1 2 Team = Internal contacts Contacts = Contacts (include phone no. in your phone) Keypad (no.1) Recents (no.2) Chats = Internal chats AIRPORTELS INTERNATIONAL CO., Ltd. 6 Pailin Park village, Soi Rattanathibet 28 Yak 2, Bang Kraso, Mueang Nonthaburi, Nonthaburi 11000 Tel.02-0266927 How to turn off incoming calls when not in use 1 2 1. Press the button (no.1) 2. Choose your status (Recommend = Do not disturb) (no.2) 3. When your working shift, you have to choose “Available” in status</p>
+<figure><img src="/sop/3cx-guide/fig1.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<figure><img src="/sop/3cx-guide/fig2.jpg" alt="ภาพประกอบขั้นตอน" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px" /></figure>
+<p>AIRPORTELS INTERNATIONAL CO., Ltd. 6 Pailin Park village, Soi Rattanathibet 28 Yak 2, Bang Kraso, Mueang Nonthaburi, Nonthaburi 11000 Tel.02-0266927 Transfer the calls 1 2 3 1. Press the button (no.1) 2. In no.2 Transfer = Directly transfer Att.transfer = Notice destination before transfer 3. You should choose a transfer. And then, select the number of destination</p>' where slug = '3cx-guide';
 
 -- ===== ILLUSTRATED: dress-code-guest-service (8 figures) =====
-update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 001/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><h3>วัตถุประสงค์ (Objective)</h3>
+update sop.documents set content_html = '<blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS : 001/2025<br><strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 กรกฏาคม 2568<br><strong>หน่วยงาน:</strong> Operations</p></blockquote><p>SOP: มาตรฐานการแต่งกายสำหรับพนักงาน Guest Service</p>
+<h3>วัตถุประสงค์ (Objective)</h3>
 <p>เพื่อกำหนดมาตรฐานการแต่งกายสำหรับพนักงาน Guest Service ทั้งชายและหญิง ให้ดูเรียบร้อย เหมาะสม และ เป็นมืออาชีพ สร้างความประทับใจแก่ลูกค้า To establish a dress code standard for both male and female Guest Service staff to ensure a neat, appropriate, and professional appearance that creates a positive impression for customers.</p>
 <h3>ขอบเขต (Scope)</h3>
 <p>พนักงานตำแหน่ง Guest Service / Branch Manager / Porter ทุกคนที่ปฏิบัติงานหน้าสาขา หรือให้บริการลูกค้า โดยตรง All Service staff working at branches or in direct customer service roles.</p>
