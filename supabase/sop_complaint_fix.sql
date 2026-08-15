@@ -21,6 +21,13 @@ set content_html = '<style>
 .prose ol>li{margin:11px 0;line-height:1.72;padding-left:4px}
 .prose li{margin:6px 0;line-height:1.72}
 .sop-en{color:var(--text-muted,#6b7280)}
+.sop-hstep{display:grid;grid-template-columns:56px 1fr;border:1px solid var(--border,#e5e7eb);border-radius:8px;margin:12px 0;overflow:hidden}
+.sop-hstep>.n{display:flex;align-items:center;justify-content:center;background:#f4ecc2;color:#6b5e12;font-weight:800;font-size:19px}
+.sop-hstep>.c{padding:12px 16px}
+.sop-hstep .th{font-weight:700;font-size:15px;line-height:1.4}
+.sop-hstep .enh{font-style:italic;color:var(--text-muted,#6b7280);margin:2px 0 9px}
+.sop-hstep .thd{line-height:1.6}
+.sop-hstep .end{font-style:italic;color:var(--text-muted,#6b7280);line-height:1.55;margin-top:4px}
 .sop-chan{background:var(--surface-2);border-left:4px solid #1a66e0;border-radius:8px;padding:10px 16px;margin:14px 0}
 .sop-chan .t{font-weight:800;font-size:16px}
 .sop-note{background:var(--surface-2);border-left:3px solid #f59e0b;border-radius:6px;padding:10px 14px;margin:10px 0;font-size:14px;line-height:1.65}
@@ -75,14 +82,12 @@ set content_html = '<style>
 <div class="sop-chan"><div class="t">📍 ช่องทางที่ 1 — หน้าสาขา (Walk-in Complaint)</div><div class="sop-en">Channel 1 — Branch / Walk-in</div></div>
 
 <h4>⚙️ ขั้นตอนการรับมือ / Handling Procedure</h4>
-<ol>
-<li><strong>รับเรื่องและฟังอย่างตั้งใจ (Receive &amp; Listen Actively)</strong> — ต้อนรับลูกค้า แนะนำตัว ฟังโดยไม่ขัดจังหวะ จดบันทึกปัญหาสำคัญ<br><span class="sop-en">Greet customer, introduce yourself, listen without interruption, note key details.</span></li>
-<li><strong>ยืนยันและสรุปปัญหา (Acknowledge &amp; Summarise)</strong> — ทวนสิ่งที่ลูกค้าแจ้งเพื่อยืนยันความเข้าใจที่ถูกต้อง<br><span class="sop-en">Repeat the issue back to confirm correct understanding before proceeding.</span></li>
-<li><strong>ประเมินระดับความเร่งด่วน (Assess Urgency Level)</strong> — ปัญหาทั่วไป → Staff จัดการเอง | ซับซ้อน/อารมณ์สูง → ส่งต่อ Branch Manager<br><span class="sop-en">Simple: Staff resolves. Complex/emotional: escalate to Branch Manager.</span></li>
-<li><strong>เสนอทางแก้ไข (Propose Resolution)</strong> — นำเสนอแนวทางในขอบเขตอำนาจ Staff เช่น ขอโทษ ชดเชย จัดการสิ่งของ<br><span class="sop-en">Offer resolution within staff authority: apology, compensation, item care.</span></li>
-<li><strong>บันทึกเรื่องร้องเรียน (Log the Complaint)</strong> — กรอก Complaint Form (เมื่อมีระบบแจ้ง) ปัจจุบันให้แจ้งผ่านกลุ่ม Lark ที่กำหนดหลังจบการสนทนา<br>รายละเอียดที่ต้องมี: Order No. / Name / Case detail / การแก้ไขหรือการตอบกลับเบื้องต้นที่ดำเนินการไปแล้ว / สิ่งที่ลูกค้าต้องการหรือต่อรอง / ข้อมูลอื่นที่จำเป็น<br><span class="sop-en">Complete the Complaint Log form immediately after the interaction.</span></li>
-<li><strong>ติดตามผล (Follow-up)</strong> — แก้ไขทันที → แจ้งลูกค้า | ต้องรอ → แจ้งระยะเวลาที่คาดหวัง<br><span class="sop-en">Resolved on-spot: confirm with customer. Pending: communicate expected timeline.</span></li>
-</ol>
+<div class="sop-hstep"><div class="n">1</div><div class="c"><div class="th">รับเรื่องและฟังอย่างตั้งใจ</div><div class="enh">Receive &amp; Listen Actively</div><div class="thd">ต้อนรับลูกค้า แนะนำตัว ฟังโดยไม่ขัดจังหวะ จดบันทึกปัญหาสำคัญ</div><div class="end">Greet customer, introduce yourself, listen without interruption, note key details.</div></div></div>
+<div class="sop-hstep"><div class="n">2</div><div class="c"><div class="th">ยืนยันและสรุปปัญหา</div><div class="enh">Acknowledge &amp; Summarise</div><div class="thd">ทวนสิ่งที่ลูกค้าแจ้งเพื่อยืนยันความเข้าใจที่ถูกต้อง</div><div class="end">Repeat the issue back to confirm correct understanding before proceeding.</div></div></div>
+<div class="sop-hstep"><div class="n">3</div><div class="c"><div class="th">ประเมินระดับความเร่งด่วน</div><div class="enh">Assess Urgency Level</div><div class="thd">ปัญหาทั่วไป → Staff จัดการเอง | ซับซ้อน/อารมณ์สูง → ส่งต่อ Branch Manager</div><div class="end">Simple: Staff resolves. Complex/emotional: escalate to Branch Manager.</div></div></div>
+<div class="sop-hstep"><div class="n">4</div><div class="c"><div class="th">เสนอทางแก้ไข</div><div class="enh">Propose Resolution</div><div class="thd">นำเสนอแนวทางในขอบเขตอำนาจ Staff เช่น ขอโทษ ชดเชย จัดการสิ่งของ</div><div class="end">Offer resolution within staff authority: apology, compensation, item care.</div></div></div>
+<div class="sop-hstep"><div class="n">5</div><div class="c"><div class="th">บันทึกเรื่องร้องเรียน</div><div class="enh">Log the Complaint</div><div class="thd">กรอก Complaint Form (เมื่อมีระบบแจ้ง) ปัจจุบันให้แจ้งผ่านกลุ่ม Lark ที่กำหนดหลังจบการสนทนา — รายละเอียดที่ต้องมี: Order No. / Name / Case detail / การแก้ไขหรือการตอบกลับเบื้องต้นที่ดำเนินการไปแล้ว / สิ่งที่ลูกค้าต้องการหรือต่อรอง / ข้อมูลอื่นที่จำเป็น</div><div class="end">Complete the Complaint Log form immediately after the interaction.</div></div></div>
+<div class="sop-hstep"><div class="n">6</div><div class="c"><div class="th">ติดตามผล</div><div class="enh">Follow-up</div><div class="thd">แก้ไขทันที → แจ้งลูกค้า | ต้องรอ → แจ้งระยะเวลาที่คาดหวัง</div><div class="end">Resolved on-spot: confirm with customer. Pending: communicate expected timeline.</div></div></div>
 
 <hr class="sop-subhr">
 <h4>1. การส่งต่อข้อมูล / Escalation Triggers</h4>
@@ -97,14 +102,12 @@ set content_html = '<style>
 <div class="sop-chan"><div class="t">💻 ช่องทางที่ 2 — Customer Service Online</div><div class="sop-en">Channel 2 — Online CS (Email / Chat / Social Media)</div></div>
 
 <h4>⚙️ ขั้นตอนการรับมือ / Handling Procedure</h4>
-<ol>
-<li><strong>ติดตามและรับเรื่อง (Monitor &amp; Receive)</strong> — CS Staff ตรวจสอบ email, chat, social ตาม SLA ที่กำหนด<br><span class="sop-en">CS Staff monitors all channels per defined SLA intervals.</span></li>
-<li><strong>ส่งข้อความยืนยันรับเรื่อง (Send Acknowledgement)</strong> — ตอบรับ ≤1 ชม. (Urgent) / ≤4 ชม. (Standard)<br><span class="sop-en">Acknowledgement within 1hr (urgent) / 4hrs (standard).</span></li>
-<li><strong>จัดประเภทและกำหนด Priority (Categorise &amp; Prioritise)</strong> — ใช้ Priority Matrix (P1/P2/P3) เพื่อกำหนดระดับความเร่งด่วน<br><span class="sop-en">Apply Priority Matrix to assign urgency level (P1 / P2 / P3).</span></li>
-<li><strong>สืบค้นและประสานงาน (Investigate &amp; Coordinate)</strong> — ตรวจสอบ booking ประสานทีมหน้าสาขาหรือทีมที่เกี่ยวข้องหากจำเป็น<br><span class="sop-en">Review booking records; coordinate with Guest Service or related team as needed.</span></li>
-<li><strong>แก้ไขและแจ้งผล (Resolve &amp; Communicate)</strong> — แจ้งผลการแก้ไขผ่านช่องทางเดิมที่ลูกค้าติดต่อมา<br><span class="sop-en">Inform customer of resolution via the same channel they used.</span></li>
-<li><strong>ปิดเคสและบันทึกผ่านระบบ Respond (Close &amp; Log)</strong> — บันทึกเคสในระบบ ระบุวันปิด สาเหตุ และแนวทางแก้ไข<br><span class="sop-en">Log case closure: date, root cause, and resolution method applied.</span></li>
-</ol>
+<div class="sop-hstep"><div class="n">1</div><div class="c"><div class="th">ติดตามและรับเรื่อง</div><div class="enh">Monitor &amp; Receive</div><div class="thd">CS Staff ตรวจสอบ email, chat, social ตาม SLA ที่กำหนด</div><div class="end">CS Staff monitors all channels per defined SLA intervals.</div></div></div>
+<div class="sop-hstep"><div class="n">2</div><div class="c"><div class="th">ส่งข้อความยืนยันรับเรื่อง</div><div class="enh">Send Acknowledgement</div><div class="thd">ตอบรับ ≤1 ชม. (Urgent) / ≤4 ชม. (Standard)</div><div class="end">Acknowledgement within 1hr (urgent) / 4hrs (standard).</div></div></div>
+<div class="sop-hstep"><div class="n">3</div><div class="c"><div class="th">จัดประเภทและกำหนด Priority</div><div class="enh">Categorise &amp; Prioritise</div><div class="thd">ใช้ Priority Matrix (P1/P2/P3) เพื่อกำหนดระดับความเร่งด่วน</div><div class="end">Apply Priority Matrix to assign urgency level (P1 / P2 / P3).</div></div></div>
+<div class="sop-hstep"><div class="n">4</div><div class="c"><div class="th">สืบค้นและประสานงาน</div><div class="enh">Investigate &amp; Coordinate</div><div class="thd">ตรวจสอบ booking ประสานทีมหน้าสาขาหรือทีมที่เกี่ยวข้องหากจำเป็น</div><div class="end">Review booking records; coordinate with Guest Service or related team as needed.</div></div></div>
+<div class="sop-hstep"><div class="n">5</div><div class="c"><div class="th">แก้ไขและแจ้งผล</div><div class="enh">Resolve &amp; Communicate</div><div class="thd">แจ้งผลการแก้ไขผ่านช่องทางเดิมที่ลูกค้าติดต่อมา</div><div class="end">Inform customer of resolution via the same channel they used.</div></div></div>
+<div class="sop-hstep"><div class="n">6</div><div class="c"><div class="th">ปิดเคสและบันทึกผ่านระบบ Respond</div><div class="enh">Close &amp; Log</div><div class="thd">บันทึกเคสในระบบ ระบุวันปิด สาเหตุ และแนวทางแก้ไข</div><div class="end">Log case closure: date, root cause, and resolution method applied.</div></div></div>
 
 <hr class="sop-subhr">
 <h4>3. Priority Matrix และ SLA</h4>
