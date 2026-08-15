@@ -25,6 +25,15 @@ set content_html = '<style>
 .sop-case{border:1px solid var(--border,#e5e7eb);border-radius:8px;padding:8px 14px;margin:8px 0}
 .sop-script{background:var(--surface-2);border-left:3px solid #1a66e0;border-radius:6px;padding:9px 13px;margin:8px 0;font-size:13.5px;line-height:1.6}
 .sop-script .en{color:var(--text-muted,#6b7280);font-style:italic}
+@media (max-width:480px){
+.prose .sop-tblwrap table.sop-tbl{min-width:460px}
+.prose table.sop-tbl th,.prose table.sop-tbl td{font-size:12.5px;min-width:120px}
+.prose .sop-tl{grid-template-columns:82px 1fr}
+.prose .sop-hstep{grid-template-columns:44px 1fr}
+.prose .sop-hstep>.n{font-size:16px}
+.prose .sop-step{grid-template-columns:38px 1fr}
+.prose blockquote{padding:8px 12px}
+}
 </style>
 
 <blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 0016/2025 &nbsp;·&nbsp; <strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 1 ตุลาคม 2568 &nbsp;·&nbsp; <strong>หน่วยงาน:</strong> Operations</p></blockquote>

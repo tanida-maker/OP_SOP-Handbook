@@ -35,6 +35,15 @@ set content_html = '<style>
 .sop-script .en{color:var(--text-muted,#6b7280);font-style:italic}
 .sop-danger{border:1px solid rgba(220,38,38,.38);background:rgba(220,38,38,.07);border-radius:12px;padding:6px 18px 12px;margin:14px 0}
 .sop-danger h3,.sop-danger h4{color:#dc2626}
+@media (max-width:480px){
+.prose .sop-tblwrap table.sop-tbl{min-width:460px}
+.prose table.sop-tbl th,.prose table.sop-tbl td{font-size:12.5px;min-width:120px}
+.prose .sop-tl{grid-template-columns:82px 1fr}
+.prose .sop-hstep{grid-template-columns:44px 1fr}
+.prose .sop-hstep>.n{font-size:16px}
+.prose .sop-step{grid-template-columns:38px 1fr}
+.prose blockquote{padding:8px 12px}
+}
 </style>
 
 <blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 026/2026 &nbsp;·&nbsp; <strong>เวอร์ชัน:</strong> 1.0<br><strong>วันที่บังคับใช้:</strong> 10 พฤษภาคม 2569 &nbsp;·&nbsp; <strong>หน่วยงาน:</strong> Operations</p></blockquote>

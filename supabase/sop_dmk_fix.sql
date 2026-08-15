@@ -19,6 +19,15 @@ set content_html = '<style>
 .prose h3{scroll-margin-top:70px;padding-top:2px}
 .prose h4{margin-top:16px}
 .prose li{margin:5px 0;line-height:1.7}
+@media (max-width:480px){
+.prose .sop-tblwrap table.sop-tbl{min-width:460px}
+.prose table.sop-tbl th,.prose table.sop-tbl td{font-size:12.5px;min-width:120px}
+.prose .sop-tl{grid-template-columns:82px 1fr}
+.prose .sop-hstep{grid-template-columns:44px 1fr}
+.prose .sop-hstep>.n{font-size:16px}
+.prose .sop-step{grid-template-columns:38px 1fr}
+.prose blockquote{padding:8px 12px}
+}
 </style>
 
 <blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 020/2026 &nbsp;·&nbsp; <strong>เวอร์ชัน:</strong> ปรับปรุงครั้งที่ 1<br><strong>วันที่บังคับใช้:</strong> 1 มกราคม 2569 &nbsp;·&nbsp; <strong>หน่วยงาน:</strong> Operations</p></blockquote>
