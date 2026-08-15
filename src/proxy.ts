@@ -12,6 +12,6 @@ export const config = {
      * Run on all paths except static assets and image files, so that
      * the auth session is kept fresh and protected pages are gated.
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|pdf)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|sw.js|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|pdf|js|webmanifest)$).*)",
   ],
 };
