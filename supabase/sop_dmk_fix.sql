@@ -15,6 +15,10 @@ set content_html = '<style>
 .sop-danger h3{color:#dc2626;margin:12px 0 8px}
 .sop-en{color:var(--text-muted,#6b7280)}
 .prose .sop-callout{background:var(--surface-2);border-left:3px solid #dc2626;border-radius:6px;padding:8px 14px;margin:6px 0}
+.prose hr.sop-hr{border:0;border-top:1px solid var(--border,#e5e7eb);margin:26px 0;opacity:.8}
+.prose h3{scroll-margin-top:70px;padding-top:2px}
+.prose h4{margin-top:16px}
+.prose li{margin:5px 0;line-height:1.7}
 </style>
 
 <blockquote><p><strong>รหัสเอกสาร:</strong> SOP-OPS: 020/2026 &nbsp;·&nbsp; <strong>เวอร์ชัน:</strong> ปรับปรุงครั้งที่ 1<br><strong>วันที่บังคับใช้:</strong> 1 มกราคม 2569 &nbsp;·&nbsp; <strong>หน่วยงาน:</strong> Operations</p></blockquote>
@@ -23,10 +27,12 @@ set content_html = '<style>
 <p>เพื่อกำหนดขั้นตอนการรับและส่งมอบกระเป๋าเดินทาง ณ ท่าอากาศยานดอนเมือง ให้เป็นไปตามข้อกำหนดด้านความปลอดภัยของการท่าฯ (ทอท.) และใช้เป็นแนวปฏิบัติจริงสำหรับพนักงานหน้าสาขา</p>
 <p class="sop-en"><em>To establish operational procedures for luggage acceptance and release at Don Mueang Airport in compliance with AOT security regulations.</em></p>
 
+<hr class="sop-hr">
 <h3>📌 ขอบเขตการใช้งาน / Scope</h3>
 <p>ใช้สำหรับพนักงาน AIRPORTELs ประจำสาขาดอนเมือง (DMK) ทุกตำแหน่งที่เกี่ยวข้องกับการรับ ฝาก ส่งมอบ และตรวจสอบกระเป๋า</p>
 <p class="sop-en"><em>Applicable to all AIRPORTELs staff involved in luggage acceptance, storage, delivery, and X-ray screening at DMK.</em></p>
 
+<hr class="sop-hr">
 <h3>คำจำกัดความ (Definitions)</h3>
 <ul>
 <li><strong>พนักงานหน้าสาขา (Guest Service &amp; Porter):</strong> พนักงานที่ให้บริการลูกค้า ณ จุดบริการ</li>
@@ -34,6 +40,7 @@ set content_html = '<style>
 <li><strong>ทอท. (AOT):</strong> บริษัท ท่าอากาศยานไทย จำกัด (มหาชน)</li>
 </ul>
 
+<hr class="sop-hr">
 <h3>บทบาทและความรับผิดชอบ (Roles &amp; Responsibilities)</h3>
 <h4>พนักงานหน้าสาขาทุกตำแหน่ง (Guest Service &amp; Porter)</h4>
 <ul>
@@ -48,6 +55,7 @@ set content_html = '<style>
 <li>ประสานงานกับเจ้าหน้าที่ ทอท. ในกรณีผิดปกติ</li>
 </ul>
 
+<hr class="sop-hr">
 <h3>ขั้นตอนการปฏิบัติงาน (Operational Procedures)</h3>
 <h4>🧳 ขั้นตอนการรับฝากกระเป๋า (Luggage Acceptance)</h4>
 <ol>
@@ -79,6 +87,7 @@ set content_html = '<style>
 
 <figure><img src="/sop/dmk-airport-service/fig2.jpg" alt="แผนผังกระบวนการรับ–ส่งมอบกระเป๋า (Process Flowchart)" loading="lazy" style="max-width:100%;border:1px solid var(--border,#e5e7eb);border-radius:8px;background:#fff" /><figcaption style="font-size:12.5px;color:var(--text-muted,#6b7280);text-align:center;margin-top:4px">แผนผังกระบวนการรับ–ส่งมอบกระเป๋า (Process Flowchart)</figcaption></figure>
 
+<hr class="sop-hr">
 <div class="sop-danger">
 <h3>🚫 ข้อห้ามและข้อควรระวัง (Prohibitions &amp; Precautions)</h3>
 <ul>
@@ -89,12 +98,14 @@ set content_html = '<style>
 </ul>
 </div>
 
+<hr class="sop-hr">
 <h3>📄 เอกสารที่เกี่ยวข้อง (Related Documents)</h3>
 <ul>
 <li><a href="https://ssglsj0spi27.sg.larksuite.com/wiki/CRaPwR0lXi7D2mk2iENlmjd4gUe?from=from_copylink" target="_blank" rel="noopener">SOP : AIRPORT LUGGAGE STORAGE / DELIVERY SERVICE AT DMK AIPORT</a></li>
 <li><a href="https://ssglsj0spi27.sg.larksuite.com/wiki/QJBWwtlRXiqL8MkOxijlg5HKg8b?from=from_copylink" target="_blank" rel="noopener">SOP: การให้ผู้อื่นมารับกระเป๋าแทน / Authorized Person Pickup</a></li>
 </ul>
 
+<hr class="sop-hr">
 <h3>⛔ รายการสิ่งของต้องห้าม (Prohibited Items)</h3>
 <p>❌ ห้ามจัดส่งสิ่งของดังต่อไปนี้ : <a href="https://ssglsj0spi27.sg.larksuite.com/wiki/OovBwWiQhi0Rhjk7gUdly8Yfgyf?from=from_copylink" target="_blank" rel="noopener">Prohibit Items</a></p>
 <table class="sop-tbl">
@@ -123,6 +134,7 @@ set content_html = '<style>
 <li class="sop-en"><em>AIRPORTELs are not responsible for fragile, valuable, liquid, electronic, or prohibited items.</em></li>
 </ul>
 
+<hr class="sop-hr">
 <h3>🛡️ ข้อกำหนดด้านความปลอดภัย (ทอท.) | AOT Security Requirements</h3>
 <ul>
 <li>กระเป๋าทุกใบต้องผ่านการตรวจด้วยเครื่อง X-ray ก่อนรับเข้าระบบ <span class="sop-en">/ All luggage must undergo X-ray screening prior to acceptance.</span></li>
