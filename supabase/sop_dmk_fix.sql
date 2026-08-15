@@ -91,12 +91,12 @@ set content_html = '<style>
 
 <h3>📄 เอกสารที่เกี่ยวข้อง (Related Documents)</h3>
 <ul>
-<li><a href="https://ssglsj0spi27.sg.larksuite.com/wiki/QJBWwtlRXiqL8MkOxijlg5HKg8b?from=from_copylink" target="_blank" rel="noopener">SOP การให้บริการรับฝากกระเป๋า ณ ท่าอากาศยานดอนเมือง</a></li>
-<li><a href="https://ssglsj0spi27.sg.larksuite.com/wiki/OovBwWiQhi0Rhjk7gUdly8Yfgyf?from=from_copylink" target="_blank" rel="noopener">SOP: การให้ผู้อื่นมารับกระเป๋าแทน / Authorized Person Pickup</a></li>
+<li><a href="https://ssglsj0spi27.sg.larksuite.com/wiki/CRaPwR0lXi7D2mk2iENlmjd4gUe?from=from_copylink" target="_blank" rel="noopener">SOP : AIRPORT LUGGAGE STORAGE / DELIVERY SERVICE AT DMK AIPORT</a></li>
+<li><a href="https://ssglsj0spi27.sg.larksuite.com/wiki/QJBWwtlRXiqL8MkOxijlg5HKg8b?from=from_copylink" target="_blank" rel="noopener">SOP: การให้ผู้อื่นมารับกระเป๋าแทน / Authorized Person Pickup</a></li>
 </ul>
 
 <h3>⛔ รายการสิ่งของต้องห้าม (Prohibited Items)</h3>
-<p>❌ ห้ามจัดส่งสิ่งของดังต่อไปนี้:</p>
+<p>❌ ห้ามจัดส่งสิ่งของดังต่อไปนี้ : <a href="https://ssglsj0spi27.sg.larksuite.com/wiki/OovBwWiQhi0Rhjk7gUdly8Yfgyf?from=from_copylink" target="_blank" rel="noopener">Prohibit Items</a></p>
 <table class="sop-tbl">
 <thead><tr><th>ประเภทสิ่งของต้องห้าม</th><th>ตัวอย่าง (Examples)</th></tr></thead>
 <tbody>
