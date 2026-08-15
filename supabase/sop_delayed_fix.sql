@@ -14,8 +14,12 @@ set content_html = '<style>
 .prose .sop-tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;border:1px solid var(--border,#e5e7eb);border-radius:8px}
 .prose .sop-tblwrap table.sop-tbl{margin:0;border:0;min-width:560px}
 .prose hr.sop-hr{border:0;border-top:1px solid var(--border,#e5e7eb);margin:26px 0;opacity:.8}
-.prose h4{margin-top:16px}
-.prose li{margin:5px 0;line-height:1.7}
+.prose hr.sop-subhr{border:0;border-top:1px dashed var(--border,#e5e7eb);margin:20px 0 16px;opacity:.7}
+.prose h4{margin-top:24px;margin-bottom:8px}
+.prose ol,.prose ul{margin:8px 0}
+.prose ol>li{margin:9px 0;line-height:1.75;padding-left:4px}
+.prose li{margin:6px 0;line-height:1.72}
+.prose ol ul{margin:6px 0}
 .sop-en{color:var(--text-muted,#6b7280)}
 .sop-note{background:var(--surface-2);border-left:3px solid #f59e0b;border-radius:6px;padding:10px 14px;margin:10px 0;font-size:14px;line-height:1.65}
 .sop-case{border:1px solid var(--border,#e5e7eb);border-radius:8px;padding:8px 14px;margin:8px 0}
@@ -137,6 +141,7 @@ set content_html = '<style>
 <li>ดำเนินการรับชำระ / คืนสัมภาระ</li>
 <li>บันทึกใน Sales report / ระบบ: ระบุ case type + ส่วนลดที่อนุมัติ + แนบเอกสาร</li>
 </ol>
+<hr class="sop-subhr">
 <h4>กรณีลูกค้าติดต่อผ่าน Call Center / Online (โทร, อีเมล, LINE, FB)</h4>
 <ol>
 <li>รับเรื่อง: CS บันทึกข้อมูลการติดต่อ → เลขฝาก, วันที่ฝาก, เหตุผล</li>
