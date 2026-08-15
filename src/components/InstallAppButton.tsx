@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download, Share, Plus, X, Smartphone } from "lucide-react";
+import { Share, Plus, X, Smartphone } from "lucide-react";
 import { useT } from "./LanguageProvider";
 
 // Chrome's "beforeinstallprompt" event (not in the standard DOM lib types).
@@ -93,7 +93,7 @@ export default function InstallAppButton({
           aria-label={t("ติดตั้งแอป", "Install app")}
           title={t("ติดตั้งแอปลงหน้าจอโฮม", "Install app to home screen")}
         >
-          <Download size={17} />
+          <Smartphone size={17} />
         </button>
       ) : (
         <button
@@ -101,7 +101,7 @@ export default function InstallAppButton({
           className="flex w-full items-center gap-3 rounded-lg border border-amber-300 bg-gradient-to-r from-amber-100 to-brand-50 px-3 py-3 text-sm font-bold text-brand-800"
         >
           <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-amber-400 text-white">
-            <Download size={16} />
+            <Smartphone size={16} />
           </span>
           <span className="leading-tight">
             {t("ติดตั้งแอป", "Install App")}
