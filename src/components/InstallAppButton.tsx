@@ -89,11 +89,11 @@ export default function InstallAppButton({
       {variant === "icon" ? (
         <button
           onClick={handleClick}
-          className="grid h-9 w-9 place-items-center rounded-full border border-amber-300 bg-gradient-to-br from-amber-100 to-brand-50 text-brand-700 transition hover:border-amber-400"
+          className="grid h-9 w-9 place-items-center rounded-full bg-amber-500 text-white shadow-sm ring-1 ring-amber-600/50 transition hover:bg-amber-600"
           aria-label={t("ติดตั้งแอป", "Install app")}
           title={t("ติดตั้งแอปลงหน้าจอโฮม", "Install app to home screen")}
         >
-          <Smartphone size={17} />
+          <Smartphone size={18} strokeWidth={2.4} />
         </button>
       ) : (
         <button
