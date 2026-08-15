@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import LangToggle from "./LangToggle";
+import InstallAppButton from "./InstallAppButton";
 import SearchBox from "./SearchBox";
 import Logo from "./Logo";
 import { useT } from "./LanguageProvider";
@@ -85,6 +86,7 @@ export default function SiteHeader({
         </div>
 
         <div className="ml-auto flex items-center gap-2 md:ml-2">
+          <InstallAppButton variant="icon" />
           <LangToggle />
           <ThemeToggle />
 
@@ -182,6 +184,7 @@ export default function SiteHeader({
                   </span>
                 </span>
               </a>
+              <InstallAppButton variant="menu" onAction={() => setOpen(false)} />
               {NAV.map((n) => (
                 <Link
                   key={n.href}
