@@ -5,7 +5,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "AIRPORTELs SOP Hub — Operations Knowledge Center",
-    short_name: "AIRPORTELs SOP Hub",
+    short_name: "AI SOP",
     description:
       "AIRPORTELs Operations Knowledge Center — ศูนย์รวมคู่มือการทำงาน SOP / WI สำหรับพนักงานหน้าสาขา",
     start_url: "/",

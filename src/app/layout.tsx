@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   applicationName: "AIRPORTELs SOP Hub",
   appleWebApp: {
     capable: true,
-    title: "AIRPORTELs SOP Hub",
+    title: "AI SOP",
     statusBarStyle: "black-translucent",
   },
 };
