@@ -132,6 +132,7 @@ set content_html = '<style>
 <hr class="sop-hr">
 <h3>🔹 ประวัติการแก้ไข / Document Control</h3>
 <div class="sop-tblwrap"><table class="sop-tbl"><thead><tr><th>Version</th><th>วันที่ / Date</th><th>แก้ไขโดย / Author</th><th>รายละเอียด / Notes</th></tr></thead><tbody><tr><td>1.0</td><td>10 May 2026</td><td>Operations Team</td><td>Initial release / เอกสารฉบับแรก</td></tr></tbody></table></div>',
-    doc_code = 'SOP-OPS-023/2026'
+    doc_code = 'SOP-OPS-023/2026',
+    summary = 'SOP-OPS 023 — ขั้นตอนจัดการสัมภาระที่ลูกค้าไม่ติดต่อ/ไม่มารับ/ทอดทิ้ง ต่อจาก SOP-OPS:016 เส้นเวลาติดตาม 3 ครั้ง (Day 1–25) การกำหนดสถานะ Abandoned (Day 30) ช่องทางการกำจัด (บริจาค/ขายทอดตลาด/ทำลาย) และสคริปต์สื่อสาร'
 where slug = 'abandoned-luggage-disposal';
 commit;
