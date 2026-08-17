@@ -129,28 +129,40 @@ export default function LeftRail({
           <span className="text-xs text-muted">↗</span>
         </a>
 
-        {/* External: All Sheet (Lark) */}
+        {/* External: All Sheet (Lark) — prominent card */}
         <a
           href={ALL_SHEET_URL}
           target="_blank"
           rel="noopener"
-          className={`${row} text-muted hover:bg-surface-2 hover:text-text`}
+          className="mt-2 flex items-center gap-2.5 rounded-xl border border-emerald-400 bg-gradient-to-r from-emerald-100 to-teal-50 px-3 py-2.5 text-sm font-bold text-emerald-900 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
         >
-          <Sheet size={20} className="shrink-0" />
-          <span className="flex-1">{t("รวมชีททั้งหมด", "All Sheet")}</span>
-          <span className="text-xs text-muted">↗</span>
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-emerald-500 text-white">
+            <Sheet size={17} />
+          </span>
+          <span className="flex-1 leading-tight">
+            All Sheet
+            <span className="block text-[11px] font-semibold text-emerald-700">
+              {t("รวมชีททั้งหมด ↗", "All spreadsheets ↗")}
+            </span>
+          </span>
         </a>
 
-        {/* External: IT Support — report issues / repairs (Lark) */}
+        {/* External: IT Support — report issues / repairs (Lark) — prominent card */}
         <a
           href={IT_SUPPORT_URL}
           target="_blank"
           rel="noopener"
-          className={`${row} text-muted hover:bg-surface-2 hover:text-text`}
+          className="flex items-center gap-2.5 rounded-xl border border-orange-400 bg-gradient-to-r from-orange-100 to-amber-50 px-3 py-2.5 text-sm font-bold text-orange-900 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
         >
-          <Wrench size={20} className="shrink-0" />
-          <span className="flex-1">{t("แจ้งปัญหา/แจ้งซ่อม (IT)", "IT Support")}</span>
-          <span className="text-xs text-muted">↗</span>
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-orange-500 text-white">
+            <Wrench size={17} />
+          </span>
+          <span className="flex-1 leading-tight">
+            IT Support
+            <span className="block text-[11px] font-semibold text-orange-700">
+              {t("แจ้งปัญหา / แจ้งซ่อม ↗", "Report issue / repair ↗")}
+            </span>
+          </span>
         </a>
       </nav>
 

@@ -221,20 +221,34 @@ export default function SiteHeader({
                 target="_blank"
                 rel="noopener"
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
+                className="flex items-center gap-2.5 rounded-lg border border-emerald-400 bg-gradient-to-r from-emerald-100 to-teal-50 px-3 py-3 text-sm font-bold text-emerald-900"
               >
-                <Sheet size={18} className="text-brand-600" />
-                {t("รวมชีททั้งหมด (All Sheet)", "All Sheet")} ↗
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-emerald-500 text-white">
+                  <Sheet size={16} />
+                </span>
+                <span className="leading-tight">
+                  All Sheet
+                  <span className="block text-[11px] font-semibold text-emerald-700">
+                    {t("รวมชีททั้งหมด ↗", "All spreadsheets ↗")}
+                  </span>
+                </span>
               </a>
               <a
                 href="https://ssglsj0spi27.sg.larksuite.com/wiki/GTC0wl0E6iVcH9kQLAolG4tWgUj?from=from_copylink"
                 target="_blank"
                 rel="noopener"
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
+                className="flex items-center gap-2.5 rounded-lg border border-orange-400 bg-gradient-to-r from-orange-100 to-amber-50 px-3 py-3 text-sm font-bold text-orange-900"
               >
-                <Wrench size={18} className="text-brand-600" />
-                {t("แจ้งปัญหา/แจ้งซ่อม (IT Support)", "IT Support")} ↗
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-orange-500 text-white">
+                  <Wrench size={16} />
+                </span>
+                <span className="leading-tight">
+                  IT Support
+                  <span className="block text-[11px] font-semibold text-orange-700">
+                    {t("แจ้งปัญหา / แจ้งซ่อม ↗", "Report issue / repair ↗")}
+                  </span>
+                </span>
               </a>
               {isAdmin && (
                 <Link
