@@ -13,8 +13,10 @@ import {
   Megaphone,
   Menu,
   Settings,
+  Sheet,
   Sparkles,
   User,
+  Wrench,
   X,
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
@@ -213,6 +215,26 @@ export default function SiteHeader({
               >
                 <CalendarDays size={18} className="text-brand-600" />
                 {t("ตารางงาน (Scheduling)", "Scheduling")} ↗
+              </a>
+              <a
+                href="https://ssglsj0spi27.sg.larksuite.com/wiki/YrI3wpdBQiNIQSk4boKls37Kgld?from=from_copylink"
+                target="_blank"
+                rel="noopener"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
+              >
+                <Sheet size={18} className="text-brand-600" />
+                {t("รวมชีททั้งหมด (All Sheet)", "All Sheet")} ↗
+              </a>
+              <a
+                href="https://ssglsj0spi27.sg.larksuite.com/wiki/GTC0wl0E6iVcH9kQLAolG4tWgUj?from=from_copylink"
+                target="_blank"
+                rel="noopener"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
+              >
+                <Wrench size={18} className="text-brand-600" />
+                {t("แจ้งปัญหา/แจ้งซ่อม (IT Support)", "IT Support")} ↗
               </a>
               {isAdmin && (
                 <Link

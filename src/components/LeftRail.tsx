@@ -14,7 +14,9 @@ import {
   Moon,
   Search,
   Settings,
+  Sheet,
   Sparkles,
+  Wrench,
   type LucideIcon,
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
@@ -26,6 +28,10 @@ import { createClient } from "@/lib/supabase/client";
 const SCHEDULING_URL = "https://airportels-scheduling.vercel.app";
 const SERVICE_PROMO_URL =
   "https://ssglsj0spi27.sg.larksuite.com/wiki/VTqtwFbXdiUKG0kIlWtlBFJegfh?from=from_copylink";
+const ALL_SHEET_URL =
+  "https://ssglsj0spi27.sg.larksuite.com/wiki/YrI3wpdBQiNIQSk4boKls37Kgld?from=from_copylink";
+const IT_SUPPORT_URL =
+  "https://ssglsj0spi27.sg.larksuite.com/wiki/GTC0wl0E6iVcH9kQLAolG4tWgUj?from=from_copylink";
 
 type Item = { href: string; label: string; icon: LucideIcon; badge?: number };
 
@@ -120,6 +126,30 @@ export default function LeftRail({
         >
           <CalendarDays size={20} className="shrink-0" />
           <span className="flex-1">{t("ตารางงาน", "Scheduling")}</span>
+          <span className="text-xs text-muted">↗</span>
+        </a>
+
+        {/* External: All Sheet (Lark) */}
+        <a
+          href={ALL_SHEET_URL}
+          target="_blank"
+          rel="noopener"
+          className={`${row} text-muted hover:bg-surface-2 hover:text-text`}
+        >
+          <Sheet size={20} className="shrink-0" />
+          <span className="flex-1">{t("รวมชีททั้งหมด", "All Sheet")}</span>
+          <span className="text-xs text-muted">↗</span>
+        </a>
+
+        {/* External: IT Support — report issues / repairs (Lark) */}
+        <a
+          href={IT_SUPPORT_URL}
+          target="_blank"
+          rel="noopener"
+          className={`${row} text-muted hover:bg-surface-2 hover:text-text`}
+        >
+          <Wrench size={20} className="shrink-0" />
+          <span className="flex-1">{t("แจ้งปัญหา/แจ้งซ่อม (IT)", "IT Support")}</span>
           <span className="text-xs text-muted">↗</span>
         </a>
       </nav>
