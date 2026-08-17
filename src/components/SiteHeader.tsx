@@ -211,10 +211,17 @@ export default function SiteHeader({
                 target="_blank"
                 rel="noopener"
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-text hover:bg-surface-2"
+                className="flex items-center gap-2.5 rounded-lg border border-blue-400 bg-gradient-to-r from-blue-100 to-sky-50 px-3 py-3 text-sm font-bold text-blue-900"
               >
-                <CalendarDays size={18} className="text-brand-600" />
-                {t("ตารางงาน (Scheduling)", "Scheduling")} ↗
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-blue-500 text-white">
+                  <CalendarDays size={16} />
+                </span>
+                <span className="leading-tight">
+                  {t("ตารางงาน", "Scheduling")}
+                  <span className="block text-[11px] font-semibold text-blue-700">
+                    {t("ตารางเวลาทำงาน ↗", "Work schedule ↗")}
+                  </span>
+                </span>
               </a>
               <a
                 href="https://ssglsj0spi27.sg.larksuite.com/wiki/YrI3wpdBQiNIQSk4boKls37Kgld?from=from_copylink"

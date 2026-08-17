@@ -117,16 +117,22 @@ export default function LeftRail({
           );
         })}
 
-        {/* External: Scheduling app (same login) */}
+        {/* External: Scheduling app (same login) — prominent card */}
         <a
           href={SCHEDULING_URL}
           target="_blank"
           rel="noopener"
-          className={`${row} text-muted hover:bg-surface-2 hover:text-text`}
+          className="mt-2 flex items-center gap-2.5 rounded-xl border border-blue-400 bg-gradient-to-r from-blue-100 to-sky-50 px-3 py-2.5 text-sm font-bold text-blue-900 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
         >
-          <CalendarDays size={20} className="shrink-0" />
-          <span className="flex-1">{t("ตารางงาน", "Scheduling")}</span>
-          <span className="text-xs text-muted">↗</span>
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-blue-500 text-white">
+            <CalendarDays size={17} />
+          </span>
+          <span className="flex-1 leading-tight">
+            {t("ตารางงาน", "Scheduling")}
+            <span className="block text-[11px] font-semibold text-blue-700">
+              {t("ตารางเวลาทำงาน ↗", "Work schedule ↗")}
+            </span>
+          </span>
         </a>
 
         {/* External: All Sheet (Lark) — prominent card */}
