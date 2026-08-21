@@ -130,8 +130,8 @@ export default function AnnouncementManager({
             className="absolute inset-0 bg-black/40"
             onClick={() => setEditing(null)}
           />
-          <div className="relative w-full max-w-lg rounded-2xl border border-border bg-surface p-5 shadow-lg">
-            <div className="mb-4 flex items-center justify-between">
+          <div className="relative flex max-h-[92vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-lg">
+            <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-4">
               <h2 className="text-lg font-bold text-text">
                 {editing.id ? "แก้ไขประกาศ" : "เพิ่มประกาศ"}
               </h2>
@@ -143,7 +143,7 @@ export default function AnnouncementManager({
               </button>
             </div>
 
-            <div className="space-y-3">
+            <div className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
               <input
                 className={field}
                 placeholder="หัวข้อประกาศ"
@@ -209,11 +209,19 @@ export default function AnnouncementManager({
                   {error}
                 </p>
               )}
+            </div>
 
+            <div className="flex shrink-0 gap-2 border-t border-border px-5 py-3">
+              <button
+                onClick={() => setEditing(null)}
+                className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-text hover:bg-surface-2"
+              >
+                ยกเลิก
+              </button>
               <button
                 onClick={save}
                 disabled={busy}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 py-2.5 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-brand-600 py-2.5 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
               >
                 {busy && <Loader2 size={16} className="animate-spin" />}
                 บันทึก
