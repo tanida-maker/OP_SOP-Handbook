@@ -7,6 +7,8 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Youtube from "@tiptap/extension-youtube";
 import Placeholder from "@tiptap/extension-placeholder";
+import Underline from "@tiptap/extension-underline";
+import { TextStyle, FontSize } from "@tiptap/extension-text-style";
 import {
   Bold,
   Film,
@@ -21,6 +23,7 @@ import {
   MonitorPlay,
   Quote,
   Redo2,
+  Underline as UnderlineIcon,
   Undo2,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -68,6 +71,9 @@ export default function Editor({
     immediatelyRender: false, // required for Next.js SSR
     extensions: [
       StarterKit,
+      Underline,
+      TextStyle,
+      FontSize,
       Image.configure({ inline: false }),
       Link.configure({ openOnClick: false, autolink: true }),
       Youtube.configure({ nocookie: true, controls: true, width: 640, height: 360 }),
@@ -162,6 +168,30 @@ export default function Editor({
         >
           <Italic size={17} />
         </ToolbarButton>
+        <ToolbarButton
+          title="ขีดเส้นใต้"
+          active={editor.isActive("underline")}
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+        >
+          <UnderlineIcon size={17} />
+        </ToolbarButton>
+        <select
+          title="ขนาดตัวอักษร"
+          className="h-9 rounded-lg border border-border bg-surface px-2 text-sm text-text hover:bg-surface-2"
+          value={(editor.getAttributes("textStyle").fontSize as string) || ""}
+          onChange={(e) => {
+            const v = e.target.value;
+            if (!v) editor.chain().focus().unsetFontSize().run();
+            else editor.chain().focus().setFontSize(v).run();
+          }}
+        >
+          <option value="">ขนาดปกติ</option>
+          <option value="13px">เล็ก</option>
+          <option value="18px">ใหญ่</option>
+          <option value="22px">ใหญ่มาก</option>
+          <option value="28px">ใหญ่พิเศษ</option>
+        </select>
+        <span className="mx-1 h-6 w-px bg-border" />
         <ToolbarButton
           title="หัวข้อใหญ่"
           active={editor.isActive("heading", { level: 2 })}

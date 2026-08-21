@@ -5,25 +5,9 @@ import { useState } from "react";
 import { Loader2, Pencil, Pin, Plus, Trash2, X } from "lucide-react";
 import { deleteAnnouncement, saveAnnouncement } from "../actions";
 import type { Announcement } from "@/lib/types";
+import Editor from "@/components/editor/Editor";
 
-type Draft = Partial<Announcement> & { bodyText?: string };
-
-// Convert stored HTML back to plain text for editing (simple unwrap).
-function htmlToText(html: string) {
-  return html
-    .replace(/<\/p>/gi, "\n")
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<[^>]+>/g, "")
-    .trim();
-}
-function textToHtml(text: string) {
-  return text
-    .split(/\n{1,}/)
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .map((l) => `<p>${l}</p>`)
-    .join("");
-}
+type Draft = Partial<Announcement>;
 
 const LEVELS = [
   { v: "info", label: "ข้อมูลทั่วไป" },
@@ -44,14 +28,14 @@ export default function AnnouncementManager({
   function openNew() {
     setEditing({
       title: "",
-      bodyText: "",
+      body_html: "",
       level: "info",
       pinned: false,
       published: true,
     });
   }
   function openEdit(a: Announcement) {
-    setEditing({ ...a, bodyText: htmlToText(a.body_html) });
+    setEditing({ ...a });
   }
 
   async function save() {
@@ -61,7 +45,7 @@ export default function AnnouncementManager({
     const res = await saveAnnouncement({
       id: editing.id,
       title: editing.title ?? "",
-      body_html: textToHtml(editing.bodyText ?? ""),
+      body_html: editing.body_html ?? "",
       level: (editing.level as Announcement["level"]) ?? "info",
       pinned: !!editing.pinned,
       published: editing.published ?? true,
@@ -168,15 +152,17 @@ export default function AnnouncementManager({
                   setEditing({ ...editing, title: e.target.value })
                 }
               />
-              <textarea
-                className={field}
-                rows={5}
-                placeholder="เนื้อหา (ขึ้นบรรทัดใหม่เพื่อแยกย่อหน้า)"
-                value={editing.bodyText ?? ""}
-                onChange={(e) =>
-                  setEditing({ ...editing, bodyText: e.target.value })
-                }
-              />
+              <div>
+                <label className="mb-1 block text-xs font-medium text-muted">
+                  เนื้อหาประกาศ — จัดขนาดฟอนต์ / ตัวหนา / เอียง / ขีดเส้นใต้ / หัวข้อ / รายการ / ลิงก์ / รูปภาพ ได้
+                </label>
+                <Editor
+                  value={editing.body_html ?? ""}
+                  onChange={(html) =>
+                    setEditing({ ...editing, body_html: html })
+                  }
+                />
+              </div>
               <div className="flex flex-wrap items-center gap-3">
                 <select
                   className={field + " max-w-[12rem]"}
