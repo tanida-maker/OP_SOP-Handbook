@@ -241,7 +241,7 @@ export default function SiteHeader({
                 </span>
               </a>
               <a
-                href="https://ssglsj0spi27.sg.larksuite.com/wiki/GTC0wl0E6iVcH9kQLAolG4tWgUj?from=from_copylink"
+                href="https://helpdesk.aims-staging.com/login?redirect=%2Fhome"
                 target="_blank"
                 rel="noopener"
                 onClick={() => setOpen(false)}

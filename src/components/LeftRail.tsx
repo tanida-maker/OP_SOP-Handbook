@@ -30,8 +30,7 @@ const SERVICE_PROMO_URL =
   "https://ssglsj0spi27.sg.larksuite.com/wiki/VTqtwFbXdiUKG0kIlWtlBFJegfh?from=from_copylink";
 const ALL_SHEET_URL =
   "https://ssglsj0spi27.sg.larksuite.com/wiki/YrI3wpdBQiNIQSk4boKls37Kgld?from=from_copylink";
-const IT_SUPPORT_URL =
-  "https://ssglsj0spi27.sg.larksuite.com/wiki/GTC0wl0E6iVcH9kQLAolG4tWgUj?from=from_copylink";
+const IT_SUPPORT_URL = "https://helpdesk.aims-staging.com/login?redirect=%2Fhome";
 
 type Item = { href: string; label: string; icon: LucideIcon; badge?: number };
 
