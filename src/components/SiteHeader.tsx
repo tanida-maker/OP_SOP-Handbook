@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
+  ClipboardList,
   Archive,
   CalendarDays,
   GraduationCap,
@@ -43,6 +44,7 @@ export default function SiteHeader({
     { href: "/", label: t("หน้าแรก", "Home"), icon: Home },
     { href: "/onboarding", label: t("พนักงานใหม่", "New Staff"), icon: GraduationCap },
     { href: "/announcements", label: t("ประกาศ", "Announcements"), icon: Megaphone },
+    { href: "/q4", label: t("Q4 & ปีใหม่", "Q4 & New Year"), icon: ClipboardList },
   ];
 
   async function logout() {
