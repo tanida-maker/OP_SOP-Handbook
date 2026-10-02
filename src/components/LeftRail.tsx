@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   Archive,
   CalendarDays,
+  ClipboardList,
   GraduationCap,
   Home,
   Languages,
@@ -50,6 +51,7 @@ export default function LeftRail({
     { href: "/onboarding", label: t("พนักงานใหม่", "New Staff"), icon: GraduationCap },
     { href: "/announcements", label: t("ประกาศ", "Announcements"), icon: Megaphone, badge: announceCount },
     { href: "/search", label: t("ค้นหา", "Search"), icon: Search },
+    { href: "/q4", label: t("Q4 & ปีใหม่", "Q4 & New Year"), icon: ClipboardList },
   ];
   if (isAdmin) {
     items.push({ href: "/archive", label: t("คลัง", "Archive"), icon: Archive });
