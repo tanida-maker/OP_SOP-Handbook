@@ -149,6 +149,7 @@ export default function Q4App({
   }
 
   function startEdit(e: Q4Entry) {
+    if (!userId || e.created_by !== userId) return;
     setEditingId(e.id);
     setDraft({
       branch: e.branch, service_area: e.service_area, category: e.category, period: e.period ?? "",
@@ -540,7 +541,7 @@ function ListView({
         <div className="space-y-3">
           {rows.map((e) => (
             <TagCard key={`${e.id}-${reviews[e.id]?.updated_at ?? ""}`} e={e} r={reviews[e.id]} status={statusOf(e)}
-              canModify={isAdmin || (!!userId && e.created_by === userId)} isAdmin={isAdmin}
+              canEdit={!!userId && e.created_by === userId} canDelete={isAdmin} isAdmin={isAdmin}
               onEdit={() => onEdit(e)} onDelete={() => onDelete(e)} onReview={onReview} />
           ))}
         </div>
@@ -558,9 +559,9 @@ function Empty({ title, body }: { title: string; body: string }) {
 }
 
 function TagCard({
-  e, r, status, canModify, isAdmin, onEdit, onDelete, onReview,
+  e, r, status, canEdit, canDelete, isAdmin, onEdit, onDelete, onReview,
 }: {
-  e: Q4Entry; r?: Q4Review; status: string; canModify: boolean; isAdmin: boolean;
+  e: Q4Entry; r?: Q4Review; status: string; canEdit: boolean; canDelete: boolean; isAdmin: boolean;
   onEdit: () => void; onDelete: () => void; onReview: (id: string, status: string, team: string, action: string) => void;
 }) {
   const t = useT();
@@ -634,11 +635,12 @@ function TagCard({
           </span>
           <span className="flex items-center gap-2">
             {e.created_name || t("พนักงาน", "Staff")}, {fmt(e.created_at)}{e.updated_at !== e.created_at && ` (${t("แก้ไขแล้ว", "edited")})`}
-            {canModify && (
-              <>
-                <button onClick={onEdit} className="rounded-md border border-border px-2 py-0.5 text-text hover:bg-surface-2">{t("แก้ไข", "Edit")}</button>
-                <button onClick={onDelete} className="rounded-md border border-border px-2 py-0.5 text-danger hover:bg-surface-2">{t("ลบ", "Delete")}</button>
-              </>
+            {/* Edit: only the person who submitted it. Delete: SOP admins only. Enforced again by RLS. */}
+            {canEdit && (
+              <button onClick={onEdit} className="rounded-md border border-border px-2 py-0.5 text-text hover:bg-surface-2">{t("แก้ไข", "Edit")}</button>
+            )}
+            {canDelete && (
+              <button onClick={onDelete} className="rounded-md border border-border px-2 py-0.5 text-danger hover:bg-surface-2">{t("ลบ", "Delete")}</button>
             )}
           </span>
         </div>
