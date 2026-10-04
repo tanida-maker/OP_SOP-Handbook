@@ -7,7 +7,7 @@ import { useT } from "@/components/LanguageProvider";
 import {
   Q4_AREA_HELP, Q4_BRANCHES, Q4_CATEGORIES, Q4_CATEGORY_NAMES, Q4_CLOSED, Q4_PRIORITIES,
   Q4_STATUSES, Q4_STATUS_TH, Q4_TEAMS, q4AreasFor,
-  type Q4Entry, type Q4Plan, type Q4Priority, type Q4Review,
+  type Q4Entry, type Q4Plan, type Q4Priority, type Q4Review, type Q4TeamMember,
 } from "@/lib/q4";
 
 type Tab = "form" | "list" | "summary";
@@ -30,14 +30,15 @@ const fmt = (iso: string) => {
   catch { return ""; }
 };
 const short = (cat: string) => cat.split(" / ")[0];
+const UNASSIGNED = "__none";
 
 export default function Q4App({
-  userId, isAdmin, fullName,
-}: { userId: string | null; isAdmin: boolean; fullName: string }) {
+  userId, isAdmin, fullName, initialTab = "form", initialTeam = "",
+}: { userId: string | null; isAdmin: boolean; fullName: string; initialTab?: Tab; initialTeam?: string }) {
   const t = useT();
   const supabase = useMemo(() => createClient(), []);
 
-  const [tab, setTab] = useState<Tab>("form");
+  const [tab, setTab] = useState<Tab>(initialTab);
   const [entries, setEntries] = useState<Q4Entry[]>([]);
   const [reviews, setReviews] = useState<Record<string, Q4Review>>({});
   const [plans, setPlans] = useState<Record<string, Q4Plan>>({});
@@ -46,6 +47,8 @@ export default function Q4App({
   const [loadErr, setLoadErr] = useState("");
   const [myName, setMyName] = useState(fullName);
   const [toast, setToast] = useState("");
+  const [myTeams, setMyTeams] = useState<string[]>([]);
+  const [teamMembers, setTeamMembers] = useState<Q4TeamMember[]>([]);
 
   // ---------- data ----------
   const loadAll = useCallback(async () => {
@@ -63,8 +66,16 @@ export default function Q4App({
     const pm: Record<string, Q4Plan> = {};
     (p.data ?? []).forEach((x) => { pm[(x as Q4Plan).category] = x as Q4Plan; });
     setPlans(pm);
+    if (userId) {
+      const tm = await supabase.from("q4_team_members").select("team").eq("user_id", userId);
+      setMyTeams((tm.data ?? []).map((x) => (x as { team: string }).team));
+    }
+    if (isAdmin) {
+      const lm = await supabase.rpc("q4_list_team_members");
+      setTeamMembers((lm.data ?? []) as Q4TeamMember[]);
+    }
     setLoading(false);
-  }, [supabase]);
+  }, [supabase, userId, isAdmin]);
 
   const reloadTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
@@ -78,6 +89,7 @@ export default function Q4App({
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_entries" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_reviews" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_plans" }, () => schedule())
+      .on("postgres_changes", { event: "*", schema: "sop", table: "q4_team_members" }, () => schedule())
       .subscribe((status) => setLive(status === "SUBSCRIBED"));
     return () => {
       if (reloadTimer.current) clearTimeout(reloadTimer.current);
@@ -165,6 +177,27 @@ export default function Q4App({
     if (error) flash(t("ลบไม่สำเร็จ", "Delete failed")); else { flash(t("ลบแล้ว", "Deleted")); loadAll(); }
   }
 
+  // Team member (not admin): may change status + action of issues assigned to their team.
+  async function saveTeamReview(id: string, status: string, action: string) {
+    const { data, error } = await supabase.from("q4_reviews")
+      .update({ status, action: action.trim() || null })
+      .eq("entry_id", id).select("entry_id");
+    if (error || !data?.length) flash(t("อัปเดตไม่สำเร็จ (ไม่มีสิทธิ์ในเรื่องนี้)", "Update failed (no permission)"));
+    else { flash(t("อัปเดตสถานะแล้ว", "Status updated")); loadAll(); }
+  }
+
+  async function addTeamMember(email: string, team: string) {
+    const { data, error } = await supabase.rpc("q4_add_team_member", { p_email: email, p_team: team });
+    if (error) flash(t("เพิ่มไม่สำเร็จ: ", "Failed: ") + error.message);
+    else if (data === "not_found") flash(t("ไม่พบบัญชีอีเมลนี้ (ต้องเคย Login ระบบตารางงานมาก่อน)", "No account with this e-mail"));
+    else { flash(t("เพิ่มผู้รับผิดชอบทีมแล้ว", "Team member added")); loadAll(); }
+  }
+  async function removeTeamMember(m: Q4TeamMember) {
+    if (!confirm(t(`เอา ${m.full_name || m.email} ออกจากทีม ${m.team} ใช่ไหม`, `Remove ${m.email} from ${m.team}?`))) return;
+    const { error } = await supabase.from("q4_team_members").delete().eq("user_id", m.user_id).eq("team", m.team);
+    if (error) flash(t("ลบไม่สำเร็จ", "Remove failed")); else { flash(t("นำออกแล้ว", "Removed")); loadAll(); }
+  }
+
   async function saveReview(id: string, status: string, team: string, action: string) {
     const { error } = await supabase.from("q4_reviews").upsert({
       entry_id: id, status, team: team || null, action: action.trim() || null,
@@ -223,6 +256,7 @@ export default function Q4App({
   const responded = Q4_BRANCHES.filter((b) => byBranch[b]).length;
 
   const [fBranch, setFBranch] = useState("");
+  const [fTeam, setFTeam] = useState(initialTeam);
 
   return (
     <div className="space-y-6">
@@ -305,14 +339,17 @@ export default function Q4App({
       {tab === "list" && (
         <ListView
           entries={entries} reviews={reviews} loading={loading} userId={userId} isAdmin={isAdmin}
-          statusOf={statusOf} fBranch={fBranch} setFBranch={setFBranch}
+          statusOf={statusOf} teamOf={teamOf} fBranch={fBranch} setFBranch={setFBranch} fTeam={fTeam} setFTeam={setFTeam}
           onEdit={startEdit} onDelete={remove} onReview={saveReview}
+          myTeams={myTeams} onTeamReview={saveTeamReview}
         />
       )}
       {tab === "summary" && (
         <SummaryView
           entries={entries} plans={plans} isAdmin={isAdmin} statusOf={statusOf} teamOf={teamOf}
           onPlan={savePlan} onExport={exportCsv}
+          teamMembers={teamMembers} onAddMember={addTeamMember} onRemoveMember={removeTeamMember}
+          onPickTeam={(team) => { setFTeam(team); setTab("list"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
         />
       )}
 
@@ -482,10 +519,13 @@ function FormView({
 /* List                                                                   */
 /* ====================================================================== */
 function ListView({
-  entries, reviews, loading, userId, isAdmin, statusOf, fBranch, setFBranch, onEdit, onDelete, onReview,
+  entries, reviews, loading, userId, isAdmin, statusOf, teamOf, fBranch, setFBranch, fTeam, setFTeam, onEdit, onDelete, onReview,
+  myTeams, onTeamReview,
 }: {
+  myTeams: string[]; onTeamReview: (id: string, status: string, action: string) => void;
   entries: Q4Entry[]; reviews: Record<string, Q4Review>; loading: boolean; userId: string | null; isAdmin: boolean;
-  statusOf: (e: Q4Entry) => string; fBranch: string; setFBranch: (b: string) => void;
+  statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string;
+  fBranch: string; setFBranch: (b: string) => void; fTeam: string; setFTeam: (t: string) => void;
   onEdit: (e: Q4Entry) => void; onDelete: (e: Q4Entry) => void;
   onReview: (id: string, status: string, team: string, action: string) => void;
 }) {
@@ -495,6 +535,7 @@ function ListView({
   const [fPri, setFPri] = useState("");
   const [fSt, setFSt] = useState("");
   const [mine, setMine] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const rows = useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -503,10 +544,32 @@ function ListView({
       .filter((e) =>
         (!fBranch || e.branch === fBranch) && (!fCat || e.category === fCat) && (!fPri || e.priority === fPri) &&
         (!fSt || statusOf(e) === fSt) && (!mine || e.created_by === userId) &&
+        (!fTeam || (fTeam === UNASSIGNED ? !teamOf(e) : teamOf(e) === fTeam)) &&
         (!s || [e.branch, e.service_area, e.category, e.period, e.issue, e.impact, e.support, e.prep, e.notes, reviews[e.id]?.action]
           .join(" ").toLowerCase().includes(s)))
       .sort((a, b) => rank[a.priority] - rank[b.priority] || b.created_at.localeCompare(a.created_at));
-  }, [entries, reviews, q, fBranch, fCat, fPri, fSt, mine, userId, statusOf]);
+  }, [entries, reviews, q, fBranch, fCat, fPri, fSt, fTeam, mine, userId, statusOf, teamOf]);
+
+  // Hand-off message for the assigned team (paste into their LINE group).
+  async function copyTeamMessage() {
+    const mineOpen = entries.filter((e) => teamOf(e) === fTeam && !Q4_CLOSED.has(statusOf(e)));
+    const hi = mineOpen.filter((e) => e.priority === "High").length;
+    const link = `${window.location.origin}/q4?tab=list&team=${encodeURIComponent(fTeam)}`;
+    const lines = [
+      `📌 งาน Q4 & ปีใหม่ ที่มอบหมายให้ทีม ${fTeam}`,
+      `ยังไม่ปิด ${mineOpen.length} เรื่อง${hi ? ` (High ${hi})` : ""}`,
+      ...mineOpen.slice(0, 10).map((e, i) => `${i + 1}. [${e.branch}] ${short(e.category)}: ${e.support}`),
+      ...(mineOpen.length > 10 ? [`และอีก ${mineOpen.length - 10} เรื่อง`] : []),
+      `ดูรายละเอียดและ Central action: ${link}`,
+    ];
+    try {
+      await navigator.clipboard.writeText(lines.join("\n"));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      window.prompt(t("คัดลอกข้อความนี้", "Copy this message"), lines.join("\n"));
+    }
+  }
 
   const sel = "rounded-lg border border-border bg-surface px-2.5 py-2 text-sm";
   if (loading) return <p className="py-10 text-center text-muted"><Loader2 className="mr-2 inline animate-spin" size={18} />{t("กำลังโหลด", "Loading")}</p>;
@@ -528,10 +591,43 @@ function ListView({
           <option value="">{t("ทุกสถานะ", "All statuses")}</option>
           {Q4_STATUSES.map((s) => <option key={s} value={s}>{s} ({Q4_STATUS_TH[s]})</option>)}
         </select>
+        <select className={sel} value={fTeam} onChange={(e) => setFTeam(e.target.value)} aria-label="Responsible Team">
+          <option value="">{t("ทุกทีมรับผิดชอบ", "All teams")}</option>
+          <option value={UNASSIGNED}>{t("ยังไม่มอบหมาย", "Unassigned")}</option>
+          {Q4_TEAMS.map((x) => <option key={x}>{x}</option>)}
+        </select>
         <label className="flex items-center gap-1.5 text-sm text-muted">
           <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} /> {t("เฉพาะที่ฉันส่ง", "Mine only")}
         </label>
       </div>
+
+      {!isAdmin && myTeams.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[#E23744]/30 bg-[#E23744]/5 px-4 py-3 text-sm">
+          <span>{t("คุณเป็นผู้รับผิดชอบทีม", "You handle team")}</span>
+          {myTeams.map((tm) => {
+            const n = entries.filter((e) => teamOf(e) === tm && !Q4_CLOSED.has(statusOf(e))).length;
+            return (
+              <button key={tm} onClick={() => setFTeam(tm)}
+                className={`rounded-lg border px-2.5 py-1 font-semibold ${fTeam === tm ? "border-[#14232E] bg-[#14232E] text-[#CFE2F3]" : "border-border bg-surface"}`}>
+                {tm} · {n} {t("เรื่องค้าง", "open")}
+              </button>
+            );
+          })}
+          <span className="text-muted">{t("อัปเดตสถานะและ Central action ของทีมได้บนการ์ด", "Update status and action on the cards")}</span>
+        </div>
+      )}
+
+      {fTeam && fTeam !== UNASSIGNED && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm">
+          <span>
+            {t("งานของทีม", "Team")} <b>{fTeam}</b>: {rows.length} {t("เรื่อง", "issues")}
+          </span>
+          <button onClick={copyTeamMessage}
+            className="rounded-lg bg-[#14232E] px-3 py-1.5 font-semibold text-[#CFE2F3]">
+            {copied ? t("คัดลอกแล้ว ✓ วางในกลุ่ม LINE ได้เลย", "Copied ✓") : t("คัดลอกข้อความแจ้งทีม (ส่ง LINE)", "Copy hand-off message")}
+          </button>
+        </div>
+      )}
 
       {!entries.length ? (
         <Empty title={t("ยังไม่มีข้อมูล", "No issues yet")} body={t("เริ่มจากแท็บ “กรอกข้อมูล” แล้วรายการจะขึ้นที่นี่ทันทีสำหรับทุกคน", "Submit the first issue and it appears here for everyone")} />
@@ -542,7 +638,8 @@ function ListView({
           {rows.map((e) => (
             <TagCard key={`${e.id}-${reviews[e.id]?.updated_at ?? ""}`} e={e} r={reviews[e.id]} status={statusOf(e)}
               canEdit={!!userId && e.created_by === userId} canDelete={isAdmin} isAdmin={isAdmin}
-              onEdit={() => onEdit(e)} onDelete={() => onDelete(e)} onReview={onReview} />
+              canTeamReview={!isAdmin && !!reviews[e.id]?.team && myTeams.includes(reviews[e.id]?.team ?? "")}
+              onEdit={() => onEdit(e)} onDelete={() => onDelete(e)} onReview={onReview} onTeamReview={onTeamReview} />
           ))}
         </div>
       )}
@@ -559,9 +656,10 @@ function Empty({ title, body }: { title: string; body: string }) {
 }
 
 function TagCard({
-  e, r, status, canEdit, canDelete, isAdmin, onEdit, onDelete, onReview,
+  e, r, status, canEdit, canDelete, isAdmin, canTeamReview, onEdit, onDelete, onReview, onTeamReview,
 }: {
   e: Q4Entry; r?: Q4Review; status: string; canEdit: boolean; canDelete: boolean; isAdmin: boolean;
+  canTeamReview: boolean; onTeamReview: (id: string, status: string, action: string) => void;
   onEdit: () => void; onDelete: () => void; onReview: (id: string, status: string, team: string, action: string) => void;
 }) {
   const t = useT();
@@ -625,6 +723,25 @@ function TagCard({
             </button>
           </div>
         )}
+        {canTeamReview && (
+          <div className="mb-3 grid gap-2 rounded-lg border border-[#E23744]/30 bg-surface-2 p-3 md:grid-cols-[170px_minmax(0,1fr)_auto] md:items-end">
+            <p className="text-xs font-semibold text-[#E23744] md:col-span-3">
+              {t(`งานของทีม ${r?.team} (คุณอัปเดตได้)`, `Your team (${r?.team}) can update this`)}
+            </p>
+            <label className="text-xs text-muted">{t("สถานะ", "Status")}
+              <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={st} onChange={(x) => setSt(x.target.value)}>
+                {Q4_STATUSES.map((s) => <option key={s}>{s}</option>)}
+              </select>
+            </label>
+            <label className="text-xs text-muted">{t("ความคืบหน้า / สิ่งที่ทีมจะทำ", "Progress / action")}
+              <input className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={action}
+                onChange={(x) => setAction(x.target.value)} placeholder={t("สิ่งที่ทีมทำแล้ว / จะทำ กำหนดเสร็จ", "What the team did / will do, by when")} />
+            </label>
+            <button onClick={() => onTeamReview(e.id, st, action)} className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
+              {t("บันทึก", "Save")}
+            </button>
+          </div>
+        )}
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 text-sm text-muted">
           <span>
             <span className={`rounded-full border px-2.5 py-0.5 text-xs font-bold ${
@@ -652,13 +769,14 @@ function TagCard({
 /* ====================================================================== */
 /* Summary                                                                */
 /* ====================================================================== */
-function Bars({ pairs, redKey }: { pairs: [string, number][]; redKey?: string }) {
+function Bars({ pairs, redKey, onPick }: { pairs: [string, number][]; redKey?: string; onPick?: (k: string) => void }) {
   const max = Math.max(1, ...pairs.map((p) => p[1]));
   if (!pairs.length) return <p className="text-sm text-muted">-</p>;
   return (
     <div className="space-y-2">
       {pairs.map(([k, v]) => (
-        <div key={k} className="grid grid-cols-[140px_minmax(0,1fr)_32px] items-center gap-2.5 text-sm">
+        <div key={k} onClick={onPick ? () => onPick(k) : undefined} title={onPick ? "ดูรายการของทีมนี้" : undefined}
+          className={`grid grid-cols-[140px_minmax(0,1fr)_32px] items-center gap-2.5 text-sm ${onPick ? "cursor-pointer rounded-md hover:bg-surface-2" : ""}`}>
           <span className="truncate" title={k}>{k}</span>
           <span className="h-2.5 overflow-hidden rounded-full bg-surface-2">
             <span className={`block h-full rounded-full ${k === redKey ? "bg-[#E23744]" : "bg-text"}`} style={{ width: `${(v / max) * 100}%` }} />
@@ -671,11 +789,13 @@ function Bars({ pairs, redKey }: { pairs: [string, number][]; redKey?: string })
 }
 
 function SummaryView({
-  entries, plans, isAdmin, statusOf, teamOf, onPlan, onExport,
+  entries, plans, isAdmin, statusOf, teamOf, onPlan, onExport, onPickTeam,
+  teamMembers, onAddMember, onRemoveMember,
 }: {
+  teamMembers: Q4TeamMember[]; onAddMember: (email: string, team: string) => void; onRemoveMember: (m: Q4TeamMember) => void;
   entries: Q4Entry[]; plans: Record<string, Q4Plan>; isAdmin: boolean;
   statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string;
-  onPlan: (c: string, p: string) => void; onExport: () => void;
+  onPlan: (c: string, p: string) => void; onExport: () => void; onPickTeam: (team: string) => void;
 }) {
   const t = useT();
   const total = entries.length;
@@ -810,6 +930,8 @@ function SummaryView({
         )}
       </div>
 
+      {isAdmin && <TeamMembersPanel members={teamMembers} onAdd={onAddMember} onRemove={onRemoveMember} />}
+
       <div className="grid gap-4 md:grid-cols-2">
         <div className={card}>
           <h2 className="mb-3 text-lg font-bold">{t("แยกตาม Service Area", "By service area")}</h2>
@@ -821,8 +943,9 @@ function SummaryView({
         </div>
         <div className={card}>
           <h2 className="mb-1 text-lg font-bold">{t("งานตามทีมผู้รับผิดชอบ", "Open work by team")}</h2>
-          <p className="mb-3 text-sm text-muted">{t("เฉพาะประเด็นที่ยังไม่ปิด", "Open issues only")}</p>
-          <Bars pairs={tally((e) => teamOf(e) || unassigned, open)} redKey={unassigned} />
+          <p className="mb-3 text-sm text-muted">{t("เฉพาะประเด็นที่ยังไม่ปิด กดที่ชื่อทีมเพื่อดูรายการและคัดลอกข้อความแจ้งทีม", "Open issues only. Click a team to see its list")}</p>
+          <Bars pairs={tally((e) => teamOf(e) || unassigned, open)} redKey={unassigned}
+            onPick={(k) => onPickTeam(k === unassigned ? UNASSIGNED : k)} />
         </div>
         <div className={card}>
           <h2 className="mb-3 text-lg font-bold">{t("High Priority ที่ยังไม่ปิด", "Open High priority")}</h2>
@@ -840,6 +963,66 @@ function SummaryView({
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ====================================================================== */
+/* Team members (SOP admins only)                                          */
+/* ====================================================================== */
+function TeamMembersPanel({
+  members, onAdd, onRemove,
+}: { members: Q4TeamMember[]; onAdd: (email: string, team: string) => void; onRemove: (m: Q4TeamMember) => void }) {
+  const t = useT();
+  const [email, setEmail] = useState("");
+  const [team, setTeam] = useState(Q4_TEAMS[0]);
+  const inp = "rounded-lg border border-border bg-surface px-2.5 py-2 text-sm";
+  return (
+    <div className={card}>
+      <h2 className="text-lg font-bold">{t("ผู้รับผิดชอบของแต่ละทีม", "Team members")}</h2>
+      <p className="mb-3 text-sm text-muted">
+        {t(
+          "คนที่อยู่ในรายชื่อนี้อัปเดตสถานะและความคืบหน้าของงานที่มอบหมายให้ทีมตัวเองได้ (เปลี่ยนทีมหรือแก้เรื่องของทีมอื่นไม่ได้)",
+          "People listed here can update status and progress of issues assigned to their team only"
+        )}
+      </p>
+      <div className="mb-4 flex flex-wrap gap-2">
+        <input className={`${inp} min-w-[220px] flex-1`} type="email" placeholder={t("อีเมลที่ใช้ Login เช่น name@airportels.asia", "Login e-mail")}
+          value={email} onChange={(e) => setEmail(e.target.value)} />
+        <select className={inp} value={team} onChange={(e) => setTeam(e.target.value)}>
+          {Q4_TEAMS.map((x) => <option key={x}>{x}</option>)}
+        </select>
+        <button disabled={!email.trim()} onClick={() => { onAdd(email, team); setEmail(""); }}
+          className="rounded-lg bg-[#14232E] px-4 py-2 text-sm font-semibold text-[#CFE2F3] disabled:opacity-50">
+          {t("เพิ่ม", "Add")}
+        </button>
+      </div>
+      {!members.length ? <p className="text-sm text-muted">{t("ยังไม่มีผู้รับผิดชอบ", "No team members yet")}</p> : (
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead><tr>
+              <th className="border-b border-border px-2.5 py-2 text-left text-xs font-semibold text-muted">{t("ทีม", "Team")}</th>
+              <th className="border-b border-border px-2.5 py-2 text-left text-xs font-semibold text-muted">{t("ชื่อ", "Name")}</th>
+              <th className="border-b border-border px-2.5 py-2 text-left text-xs font-semibold text-muted">{t("อีเมล", "E-mail")}</th>
+              <th className="border-b border-border px-2.5 py-2" />
+            </tr></thead>
+            <tbody>
+              {members.map((m) => (
+                <tr key={`${m.user_id}-${m.team}`}>
+                  <td className="border-b border-border px-2.5 py-2 font-semibold">{m.team}</td>
+                  <td className="border-b border-border px-2.5 py-2">{m.full_name || "-"}</td>
+                  <td className="border-b border-border px-2.5 py-2 text-muted">{m.email}</td>
+                  <td className="border-b border-border px-2.5 py-2 text-right">
+                    <button onClick={() => onRemove(m)} className="rounded-md border border-border px-2 py-0.5 text-danger hover:bg-surface-2">
+                      {t("นำออก", "Remove")}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

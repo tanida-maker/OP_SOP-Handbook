@@ -3,7 +3,22 @@ import Q4App from "./Q4App";
 
 export const dynamic = "force-dynamic";
 
-export default async function Q4Page() {
+// Optional deep link for team hand-off, e.g. /q4?tab=list&team=HR
+export default async function Q4Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string; team?: string }>;
+}) {
   const { user, isAdmin, fullName } = await getSessionUser();
-  return <Q4App userId={user?.id ?? null} isAdmin={isAdmin} fullName={fullName ?? ""} />;
+  const sp = await searchParams;
+  const tab = sp.tab === "list" || sp.tab === "summary" ? sp.tab : "form";
+  return (
+    <Q4App
+      userId={user?.id ?? null}
+      isAdmin={isAdmin}
+      fullName={fullName ?? ""}
+      initialTab={tab}
+      initialTeam={sp.team ?? ""}
+    />
+  );
 }
