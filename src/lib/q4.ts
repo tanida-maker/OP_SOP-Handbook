@@ -3,7 +3,7 @@
 
 export const Q4_BRANCHES = [
   "DMK", "BKK", "HKTI", "HKTD", "CNX", "T21", "EMS",
-  "CTWH", "CTWG", "MBK", "ICS", "MIXT", "Online - CS",
+  "CTWH", "CTWG", "MBK", "ICS", "MIXT", "TPY", "Online - CS",
 ] as const;
 
 export const Q4_PORTER_BRANCHES = new Set(["DMK", "BKK"]);
@@ -25,7 +25,7 @@ export const Q4_STATUS_TH: Record<string, string> = {
 export const Q4_CLOSED = new Set(["Completed", "Not Required"]);
 
 export const Q4_TEAMS = [
-  "OP", "CS", "Online-CS", "HR", "IT", "Transport", "Purchasing", "Marketing / Media", "Management", "Other",
+  "OP", "Online-CS", "HR", "IT", "MS - Logistic", "BD", "Marketing / Media", "Management", "Other",
 ];
 
 export const Q4_AREA_HELP: Record<string, string> = {
@@ -110,4 +110,10 @@ export interface Q4Plan {
   category: string;
   plan: string;
   updated_at: string;
+}
+export interface Q4TeamMember {
+  user_id: string;
+  team: string;
+  email: string;
+  full_name: string | null;
 }
