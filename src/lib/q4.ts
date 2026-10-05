@@ -117,3 +117,10 @@ export interface Q4TeamMember {
   email: string;
   full_name: string | null;
 }
+   export interface Q4Analysis {
+     id: string;
+     content: string;
+     entry_count: number;
+     model: string | null;
+     created_at: string;
+   }
