@@ -7,7 +7,7 @@ import { useT } from "@/components/LanguageProvider";
 import {
   Q4_AREA_HELP, Q4_BRANCHES, Q4_CATEGORIES, Q4_CATEGORY_NAMES, Q4_CLOSED, Q4_PRIORITIES,
   Q4_STATUSES, Q4_STATUS_TH, Q4_TEAMS, q4AreasFor,
-  type Q4Entry, type Q4Plan, type Q4Priority, type Q4Review, type Q4TeamMember,
+  type Q4Entry, type Q4Plan, type Q4Priority, type Q4Review, type Q4TeamMember, type Q4Analysis,
 } from "@/lib/q4";
 
 type Tab = "form" | "list" | "summary";
@@ -49,6 +49,7 @@ export default function Q4App({
   const [toast, setToast] = useState("");
   const [myTeams, setMyTeams] = useState<string[]>([]);
   const [teamMembers, setTeamMembers] = useState<Q4TeamMember[]>([]);
+  const [analysis, setAnalysis] = useState<Q4Analysis | null>(null);
 
   // ---------- data ----------
   const loadAll = useCallback(async () => {
@@ -66,6 +67,8 @@ export default function Q4App({
     const pm: Record<string, Q4Plan> = {};
     (p.data ?? []).forEach((x) => { pm[(x as Q4Plan).category] = x as Q4Plan; });
     setPlans(pm);
+    const an = await supabase.from("q4_analysis").select("*").order("created_at", { ascending: false }).limit(1);
+    setAnalysis(((an.data ?? [])[0] as Q4Analysis | undefined) ?? null);
     if (userId) {
       const tm = await supabase.from("q4_team_members").select("team").eq("user_id", userId);
       setMyTeams((tm.data ?? []).map((x) => (x as { team: string }).team));
@@ -90,6 +93,7 @@ export default function Q4App({
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_reviews" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_plans" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_team_members" }, () => schedule())
+      .on("postgres_changes", { event: "*", schema: "sop", table: "q4_analysis" }, () => schedule())
       .subscribe((status) => setLive(status === "SUBSCRIBED"));
     return () => {
       if (reloadTimer.current) clearTimeout(reloadTimer.current);
@@ -184,6 +188,18 @@ export default function Q4App({
       .eq("entry_id", id).select("entry_id");
     if (error || !data?.length) flash(t("อัปเดตไม่สำเร็จ (ไม่มีสิทธิ์ในเรื่องนี้)", "Update failed (no permission)"));
     else { flash(t("อัปเดตสถานะแล้ว", "Status updated")); loadAll(); }
+  }
+
+  // Save a summary that an admin produced in claude.ai (pasted back) so every team can read it.
+  async function saveAnalysis(content: string) {
+    const text = content.trim();
+    if (!text) return false;
+    const { error } = await supabase.from("q4_analysis")
+      .insert({ content: text, entry_count: entries.length, model: "claude.ai", created_by: userId });
+    if (error) { flash(t("บันทึกไม่สำเร็จ: ", "Save failed: ") + error.message); return false; }
+    flash(t("บันทึกสรุปแล้ว ทุกทีมเห็นได้ทันที", "Summary saved for all teams"));
+    loadAll();
+    return true;
   }
 
   async function addTeamMember(email: string, team: string) {
@@ -349,6 +365,7 @@ export default function Q4App({
           entries={entries} plans={plans} isAdmin={isAdmin} statusOf={statusOf} teamOf={teamOf}
           onPlan={savePlan} onExport={exportCsv}
           teamMembers={teamMembers} onAddMember={addTeamMember} onRemoveMember={removeTeamMember}
+          analysis={analysis} onSaveAnalysis={saveAnalysis}
           onPickTeam={(team) => { setFTeam(team); setTab("list"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
         />
       )}
@@ -790,8 +807,9 @@ function Bars({ pairs, redKey, onPick }: { pairs: [string, number][]; redKey?: s
 
 function SummaryView({
   entries, plans, isAdmin, statusOf, teamOf, onPlan, onExport, onPickTeam,
-  teamMembers, onAddMember, onRemoveMember,
+  teamMembers, onAddMember, onRemoveMember, analysis, onSaveAnalysis,
 }: {
+  analysis: Q4Analysis | null; onSaveAnalysis: (content: string) => Promise<boolean>;
   teamMembers: Q4TeamMember[]; onAddMember: (email: string, team: string) => void; onRemoveMember: (m: Q4TeamMember) => void;
   entries: Q4Entry[]; plans: Record<string, Q4Plan>; isAdmin: boolean;
   statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string;
@@ -930,6 +948,10 @@ function SummaryView({
         )}
       </div>
 
+      <AutoSummaryPanel entries={entries} statusOf={statusOf} teamOf={teamOf} />
+      <ClaudeSummaryPanel entries={entries} statusOf={statusOf} teamOf={teamOf} analysis={analysis}
+        isAdmin={isAdmin} total={total} onSave={onSaveAnalysis} />
+
       {isAdmin && <TeamMembersPanel members={teamMembers} onAdd={onAddMember} onRemove={onRemoveMember} />}
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -1023,6 +1045,261 @@ function TeamMembersPanel({
           </table>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ====================================================================== */
+/* AI analysis (run by admins, visible to everyone for team presentations) */
+/* ====================================================================== */
+const escHtml = (x: string) =>
+  x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+// Minimal, safe markdown -> HTML (headings, bullets, bold). Input is escaped first.
+function mdToHtml(md: string): string {
+  const out: string[] = [];
+  let inList = false;
+  const inline = (x: string) => escHtml(x).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+  for (const raw of md.split(/\r?\n/)) {
+    const l = raw.trim();
+    const bullet = /^[-*•]\s+/.test(l);
+    if (!bullet && inList) { out.push("</ul>"); inList = false; }
+    if (bullet) {
+      if (!inList) { out.push("<ul>"); inList = true; }
+      out.push(`<li>${inline(l.replace(/^[-*•]\s+/, ""))}</li>`);
+    } else if (l.startsWith("### ")) out.push(`<h4>${inline(l.slice(4))}</h4>`);
+    else if (l.startsWith("## ")) out.push(`<h3>${inline(l.slice(3))}</h3>`);
+    else if (l.startsWith("# ")) out.push(`<h3>${inline(l.slice(2))}</h3>`);
+    else if (l) out.push(`<p>${inline(l)}</p>`);
+  }
+  if (inList) out.push("</ul>");
+  return out.join("");
+}
+
+/* Playbook: first-step solutions and suggested team per category (free, no AI). */
+const PLAYBOOK: Record<string, { team: string; steps: string[] }> = {
+  "Operation / งานหน้าสาขา": { team: "OP", steps: ["ทบทวน Workflow รับฝาก-คืนช่วง Peak และจุดที่เกิด Bottleneck", "เตรียมเคาน์เตอร์/จุดรับฝากชั่วคราว ป้ายบอกทาง และระบบคิว"] },
+  "Guest Service / งานบริการหน้าสาขา": { team: "OP", steps: ["ทำ Guideline/Script หน้าเคาน์เตอร์ช่วง Peak", "Briefing ทีม Guest Service ก่อนเข้า Peak"] },
+  "Porter / งานขนย้ายกระเป๋า": { team: "OP", steps: ["วาง Shift/OT Porter ตามช่วงเที่ยวบินหนาแน่น", "ตรวจและเพิ่ม Trolley / อุปกรณ์ขนย้าย กำหนดจุด Loading ให้ชัด"] },
+  "Customer / ปัญหาหรือ Case ลูกค้า": { team: "Online-CS", steps: ["ทำ Script และขั้นตอน Service Recovery (Delay / Lost / Damage / Refund)", "กำหนดช่องทาง Escalation และผู้ตัดสินใจช่วง Peak"] },
+  "Staffing / Manpower": { team: "HR", steps: ["วางแผนกำลังคน OT และพนักงานเสริมช่วง Peak", "จัด Backup ข้ามสาขาและรายชื่อสำรอง"] },
+  "System / IT": { team: "IT", steps: ["ตรวจอุปกรณ์ Internet สำรอง EDC Printer Scanner ก่อน Peak", "กำหนด Contact IT และขั้นตอนเมื่อระบบล่ม"] },
+  "Stock / Material": { team: "MS - Logistic", steps: ["ตรวจ Stock Tag / Receipt / ถุง / Packaging ทุกสาขา", "สั่งเพิ่มล่วงหน้าและกำหนดรอบส่งของก่อน Peak"] },
+  "Transport / Delivery": { team: "MS - Logistic", steps: ["วางแผนรถและ Runner สำรองช่วง Peak", "ทบทวน Cut-off และช่องทางประสานงานสาขา-Transport"] },
+  "SOP / Training": { team: "OP", steps: ["ปรับ SOP/WI ที่พนักงานยังไม่มั่นใจ", "จัด Training / Simulation / Checklist ก่อนปีใหม่"] },
+  "Emergency / Service Recovery": { team: "Management", steps: ["ทำ Emergency Plan: ระบบล่ม คนไม่พอ กระเป๋าตกค้าง สาขาปิด", "ซ้อมขั้นตอนและแจ้งผู้รับผิดชอบแต่ละกรณี"] },
+  "Branch / Facility": { team: "Management", steps: ["ตรวจพื้นที่ Counter Storage ไฟฟ้า แอร์ แสงสว่างก่อน Peak", "ประสานห้าง/สนามบินเรื่องพื้นที่เสริม"] },
+  "Equipment / Tools": { team: "MS - Logistic", steps: ["ตรวจอุปกรณ์ประจำสาขาและซ่อม/เปลี่ยนก่อน Peak", "เตรียมอุปกรณ์สำรองไว้ส่วนกลาง"] },
+  "Sales / Promotion": { team: "BD", steps: ["สรุป Campaign / Promotion ปีใหม่ให้ทุกสาขารู้ล่วงหน้า", "ทำข้อความแนะนำลูกค้าและเงื่อนไขที่ชัดเจน"] },
+  "Media / Content / Filming": { team: "Marketing / Media", steps: ["วางตารางถ่ายทำไม่ให้ชนช่วง Peak", "แจ้งสาขาล่วงหน้าและกำหนดพื้นที่ถ่ายทำ"] },
+  "Communication / Coordination": { team: "Management", steps: ["กำหนด Contact point และกลุ่มสื่อสารช่วง Peak", "สื่อสารเรื่องสำคัญให้ทุกสาขาเข้าใจตรงกันก่อนเข้า Peak"] },
+  "Security / Safety": { team: "Management", steps: ["ทบทวนความปลอดภัยของกระเป๋าและการเข้า-ออกพื้นที่", "ตรวจ CCTV และขั้นตอนเมื่อเกิดเหตุ"] },
+  "Other / อื่นๆ": { team: "OP", steps: ["พิจารณารายกรณีในที่ประชุมส่วนกลาง"] },
+};
+const DUE: Record<string, string> = { High: "ก่อน 1 ธ.ค.", Medium: "1-20 ธ.ค.", Low: "ทบทวนหลัง Peak" };
+
+function buildAutoSummary(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teamOf: (e: Q4Entry) => string): string {
+  const open = entries.filter((e) => !Q4_CLOSED.has(statusOf(e)));
+  const L: string[] = [];
+  const count = (xs: string[]) => {
+    const m: Record<string, number> = {};
+    xs.forEach((x) => { m[x] = (m[x] || 0) + 1; });
+    return Object.entries(m).sort((a, b) => b[1] - a[1]);
+  };
+  const responded = new Set(entries.map((e) => e.branch));
+  const missing = Q4_BRANCHES.filter((b) => !responded.has(b));
+  const cats = count(entries.map((e) => short(e.category)));
+  const brs = count(entries.map((e) => e.branch));
+  const periods = entries.map((e) => e.period).filter(Boolean) as string[];
+
+  L.push("## ภาพรวม");
+  L.push(`- ทั้งหมด **${entries.length} ประเด็น** จาก ${responded.size}/${Q4_BRANCHES.length} สาขา/ทีม · High ${entries.filter((e) => e.priority === "High").length} · ยังไม่ปิด ${open.length}`);
+  if (cats.length) L.push(`- หมวดที่แจ้งมากสุด: ${cats.slice(0, 3).map(([k, v]) => `**${k}** (${v})`).join(", ")}`);
+  if (brs.length) L.push(`- สาขาที่แจ้งมากสุด: ${brs.slice(0, 3).map(([k, v]) => `**${k}** (${v})`).join(", ")}`);
+  if (periods.length) L.push(`- ช่วงเวลาที่ถูกระบุ: ${[...new Set(periods)].slice(0, 5).join(" · ")}`);
+
+  const hi = open.filter((e) => e.priority === "High");
+  L.push("## ประเด็นเร่งด่วนก่อน Peak (High ที่ยังไม่ปิด)");
+  if (!hi.length) L.push("- ไม่มี");
+  hi.forEach((e) => L.push(`- **[${e.branch}] ${short(e.category)}:** ${e.support}`));
+
+  L.push("## แนวทางแก้ไขเบื้องต้น แยกตามทีม");
+  const byTeam: Record<string, Q4Entry[]> = {};
+  open.forEach((e) => {
+    const tm = teamOf(e) || (PLAYBOOK[e.category]?.team ?? "OP");
+    (byTeam[tm] = byTeam[tm] || []).push(e);
+  });
+  const teams = Object.keys(byTeam).sort((a, b) => byTeam[b].length - byTeam[a].length);
+  if (!teams.length) L.push("- ไม่มีประเด็นค้าง");
+  teams.forEach((tm) => {
+    const list = byTeam[tm];
+    const assigned = list.filter((e) => teamOf(e) === tm).length;
+    L.push(`### ${tm} (${list.length} เรื่อง${assigned < list.length ? ` · แนะนำ ${list.length - assigned}` : ""})`);
+    L.push("- **ปัญหาที่เกี่ยวข้อง:**");
+    list.slice(0, 8).forEach((e) => L.push(`- [${e.branch}] ${short(e.category)} (${e.priority}): ${e.support}`));
+    if (list.length > 8) L.push(`- และอีก ${list.length - 8} เรื่อง`);
+    const steps = [...new Set(list.flatMap((e) => PLAYBOOK[e.category]?.steps ?? []))];
+    L.push(`- **แนวทางแก้ไขเบื้องต้น:** ${steps.slice(0, 4).join(" / ")}`);
+    const pr = list.some((e) => e.priority === "High") ? "High" : list.some((e) => e.priority === "Medium") ? "Medium" : "Low";
+    L.push(`- **กำหนดเวลาแนะนำ:** ${DUE[pr]}`);
+  });
+
+  L.push("## ปัญหาที่เกิดซ้ำหลายสาขา (ควรแก้ระดับส่วนกลาง)");
+  const multi = Q4_CATEGORY_NAMES.map((c) => [c, [...new Set(entries.filter((e) => e.category === c).map((e) => e.branch))]] as const)
+    .filter(([, b]) => b.length >= 2).sort((a, b) => b[1].length - a[1].length);
+  if (!multi.length) L.push("- ยังไม่พบ");
+  multi.forEach(([c, b]) => L.push(`- **${short(c)}** ${b.length} สาขา (${b.join(", ")}): ${PLAYBOOK[c]?.steps[0] ?? ""}`));
+
+  L.push("## สิ่งที่ยังขาด");
+  L.push(missing.length ? `- สาขา/ทีมที่ยังไม่ส่ง: ${missing.join(", ")}` : "- ทุกสาขา/ทีมส่งข้อมูลแล้ว");
+  const unassigned = open.filter((e) => !teamOf(e)).length;
+  if (unassigned) L.push(`- ประเด็นที่ยังไม่มอบหมายทีม: ${unassigned} เรื่อง (ทีมด้านบนเป็นทีมที่ระบบแนะนำ)`);
+  return L.join("\n");
+}
+
+function printSummary(title: string, meta: string, html: string) {
+  const w = window.open("", "_blank");
+  if (!w) return;
+  w.document.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><title>${escHtml(title)}</title>
+<style>body{font-family:Sarabun,"Leelawadee UI",Tahoma,sans-serif;max-width:820px;margin:32px auto;padding:0 24px;color:#14232E;line-height:1.6}
+h1{font-size:22px;margin:0 0 4px}h3{font-size:18px;margin:22px 0 6px;border-bottom:2px solid #E23744;padding-bottom:4px}
+h4{font-size:16px;margin:14px 0 4px}ul{margin:4px 0 8px;padding-left:22px}p{margin:4px 0}.meta{color:#5B6C79;font-size:13px}</style></head>
+<body><h1>${escHtml(title)}</h1><p class="meta">${escHtml(meta)}</p>${html}</body></html>`);
+  w.document.close();
+  w.focus();
+  setTimeout(() => w.print(), 300);
+}
+
+const proseCls = "mt-3 border-t border-border pt-3 text-[15px] leading-relaxed [&_b]:font-bold [&_h3]:mb-1.5 [&_h3]:mt-5 [&_h3]:border-b-2 [&_h3]:border-[#E23744] [&_h3]:pb-1 [&_h3]:text-lg [&_h3]:font-bold [&_h4]:mb-1 [&_h4]:mt-3 [&_h4]:font-bold [&_li]:my-0.5 [&_p]:my-1 [&_ul]:list-disc [&_ul]:pl-5";
+
+function AutoSummaryPanel({
+  entries, statusOf, teamOf,
+}: { entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string }) {
+  const t = useT();
+  const [copied, setCopied] = useState(false);
+  const md = useMemo(() => buildAutoSummary(entries, statusOf, teamOf), [entries, statusOf, teamOf]);
+  const html = useMemo(() => mdToHtml(md), [md]);
+  if (!entries.length) return null;
+  const meta = `สรุปอัตโนมัติจาก ${entries.length} ประเด็น · ${fmt(new Date().toISOString())}`;
+  return (
+    <div className={card}>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-bold">{t("สรุปผลและแนวทางแก้ไขเบื้องต้น (อัตโนมัติ)", "Auto summary & first-step solutions")}</h2>
+          <p className="text-sm text-muted">{t("อัปเดตสดตามข้อมูลล่าสุด ไม่มีค่าใช้จ่าย · ทีมในวงเล็บ \"แนะนำ\" คือทีมที่ระบบเสนอเมื่อยังไม่มอบหมาย", "Live, free. Suggested teams shown when not yet assigned")}</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button onClick={() => printSummary("สรุปผลและแนวทาง Support: Q4 & ปีใหม่", meta, html)} className="rounded-lg border border-border px-3 py-2 text-sm font-semibold">
+            {t("พิมพ์ / บันทึก PDF", "Print / PDF")}
+          </button>
+          <button onClick={async () => { try { await navigator.clipboard.writeText(md); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* ignore */ } }}
+            className="rounded-lg border border-border px-3 py-2 text-sm font-semibold">
+            {copied ? t("คัดลอกแล้ว ✓", "Copied ✓") : t("คัดลอกข้อความ", "Copy text")}
+          </button>
+        </div>
+      </div>
+      <div className={proseCls} dangerouslySetInnerHTML={{ __html: html }} />
+    </div>
+  );
+}
+
+function buildClaudePrompt(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teamOf: (e: Q4Entry) => string): string {
+  const responded = new Set(entries.map((e) => e.branch));
+  const missing = Q4_BRANCHES.filter((b) => !responded.has(b));
+  const data = entries.map((x) => ({
+    branch: x.branch, area: x.service_area, category: x.category, priority: x.priority, period: x.period,
+    issue: x.issue, impact: x.impact, support_needed: x.support, team_prep: x.prep, notes: x.notes,
+    status: statusOf(x), assigned_team: teamOf(x) || null,
+  }));
+  return `คุณเป็นนักวิเคราะห์ Operation ของ Airportels (บริการรับฝากและส่งกระเป๋า มีสาขาที่สนามบินและในเมือง)
+ส่วนกลางกำลังวางแผน Support ทุกสาขาสำหรับ Q4 และช่วงปีใหม่ ด้านล่างคือประเด็นที่สาขา/ทีมแจ้งเข้ามา (JSON)
+จำนวนประเด็น: ${entries.length} | ส่งแล้ว: ${responded.size}/${Q4_BRANCHES.length} | ยังไม่ส่ง: ${missing.join(", ") || "ไม่มี"}
+ทีมที่รับผิดชอบได้: ${Q4_TEAMS.filter((x) => x !== "Other").join(", ")}
+
+เขียนสรุปภาษาไทยเพื่อนำเสนอในที่ประชุมทุกทีม ใช้ markdown เฉพาะ "## " "### " bullet "- " และ **ตัวหนา** ห้ามใช้ตาราง
+โครงสร้าง:
+## ภาพรวม
+## ประเด็นเร่งด่วนที่ต้องตัดสินใจก่อน Peak
+## แนวทางแก้ไขเบื้องต้น แยกตามทีม (ใช้ "### ชื่อทีม" แต่ละทีมมี ปัญหาที่เกี่ยวข้อง / แนวทางแก้ไขเบื้องต้น / สิ่งที่ต้องเตรียมและกำหนดเวลา)
+## ปัญหาที่เกิดซ้ำหลายสาขา
+## Timeline แนะนำ (ก่อน 1 ธ.ค. / 1-20 ธ.ค. / ช่วง Peak 20 ธ.ค. - 5 ม.ค.)
+## สิ่งที่ยังขาดข้อมูล
+อ้างอิงเฉพาะข้อมูลที่ให้มา ห้ามแต่งตัวเลขหรือเหตุการณ์ ข้อเสนอของคุณเองให้เขียนเป็นข้อแนะนำ
+
+DATA:
+${JSON.stringify(data)}`;
+}
+
+function ClaudeSummaryPanel({
+  entries, statusOf, teamOf, analysis, isAdmin, total, onSave,
+}: {
+  entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string;
+  analysis: Q4Analysis | null; isAdmin: boolean; total: number; onSave: (content: string) => Promise<boolean>;
+}) {
+  const t = useT();
+  const [copied, setCopied] = useState(false);
+  const [pasting, setPasting] = useState(false);
+  const [draft, setDraft] = useState("");
+  const html = useMemo(() => (analysis ? mdToHtml(analysis.content) : ""), [analysis]);
+  if (!analysis && !isAdmin) return null;
+
+  async function copyPrompt() {
+    const text = buildClaudePrompt(entries, statusOf, teamOf);
+    try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 3000); }
+    catch { window.prompt(t("คัดลอกข้อความนี้", "Copy this"), text); }
+  }
+
+  return (
+    <div className={card}>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-bold">{t("สรุปเชิงลึกจาก Claude", "In-depth summary from Claude")}</h2>
+          <p className="text-sm text-muted">
+            {analysis
+              ? `${t("บันทึกเมื่อ", "Saved")} ${fmt(analysis.created_at)} · ${t("จาก", "from")} ${analysis.entry_count} ${t("ประเด็น", "issues")}`
+              : t("ใช้ Claude ที่มีอยู่ (claude.ai) วิเคราะห์ แล้ววางผลกลับมาให้ทุกทีมเห็น ไม่มีค่าใช้จ่ายเพิ่ม", "Use your existing claude.ai to analyse, then paste the result here")}
+          </p>
+          {analysis && analysis.entry_count !== total && (
+            <p className="mt-1 text-sm font-semibold text-[#E23744]">{t(`ตอนนี้มี ${total} ประเด็นแล้ว`, `Now ${total} issues`)}</p>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {isAdmin && (
+            <>
+              <button onClick={copyPrompt} disabled={!total}
+                className="rounded-lg bg-[#14232E] px-3 py-2 text-sm font-semibold text-[#CFE2F3] disabled:opacity-50">
+                {copied ? t("คัดลอกแล้ว ✓ ไปวางใน claude.ai", "Copied ✓ paste in claude.ai") : t("① คัดลอกข้อมูลไปถาม Claude", "① Copy data for Claude")}
+              </button>
+              <button onClick={() => setPasting((v) => !v)} className="rounded-lg bg-[#E23744] px-3 py-2 text-sm font-semibold text-white">
+                {t("② วางผลจาก Claude", "② Paste Claude's result")}
+              </button>
+            </>
+          )}
+          {analysis && (
+            <button onClick={() => printSummary("สรุปวิเคราะห์เพื่อวางแผน Support: Q4 & ปีใหม่", `จาก ${analysis.entry_count} ประเด็น · ${fmt(analysis.created_at)}`, html)}
+              className="rounded-lg border border-border px-3 py-2 text-sm font-semibold">
+              {t("พิมพ์ / บันทึก PDF", "Print / PDF")}
+            </button>
+          )}
+        </div>
+      </div>
+      {isAdmin && pasting && (
+        <div className="mt-3 rounded-lg bg-surface-2 p-3">
+          <p className="mb-2 text-sm text-muted">
+            {t("วิธีใช้: กด ① แล้วเปิด claude.ai วางข้อความ (Ctrl+V) ส่ง รอคำตอบ จากนั้นกดปุ่มคัดลอกใต้คำตอบของ Claude แล้ววางในช่องนี้ กดบันทึก", "Press ①, paste into claude.ai, copy the reply, paste here and save")}
+          </p>
+          <textarea rows={8} value={draft} onChange={(e) => setDraft(e.target.value)}
+            className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm" placeholder={t("วางคำตอบจาก Claude ที่นี่", "Paste Claude's answer here")} />
+          <div className="mt-2 flex gap-2">
+            <button disabled={!draft.trim()} onClick={async () => { if (await onSave(draft)) { setDraft(""); setPasting(false); } }}
+              className="rounded-lg bg-[#14232E] px-4 py-2 text-sm font-semibold text-[#CFE2F3] disabled:opacity-50">
+              {t("บันทึกให้ทุกทีมเห็น", "Save for all teams")}
+            </button>
+            <button onClick={() => setPasting(false)} className="rounded-lg border border-border px-4 py-2 text-sm font-semibold">{t("ยกเลิก", "Cancel")}</button>
+          </div>
+        </div>
+      )}
+      {analysis && <div className={proseCls} dangerouslySetInnerHTML={{ __html: html }} />}
     </div>
   );
 }
