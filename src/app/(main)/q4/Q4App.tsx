@@ -1098,63 +1098,87 @@ const PLAYBOOK: Record<string, { team: string; steps: string[] }> = {
 };
 const DUE: Record<string, string> = { High: "ก่อน 1 ธ.ค.", Medium: "1-20 ธ.ค.", Low: "ทบทวนหลัง Peak" };
 
-function buildAutoSummary(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teamOf: (e: Q4Entry) => string): string {
+type TeamPlan = { team: string; items: Q4Entry[]; suggested: number; high: number; due: string; steps: string[] };
+type AutoData = {
+  total: number; responded: number; high: number; open: number; unassigned: number;
+  missing: string[]; urgent: Q4Entry[]; teams: TeamPlan[];
+  repeated: { category: string; branches: string[]; step: string }[];
+};
+
+const clean = (x: string | null | undefined) => (x ?? "").replace(/\s+/g, " ").trim();
+
+function computeAuto(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teamOf: (e: Q4Entry) => string): AutoData {
   const open = entries.filter((e) => !Q4_CLOSED.has(statusOf(e)));
-  const L: string[] = [];
-  const count = (xs: string[]) => {
-    const m: Record<string, number> = {};
-    xs.forEach((x) => { m[x] = (m[x] || 0) + 1; });
-    return Object.entries(m).sort((a, b) => b[1] - a[1]);
-  };
   const responded = new Set(entries.map((e) => e.branch));
-  const missing = Q4_BRANCHES.filter((b) => !responded.has(b));
-  const cats = count(entries.map((e) => short(e.category)));
-  const brs = count(entries.map((e) => e.branch));
-  const periods = entries.map((e) => e.period).filter(Boolean) as string[];
-
-  L.push("## ภาพรวม");
-  L.push(`- ทั้งหมด **${entries.length} ประเด็น** จาก ${responded.size}/${Q4_BRANCHES.length} สาขา/ทีม · High ${entries.filter((e) => e.priority === "High").length} · ยังไม่ปิด ${open.length}`);
-  if (cats.length) L.push(`- หมวดที่แจ้งมากสุด: ${cats.slice(0, 3).map(([k, v]) => `**${k}** (${v})`).join(", ")}`);
-  if (brs.length) L.push(`- สาขาที่แจ้งมากสุด: ${brs.slice(0, 3).map(([k, v]) => `**${k}** (${v})`).join(", ")}`);
-  if (periods.length) L.push(`- ช่วงเวลาที่ถูกระบุ: ${[...new Set(periods)].slice(0, 5).join(" · ")}`);
-
-  const hi = open.filter((e) => e.priority === "High");
-  L.push("## ประเด็นเร่งด่วนก่อน Peak (High ที่ยังไม่ปิด)");
-  if (!hi.length) L.push("- ไม่มี");
-  hi.forEach((e) => L.push(`- **[${e.branch}] ${short(e.category)}:** ${e.support}`));
-
-  L.push("## แนวทางแก้ไขเบื้องต้น แยกตามทีม");
+  const rank: Record<string, number> = { High: 0, Medium: 1, Low: 2 };
   const byTeam: Record<string, Q4Entry[]> = {};
   open.forEach((e) => {
     const tm = teamOf(e) || (PLAYBOOK[e.category]?.team ?? "OP");
     (byTeam[tm] = byTeam[tm] || []).push(e);
   });
-  const teams = Object.keys(byTeam).sort((a, b) => byTeam[b].length - byTeam[a].length);
-  if (!teams.length) L.push("- ไม่มีประเด็นค้าง");
-  teams.forEach((tm) => {
-    const list = byTeam[tm];
-    const assigned = list.filter((e) => teamOf(e) === tm).length;
-    L.push(`### ${tm} (${list.length} เรื่อง${assigned < list.length ? ` · แนะนำ ${list.length - assigned}` : ""})`);
-    L.push("- **ปัญหาที่เกี่ยวข้อง:**");
-    list.slice(0, 8).forEach((e) => L.push(`- [${e.branch}] ${short(e.category)} (${e.priority}): ${e.support}`));
-    if (list.length > 8) L.push(`- และอีก ${list.length - 8} เรื่อง`);
-    const steps = [...new Set(list.flatMap((e) => PLAYBOOK[e.category]?.steps ?? []))];
-    L.push(`- **แนวทางแก้ไขเบื้องต้น:** ${steps.slice(0, 4).join(" / ")}`);
-    const pr = list.some((e) => e.priority === "High") ? "High" : list.some((e) => e.priority === "Medium") ? "Medium" : "Low";
-    L.push(`- **กำหนดเวลาแนะนำ:** ${DUE[pr]}`);
+  const teams: TeamPlan[] = Object.entries(byTeam).map(([team, items]) => {
+    items.sort((a, b) => rank[a.priority] - rank[b.priority] || a.branch.localeCompare(b.branch));
+    const high = items.filter((e) => e.priority === "High").length;
+    const pr = high ? "High" : items.some((e) => e.priority === "Medium") ? "Medium" : "Low";
+    return {
+      team, items, high, due: DUE[pr],
+      suggested: items.filter((e) => teamOf(e) !== team).length,
+      steps: [...new Set(items.flatMap((e) => PLAYBOOK[e.category]?.steps ?? []))].slice(0, 4),
+    };
+  }).sort((a, b) => b.high - a.high || b.items.length - a.items.length);
+  const repeated = Q4_CATEGORY_NAMES
+    .map((c) => ({ category: c, branches: [...new Set(entries.filter((e) => e.category === c).map((e) => e.branch))], step: PLAYBOOK[c]?.steps[0] ?? "" }))
+    .filter((r) => r.branches.length >= 2)
+    .sort((a, b) => b.branches.length - a.branches.length);
+  return {
+    total: entries.length, responded: responded.size,
+    high: entries.filter((e) => e.priority === "High").length,
+    open: open.length, unassigned: open.filter((e) => !teamOf(e)).length,
+    missing: Q4_BRANCHES.filter((b) => !responded.has(b)),
+    urgent: open.filter((e) => e.priority === "High").sort((a, b) => a.branch.localeCompare(b.branch)),
+    teams, repeated,
+  };
+}
+
+// Plain-text version (for copy into LINE / Lark)
+function autoToText(d: AutoData, statusOf: (e: Q4Entry) => string, only: string): string {
+  const L: string[] = [];
+  const teams = only ? d.teams.filter((t) => t.team === only) : d.teams;
+  L.push(`สรุปแผน Support Q4 & ปีใหม่${only ? ` · ทีม ${only}` : ""}`);
+  L.push(`ทั้งหมด ${d.total} ประเด็น · ส่งแล้ว ${d.responded}/${Q4_BRANCHES.length} สาขา · High ${d.high} · ยังไม่ปิด ${d.open}`);
+  teams.forEach((t) => {
+    L.push("", `■ ทีม ${t.team} (${t.items.length} เรื่อง · High ${t.high} · กำหนด ${t.due})`);
+    L.push(`แนวทาง: ${t.steps.join(" / ")}`);
+    t.items.forEach((e, i) => L.push(`${i + 1}. [${e.branch}] ${short(e.category)} (${e.priority}, ${statusOf(e)}): ${clean(e.support)}`));
   });
-
-  L.push("## ปัญหาที่เกิดซ้ำหลายสาขา (ควรแก้ระดับส่วนกลาง)");
-  const multi = Q4_CATEGORY_NAMES.map((c) => [c, [...new Set(entries.filter((e) => e.category === c).map((e) => e.branch))]] as const)
-    .filter(([, b]) => b.length >= 2).sort((a, b) => b[1].length - a[1].length);
-  if (!multi.length) L.push("- ยังไม่พบ");
-  multi.forEach(([c, b]) => L.push(`- **${short(c)}** ${b.length} สาขา (${b.join(", ")}): ${PLAYBOOK[c]?.steps[0] ?? ""}`));
-
-  L.push("## สิ่งที่ยังขาด");
-  L.push(missing.length ? `- สาขา/ทีมที่ยังไม่ส่ง: ${missing.join(", ")}` : "- ทุกสาขา/ทีมส่งข้อมูลแล้ว");
-  const unassigned = open.filter((e) => !teamOf(e)).length;
-  if (unassigned) L.push(`- ประเด็นที่ยังไม่มอบหมายทีม: ${unassigned} เรื่อง (ทีมด้านบนเป็นทีมที่ระบบแนะนำ)`);
   return L.join("\n");
+}
+
+// Printable HTML (A4, tables) for presenting
+function autoToPrintHtml(d: AutoData, statusOf: (e: Q4Entry) => string, only: string): string {
+  const teams = only ? d.teams.filter((t) => t.team === only) : d.teams;
+  const pri = (p: string) => `<span class="pri ${p}">${p}</span>`;
+  const row = (e: Q4Entry) =>
+    `<tr><td class="b">${escHtml(e.branch)}</td><td>${escHtml(short(e.category))}</td><td>${pri(e.priority)}</td><td>${escHtml(clean(e.support))}</td><td>${escHtml(statusOf(e))}</td></tr>`;
+  const head = `<tr><th>สาขา</th><th>หมวด</th><th>Priority</th><th>ต้องการให้ส่วนกลาง Support</th><th>สถานะ</th></tr>`;
+  let h = `<div class="kpis">
+    <div><b>${d.total}</b><span>ประเด็นทั้งหมด</span></div>
+    <div><b>${d.responded}/${Q4_BRANCHES.length}</b><span>สาขา/ทีมที่ส่ง</span></div>
+    <div class="red"><b>${d.high}</b><span>High</span></div>
+    <div><b>${d.open}</b><span>ยังไม่ปิด</span></div></div>`;
+  if (!only && d.urgent.length) h += `<h2>ประเด็นเร่งด่วนก่อน Peak</h2><table>${head}${d.urgent.map(row).join("")}</table>`;
+  h += `<h2>แผนแยกตามทีม</h2>`;
+  teams.forEach((t) => {
+    h += `<div class="team"><h3>${escHtml(t.team)} <small>${t.items.length} เรื่อง · High ${t.high} · กำหนด ${escHtml(t.due)}</small></h3>
+      <p class="steps"><b>แนวทางแก้ไขเบื้องต้น:</b> ${t.steps.map(escHtml).join(" · ")}</p>
+      <table>${head}${t.items.map(row).join("")}</table></div>`;
+  });
+  if (!only && d.repeated.length) {
+    h += `<h2>ปัญหาที่เกิดซ้ำหลายสาขา</h2><table><tr><th>หมวด</th><th>จำนวนสาขา</th><th>สาขา</th><th>แนวทางระดับส่วนกลาง</th></tr>${
+      d.repeated.map((r) => `<tr><td class="b">${escHtml(short(r.category))}</td><td>${r.branches.length}</td><td>${escHtml(r.branches.join(", "))}</td><td>${escHtml(r.step)}</td></tr>`).join("")}</table>`;
+  }
+  if (!only && d.missing.length) h += `<p class="miss"><b>ยังไม่ส่งข้อมูล:</b> ${escHtml(d.missing.join(", "))}</p>`;
+  return h;
 }
 
 function printSummary(title: string, meta: string, html: string) {
@@ -1163,7 +1187,17 @@ function printSummary(title: string, meta: string, html: string) {
   w.document.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><title>${escHtml(title)}</title>
 <style>body{font-family:Sarabun,"Leelawadee UI",Tahoma,sans-serif;max-width:820px;margin:32px auto;padding:0 24px;color:#14232E;line-height:1.6}
 h1{font-size:22px;margin:0 0 4px}h3{font-size:18px;margin:22px 0 6px;border-bottom:2px solid #E23744;padding-bottom:4px}
-h4{font-size:16px;margin:14px 0 4px}ul{margin:4px 0 8px;padding-left:22px}p{margin:4px 0}.meta{color:#5B6C79;font-size:13px}</style></head>
+h4{font-size:16px;margin:14px 0 4px}ul{margin:4px 0 8px;padding-left:22px}p{margin:4px 0}.meta{color:#5B6C79;font-size:13px}
+h2{font-size:18px;margin:24px 0 8px;padding-bottom:4px;border-bottom:2px solid #E23744}
+.team h3{border:0;margin:18px 0 4px;font-size:16px}.team h3 small{font-weight:400;color:#5B6C79;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0 10px;page-break-inside:auto}tr{page-break-inside:avoid}
+th{background:#14232E;color:#fff;text-align:left;padding:6px 8px;font-weight:600}td{border-bottom:1px solid #D6E2EC;padding:6px 8px;vertical-align:top}
+td.b{font-weight:700;white-space:nowrap}.pri{color:#fff;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700}
+.pri.High{background:#E23744}.pri.Medium{background:#D9912B}.pri.Low{background:#4F86B5}
+.kpis{display:flex;gap:10px;margin:12px 0}.kpis div{flex:1;border:1px solid #D6E2EC;border-radius:8px;padding:8px 12px}
+.kpis b{display:block;font-size:24px}.kpis span{font-size:12px;color:#5B6C79}.kpis .red b{color:#E23744}
+.steps{background:#F3F7FB;border-radius:6px;padding:6px 10px;font-size:13px}.miss{margin-top:16px;font-size:13px}
+@page{size:A4;margin:14mm}</style></head>
 <body><h1>${escHtml(title)}</h1><p class="meta">${escHtml(meta)}</p>${html}</body></html>`);
   w.document.close();
   w.focus();
@@ -1176,29 +1210,151 @@ function AutoSummaryPanel({
   entries, statusOf, teamOf,
 }: { entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string }) {
   const t = useT();
+  const [only, setOnly] = useState("");
   const [copied, setCopied] = useState(false);
-  const md = useMemo(() => buildAutoSummary(entries, statusOf, teamOf), [entries, statusOf, teamOf]);
-  const html = useMemo(() => mdToHtml(md), [md]);
+  const d = useMemo(() => computeAuto(entries, statusOf, teamOf), [entries, statusOf, teamOf]);
   if (!entries.length) return null;
-  const meta = `สรุปอัตโนมัติจาก ${entries.length} ประเด็น · ${fmt(new Date().toISOString())}`;
+  const teams = only ? d.teams.filter((x) => x.team === only) : d.teams;
+  const th = "bg-[#14232E] px-3 py-2 text-left text-xs font-semibold text-white whitespace-nowrap";
+  const td = "border-b border-border px-3 py-2 align-top text-sm";
+  const priCls = (p: string) => `inline-block rounded px-1.5 py-0.5 text-[11px] font-bold text-white ${PRI_STYLE[p]}`;
+  const title = `สรุปแผน Support: Q4 & ปีใหม่${only ? ` · ทีม ${only}` : ""}`;
+  const meta = `จาก ${d.total} ประเด็น · ${fmt(new Date().toISOString())}`;
+
+  const issueTable = (rows: Q4Entry[], showTeam = false) => (
+    <div className="overflow-x-auto rounded-lg border border-border">
+      <table className="w-full border-collapse">
+        <thead><tr>
+          <th className={th}>{t("สาขา", "Branch")}</th><th className={th}>{t("หมวด", "Category")}</th>
+          <th className={th}>Priority</th><th className={`${th} min-w-[260px]`}>{t("ต้องการให้ส่วนกลาง Support", "Support needed")}</th>
+          {showTeam && <th className={th}>{t("ทีม", "Team")}</th>}
+          <th className={th}>{t("สถานะ", "Status")}</th>
+        </tr></thead>
+        <tbody>
+          {rows.map((e) => (
+            <tr key={e.id} className="even:bg-surface-2/60">
+              <td className={`${td} whitespace-nowrap font-bold`}>{e.branch}</td>
+              <td className={`${td} whitespace-nowrap`}>{short(e.category)}</td>
+              <td className={td}><span className={priCls(e.priority)}>{e.priority}</span></td>
+              <td className={td}><span className="line-clamp-3" title={clean(e.support)}>{clean(e.support)}</span></td>
+              {showTeam && <td className={`${td} whitespace-nowrap`}>{teamOf(e) || <span className="text-muted">{PLAYBOOK[e.category]?.team} *</span>}</td>}
+              <td className={`${td} whitespace-nowrap text-xs`}>{Q4_STATUS_TH[statusOf(e)]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
   return (
     <div className={card}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold">{t("สรุปผลและแนวทางแก้ไขเบื้องต้น (อัตโนมัติ)", "Auto summary & first-step solutions")}</h2>
-          <p className="text-sm text-muted">{t("อัปเดตสดตามข้อมูลล่าสุด ไม่มีค่าใช้จ่าย · ทีมในวงเล็บ \"แนะนำ\" คือทีมที่ระบบเสนอเมื่อยังไม่มอบหมาย", "Live, free. Suggested teams shown when not yet assigned")}</p>
+          <h2 className="text-lg font-bold">{t("สรุปผลและแนวทางแก้ไขเบื้องต้น", "Summary & first-step solutions")}</h2>
+          <p className="text-sm text-muted">{t("อัปเดตสดตามข้อมูลล่าสุด · เลือกทีมเพื่อนำเสนอเฉพาะทีมที่เกี่ยวข้อง", "Live. Pick a team to present only its part")}</p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <button onClick={() => printSummary("สรุปผลและแนวทาง Support: Q4 & ปีใหม่", meta, html)} className="rounded-lg border border-border px-3 py-2 text-sm font-semibold">
+        <div className="flex flex-wrap items-center gap-2">
+          <select value={only} onChange={(e) => setOnly(e.target.value)} className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-semibold">
+            <option value="">{t("ทุกทีม (ภาพรวม)", "All teams")}</option>
+            {d.teams.map((x) => <option key={x.team} value={x.team}>{x.team} ({x.items.length})</option>)}
+          </select>
+          <button onClick={() => printSummary(title, meta, autoToPrintHtml(d, statusOf, only))}
+            className="rounded-lg bg-[#14232E] px-3 py-2 text-sm font-semibold text-[#CFE2F3]">
             {t("พิมพ์ / บันทึก PDF", "Print / PDF")}
           </button>
-          <button onClick={async () => { try { await navigator.clipboard.writeText(md); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* ignore */ } }}
+          <button onClick={async () => { try { await navigator.clipboard.writeText(autoToText(d, statusOf, only)); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* ignore */ } }}
             className="rounded-lg border border-border px-3 py-2 text-sm font-semibold">
             {copied ? t("คัดลอกแล้ว ✓", "Copied ✓") : t("คัดลอกข้อความ", "Copy text")}
           </button>
         </div>
       </div>
-      <div className={proseCls} dangerouslySetInnerHTML={{ __html: html }} />
+
+      {/* KPIs */}
+      <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-5">
+        {([
+          [String(d.total), t("ประเด็นทั้งหมด", "Issues"), ""],
+          [`${d.responded}/${Q4_BRANCHES.length}`, t("สาขา/ทีมที่ส่ง", "Responded"), ""],
+          [String(d.high), "High", "text-[#E23744]"],
+          [String(d.open), t("ยังไม่ปิด", "Open"), ""],
+          [String(d.unassigned), t("ยังไม่มอบหมายทีม", "Unassigned"), d.unassigned ? "text-[#D9912B]" : ""],
+        ] as const).map(([v, k, c]) => (
+          <div key={k} className="rounded-lg border border-border px-3 py-2">
+            <div className={`text-2xl font-extrabold ${c}`}>{v}</div>
+            <div className="text-xs text-muted">{k}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Urgent */}
+      {!only && d.urgent.length > 0 && (
+        <section className="mt-6">
+          <h3 className="mb-2 flex items-center gap-2 text-base font-bold">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#E23744]" />
+            {t("ประเด็นเร่งด่วนก่อน Peak", "Urgent before peak")} <span className="text-sm font-normal text-muted">({d.urgent.length})</span>
+          </h3>
+          {issueTable(d.urgent, true)}
+          <p className="mt-1 text-xs text-muted">* {t("ทีมที่ระบบแนะนำ (ยังไม่มอบหมาย)", "Suggested team (not yet assigned)")}</p>
+        </section>
+      )}
+
+      {/* Per team */}
+      <section className="mt-6">
+        <h3 className="mb-2 text-base font-bold">{t("แผนแยกตามทีม", "Plan by team")}</h3>
+        <div className="space-y-4">
+          {teams.map((x) => (
+            <div key={x.team} className="overflow-hidden rounded-xl border border-border">
+              <div className="flex flex-wrap items-center justify-between gap-2 bg-[#14232E] px-4 py-2.5 text-[#E9F1F8]">
+                <span className="text-base font-bold">{x.team}</span>
+                <span className="flex flex-wrap gap-1.5 text-xs">
+                  <span className="rounded-full bg-white/15 px-2 py-0.5">{x.items.length} {t("เรื่อง", "issues")}</span>
+                  {x.high > 0 && <span className="rounded-full bg-[#E23744] px-2 py-0.5 font-bold">High {x.high}</span>}
+                  {x.suggested > 0 && <span className="rounded-full bg-[#D9912B] px-2 py-0.5">{t("แนะนำ", "suggested")} {x.suggested}</span>}
+                  <span className="rounded-full bg-[#CFE2F3] px-2 py-0.5 font-semibold text-[#14232E]">{t("กำหนด", "Due")} {x.due}</span>
+                </span>
+              </div>
+              <div className="p-3">
+                <div className="mb-3 rounded-lg bg-surface-2 px-3 py-2 text-sm">
+                  <b>{t("แนวทางแก้ไขเบื้องต้น", "First steps")}</b>
+                  <ul className="mt-1 list-disc pl-5">{x.steps.map((st) => <li key={st}>{st}</li>)}</ul>
+                </div>
+                {issueTable(x.items)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Repeated */}
+      {!only && d.repeated.length > 0 && (
+        <section className="mt-6">
+          <h3 className="mb-2 text-base font-bold">{t("ปัญหาที่เกิดซ้ำหลายสาขา (ควรแก้ระดับส่วนกลาง)", "Repeated across branches")}</h3>
+          <div className="overflow-x-auto rounded-lg border border-border">
+            <table className="w-full border-collapse">
+              <thead><tr>
+                <th className={th}>{t("หมวด", "Category")}</th><th className={th}>{t("สาขา", "Branches")}</th>
+                <th className={`${th} min-w-[240px]`}>{t("แนวทางระดับส่วนกลาง", "Central approach")}</th>
+              </tr></thead>
+              <tbody>
+                {d.repeated.map((r) => (
+                  <tr key={r.category} className="even:bg-surface-2/60">
+                    <td className={`${td} whitespace-nowrap font-bold`}>{short(r.category)} <span className="font-normal text-muted">({r.branches.length})</span></td>
+                    <td className={td}><span className="flex flex-wrap gap-1">{r.branches.map((b) => <span key={b} className="rounded bg-[#CFE2F3] px-1.5 py-0.5 text-xs font-bold text-[#14232E]">{b}</span>)}</span></td>
+                    <td className={td}>{r.step}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {/* Missing */}
+      {!only && d.missing.length > 0 && (
+        <section className="mt-6 flex flex-wrap items-center gap-2 text-sm">
+          <b>{t("ยังไม่ส่งข้อมูล:", "Not yet submitted:")}</b>
+          {d.missing.map((b) => <span key={b} className="rounded border border-dashed border-border px-2 py-0.5 font-semibold text-muted">{b}</span>)}
+        </section>
+      )}
     </div>
   );
 }
