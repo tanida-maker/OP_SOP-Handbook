@@ -1519,7 +1519,7 @@ const PRESENT_TEAMS: { team: string; items: string[] }[] = [
 function PresentationView() {
   const t = useT();
   const deck = useRef<HTMLDivElement>(null);
-  const slide = "q4-slide relative mx-auto flex aspect-video w-full max-w-[1100px] flex-col overflow-hidden rounded-2xl shadow-sm";
+  const slide = "q4-slide relative mx-auto flex min-h-[min(56.25vw,619px)] w-full max-w-[1100px] flex-col rounded-2xl shadow-sm";
   const head = "font-extrabold leading-tight";
 
   return (
@@ -1527,7 +1527,7 @@ function PresentationView() {
       <style>{`
         .q4-slide{font-size:clamp(8px,1.15vw,13px)}
         #q4-deck:fullscreen{background:#0D171F;overflow:auto;padding:2vh 0}
-        #q4-deck:fullscreen .q4-slide{max-width:none;width:96vw;font-size:1.15vw;margin-bottom:2vh}
+        #q4-deck:fullscreen .q4-slide{max-width:none;width:96vw;min-height:54vw;font-size:1.15vw;margin-bottom:2vh}
         @media print{
           @page{size:A4 landscape;margin:6mm}
           body *{visibility:hidden}
@@ -1553,14 +1553,14 @@ function PresentationView() {
 
       <div id="q4-deck" ref={deck} className="space-y-4">
         {/* ---------------- Slide 1: risks ---------------- */}
-        <section className={`${slide} bg-[#14232E] px-[6.5%] pb-[7%] pt-[5.5%] text-[#EEF3F7]`}>
+        <section className={`${slide} bg-[#14232E] px-[6.5%] pb-[3%] pt-[5.5%] text-[#EEF3F7]`}>
           <p className="text-[1.15em] font-semibold text-[#CFE2F3]">Airportels · {PRESENT_DATE}</p>
           <h1 className={`${head} mt-[1.2%] text-[3.4em] text-white`}>เตรียมความพร้อม Q4 &amp; ปีใหม่</h1>
           <p className="mt-[1.6%] text-[1.5em] leading-relaxed text-[#DDE7EF]">
             {PRESENT_LEAD.before}<b className="text-white">{PRESENT_LEAD.b1}</b>{PRESENT_LEAD.mid}<b className="text-white">{PRESENT_LEAD.b2}</b>
             {PRESENT_LEAD.after1}<b className="text-[#FF6B78]">{PRESENT_LEAD.date}</b>{PRESENT_LEAD.after2}
           </p>
-          <div className="mt-auto grid grid-cols-5 gap-[1.2%]">
+          <div className="mt-auto grid grid-cols-5 gap-[1.2%] pt-[3%]">
             {PRESENT_RISKS.map((r) => (
               <div key={r.title} className={`flex flex-col gap-[0.5em] rounded-xl border-t-[0.35em] bg-[#1E3241] p-[7%] ${r.main ? "border-[#E23744]" : "border-[#CFE2F3]"}`}>
                 <h3 className="text-[1.3em] font-bold leading-snug text-white">{r.title}</h3>
@@ -1569,17 +1569,17 @@ function PresentationView() {
               </div>
             ))}
           </div>
-          <p className="absolute bottom-[3.5%] left-[6.5%] text-[1.1em] text-[#8FA6B8]">AI Operation Department · 1 / 2</p>
+          <p className="mt-[2.5%] text-[1.1em] text-[#8FA6B8]">AI Operation Department · 1 / 2</p>
         </section>
 
         {/* ---------------- Slide 2: team support ---------------- */}
-        <section className={`${slide} border border-border bg-[#F4F7FA] px-[6.5%] pb-[7%] pt-[5.5%] text-[#14232E]`}>
+        <section className={`${slide} border border-border bg-[#F4F7FA] px-[6.5%] pb-[3%] pt-[5.5%] text-[#14232E]`}>
           <h2 className={`${head} text-[2.6em]`}>งานที่ต้องการซัพพอตแต่ละทีม</h2>
-          <div className="mt-[2.5%] grid flex-1 grid-cols-3 gap-[1.4%]">
+          <div className="mt-[2.5%] grid grid-cols-3 gap-[1.4%]">
             {PRESENT_TEAMS.map((x) => (
               <div key={x.team} className="flex flex-col gap-[0.5em] rounded-xl border border-[#D6E2EC] border-l-[0.45em] border-l-[#14232E] bg-white px-[6%] py-[5%]">
                 <h3 className="text-[1.5em] font-bold">{x.team}</h3>
-                <ul className="list-disc space-y-[0.3em] pl-[1.1em] text-[1.1em] leading-snug">
+                <ul className="list-disc space-y-[0.3em] pl-[1.1em] text-[1.05em] leading-snug">
                   {x.items.map((it) => <li key={it}>{it}</li>)}
                 </ul>
               </div>
@@ -1589,7 +1589,7 @@ function PresentationView() {
               <p className="text-[1.35em] font-semibold leading-snug">งานเตรียมเสร็จก่อน 30 พ.ย.</p>
             </div>
           </div>
-          <p className="absolute bottom-[3.5%] left-[6.5%] text-[1.1em] text-[#5B6C79]">เตรียมความพร้อม Q4 &amp; ปีใหม่ · 2 / 2</p>
+          <p className="mt-[2.5%] text-[1.1em] text-[#5B6C79]">เตรียมความพร้อม Q4 &amp; ปีใหม่ · 2 / 2</p>
         </section>
       </div>
     </div>
