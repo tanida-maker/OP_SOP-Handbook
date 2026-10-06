@@ -371,7 +371,7 @@ export default function Q4App({
         />
       )}
 
-      {tab === "present" && <PresentationView entries={entries} statusOf={statusOf} teamOf={teamOf} />}
+      {tab === "present" && <PresentationView />}
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-[#14232E] px-4 py-2.5 text-sm text-white shadow-lg">
@@ -1464,57 +1464,83 @@ function ClaudeSummaryPanel({
 }
 
 /* ====================================================================== */
-/* Presentation: 2 short slides (16:9), full-screen + print landscape     */
+/* Presentation: meeting summary (2 slides, 16:9), full-screen + print    */
+/* Content = the agreed meeting deck "สรุปประชุม: เตรียมความพร้อม Q4 & ปีใหม่" */
 /* ====================================================================== */
-const cut = (x: string, n: number) => (x.length > n ? `${x.slice(0, n - 1)}…` : x);
+const PRESENT_DATE = "สรุปประชุม 6 ต.ค. 2569";
+const PRESENT_LEAD = {
+  before: "ความเสี่ยงหลักช่วง Peak คือ ",
+  b1: "กะที่มีพนักงานคนเดียว",
+  mid: " และ ",
+  b2: "พื้นที่เก็บกระเป๋าไม่พอ",
+  after1: " ต้องตัดสินใจเรื่องกำลังคนและอุปกรณ์ภายใน ",
+  date: "31 ต.ค.",
+  after2: " เพราะ BKK, DMK, HKTI และ Online-CS เริ่ม High season ตั้งแต่ พ.ย.",
+};
+const PRESENT_RISKS: { title: string; branches: string; impact: string; main: boolean }[] = [
+  { title: "1. คนไม่พอ / กะคนเดียว", branches: "BKK, DMK, HKTI, CNX, T21, ICS, Online-CS", impact: "คิวยาว ลูกค้าเลิกรอ พนักงานไม่ได้พัก", main: true },
+  { title: "2. พื้นที่เก็บเต็ม", branches: "DMK, BKK, HKTI, CTWG, TPY, CNX", impact: "ต้อง Rotate ไปคลัง เสี่ยงส่งผิด / บางสาขาต้องปฏิเสธลูกค้า", main: true },
+  { title: "3. ระบบ/อุปกรณ์ช้า", branches: "BKK, HKTD, HKTI, CNX, TPY, MBK", impact: "คอมค้าง ข้อมูลหาย ต้องสร้าง Order ใหม่", main: false },
+  { title: "4. เพิ่มรอบรับ-ส่ง / การประสานเข้ารับที่จุด", branches: "Online-CS, HKTI, HKTD, TPY, MIXT", impact: "เข้ารับไม่ทัน 12:00 ภูเก็ตรถติดจนงด Walk-in", main: false },
+  { title: "5. ลูกค้าไม่รู้ทางเลือก", branches: "CTWG, HKTI, T21", impact: "ไม่รู้ว่ามี 2 สาขา ไม่มีโปรช่วยระบายกระเป๋า", main: false },
+];
+const PRESENT_TEAMS: { team: string; items: string[] }[] = [
+  { team: "HR", items: [
+    "กำลังคนสำรอง, Trainee/ Contact Staff ที่ BKK DMK CNX HKT",
+    "Porter BKK กะครบ 24 ชม. · สำรอง DMK (Contact 1 คน) ช่วง Hi-season",
+    "Runner สำรอง · สรรหา Contact 3 เดือน",
+    "ยกวันหยุด ธ.ค. ไปใช้ ม.ค.–ก.ค. 2570",
+  ] },
+  { team: "OP", items: [
+    "Stock Inventory และอุปกรณ์ (รถเข็น ชั้นวาง)",
+    "Queue Card และ Sticker DMK/BKK ตามที่สาขาขอ",
+    "Flow ช่วง X-Ray ที่คิวยาว (CNX)",
+    "แผน Capacity และขั้นตอน Rotate ไปคลัง",
+  ] },
+  { team: "IT & Dev.", items: [
+    "ตรวจอุปกรณ์/ระบบล่วงหน้า เปลี่ยนคอมที่ช้าสำหรับหน้าสาขา & CS",
+    "Laptop/คอมสำรองให้สาขาที่เพิ่มคน",
+    "เพิ่มรูปแบบค้นหา Booking, รายงาน AOT",
+    "Email/WhatsApp Official สาขาภูเก็ต",
+  ] },
+  { team: "Logistic", items: [
+    "เพิ่มเจ้าหน้าที่และรถเข้ารับ รักษา Pickup Time 12:00",
+    "เพิ่มรอบรับ + ทีม Standby ทุกวันช่วง Hi-Season",
+    "รอบรถ HKT ช่วง Festival · แจ้งปิดรับล่วงหน้า > 3 ชม.",
+    "คนขับเข้ารับหน้าร้านเอง แจ้งค่าจอด ไม่แทรกคิวตอนแพ็ค",
+  ] },
+  { team: "MKT & BD", items: [
+    "โปรส่งกระเป๋าระบายพื้นที่ + เพิ่มช่วงปิดรอบ",
+    "Signage CTWH/CTWG · Standee HKTI–HKTD",
+    "หน้าเว็บแจ้งเวลาเข้ารับอาจเปลี่ยนช่วง Peak",
+  ] },
+];
 
-function PresentationView({
-  entries, statusOf, teamOf,
-}: { entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string }) {
+function PresentationView() {
   const t = useT();
   const deck = useRef<HTMLDivElement>(null);
-  const d = useMemo(() => computeAuto(entries, statusOf, teamOf), [entries, statusOf, teamOf]);
-  const cats = useMemo(() => {
-    const m: Record<string, number> = {};
-    entries.forEach((e) => { const k = short(e.category); m[k] = (m[k] || 0) + 1; });
-    return Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 6);
-  }, [entries]);
-  const brs = useMemo(() => {
-    const m: Record<string, number> = {};
-    entries.forEach((e) => { m[e.branch] = (m[e.branch] || 0) + 1; });
-    return Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 5);
-  }, [entries]);
-  const today = new Date().toLocaleDateString("th-TH", { dateStyle: "long" });
-
-  if (!entries.length) {
-    return <div className="rounded-xl border border-dashed border-border px-4 py-12 text-center text-muted">{t("ยังไม่มีข้อมูลสำหรับสร้าง Presentation", "No data yet")}</div>;
-  }
-  const catMax = Math.max(1, ...cats.map((c) => c[1]));
-  const teams = d.teams.slice(0, 6);
-  const moreTeams = d.teams.length - teams.length;
-
-  const slide = "q4-slide relative mx-auto flex aspect-video w-full max-w-[1100px] flex-col overflow-hidden rounded-2xl border border-border bg-white text-[#14232E] shadow-sm";
-  const bandCls = "flex items-center justify-between bg-[#14232E] px-[3%] py-[1.6%] text-[#E9F1F8]";
+  const slide = "q4-slide relative mx-auto flex aspect-video w-full max-w-[1100px] flex-col overflow-hidden rounded-2xl shadow-sm";
+  const head = "font-extrabold leading-tight";
 
   return (
     <div className="space-y-4">
       <style>{`
-        .q4-slide{font-size:clamp(9px,1.25vw,14px)}
+        .q4-slide{font-size:clamp(8px,1.15vw,13px)}
         #q4-deck:fullscreen{background:#0D171F;overflow:auto;padding:2vh 0}
-        #q4-deck:fullscreen .q4-slide{max-width:none;width:96vw;font-size:1.25vw;margin-bottom:2vh;border:0}
+        #q4-deck:fullscreen .q4-slide{max-width:none;width:96vw;font-size:1.15vw;margin-bottom:2vh}
         @media print{
           @page{size:A4 landscape;margin:6mm}
           body *{visibility:hidden}
           #q4-deck,#q4-deck *{visibility:visible}
           #q4-deck{position:absolute;left:0;top:0;width:100%}
-          .q4-slide{max-width:none!important;width:100%!important;font-size:12.5px!important;box-shadow:none!important;border:0!important;
+          .q4-slide{max-width:none!important;width:100%!important;font-size:12px!important;box-shadow:none!important;border-radius:0!important;
             page-break-after:always;break-after:page;-webkit-print-color-adjust:exact;print-color-adjust:exact}
           .q4-noprint{display:none!important}
         }
       `}</style>
 
       <div className="q4-noprint flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm text-muted">{t("สรุปสั้น 2 หน้าสำหรับนำเสนอในที่ประชุม · อัปเดตตามข้อมูลล่าสุด", "2-slide summary for meetings · live data")}</p>
+        <p className="text-sm text-muted">{t("สรุปประชุมสำหรับนำเสนอและแจ้งทุกทีม 2 หน้า", "Meeting summary for all teams, 2 slides")}</p>
         <div className="flex gap-2">
           <button onClick={() => deck.current?.requestFullscreen?.()} className="rounded-lg bg-[#E23744] px-4 py-2 text-sm font-semibold text-white">
             {t("นำเสนอเต็มจอ", "Present full screen")}
@@ -1526,110 +1552,44 @@ function PresentationView({
       </div>
 
       <div id="q4-deck" ref={deck} className="space-y-4">
-        {/* ---------------- Slide 1: overview ---------------- */}
-        <section className={slide}>
-          <div className={bandCls}>
-            <div>
-              <div className="text-[1.05em] font-semibold text-[#CFE2F3]">Airportels · Q4 &amp; New Year Readiness</div>
-              <div className="text-[1.9em] font-extrabold leading-tight">สรุปปัญหาที่สาขาแจ้งเข้ามา</div>
-            </div>
-            <div className="text-right text-[0.95em] text-[#C2D3E2]">{today}<br />1 / 2</div>
+        {/* ---------------- Slide 1: risks ---------------- */}
+        <section className={`${slide} bg-[#14232E] px-[6.5%] pb-[7%] pt-[5.5%] text-[#EEF3F7]`}>
+          <p className="text-[1.15em] font-semibold text-[#CFE2F3]">Airportels · {PRESENT_DATE}</p>
+          <h1 className={`${head} mt-[1.2%] text-[3.4em] text-white`}>เตรียมความพร้อม Q4 &amp; ปีใหม่</h1>
+          <p className="mt-[1.6%] text-[1.5em] leading-relaxed text-[#DDE7EF]">
+            {PRESENT_LEAD.before}<b className="text-white">{PRESENT_LEAD.b1}</b>{PRESENT_LEAD.mid}<b className="text-white">{PRESENT_LEAD.b2}</b>
+            {PRESENT_LEAD.after1}<b className="text-[#FF6B78]">{PRESENT_LEAD.date}</b>{PRESENT_LEAD.after2}
+          </p>
+          <div className="mt-auto grid grid-cols-5 gap-[1.2%]">
+            {PRESENT_RISKS.map((r) => (
+              <div key={r.title} className={`flex flex-col gap-[0.5em] rounded-xl border-t-[0.35em] bg-[#1E3241] p-[7%] ${r.main ? "border-[#E23744]" : "border-[#CFE2F3]"}`}>
+                <h3 className="text-[1.3em] font-bold leading-snug text-white">{r.title}</h3>
+                <p className="text-[1.1em] leading-snug text-[#CFE2F3]">{r.branches}</p>
+                <p className="text-[1.1em] leading-snug text-[#DDE7EF]">{r.impact}</p>
+              </div>
+            ))}
           </div>
-          <div className="grid flex-1 grid-cols-[1fr_1.15fr] gap-[2.5%] p-[3%]">
-            <div className="flex flex-col gap-[4%]">
-              <div className="grid grid-cols-2 gap-[4%]">
-                {([
-                  [String(d.total), "ประเด็นทั้งหมด", ""],
-                  [`${d.responded}/${Q4_BRANCHES.length}`, "สาขา/ทีมที่ส่ง", ""],
-                  [String(d.high), "High priority", "text-[#E23744]"],
-                  [String(d.open), "ยังไม่ปิด", ""],
-                ] as const).map(([v, k, c]) => (
-                  <div key={k} className="rounded-xl border border-[#D6E2EC] px-[8%] py-[6%]">
-                    <div className={`text-[2.6em] font-extrabold leading-none ${c}`}>{v}</div>
-                    <div className="mt-[0.3em] text-[0.95em] text-[#5B6C79]">{k}</div>
-                  </div>
-                ))}
-              </div>
-              <div>
-                <div className="mb-[0.4em] text-[1em] font-bold">สาขาที่แจ้งมากสุด</div>
-                <div className="flex flex-wrap gap-[0.4em]">
-                  {brs.map(([b, n]) => (
-                    <span key={b} className="rounded-md bg-[#CFE2F3] px-[0.6em] py-[0.2em] text-[0.95em] font-bold">{b} <span className="font-normal">· {n}</span></span>
-                  ))}
-                </div>
-              </div>
-              {d.missing.length > 0 && (
-                <div className="text-[0.9em] text-[#5B6C79]"><b className="text-[#14232E]">ยังไม่ส่ง:</b> {d.missing.join(", ")}</div>
-              )}
-            </div>
-            <div className="flex flex-col gap-[4%]">
-              <div>
-                <div className="mb-[0.5em] text-[1em] font-bold">หมวดที่แจ้งมากสุด</div>
-                <div className="space-y-[0.45em]">
-                  {cats.map(([k, v]) => (
-                    <div key={k} className="grid grid-cols-[34%_1fr_2.2em] items-center gap-[0.6em] text-[0.95em]">
-                      <span className="truncate">{k}</span>
-                      <span className="h-[0.75em] overflow-hidden rounded-full bg-[#E9F1F8]">
-                        <span className="block h-full rounded-full bg-[#14232E]" style={{ width: `${(v / catMax) * 100}%` }} />
-                      </span>
-                      <span className="text-right font-bold">{v}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="flex-1 rounded-xl border-l-[0.35em] border-[#E23744] bg-[#E23744]/5 px-[4%] py-[3%]">
-                <div className="mb-[0.4em] text-[1em] font-bold text-[#E23744]">เร่งด่วนก่อน Peak ({d.urgent.length})</div>
-                {d.urgent.length ? (
-                  <ul className="space-y-[0.3em] text-[0.92em]">
-                    {d.urgent.slice(0, 5).map((e) => (
-                      <li key={e.id}><b>[{e.branch}] {short(e.category)}:</b> {cut(clean(e.support), 70)}</li>
-                    ))}
-                    {d.urgent.length > 5 && <li className="text-[#5B6C79]">และอีก {d.urgent.length - 5} เรื่อง</li>}
-                  </ul>
-                ) : <p className="text-[0.92em] text-[#5B6C79]">ไม่มี High ค้าง</p>}
-              </div>
-            </div>
-          </div>
+          <p className="absolute bottom-[3.5%] left-[6.5%] text-[1.1em] text-[#8FA6B8]">AI Operation Department · 1 / 2</p>
         </section>
 
-        {/* ---------------- Slide 2: plan by team ---------------- */}
-        <section className={slide}>
-          <div className={bandCls}>
-            <div>
-              <div className="text-[1.05em] font-semibold text-[#CFE2F3]">Airportels · Q4 &amp; New Year Readiness</div>
-              <div className="text-[1.9em] font-extrabold leading-tight">แผน Support แยกตามทีม</div>
-            </div>
-            <div className="text-right text-[0.95em] text-[#C2D3E2]">{today}<br />2 / 2</div>
-          </div>
-          <div className="flex flex-1 flex-col gap-[2.5%] p-[3%]">
-            <div className="grid flex-1 grid-cols-3 gap-[2%]">
-              {teams.map((x) => (
-                <div key={x.team} className="flex flex-col overflow-hidden rounded-xl border border-[#D6E2EC]">
-                  <div className="flex items-center justify-between gap-[0.4em] bg-[#E9F1F8] px-[5%] py-[3%]">
-                    <span className="text-[1.15em] font-extrabold">{x.team}</span>
-                    <span className="flex gap-[0.3em] text-[0.8em]">
-                      <span className="rounded-full bg-[#14232E] px-[0.55em] py-[0.1em] text-white">{x.items.length}</span>
-                      {x.high > 0 && <span className="rounded-full bg-[#E23744] px-[0.55em] py-[0.1em] font-bold text-white">H {x.high}</span>}
-                    </span>
-                  </div>
-                  <div className="flex flex-1 flex-col px-[5%] py-[3%] text-[0.88em]">
-                    <ul className="list-disc space-y-[0.2em] pl-[1.1em]">
-                      {x.steps.slice(0, 2).map((st) => <li key={st}>{cut(st, 60)}</li>)}
-                    </ul>
-                    <div className="mt-auto pt-[0.4em] text-[0.92em] text-[#5B6C79]">
-                      <b className="text-[#14232E]">กำหนด:</b> {x.due} · <b className="text-[#14232E]">สาขา:</b> {cut([...new Set(x.items.map((e) => e.branch))].join(", "), 40)}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center gap-x-[1.2em] gap-y-[0.3em] rounded-xl bg-[#F3F7FB] px-[2.5%] py-[1.4%] text-[0.9em]">
-              <b>ปัญหาซ้ำหลายสาขา:</b>
-              {d.repeated.slice(0, 4).map((r) => <span key={r.category}>{short(r.category)} <b>({r.branches.length} สาขา)</b></span>)}
-              {!d.repeated.length && <span className="text-[#5B6C79]">ยังไม่พบ</span>}
-              {moreTeams > 0 && <span className="ml-auto text-[#5B6C79]">+ อีก {moreTeams} ทีม ดูในแท็บสรุปผล</span>}
+        {/* ---------------- Slide 2: team support ---------------- */}
+        <section className={`${slide} border border-border bg-[#F4F7FA] px-[6.5%] pb-[7%] pt-[5.5%] text-[#14232E]`}>
+          <h2 className={`${head} text-[2.6em]`}>งานที่ต้องการซัพพอตแต่ละทีม</h2>
+          <div className="mt-[2.5%] grid flex-1 grid-cols-3 gap-[1.4%]">
+            {PRESENT_TEAMS.map((x) => (
+              <div key={x.team} className="flex flex-col gap-[0.5em] rounded-xl border border-[#D6E2EC] border-l-[0.45em] border-l-[#14232E] bg-white px-[6%] py-[5%]">
+                <h3 className="text-[1.5em] font-bold">{x.team}</h3>
+                <ul className="list-disc space-y-[0.3em] pl-[1.1em] text-[1.1em] leading-snug">
+                  {x.items.map((it) => <li key={it}>{it}</li>)}
+                </ul>
+              </div>
+            ))}
+            <div className="flex flex-col justify-center gap-[0.5em] rounded-xl bg-[#E23744] px-[6%] py-[5%] text-white">
+              <h3 className="text-[1.5em] font-bold">ทุกทีม</h3>
+              <p className="text-[1.35em] font-semibold leading-snug">งานเตรียมเสร็จก่อน 30 พ.ย.</p>
             </div>
           </div>
+          <p className="absolute bottom-[3.5%] left-[6.5%] text-[1.1em] text-[#5B6C79]">เตรียมความพร้อม Q4 &amp; ปีใหม่ · 2 / 2</p>
         </section>
       </div>
     </div>
