@@ -11,7 +11,7 @@ export default async function Q4Page({
 }) {
   const { user, isAdmin, fullName } = await getSessionUser();
   const sp = await searchParams;
-  const tab = sp.tab === "list" || sp.tab === "summary" ? sp.tab : "form";
+  const tab = sp.tab === "list" || sp.tab === "summary" || sp.tab === "present" || sp.tab === "team" ? sp.tab : "form";
   return (
     <Q4App
       userId={user?.id ?? null}
@@ -19,6 +19,7 @@ export default async function Q4Page({
       fullName={fullName ?? ""}
       initialTab={tab}
       initialTeam={sp.team ?? ""}
+      external={user?.app_metadata?.q4_external === true}
     />
   );
 }

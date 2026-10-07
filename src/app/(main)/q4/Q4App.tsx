@@ -7,7 +7,7 @@ import { useT } from "@/components/LanguageProvider";
 import {
   Q4_AREA_HELP, Q4_BRANCHES, Q4_CATEGORIES, Q4_CATEGORY_NAMES, Q4_CLOSED, Q4_PRIORITIES,
   Q4_STATUSES, Q4_STATUS_TH, Q4_TEAMS, q4AreasFor,
-  type Q4Entry, type Q4Plan, type Q4Priority, type Q4Review, type Q4TeamMember, type Q4Analysis, type Q4Task,
+  type Q4Entry, type Q4Plan, type Q4Priority, type Q4Review, type Q4TeamMember, type Q4Analysis, type Q4Task, type Q4Attachment,
 } from "@/lib/q4";
 
 type Tab = "form" | "list" | "summary" | "present" | "team";
@@ -33,17 +33,19 @@ const short = (cat: string) => cat.split(" / ")[0];
 const UNASSIGNED = "__none";
 
 export default function Q4App({
-  userId, isAdmin, fullName, initialTab = "form", initialTeam = "",
-}: { userId: string | null; isAdmin: boolean; fullName: string; initialTab?: Tab; initialTeam?: string }) {
+  userId, isAdmin, fullName, initialTab = "form", initialTeam = "", external = false,
+}: { userId: string | null; isAdmin: boolean; fullName: string; initialTab?: Tab; initialTeam?: string; external?: boolean }) {
   const t = useT();
   const supabase = useMemo(() => createClient(), []);
 
-  const [tab, setTab] = useState<Tab>(initialTab);
+  // External Support members (invited by e-mail) only get Summary / Presentation / Support team
+  const [tab, setTab] = useState<Tab>(external && !["summary", "present", "team"].includes(initialTab) ? "team" : initialTab);
   const [entries, setEntries] = useState<Q4Entry[]>([]);
   const [reviews, setReviews] = useState<Record<string, Q4Review>>({});
   const [plans, setPlans] = useState<Record<string, Q4Plan>>({});
   const [notes, setNotes] = useState<Record<string, Record<string, string>>>({});
   const [tasks, setTasks] = useState<Record<string, Record<string, Q4Task>>>({});
+  const [files, setFiles] = useState<Record<string, Q4Attachment[]>>({});
   const [loading, setLoading] = useState(true);
   const [live, setLive] = useState(false);
   const [loadErr, setLoadErr] = useState("");
@@ -73,6 +75,10 @@ export default function Q4App({
     const tkm: Record<string, Record<string, Q4Task>> = {};
     ((tk.data ?? []) as Q4Task[]).forEach((x) => { (tkm[x.entry_id] = tkm[x.entry_id] || {})[x.team] = x; });
     setTasks(tkm);
+    const at = await supabase.from("q4_attachments").select("*").order("created_at");
+    const atm: Record<string, Q4Attachment[]> = {};
+    ((at.data ?? []) as Q4Attachment[]).forEach((x) => { (atm[x.entry_id] = atm[x.entry_id] || []).push(x); });
+    setFiles(atm);
     const rm: Record<string, Q4Review> = {};
     (r.data ?? []).forEach((x) => { rm[(x as Q4Review).entry_id] = x as Q4Review; });
     setReviews(rm);
@@ -110,6 +116,7 @@ export default function Q4App({
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_team_members" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_team_notes" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_team_tasks" }, () => schedule())
+      .on("postgres_changes", { event: "*", schema: "sop", table: "q4_attachments" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_analysis" }, () => schedule())
       .subscribe((status) => setLive(status === "SUBSCRIBED"));
     return () => {
@@ -225,9 +232,14 @@ export default function Q4App({
     let assigned = false;
     const cur = (tasks[id]?.[team]?.assignee_email ?? "").toLowerCase();
     if (assigneeEmail.trim().toLowerCase() !== cur) {
-      const r = await supabase.rpc("q4_assign_task", { p_entry: id, p_team: team, p_email: assigneeEmail.trim() || null });
+      let r = await supabase.rpc("q4_assign_task", { p_entry: id, p_team: team, p_email: assigneeEmail.trim() || null });
+      if (!r.error && r.data === "not_found") {
+        // no account yet: create it and add to the team, then assign
+        if (!(await inviteToTeam(assigneeEmail.trim(), team))) return false;
+        r = await supabase.rpc("q4_assign_task", { p_entry: id, p_team: team, p_email: assigneeEmail.trim() });
+      }
       if (r.error) { flash(t("มอบหมายผู้รับงานไม่สำเร็จ: ", "Assign failed: ") + r.error.message); return false; }
-      if (r.data === "not_found") { flash(t("ไม่พบบัญชีอีเมลนี้ (ต้องเคย Login ระบบตารางงาน)", "No account with this e-mail")); return false; }
+      if (r.data === "not_found") { flash(t("ไม่พบบัญชีอีเมลนี้", "No account with this e-mail")); return false; }
       assigned = true;
     }
     flash(t("อัปเดตแล้ว", "Updated"));
@@ -235,6 +247,42 @@ export default function Q4App({
     notifyLark(id, prev, status, prevTeams, teams, assigned);
     return true;
   }
+
+  // ---------- attachments (Supabase Storage bucket "q4-files", private) ----------
+  async function uploadFiles(entryId: string, team: string, list: FileList | File[]) {
+    let ok = 0;
+    for (const file of Array.from(list)) {
+      if (file.size > 10 * 1024 * 1024) { flash(t(`${file.name} ใหญ่เกิน 10 MB`, `${file.name} is over 10 MB`)); continue; }
+      const safe = file.name.replace(/[^\w.\-]+/g, "_").slice(-80);
+      const path = `${entryId}/${crypto.randomUUID()}-${safe}`;
+      const up = await supabase.storage.from("q4-files").upload(path, file, { contentType: file.type || undefined });
+      if (up.error) { flash(t("อัปโหลดไม่สำเร็จ: ", "Upload failed: ") + up.error.message); continue; }
+      const ins = await supabase.from("q4_attachments").insert({
+        entry_id: entryId, team, path, name: file.name, mime: file.type || null, size: file.size, uploaded_by: userId,
+      });
+      if (ins.error) { await supabase.storage.from("q4-files").remove([path]); flash(t("บันทึกไฟล์ไม่สำเร็จ: ", "Save failed: ") + ins.error.message); continue; }
+      ok++;
+    }
+    if (ok) { flash(t(`อัปโหลดแล้ว ${ok} ไฟล์`, `Uploaded ${ok} file(s)`)); loadAll(); }
+  }
+  async function openFile(a: Q4Attachment) {
+    const r = await supabase.storage.from("q4-files").createSignedUrl(a.path, 60 * 60, { download: false });
+    if (r.error || !r.data) { flash(t("เปิดไฟล์ไม่สำเร็จ", "Could not open file")); return; }
+    window.open(r.data.signedUrl, "_blank", "noopener");
+  }
+  async function downloadFile(a: Q4Attachment) {
+    const r = await supabase.storage.from("q4-files").createSignedUrl(a.path, 60 * 60, { download: a.name });
+    if (r.error || !r.data) { flash(t("ดาวน์โหลดไม่สำเร็จ", "Download failed")); return; }
+    window.location.href = r.data.signedUrl;
+  }
+  async function deleteFile(a: Q4Attachment) {
+    if (!confirm(t(`ลบไฟล์ ${a.name} ใช่ไหม`, `Delete ${a.name}?`))) return;
+    const d = await supabase.from("q4_attachments").delete().eq("id", a.id);
+    if (d.error) { flash(t("ลบไม่สำเร็จ", "Delete failed")); return; }
+    await supabase.storage.from("q4-files").remove([a.path]);
+    loadAll();
+  }
+  const fileOps = { upload: uploadFiles, open: openFile, download: downloadFile, remove: deleteFile };
 
   // Upsert non-empty notes, delete emptied ones, for the given teams only.
   async function writeNotes(id: string, teamNotes: Record<string, string>) {
@@ -277,11 +325,33 @@ export default function Q4App({
     return true;
   }
 
+  // Adds a person to a team; creates a login account for people without one (e.g. external / Gmail).
+  async function inviteToTeam(email: string, team: string): Promise<boolean> {
+    try {
+      const res = await fetch("/api/q4/invite", {
+        method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, team }),
+      });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const map: Record<string, string> = {
+          bad_email: t("อีเมลไม่ถูกต้อง", "Invalid e-mail"),
+          not_allowed: t("เพิ่มได้เฉพาะคนในทีมนี้หรือ Admin", "Only this team or Admin can add"),
+          missing_service_key: t("ยังไม่ได้ตั้งค่า SUPABASE_SERVICE_ROLE_KEY ใน Vercel", "SUPABASE_SERVICE_ROLE_KEY not set"),
+        };
+        flash(map[j.error] ?? t("เพิ่มไม่สำเร็จ: ", "Failed: ") + (j.error ?? res.status));
+        return false;
+      }
+      flash(j.created
+        ? t(`เพิ่ม ${email} แล้ว (บัญชีใหม่) ให้ Login ด้วย Google หรือส่งลิงก์ทางอีเมล`, `Added ${email} (new account)`)
+        : t(`เพิ่ม ${email} เข้าทีม ${team} แล้ว`, `Added ${email} to ${team}`));
+      return true;
+    } catch {
+      flash(t("เชื่อมต่อไม่สำเร็จ", "Connection failed"));
+      return false;
+    }
+  }
   async function addTeamMember(email: string, team: string) {
-    const { data, error } = await supabase.rpc("q4_add_team_member", { p_email: email, p_team: team });
-    if (error) flash(t("เพิ่มไม่สำเร็จ: ", "Failed: ") + error.message);
-    else if (data === "not_found") flash(t("ไม่พบบัญชีอีเมลนี้ (ต้องเคย Login ระบบตารางงานมาก่อน)", "No account with this e-mail"));
-    else { flash(t("เพิ่มผู้รับผิดชอบทีมแล้ว", "Team member added")); loadAll(); }
+    if (await inviteToTeam(email, team)) loadAll();
   }
   async function removeTeamMember(m: Q4TeamMember) {
     if (!confirm(t(`เอา ${m.full_name || m.email} ออกจากทีม ${m.team} ใช่ไหม`, `Remove ${m.email} from ${m.team}?`))) return;
@@ -398,7 +468,7 @@ export default function Q4App({
             return (
               <button
                 key={b}
-                onClick={() => { setFBranch(b); setTab("list"); }}
+                onClick={() => { if (external) return; setFBranch(b); setTab("list"); }}
                 className={`flex min-h-[60px] flex-col justify-between rounded-md p-2 text-left transition ${
                   s ? "bg-[#CFE2F3] text-[#14232E]" : "border border-dashed border-[#3A5163] text-[#7F97AA] hover:border-[#CFE2F3]"
                 } ${s?.hi ? "shadow-[inset_0_-3px_0_#E23744]" : ""}`}
@@ -418,8 +488,8 @@ export default function Q4App({
           ["list", `${t("รายการทั้งหมด", "All issues")}${entries.length ? ` (${entries.length})` : ""}`, ListChecks],
           ["summary", t("สรุปผล", "Summary"), PieChart],
           ["present", t("Presentation", "Presentation"), Presentation],
-          ...((isAdmin || myTeams.length) ? [["team", t("ทีม Support", "Support team"), Users] as const] : []),
-        ] as const).map(([k, label, Icon]) => (
+          ...((isAdmin || myTeams.length || external) ? [["team", t("ทีม Support", "Support team"), Users] as const] : []),
+        ] as const).filter(([k]) => !external || k === "summary" || k === "present" || k === "team").map(([k, label, Icon]) => (
           <button
             key={k}
             onClick={() => setTab(k)}
@@ -469,6 +539,7 @@ export default function Q4App({
         <MyTeamView
           isAdmin={isAdmin} myTeams={myTeams} members={teamMembers} userId={userId}
           entries={entries} statusOf={statusOf} teamsOf={teamsOf} notes={notes} tasks={tasks} onSaveTask={saveTask}
+          files={files} fileOps={fileOps} external={external}
           onAdd={addTeamMember} onRemove={removeTeamMember}
           onOpenList={(team) => { setFTeam(team); setTab("list"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
         />
@@ -1782,7 +1853,9 @@ function PresentationView() {
 /* ====================================================================== */
 function MyTeamView({
   isAdmin, myTeams, members, userId, entries, statusOf, teamsOf, notes, tasks, onSaveTask, onAdd, onRemove, onOpenList,
+  files, fileOps, external,
 }: {
+  files: Record<string, Q4Attachment[]>; fileOps: FileOps; external: boolean;
   isAdmin: boolean; myTeams: string[]; members: Q4TeamMember[]; userId: string | null;
   entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamsOf: (e: Q4Entry) => string[];
   notes: Record<string, Record<string, string>>; tasks: Record<string, Record<string, Q4Task>>;
@@ -1835,17 +1908,20 @@ function MyTeamView({
           ) : shown.map((e) => (
             <TeamTaskRow key={`${e.id}-${statusOf(e)}-${notes[e.id]?.[team] ?? ""}-${tasks[e.id]?.[team]?.assignee_email ?? ""}-${teamsOf(e).join("|")}`}
               e={e} team={team} status={statusOf(e)} teams={teamsOf(e)} note={notes[e.id]?.[team] ?? ""}
-              assignee={tasks[e.id]?.[team]?.assignee_email ?? ""} members={list} onSave={onSaveTask} />
+              assignee={tasks[e.id]?.[team]?.assignee_email ?? ""} members={list} onSave={onSaveTask}
+              files={files[e.id] ?? []} fileOps={fileOps} userId={userId} isAdmin={isAdmin} />
           ))}
-          <button onClick={() => onOpenList(team)} className="text-sm font-semibold text-brand-600 hover:underline">
-            {t("ดูการ์ดแบบเต็มในแท็บรายการทั้งหมด", "Open full cards")} →
-          </button>
+          {!external && (
+            <button onClick={() => onOpenList(team)} className="text-sm font-semibold text-brand-600 hover:underline">
+              {t("ดูการ์ดแบบเต็มในแท็บรายการทั้งหมด", "Open full cards")} →
+            </button>
+          )}
         </div>
 
         {/* ---------- members ---------- */}
         <aside className="h-fit space-y-3 rounded-xl border border-border bg-surface p-4">
           <h3 className="font-bold">{t("สมาชิกทีม", "Members")} {team} ({list.length})</h3>
-          <p className="text-xs text-muted">{t("คนในทีมเพิ่มสมาชิกเองได้ด้วยอีเมลที่ใช้ Login ไม่ต้องผ่าน Admin", "Team members can add people by login e-mail")}</p>
+          <p className="text-xs text-muted">{t("คนในทีมเพิ่มสมาชิกเองได้ ใช้ Gmail หรืออีเมลบริษัท ไม่ต้องมีบัญชีระบบตารางงาน", "Add people by Gmail or company e-mail, no Scheduling account needed")}</p>
           {!list.length ? <p className="text-sm text-muted">-</p> : (
             <ul className="divide-y divide-border rounded-lg border border-border">
               {list.map((m) => (
@@ -1874,8 +1950,9 @@ function MyTeamView({
 }
 
 function TeamTaskRow({
-  e, team, status, teams, note, assignee, members, onSave,
+  e, team, status, teams, note, assignee, members, onSave, files, fileOps, userId, isAdmin,
 }: {
+  files: Q4Attachment[]; fileOps: FileOps; userId: string | null; isAdmin: boolean;
   e: Q4Entry; team: string; status: string; teams: string[]; note: string; assignee: string; members: Q4TeamMember[];
   onSave: (id: string, team: string, status: string, addTeams: string[], note: string, assigneeEmail: string) => Promise<boolean>;
 }) {
@@ -1924,12 +2001,64 @@ function TeamTaskRow({
           })}
         </div>
       </details>
+      <AttachmentBox files={files} fileOps={fileOps} entryId={e.id} team={team} userId={userId} isAdmin={isAdmin} canUpload />
       <div className="mt-2 flex justify-end">
         <button disabled={busy} onClick={async () => { setBusy(true); await onSave(e.id, team, st, add, nt, who); setBusy(false); }}
           className="rounded-md bg-[#14232E] px-4 py-1.5 text-sm font-semibold text-[#CFE2F3] disabled:opacity-50">
           {busy ? t("กำลังบันทึก", "Saving") : t("บันทึก", "Save")}
         </button>
       </div>
+    </div>
+  );
+}
+
+type FileOps = {
+  upload: (entryId: string, team: string, list: FileList | File[]) => Promise<void>;
+  open: (a: Q4Attachment) => Promise<void>;
+  download: (a: Q4Attachment) => Promise<void>;
+  remove: (a: Q4Attachment) => Promise<void>;
+};
+
+function AttachmentBox({
+  files, fileOps, entryId, team, userId, isAdmin, canUpload,
+}: { files: Q4Attachment[]; fileOps: FileOps; entryId: string; team: string; userId: string | null; isAdmin: boolean; canUpload: boolean }) {
+  const t = useT();
+  const [busy, setBusy] = useState(false);
+  const size = (n: number | null) => (n == null ? "" : n > 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`);
+  return (
+    <div className="mt-2 rounded-lg border border-dashed border-border p-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="text-xs font-semibold text-muted">📎 {t("ไฟล์ / รูปภาพ", "Files / photos")} ({files.length})</span>
+        {canUpload && (
+          <label className={`cursor-pointer rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-semibold hover:bg-surface-2 ${busy ? "opacity-50" : ""}`}>
+            {busy ? t("กำลังอัปโหลด…", "Uploading…") : t("+ อัปโหลดรูป / ไฟล์", "+ Upload")}
+            <input type="file" multiple accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx,.csv" className="hidden" disabled={busy}
+              onChange={async (ev) => {
+                const list = ev.target.files;
+                if (!list?.length) return;
+                setBusy(true);
+                await fileOps.upload(entryId, team, list);
+                setBusy(false);
+                ev.target.value = "";
+              }} />
+          </label>
+        )}
+      </div>
+      {files.length > 0 && (
+        <ul className="mt-1.5 space-y-1">
+          {files.map((a) => (
+            <li key={a.id} className="flex flex-wrap items-center gap-2 text-xs">
+              <span>{a.mime?.startsWith("image/") ? "🖼️" : "📄"}</span>
+              <button onClick={() => fileOps.open(a)} className="max-w-[260px] truncate font-semibold text-brand-600 hover:underline" title={a.name}>{a.name}</button>
+              <span className="text-muted">{size(a.size)}{a.team ? ` · ${a.team}` : ""}</span>
+              <button onClick={() => fileOps.download(a)} className="rounded border border-border px-1.5 py-0.5 hover:bg-surface-2">{t("ดาวน์โหลด", "Download")}</button>
+              {(isAdmin || a.uploaded_by === userId) && (
+                <button onClick={() => fileOps.remove(a)} className="rounded border border-border px-1.5 py-0.5 text-danger hover:bg-surface-2">{t("ลบ", "Delete")}</button>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
