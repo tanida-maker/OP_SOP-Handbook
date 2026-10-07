@@ -103,6 +103,7 @@ export interface Q4Review {
   entry_id: string;
   status: string;
   team: string | null;
+  teams: string[] | null;
   action: string | null;
   updated_at: string;
 }
