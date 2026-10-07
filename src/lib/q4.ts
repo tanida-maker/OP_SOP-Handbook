@@ -25,7 +25,7 @@ export const Q4_STATUS_TH: Record<string, string> = {
 export const Q4_CLOSED = new Set(["Completed", "Not Required"]);
 
 export const Q4_TEAMS = [
-  "OP Manager", "OP Co.", "Online-CS", "HR", "IT", "MS - Logistic", "BD", "Marketing / Media", "Management", "Other",
+  "OP Manager", "OP Co.", "HR", "IT & Dev.", "BD", "MKT", "MS - Logistic", "Management", "FA", "Online-CS", "Other",
 ];
 
 export const Q4_AREA_HELP: Record<string, string> = {
