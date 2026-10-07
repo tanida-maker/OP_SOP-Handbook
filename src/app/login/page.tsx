@@ -60,7 +60,7 @@ export default function LoginPage() {
         {Q4_MODE && (
           <div className="mt-4 rounded-2xl border border-border bg-surface p-5 text-sm shadow-sm">
             <p className="mb-2 font-bold text-text">
-              <T th="วิธีกรอกฟอร์ม (ใช้เวลาประมาณ 3 นาที/ประเด็น)" en="How to fill in the form (about 3 min per issue)" />
+              <T th="สำหรับสาขา: วิธีกรอกฟอร์ม (ประมาณ 3 นาที/ประเด็น)" en="For branches: how to fill in the form (about 3 min per issue)" />
             </p>
             <ol className="list-decimal space-y-1.5 pl-5 text-muted">
               <li>
@@ -82,6 +82,38 @@ export default function LoginPage() {
                 en="One entry per issue. You can submit several and edit your own entries later"
               />
             </p>
+          </div>
+        )}
+
+        {Q4_MODE && (
+          <div className="mt-4 rounded-2xl border border-[#14232E]/30 bg-surface p-5 text-sm shadow-sm">
+            <p className="mb-2 font-bold text-text">
+              <T th="สำหรับทีม Support (OP, HR, IT & Dev., BD, MKT, MS - Logistic, FA ฯลฯ)" en="For Support teams" />
+            </p>
+            <ol className="list-decimal space-y-1.5 pl-5 text-muted">
+              <li>
+                <T th="เข้าสู่ระบบด้วยบัญชีเดียวกับระบบตารางงาน แล้วเปิดแท็บ “ทีม Support”" en="Sign in with your Scheduling account and open the “Support team” tab" />
+              </li>
+              <li>
+                <T th="เลือกทีมของคุณ ดูงานที่มอบหมาย เรียงงาน High ก่อน" en="Pick your team to see its assigned issues, High first" />
+              </li>
+              <li>
+                <T th="อัปเดตสถานะ ใส่ความคืบหน้า เลือกผู้รับงานในทีม หรือมอบหมายต่อให้ทีมอื่น แล้วกด บันทึก" en="Update status and progress, pick an assignee, or delegate to another team, then Save" />
+              </li>
+              <li>
+                <T th="ทำเสร็จแล้วเลือกสถานะ Completed เพื่อปิดงาน ระบบแจ้ง Lark ให้อัตโนมัติ" en="Choose Completed to close; Lark is notified automatically" />
+              </li>
+            </ol>
+            <p className="mt-3 rounded-lg bg-surface-2 px-3 py-2 text-xs text-muted">
+              <T
+                th="ยังไม่อยู่ในทีม? ให้หัวหน้าทีมหรือ Admin เพิ่มอีเมลที่คุณใช้ Login ในแท็บ “ทีม Support” (เพิ่มเองได้ ไม่ต้องผ่าน Admin)"
+                en="Not in a team yet? Ask your team lead or an Admin to add your login e-mail in the “Support team” tab"
+              />
+            </p>
+            <a href="/login?next=%2Fq4%3Ftab%3Dteam"
+              className="mt-3 flex items-center justify-center rounded-lg bg-[#14232E] py-2.5 text-sm font-semibold text-[#CFE2F3] hover:opacity-90">
+              <T th="ทีม Support: เข้าสู่ระบบแล้วไปหน้างานของทีม" en="Support team: sign in and go to team work" /> →
+            </a>
           </div>
         )}
 
