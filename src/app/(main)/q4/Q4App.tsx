@@ -214,9 +214,9 @@ export default function Q4App({
     if (error) flash(t("ลบไม่สำเร็จ", "Remove failed")); else { flash(t("นำออกแล้ว", "Removed")); loadAll(); }
   }
 
-  async function saveReview(id: string, status: string, team: string, action: string) {
+  async function saveReview(id: string, status: string, teams: string[], action: string) {
     const { error } = await supabase.from("q4_reviews").upsert({
-      entry_id: id, status, team: team || null, action: action.trim() || null,
+      entry_id: id, status, teams, team: teams[0] ?? null, action: action.trim() || null,
       updated_by: userId, updated_at: new Date().toISOString(),
     });
     if (error) flash(t("อัปเดตไม่สำเร็จ: ", "Update failed: ") + error.message);
@@ -232,7 +232,13 @@ export default function Q4App({
   }
 
   const statusOf = useCallback((e: Q4Entry) => reviews[e.id]?.status ?? "New", [reviews]);
-  const teamOf = useCallback((e: Q4Entry) => reviews[e.id]?.team ?? "", [reviews]);
+  const teamsOf = useCallback((e: Q4Entry): string[] => {
+    const r = reviews[e.id];
+    if (!r) return [];
+    if (r.teams && r.teams.length) return r.teams;
+    return r.team ? [r.team] : [];
+  }, [reviews]);
+  const teamOf = useCallback((e: Q4Entry) => teamsOf(e).join(", "), [teamsOf]);
 
   // ---------- export (CSV in Lark import column order) ----------
   function exportCsv() {
@@ -356,14 +362,14 @@ export default function Q4App({
       {tab === "list" && (
         <ListView
           entries={entries} reviews={reviews} loading={loading} userId={userId} isAdmin={isAdmin}
-          statusOf={statusOf} teamOf={teamOf} fBranch={fBranch} setFBranch={setFBranch} fTeam={fTeam} setFTeam={setFTeam}
+          statusOf={statusOf} teamsOf={teamsOf} fBranch={fBranch} setFBranch={setFBranch} fTeam={fTeam} setFTeam={setFTeam}
           onEdit={startEdit} onDelete={remove} onReview={saveReview}
           myTeams={myTeams} onTeamReview={saveTeamReview}
         />
       )}
       {tab === "summary" && (
         <SummaryView
-          entries={entries} plans={plans} isAdmin={isAdmin} statusOf={statusOf} teamOf={teamOf}
+          entries={entries} plans={plans} isAdmin={isAdmin} statusOf={statusOf} teamsOf={teamsOf}
           onPlan={savePlan} onExport={exportCsv}
           teamMembers={teamMembers} onAddMember={addTeamMember} onRemoveMember={removeTeamMember}
           analysis={analysis} onSaveAnalysis={saveAnalysis}
@@ -539,15 +545,15 @@ function FormView({
 /* List                                                                   */
 /* ====================================================================== */
 function ListView({
-  entries, reviews, loading, userId, isAdmin, statusOf, teamOf, fBranch, setFBranch, fTeam, setFTeam, onEdit, onDelete, onReview,
+  entries, reviews, loading, userId, isAdmin, statusOf, teamsOf, fBranch, setFBranch, fTeam, setFTeam, onEdit, onDelete, onReview,
   myTeams, onTeamReview,
 }: {
   myTeams: string[]; onTeamReview: (id: string, status: string, action: string) => void;
   entries: Q4Entry[]; reviews: Record<string, Q4Review>; loading: boolean; userId: string | null; isAdmin: boolean;
-  statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string;
+  statusOf: (e: Q4Entry) => string; teamsOf: (e: Q4Entry) => string[];
   fBranch: string; setFBranch: (b: string) => void; fTeam: string; setFTeam: (t: string) => void;
   onEdit: (e: Q4Entry) => void; onDelete: (e: Q4Entry) => void;
-  onReview: (id: string, status: string, team: string, action: string) => void;
+  onReview: (id: string, status: string, teams: string[], action: string) => void;
 }) {
   const t = useT();
   const [q, setQ] = useState("");
@@ -564,15 +570,15 @@ function ListView({
       .filter((e) =>
         (!fBranch || e.branch === fBranch) && (!fCat || e.category === fCat) && (!fPri || e.priority === fPri) &&
         (!fSt || statusOf(e) === fSt) && (!mine || e.created_by === userId) &&
-        (!fTeam || (fTeam === UNASSIGNED ? !teamOf(e) : teamOf(e) === fTeam)) &&
+        (!fTeam || (fTeam === UNASSIGNED ? !teamsOf(e).length : teamsOf(e).includes(fTeam))) &&
         (!s || [e.branch, e.service_area, e.category, e.period, e.issue, e.impact, e.support, e.prep, e.notes, reviews[e.id]?.action]
           .join(" ").toLowerCase().includes(s)))
       .sort((a, b) => rank[a.priority] - rank[b.priority] || b.created_at.localeCompare(a.created_at));
-  }, [entries, reviews, q, fBranch, fCat, fPri, fSt, fTeam, mine, userId, statusOf, teamOf]);
+  }, [entries, reviews, q, fBranch, fCat, fPri, fSt, fTeam, mine, userId, statusOf, teamsOf]);
 
   // Hand-off message for the assigned team (paste into their LINE group).
   async function copyTeamMessage() {
-    const mineOpen = entries.filter((e) => teamOf(e) === fTeam && !Q4_CLOSED.has(statusOf(e)));
+    const mineOpen = entries.filter((e) => teamsOf(e).includes(fTeam) && !Q4_CLOSED.has(statusOf(e)));
     const hi = mineOpen.filter((e) => e.priority === "High").length;
     const link = `${window.location.origin}/q4?tab=list&team=${encodeURIComponent(fTeam)}`;
     const lines = [
@@ -625,7 +631,7 @@ function ListView({
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[#E23744]/30 bg-[#E23744]/5 px-4 py-3 text-sm">
           <span>{t("คุณเป็นผู้รับผิดชอบทีม", "You handle team")}</span>
           {myTeams.map((tm) => {
-            const n = entries.filter((e) => teamOf(e) === tm && !Q4_CLOSED.has(statusOf(e))).length;
+            const n = entries.filter((e) => teamsOf(e).includes(tm) && !Q4_CLOSED.has(statusOf(e))).length;
             return (
               <button key={tm} onClick={() => setFTeam(tm)}
                 className={`rounded-lg border px-2.5 py-1 font-semibold ${fTeam === tm ? "border-[#14232E] bg-[#14232E] text-[#CFE2F3]" : "border-border bg-surface"}`}>
@@ -658,7 +664,8 @@ function ListView({
           {rows.map((e) => (
             <TagCard key={`${e.id}-${reviews[e.id]?.updated_at ?? ""}`} e={e} r={reviews[e.id]} status={statusOf(e)}
               canEdit={!!userId && e.created_by === userId} canDelete={isAdmin} isAdmin={isAdmin}
-              canTeamReview={!isAdmin && !!reviews[e.id]?.team && myTeams.includes(reviews[e.id]?.team ?? "")}
+              teams={teamsOf(e)} canTeamReview={!isAdmin && teamsOf(e).some((x) => myTeams.includes(x))}
+              myTeams={myTeams}
               onEdit={() => onEdit(e)} onDelete={() => onDelete(e)} onReview={onReview} onTeamReview={onTeamReview} />
           ))}
         </div>
@@ -676,15 +683,18 @@ function Empty({ title, body }: { title: string; body: string }) {
 }
 
 function TagCard({
-  e, r, status, canEdit, canDelete, isAdmin, canTeamReview, onEdit, onDelete, onReview, onTeamReview,
+  e, r, status, teams, myTeams, canEdit, canDelete, isAdmin, canTeamReview, onEdit, onDelete, onReview, onTeamReview,
 }: {
+  teams: string[]; myTeams: string[];
   e: Q4Entry; r?: Q4Review; status: string; canEdit: boolean; canDelete: boolean; isAdmin: boolean;
   canTeamReview: boolean; onTeamReview: (id: string, status: string, action: string) => void;
-  onEdit: () => void; onDelete: () => void; onReview: (id: string, status: string, team: string, action: string) => void;
+  onEdit: () => void; onDelete: () => void; onReview: (id: string, status: string, teams: string[], action: string) => void;
 }) {
   const t = useT();
   const [st, setSt] = useState(status);
-  const [team, setTeam] = useState(r?.team ?? "");
+  const [sel, setSel] = useState<string[]>(teams);
+  const toggleTeam = (x: string) => setSel((cur) => (cur.includes(x) ? cur.filter((y) => y !== x) : [...cur, x]));
+  const teamLabel = teams.join(", ");
   const [action, setAction] = useState(r?.action ?? "");
 
   const flow: [string, string | null, boolean][] = [
@@ -718,35 +728,45 @@ function TagCard({
         {e.notes && <p className="mb-2 whitespace-pre-wrap text-sm text-muted">{t("หมายเหตุ", "Notes")}: {e.notes}</p>}
         {r?.action && (
           <div className="mb-2 rounded-lg bg-surface-2 px-3 py-2 text-sm">
-            <b>Central action{r.team ? ` (${r.team})` : ""}:</b> {r.action}
+            <b>Central action{teamLabel ? ` (${teamLabel})` : ""}:</b> {r.action}
           </div>
         )}
         {isAdmin && (
-          <div className="mb-3 grid gap-2 rounded-lg bg-surface-2 p-3 md:grid-cols-[170px_170px_minmax(0,1fr)_auto] md:items-end">
-            <label className="text-xs text-muted">{t("สถานะ", "Status")}
-              <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={st} onChange={(x) => setSt(x.target.value)}>
-                {Q4_STATUSES.map((s) => <option key={s}>{s}</option>)}
-              </select>
-            </label>
-            <label className="text-xs text-muted">Responsible Team
-              <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={team} onChange={(x) => setTeam(x.target.value)}>
-                <option value="">{t("ยังไม่มอบหมาย", "Unassigned")}</option>
-                {Q4_TEAMS.map((x) => <option key={x}>{x}</option>)}
-              </select>
-            </label>
-            <label className="text-xs text-muted">Central action
-              <input className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={action}
-                onChange={(x) => setAction(x.target.value)} placeholder={t("สิ่งที่ส่วนกลางจะทำ กำหนดเสร็จ", "What Central will do, by when")} />
-            </label>
-            <button onClick={() => onReview(e.id, st, team, action)} className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
-              {t("บันทึก", "Save")}
-            </button>
+          <div className="mb-3 space-y-2 rounded-lg bg-surface-2 p-3">
+            <div>
+              <span className="text-xs text-muted">Responsible Team <span className="font-normal">({t("เลือกได้หลายทีม", "multiple allowed")})</span></span>
+              <div className="mt-1 flex flex-wrap gap-1.5">
+                {Q4_TEAMS.map((x) => {
+                  const on = sel.includes(x);
+                  return (
+                    <button key={x} type="button" onClick={() => toggleTeam(x)} aria-pressed={on}
+                      className={`rounded-md border px-2.5 py-1 text-xs font-semibold transition ${on ? "border-[#14232E] bg-[#14232E] text-[#CFE2F3]" : "border-border bg-surface text-text hover:border-brand-400"}`}>
+                      {on ? "✓ " : ""}{x}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="grid gap-2 md:grid-cols-[170px_minmax(0,1fr)_auto] md:items-end">
+              <label className="text-xs text-muted">{t("สถานะ", "Status")}
+                <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={st} onChange={(x) => setSt(x.target.value)}>
+                  {Q4_STATUSES.map((s) => <option key={s}>{s}</option>)}
+                </select>
+              </label>
+              <label className="text-xs text-muted">Central action
+                <input className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={action}
+                  onChange={(x) => setAction(x.target.value)} placeholder={t("สิ่งที่ส่วนกลางจะทำ กำหนดเสร็จ", "What Central will do, by when")} />
+              </label>
+              <button onClick={() => onReview(e.id, st, sel, action)} className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
+                {t("บันทึก", "Save")}
+              </button>
+            </div>
           </div>
         )}
         {canTeamReview && (
           <div className="mb-3 grid gap-2 rounded-lg border border-[#E23744]/30 bg-surface-2 p-3 md:grid-cols-[170px_minmax(0,1fr)_auto] md:items-end">
             <p className="text-xs font-semibold text-[#E23744] md:col-span-3">
-              {t(`งานของทีม ${r?.team} (คุณอัปเดตได้)`, `Your team (${r?.team}) can update this`)}
+              {t(`งานของทีม ${teams.filter((x) => myTeams.includes(x)).join(", ")} (คุณอัปเดตได้)`, `Your team (${teams.filter((x) => myTeams.includes(x)).join(", ")}) can update this`)}
             </p>
             <label className="text-xs text-muted">{t("สถานะ", "Status")}
               <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={st} onChange={(x) => setSt(x.target.value)}>
@@ -768,7 +788,7 @@ function TagCard({
               status === "Completed" ? "border-ok bg-ok/10 text-ok" : closed ? "border-border" : status === "Waiting for Support" ? "border-warn bg-warn/10 text-text" : "border-border bg-surface-2 text-text"}`}>
               {status} · {Q4_STATUS_TH[status]}
             </span>
-            {r?.team && !r.action && <span className="ml-2">{t("ทีม", "Team")}: {r.team}</span>}
+            {teamLabel && !r?.action && <span className="ml-2">{t("ทีม", "Team")}: {teamLabel}</span>}
           </span>
           <span className="flex items-center gap-2">
             {e.created_name || t("พนักงาน", "Staff")}, {fmt(e.created_at)}{e.updated_at !== e.created_at && ` (${t("แก้ไขแล้ว", "edited")})`}
@@ -809,13 +829,13 @@ function Bars({ pairs, redKey, onPick }: { pairs: [string, number][]; redKey?: s
 }
 
 function SummaryView({
-  entries, plans, isAdmin, statusOf, teamOf, onPlan, onExport, onPickTeam,
+  entries, plans, isAdmin, statusOf, teamsOf, onPlan, onExport, onPickTeam,
   teamMembers, onAddMember, onRemoveMember, analysis, onSaveAnalysis,
 }: {
   analysis: Q4Analysis | null; onSaveAnalysis: (content: string) => Promise<boolean>;
   teamMembers: Q4TeamMember[]; onAddMember: (email: string, team: string) => void; onRemoveMember: (m: Q4TeamMember) => void;
   entries: Q4Entry[]; plans: Record<string, Q4Plan>; isAdmin: boolean;
-  statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string;
+  statusOf: (e: Q4Entry) => string; teamsOf: (e: Q4Entry) => string[];
   onPlan: (c: string, p: string) => void; onExport: () => void; onPickTeam: (team: string) => void;
 }) {
   const t = useT();
@@ -951,8 +971,8 @@ function SummaryView({
         )}
       </div>
 
-      <AutoSummaryPanel entries={entries} statusOf={statusOf} teamOf={teamOf} />
-      <ClaudeSummaryPanel entries={entries} statusOf={statusOf} teamOf={teamOf} analysis={analysis}
+      <AutoSummaryPanel entries={entries} statusOf={statusOf} teamsOf={teamsOf} />
+      <ClaudeSummaryPanel entries={entries} statusOf={statusOf} teamsOf={teamsOf} analysis={analysis}
         isAdmin={isAdmin} total={total} onSave={onSaveAnalysis} />
 
       {isAdmin && <TeamMembersPanel members={teamMembers} onAdd={onAddMember} onRemove={onRemoveMember} />}
@@ -969,7 +989,11 @@ function SummaryView({
         <div className={card}>
           <h2 className="mb-1 text-lg font-bold">{t("งานตามทีมผู้รับผิดชอบ", "Open work by team")}</h2>
           <p className="mb-3 text-sm text-muted">{t("เฉพาะประเด็นที่ยังไม่ปิด กดที่ชื่อทีมเพื่อดูรายการและคัดลอกข้อความแจ้งทีม", "Open issues only. Click a team to see its list")}</p>
-          <Bars pairs={tally((e) => teamOf(e) || unassigned, open)} redKey={unassigned}
+          <Bars pairs={(() => {
+            const m: Record<string, number> = {};
+            open.forEach((e) => { const ts = teamsOf(e); (ts.length ? ts : [unassigned]).forEach((k) => { m[k] = (m[k] || 0) + 1; }); });
+            return Object.entries(m).sort((a, b) => b[1] - a[1]);
+          })()} redKey={unassigned}
             onPick={(k) => onPickTeam(k === unassigned ? UNASSIGNED : k)} />
         </div>
         <div className={card}>
@@ -1110,14 +1134,14 @@ type AutoData = {
 
 const clean = (x: string | null | undefined) => (x ?? "").replace(/\s+/g, " ").trim();
 
-function computeAuto(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teamOf: (e: Q4Entry) => string): AutoData {
+function computeAuto(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teamsOf: (e: Q4Entry) => string[]): AutoData {
   const open = entries.filter((e) => !Q4_CLOSED.has(statusOf(e)));
   const responded = new Set(entries.map((e) => e.branch));
   const rank: Record<string, number> = { High: 0, Medium: 1, Low: 2 };
   const byTeam: Record<string, Q4Entry[]> = {};
   open.forEach((e) => {
-    const tm = teamOf(e) || (PLAYBOOK[e.category]?.team ?? "OP");
-    (byTeam[tm] = byTeam[tm] || []).push(e);
+    const ts = teamsOf(e);
+    (ts.length ? ts : [PLAYBOOK[e.category]?.team ?? "OP"]).forEach((tm) => { (byTeam[tm] = byTeam[tm] || []).push(e); });
   });
   const teams: TeamPlan[] = Object.entries(byTeam).map(([team, items]) => {
     items.sort((a, b) => rank[a.priority] - rank[b.priority] || a.branch.localeCompare(b.branch));
@@ -1125,7 +1149,7 @@ function computeAuto(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teamO
     const pr = high ? "High" : items.some((e) => e.priority === "Medium") ? "Medium" : "Low";
     return {
       team, items, high, due: DUE[pr],
-      suggested: items.filter((e) => teamOf(e) !== team).length,
+      suggested: items.filter((e) => !teamsOf(e).includes(team)).length,
       steps: [...new Set(items.flatMap((e) => PLAYBOOK[e.category]?.steps ?? []))].slice(0, 4),
     };
   }).sort((a, b) => b.high - a.high || b.items.length - a.items.length);
@@ -1136,7 +1160,7 @@ function computeAuto(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teamO
   return {
     total: entries.length, responded: responded.size,
     high: entries.filter((e) => e.priority === "High").length,
-    open: open.length, unassigned: open.filter((e) => !teamOf(e)).length,
+    open: open.length, unassigned: open.filter((e) => !teamsOf(e).length).length,
     missing: Q4_BRANCHES.filter((b) => !responded.has(b)),
     urgent: open.filter((e) => e.priority === "High").sort((a, b) => a.branch.localeCompare(b.branch)),
     teams, repeated,
@@ -1210,12 +1234,12 @@ td.b{font-weight:700;white-space:nowrap}.pri{color:#fff;border-radius:4px;paddin
 const proseCls = "mt-3 border-t border-border pt-3 text-[15px] leading-relaxed [&_b]:font-bold [&_h3]:mb-1.5 [&_h3]:mt-5 [&_h3]:border-b-2 [&_h3]:border-[#E23744] [&_h3]:pb-1 [&_h3]:text-lg [&_h3]:font-bold [&_h4]:mb-1 [&_h4]:mt-3 [&_h4]:font-bold [&_li]:my-0.5 [&_p]:my-1 [&_ul]:list-disc [&_ul]:pl-5";
 
 function AutoSummaryPanel({
-  entries, statusOf, teamOf,
-}: { entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string }) {
+  entries, statusOf, teamsOf,
+}: { entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamsOf: (e: Q4Entry) => string[] }) {
   const t = useT();
   const [only, setOnly] = useState("");
   const [copied, setCopied] = useState(false);
-  const d = useMemo(() => computeAuto(entries, statusOf, teamOf), [entries, statusOf, teamOf]);
+  const d = useMemo(() => computeAuto(entries, statusOf, teamsOf), [entries, statusOf, teamsOf]);
   if (!entries.length) return null;
   const teams = only ? d.teams.filter((x) => x.team === only) : d.teams;
   const th = "bg-[#14232E] px-3 py-2 text-left text-xs font-semibold text-white whitespace-nowrap";
@@ -1240,7 +1264,7 @@ function AutoSummaryPanel({
               <td className={`${td} whitespace-nowrap`}>{short(e.category)}</td>
               <td className={td}><span className={priCls(e.priority)}>{e.priority}</span></td>
               <td className={td}><span className="line-clamp-3" title={clean(e.support)}>{clean(e.support)}</span></td>
-              {showTeam && <td className={`${td} whitespace-nowrap`}>{teamOf(e) || <span className="text-muted">{PLAYBOOK[e.category]?.team} *</span>}</td>}
+              {showTeam && <td className={`${td} whitespace-nowrap`}>{teamsOf(e).join(", ") || <span className="text-muted">{PLAYBOOK[e.category]?.team} *</span>}</td>}
               <td className={`${td} whitespace-nowrap text-xs`}>{Q4_STATUS_TH[statusOf(e)]}</td>
             </tr>
           ))}
@@ -1362,13 +1386,13 @@ function AutoSummaryPanel({
   );
 }
 
-function buildClaudePrompt(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teamOf: (e: Q4Entry) => string): string {
+function buildClaudePrompt(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teamsOf: (e: Q4Entry) => string[]): string {
   const responded = new Set(entries.map((e) => e.branch));
   const missing = Q4_BRANCHES.filter((b) => !responded.has(b));
   const data = entries.map((x) => ({
     branch: x.branch, area: x.service_area, category: x.category, priority: x.priority, period: x.period,
     issue: x.issue, impact: x.impact, support_needed: x.support, team_prep: x.prep, notes: x.notes,
-    status: statusOf(x), assigned_team: teamOf(x) || null,
+    status: statusOf(x), assigned_teams: teamsOf(x),
   }));
   return `คุณเป็นนักวิเคราะห์ Operation ของ Airportels (บริการรับฝากและส่งกระเป๋า มีสาขาที่สนามบินและในเมือง)
 ส่วนกลางกำลังวางแผน Support ทุกสาขาสำหรับ Q4 และช่วงปีใหม่ ด้านล่างคือประเด็นที่สาขา/ทีมแจ้งเข้ามา (JSON)
@@ -1379,7 +1403,7 @@ function buildClaudePrompt(entries: Q4Entry[], statusOf: (e: Q4Entry) => string,
 โครงสร้าง:
 ## ภาพรวม
 ## ประเด็นเร่งด่วนที่ต้องตัดสินใจก่อน Peak
-## แนวทางแก้ไขเบื้องต้น แยกตามทีม (ใช้ "### ชื่อทีม" แต่ละทีมมี ปัญหาที่เกี่ยวข้อง / แนวทางแก้ไขเบื้องต้น / สิ่งที่ต้องเตรียมและกำหนดเวลา)
+## แนวทางแก้ไขเบื้องต้น แยกตามทีม (ใช้ "### ชื่อทีม" ตาม assigned_teams แต่ละทีมมี ปัญหาที่เกี่ยวข้อง / แนวทางแก้ไขเบื้องต้น / สิ่งที่ต้องเตรียมและกำหนดเวลา)
 ## ปัญหาที่เกิดซ้ำหลายสาขา
 ## Timeline แนะนำ (ก่อน 1 ธ.ค. / 1-20 ธ.ค. / ช่วง Peak 20 ธ.ค. - 5 ม.ค.)
 ## สิ่งที่ยังขาดข้อมูล
@@ -1390,9 +1414,9 @@ ${JSON.stringify(data)}`;
 }
 
 function ClaudeSummaryPanel({
-  entries, statusOf, teamOf, analysis, isAdmin, total, onSave,
+  entries, statusOf, teamsOf, analysis, isAdmin, total, onSave,
 }: {
-  entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamOf: (e: Q4Entry) => string;
+  entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamsOf: (e: Q4Entry) => string[];
   analysis: Q4Analysis | null; isAdmin: boolean; total: number; onSave: (content: string) => Promise<boolean>;
 }) {
   const t = useT();
@@ -1403,7 +1427,7 @@ function ClaudeSummaryPanel({
   if (!analysis && !isAdmin) return null;
 
   async function copyPrompt() {
-    const text = buildClaudePrompt(entries, statusOf, teamOf);
+    const text = buildClaudePrompt(entries, statusOf, teamsOf);
     try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 3000); }
     catch { window.prompt(t("คัดลอกข้อความนี้", "Copy this"), text); }
   }
