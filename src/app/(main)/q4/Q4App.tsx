@@ -190,6 +190,19 @@ export default function Q4App({
   }
 
   // Team member (not admin): may change status + action of issues assigned to their team.
+  // Lark notification (group + reporter DM) when the status really changed. Never blocks the save.
+  async function notifyLark(id: string, prev: string, next: string) {
+    if (prev === next) return;
+    try {
+      const res = await fetch("/api/q4/notify", {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ entry_id: id, prev_status: prev }),
+      });
+      const j = await res.json().catch(() => ({}));
+      if (j.group === "sent" || j.dm === "sent") flash(t("อัปเดตแล้ว และแจ้ง Lark แล้ว", "Updated and sent to Lark"));
+    } catch { /* notification is best-effort */ }
+  }
+
   // Upsert non-empty notes, delete emptied ones, for the given teams only.
   async function writeNotes(id: string, teamNotes: Record<string, string>) {
     const up = Object.entries(teamNotes).filter(([, v]) => v.trim()).map(([team, v]) => ({ entry_id: id, team, note: v.trim() }));
@@ -207,11 +220,12 @@ export default function Q4App({
 
   // Team member (not admin): status of an issue assigned to their team + their own team's comment.
   async function saveTeamReview(id: string, status: string, teamNotes: Record<string, string>) {
+    const prev = reviews[id]?.status ?? "New";
     const { data, error } = await supabase.from("q4_reviews").update({ status }).eq("entry_id", id).select("entry_id");
     if (error || !data?.length) { flash(t("อัปเดตไม่สำเร็จ (ไม่มีสิทธิ์ในเรื่องนี้)", "Update failed (no permission)")); return; }
     const err = await writeNotes(id, teamNotes);
     if (err) flash(t("บันทึกความเห็นทีมไม่สำเร็จ: ", "Team comment failed: ") + err);
-    else { flash(t("อัปเดตแล้ว", "Updated")); loadAll(); }
+    else { flash(t("อัปเดตแล้ว", "Updated")); loadAll(); notifyLark(id, prev, status); }
   }
 
   // Save a summary that an admin produced in claude.ai (pasted back) so every team can read it.
@@ -239,6 +253,7 @@ export default function Q4App({
   }
 
   async function saveReview(id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>) {
+    const prev = reviews[id]?.status ?? "New";
     const { error } = await supabase.from("q4_reviews").upsert({
       entry_id: id, status, teams, team: teams[0] ?? null, action: action.trim() || null,
       updated_by: userId, updated_at: new Date().toISOString(),
@@ -250,7 +265,7 @@ export default function Q4App({
     removed.forEach((tm) => { all[tm] = ""; });
     const err = await writeNotes(id, all);
     if (err) flash(t("บันทึกความเห็นทีมไม่สำเร็จ: ", "Team comment failed: ") + err);
-    else { flash(t("อัปเดตสถานะแล้ว", "Status updated")); loadAll(); }
+    else { flash(t("อัปเดตสถานะแล้ว", "Status updated")); loadAll(); notifyLark(id, prev, status); }
   }
 
   async function savePlan(category: string, plan: string) {
@@ -1669,7 +1684,7 @@ function PresentationView() {
             ))}
             <div className="flex flex-col justify-center gap-[0.5em] rounded-xl bg-[#E23744] px-[6%] py-[5%] text-white">
               <h3 className="text-[1.5em] font-bold">ทุกทีม</h3>
-              <p className="text-[1.35em] font-semibold leading-snug">งานเตรียมเสร็จก่อน 30 พ.ย.</p>
+              <p className="text-[1.35em] font-semibold leading-snug">งานเตรียมเสร็จภายใน 31 ตุลาคม 2569</p>
             </div>
           </div>
           <p className="mt-[2.5%] text-[1.1em] text-[#5B6C79]">เตรียมความพร้อม Q4 &amp; ปีใหม่ · 2 / 2</p>
