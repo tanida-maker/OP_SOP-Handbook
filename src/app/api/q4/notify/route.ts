@@ -51,8 +51,8 @@ export async function POST(req: Request) {
   const { user, supabase } = await getSessionUser();
   if (!user) return NextResponse.json({ error: "not_signed_in" }, { status: 401 });
 
-  const { entry_id, prev_status, prev_teams } = (await req.json().catch(() => ({}))) as {
-    entry_id?: string; prev_status?: string; prev_teams?: string[];
+  const { entry_id, prev_status, prev_teams, assigned } = (await req.json().catch(() => ({}))) as {
+    entry_id?: string; prev_status?: string; prev_teams?: string[]; assigned?: boolean;
   };
   if (!entry_id) return NextResponse.json({ error: "missing_entry" }, { status: 400 });
 
@@ -61,11 +61,14 @@ export async function POST(req: Request) {
   if (ctx.error || !ctx.data) return NextResponse.json({ error: "forbidden" }, { status: 403 });
   const info = ctx.data as { reporter_email: string | null; reporter_name: string | null; updater_name: string | null };
 
-  const [e, r, n] = await Promise.all([
+  const [e, r, n, tk] = await Promise.all([
     supabase.schema("sop").from("q4_entries").select("*").eq("id", entry_id).single(),
     supabase.schema("sop").from("q4_reviews").select("*").eq("entry_id", entry_id).maybeSingle(),
     supabase.schema("sop").from("q4_team_notes").select("team, note").eq("entry_id", entry_id),
+    supabase.schema("sop").from("q4_team_tasks").select("team, assignee_name, assignee_email").eq("entry_id", entry_id),
   ]);
+  const owners = ((tk.data ?? []) as { team: string; assignee_name: string | null; assignee_email: string | null }[])
+    .map((x) => `${x.team} → ${x.assignee_name || x.assignee_email}`);
   if (e.error || !e.data) return NextResponse.json({ error: "not_found" }, { status: 404 });
   const entry = e.data as Q4Entry;
   const rev = (r.data ?? null) as Q4Review | null;
@@ -83,13 +86,15 @@ export async function POST(req: Request) {
   const result: { group?: string; branch?: string; dm?: string } = {};
 
   // A) Assignment group: new assignments or status change
-  if (added.length || statusChanged) {
+  if (added.length || statusChanged || assigned) {
     const card = makeCard(
-      added.length ? `Q4 · มอบหมายงาน [${entry.branch}] → ${added.join(", ")}` : `Q4 · อัปเดตงาน [${entry.branch}]`,
-      added.length ? "red" : color,
+      added.length ? `Q4 · มอบหมายงาน [${entry.branch}] → ${added.join(", ")}`
+        : assigned && !statusChanged ? `Q4 · มอบหมายผู้รับงาน [${entry.branch}]` : `Q4 · อัปเดตงาน [${entry.branch}]`,
+      added.length || (assigned && !statusChanged) ? "red" : color,
       [
         added.length ? `**มอบหมายใหม่:** ${added.join(", ")}` : "",
         `**ทีมรับผิดชอบทั้งหมด:** ${teams.join(", ") || "-"}`,
+        owners.length ? `**ผู้รับงาน:** ${owners.join(" · ")}` : "",
         `**สาขา:** ${entry.branch} · ${entry.service_area}`,
         `**หมวด:** ${entry.category} · Priority ${entry.priority}`,
         statusLine,
