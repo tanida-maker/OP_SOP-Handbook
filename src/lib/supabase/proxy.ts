@@ -51,6 +51,17 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // External Support members (invited by e-mail) may only use the Q4 module.
+  if (user && user.app_metadata?.q4_external === true) {
+    const allowed = ["/q4", "/api/q4", "/auth", "/login", "/_next", "/favicon", "/icon", "/manifest"];
+    if (!allowed.some((p) => pathname === p || pathname.startsWith(p + "/") || pathname.startsWith(p + "?"))) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/q4";
+      url.search = "?tab=team";
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Not logged in and hitting a protected page → send to login.
   if (!user && !isPublic(pathname)) {
     const url = request.nextUrl.clone();
