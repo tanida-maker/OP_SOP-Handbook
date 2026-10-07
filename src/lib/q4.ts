@@ -105,6 +105,7 @@ export interface Q4Review {
   team: string | null;
   teams: string[] | null;
   action: string | null;
+  updated_as?: string | null;
   updated_at: string;
 }
 export interface Q4Plan {
