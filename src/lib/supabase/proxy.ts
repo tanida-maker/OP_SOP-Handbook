@@ -62,6 +62,11 @@ export async function updateSession(request: NextRequest) {
   // Logged in but on the login page → send home.
   if (user && pathname === "/login") {
     const url = request.nextUrl.clone();
+    const next = request.nextUrl.searchParams.get("next");
+    // already signed in: honour a safe in-app ?next= (e.g. /q4?tab=team), else go home
+    if (next && next.startsWith("/") && !next.startsWith("//")) {
+      return NextResponse.redirect(new URL(next, request.url));
+    }
     url.pathname = Q4_MODE ? "/q4" : "/";
     url.search = "";
     return NextResponse.redirect(url);
