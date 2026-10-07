@@ -133,3 +133,14 @@ export interface Q4Task {
   assignee_email: string | null;
   assignee_name: string | null;
 }
+export interface Q4Attachment {
+  id: string;
+  entry_id: string;
+  team: string | null;
+  path: string;
+  name: string;
+  mime: string | null;
+  size: number | null;
+  uploaded_by: string | null;
+  created_at: string;
+}
