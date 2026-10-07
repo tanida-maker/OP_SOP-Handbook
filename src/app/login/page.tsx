@@ -92,7 +92,7 @@ export default function LoginPage() {
             </p>
             <ol className="list-decimal space-y-1.5 pl-5 text-muted">
               <li>
-                <T th="เข้าสู่ระบบด้วยบัญชีเดียวกับระบบตารางงาน แล้วเปิดแท็บ “ทีม Support”" en="Sign in with your Scheduling account and open the “Support team” tab" />
+                <T th="เข้าสู่ระบบด้วย Google (Gmail / อีเมลบริษัท) หรือกด “ส่งลิงก์เข้าสู่ระบบทางอีเมล” ด้วยอีเมลที่หัวหน้าทีมเพิ่มไว้ ไม่ต้องมีบัญชีระบบตารางงาน แล้วเปิดแท็บ “ทีม Support”" en="Sign in with Google (Gmail / company e-mail) or the e-mail login link, using the address your team lead added. No Scheduling account needed. Then open the “Support team” tab" />
               </li>
               <li>
                 <T th="เลือกทีมของคุณ ดูงานที่มอบหมาย เรียงงาน High ก่อน" en="Pick your team to see its assigned issues, High first" />
@@ -106,7 +106,7 @@ export default function LoginPage() {
             </ol>
             <p className="mt-3 rounded-lg bg-surface-2 px-3 py-2 text-xs text-muted">
               <T
-                th="ยังไม่อยู่ในทีม? ให้หัวหน้าทีมหรือ Admin เพิ่มอีเมลที่คุณใช้ Login ในแท็บ “ทีม Support” (เพิ่มเองได้ ไม่ต้องผ่าน Admin)"
+                th="ยังเข้าไม่ได้? ให้หัวหน้าทีมเพิ่มอีเมลของคุณในแท็บ “ทีม Support” ก่อน (ใช้ Gmail หรืออีเมลบริษัทก็ได้) แล้วกลับมาเข้าสู่ระบบด้วยอีเมลนั้น"
                 en="Not in a team yet? Ask your team lead or an Admin to add your login e-mail in the “Support team” tab"
               />
             </p>
