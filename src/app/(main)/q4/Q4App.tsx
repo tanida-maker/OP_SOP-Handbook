@@ -191,15 +191,16 @@ export default function Q4App({
 
   // Team member (not admin): may change status + action of issues assigned to their team.
   // Lark notification (group + reporter DM) when the status really changed. Never blocks the save.
-  async function notifyLark(id: string, prev: string, next: string) {
-    if (prev === next) return;
+  async function notifyLark(id: string, prev: string, next: string, prevTeams: string[], nextTeams: string[]) {
+    const added = nextTeams.some((x) => !prevTeams.includes(x));
+    if (prev === next && !added) return;
     try {
       const res = await fetch("/api/q4/notify", {
         method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ entry_id: id, prev_status: prev }),
+        body: JSON.stringify({ entry_id: id, prev_status: prev, prev_teams: prevTeams }),
       });
       const j = await res.json().catch(() => ({}));
-      if (j.group === "sent" || j.dm === "sent") flash(t("อัปเดตแล้ว และแจ้ง Lark แล้ว", "Updated and sent to Lark"));
+      if (j.group === "sent" || j.branch === "sent" || j.dm === "sent") flash(t("อัปเดตแล้ว และแจ้ง Lark แล้ว", "Updated and sent to Lark"));
     } catch { /* notification is best-effort */ }
   }
 
@@ -219,13 +220,17 @@ export default function Q4App({
   }
 
   // Team member (not admin): status of an issue assigned to their team + their own team's comment.
-  async function saveTeamReview(id: string, status: string, teamNotes: Record<string, string>) {
+  async function saveTeamReview(id: string, status: string, teams: string[], updatedAs: string, teamNotes: Record<string, string>) {
     const prev = reviews[id]?.status ?? "New";
-    const { data, error } = await supabase.from("q4_reviews").update({ status }).eq("entry_id", id).select("entry_id");
+    const { data, error } = await supabase.from("q4_reviews")
+      .update({ status, teams, updated_as: updatedAs || null }).eq("entry_id", id).select("entry_id");
     if (error || !data?.length) { flash(t("อัปเดตไม่สำเร็จ (ไม่มีสิทธิ์ในเรื่องนี้)", "Update failed (no permission)")); return; }
     const err = await writeNotes(id, teamNotes);
     if (err) flash(t("บันทึกความเห็นทีมไม่สำเร็จ: ", "Team comment failed: ") + err);
-    else { flash(t("อัปเดตแล้ว", "Updated")); loadAll(); notifyLark(id, prev, status); }
+    else {
+      flash(t("อัปเดตแล้ว", "Updated")); loadAll();
+      notifyLark(id, prev, status, reviews[id]?.teams ?? [], teams);
+    }
   }
 
   // Save a summary that an admin produced in claude.ai (pasted back) so every team can read it.
@@ -252,10 +257,10 @@ export default function Q4App({
     if (error) flash(t("ลบไม่สำเร็จ", "Remove failed")); else { flash(t("นำออกแล้ว", "Removed")); loadAll(); }
   }
 
-  async function saveReview(id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>) {
+  async function saveReview(id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>, updatedAs = "") {
     const prev = reviews[id]?.status ?? "New";
     const { error } = await supabase.from("q4_reviews").upsert({
-      entry_id: id, status, teams, team: teams[0] ?? null, action: action.trim() || null,
+      entry_id: id, status, teams, team: teams[0] ?? null, action: action.trim() || null, updated_as: updatedAs || null,
       updated_by: userId, updated_at: new Date().toISOString(),
     });
     if (error) { flash(t("อัปเดตไม่สำเร็จ: ", "Update failed: ") + error.message); return; }
@@ -265,7 +270,10 @@ export default function Q4App({
     removed.forEach((tm) => { all[tm] = ""; });
     const err = await writeNotes(id, all);
     if (err) flash(t("บันทึกความเห็นทีมไม่สำเร็จ: ", "Team comment failed: ") + err);
-    else { flash(t("อัปเดตสถานะแล้ว", "Status updated")); loadAll(); notifyLark(id, prev, status); }
+    else {
+      flash(t("อัปเดตสถานะแล้ว", "Status updated")); loadAll();
+      notifyLark(id, prev, status, reviews[id]?.teams ?? [], teams);
+    }
   }
 
   async function savePlan(category: string, plan: string) {
@@ -594,13 +602,13 @@ function ListView({
   entries, reviews, loading, userId, isAdmin, statusOf, teamsOf, fBranch, setFBranch, fTeam, setFTeam, onEdit, onDelete, onReview,
   myTeams, onTeamReview, notes,
 }: {
-  myTeams: string[]; onTeamReview: (id: string, status: string, teamNotes: Record<string, string>) => void;
+  myTeams: string[]; onTeamReview: (id: string, status: string, teams: string[], updatedAs: string, teamNotes: Record<string, string>) => void;
   notes: Record<string, Record<string, string>>;
   entries: Q4Entry[]; reviews: Record<string, Q4Review>; loading: boolean; userId: string | null; isAdmin: boolean;
   statusOf: (e: Q4Entry) => string; teamsOf: (e: Q4Entry) => string[];
   fBranch: string; setFBranch: (b: string) => void; fTeam: string; setFTeam: (t: string) => void;
   onEdit: (e: Q4Entry) => void; onDelete: (e: Q4Entry) => void;
-  onReview: (id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>) => void;
+  onReview: (id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>, updatedAs?: string) => void;
 }) {
   const t = useT();
   const [q, setQ] = useState("");
@@ -734,8 +742,8 @@ function TagCard({
 }: {
   teams: string[]; myTeams: string[]; teamNotes: Record<string, string>;
   e: Q4Entry; r?: Q4Review; status: string; canEdit: boolean; canDelete: boolean; isAdmin: boolean;
-  canTeamReview: boolean; onTeamReview: (id: string, status: string, teamNotes: Record<string, string>) => void;
-  onEdit: () => void; onDelete: () => void; onReview: (id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>) => void;
+  canTeamReview: boolean; onTeamReview: (id: string, status: string, teams: string[], updatedAs: string, teamNotes: Record<string, string>) => void;
+  onEdit: () => void; onDelete: () => void; onReview: (id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>, updatedAs?: string) => void;
 }) {
   const t = useT();
   const [st, setSt] = useState(status);
@@ -745,6 +753,7 @@ function TagCard({
   const [nd, setNd] = useState<Record<string, string>>(teamNotes);
   const setNote = (tm: string, v: string) => setNd((cur) => ({ ...cur, [tm]: v }));
   const myOwn = teams.filter((x) => myTeams.includes(x));
+  const [asWho, setAsWho] = useState(isAdmin ? "" : myOwn[0] ?? "");
   const noteList = teams.filter((tm) => teamNotes[tm]);
   const [action, setAction] = useState(r?.action ?? "");
 
@@ -817,7 +826,13 @@ function TagCard({
                 ))}
               </div>
             )}
-            <div className="grid gap-2 md:grid-cols-[170px_minmax(0,1fr)_auto] md:items-end">
+            <div className="grid gap-2 md:grid-cols-[170px_170px_minmax(0,1fr)_auto] md:items-end">
+              <label className="text-xs text-muted">{t("อัปเดตในนาม", "Update as")}
+                <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={asWho} onChange={(x) => setAsWho(x.target.value)}>
+                  <option value="">{t("ส่วนกลาง (Admin)", "Central (Admin)")}</option>
+                  {Q4_TEAMS.map((x) => <option key={x}>{x}</option>)}
+                </select>
+              </label>
               <label className="text-xs text-muted">{t("สถานะ", "Status")}
                 <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={st} onChange={(x) => setSt(x.target.value)}>
                   {Q4_STATUSES.map((s) => <option key={s}>{s}</option>)}
@@ -827,33 +842,56 @@ function TagCard({
                 <input className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={action}
                   onChange={(x) => setAction(x.target.value)} placeholder={t("สิ่งที่ส่วนกลางจะทำ กำหนดเสร็จ", "What Central will do, by when")} />
               </label>
-              <button onClick={() => onReview(e.id, st, sel, action, Object.fromEntries(sel.map((tm) => [tm, nd[tm] ?? ""])))} className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
+              <button onClick={() => onReview(e.id, st, sel, action, Object.fromEntries(sel.map((tm) => [tm, nd[tm] ?? ""])), asWho)} className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
                 {t("บันทึก", "Save")}
               </button>
             </div>
           </div>
         )}
         {canTeamReview && (
-          <div className="mb-3 grid gap-2 rounded-lg border border-[#E23744]/30 bg-surface-2 p-3 md:grid-cols-[170px_minmax(0,1fr)_auto] md:items-end">
-            <p className="text-xs font-semibold text-[#E23744] md:col-span-3">
-              {t(`งานของทีม ${teams.filter((x) => myTeams.includes(x)).join(", ")} (คุณอัปเดตได้)`, `Your team (${teams.filter((x) => myTeams.includes(x)).join(", ")}) can update this`)}
+          <div className="mb-3 space-y-2 rounded-lg border border-[#E23744]/30 bg-surface-2 p-3">
+            <p className="text-xs font-semibold text-[#E23744]">
+              {t(`งานของทีม ${myOwn.join(", ")} · มอบหมายต่อ อัปเดตสถานะ และปิดงานได้`, `Your team (${myOwn.join(", ")}): delegate, update and close`)}
             </p>
-            <label className="text-xs text-muted">{t("สถานะ", "Status")}
-              <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={st} onChange={(x) => setSt(x.target.value)}>
-                {Q4_STATUSES.map((s) => <option key={s}>{s}</option>)}
-              </select>
-            </label>
-            <div className="space-y-1.5">
-              {myOwn.map((tm) => (
-                <label key={tm} className="block text-xs text-muted">{t(`ความคืบหน้าทีม ${tm}`, `${tm} progress`)}
-                  <input className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={nd[tm] ?? ""}
-                    onChange={(x) => setNote(tm, x.target.value)} placeholder={t("สิ่งที่ทีมทำแล้ว / จะทำ กำหนดเสร็จ", "What the team did / will do, by when")} />
-                </label>
-              ))}
+            <div>
+              <span className="text-xs text-muted">{t("มอบหมายต่อให้ทีม (เพิ่มได้ ลบทีมเดิมไม่ได้)", "Delegate to teams (add only)")}</span>
+              <div className="mt-1 flex flex-wrap gap-1.5">
+                {Q4_TEAMS.map((x) => {
+                  const locked = teams.includes(x);
+                  const on = sel.includes(x);
+                  return (
+                    <button key={x} type="button" disabled={locked} onClick={() => toggleTeam(x)} aria-pressed={on}
+                      className={`rounded-md border px-2.5 py-1 text-xs font-semibold transition ${on ? "border-[#14232E] bg-[#14232E] text-[#CFE2F3]" : "border-border bg-surface text-text hover:border-brand-400"} ${locked ? "opacity-70" : ""}`}>
+                      {on ? "✓ " : ""}{x}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-            <button onClick={() => onTeamReview(e.id, st, Object.fromEntries(myOwn.map((tm) => [tm, nd[tm] ?? ""])))} className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
-              {t("บันทึก", "Save")}
-            </button>
+            <div className="grid gap-2 md:grid-cols-[170px_170px_minmax(0,1fr)_auto] md:items-end">
+              <label className="text-xs text-muted">{t("อัปเดตในนาม", "Update as")}
+                <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={asWho} onChange={(x) => setAsWho(x.target.value)}>
+                  {myOwn.map((x) => <option key={x}>{x}</option>)}
+                </select>
+              </label>
+              <label className="text-xs text-muted">{t("สถานะ", "Status")}
+                <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={st} onChange={(x) => setSt(x.target.value)}>
+                  {Q4_STATUSES.map((s) => <option key={s} value={s}>{s}{s === "Completed" ? ` (${t("ปิดงาน", "close")})` : ""}</option>)}
+                </select>
+              </label>
+              <div className="space-y-1.5">
+                {myOwn.map((tm) => (
+                  <label key={tm} className="block text-xs text-muted">{t(`ความคืบหน้าทีม ${tm}`, `${tm} progress`)}
+                    <input className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={nd[tm] ?? ""}
+                      onChange={(x) => setNote(tm, x.target.value)} placeholder={t("สิ่งที่ทีมทำแล้ว / มอบหมายใคร / กำหนดเสร็จ", "Done / delegated to / by when")} />
+                  </label>
+                ))}
+              </div>
+              <button onClick={() => onTeamReview(e.id, st, Array.from(new Set([...teams, ...sel])), asWho, Object.fromEntries(myOwn.map((tm) => [tm, nd[tm] ?? ""])))}
+                className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
+                {t("บันทึก", "Save")}
+              </button>
+            </div>
           </div>
         )}
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 text-sm text-muted">
@@ -863,6 +901,7 @@ function TagCard({
               {status} · {Q4_STATUS_TH[status]}
             </span>
             {teamLabel && !r?.action && <span className="ml-2">{t("ทีม", "Team")}: {teamLabel}</span>}
+            {r?.updated_as && <span className="ml-2">· {t("อัปเดตล่าสุดโดย", "Last update by")} <b className="text-text">{r.updated_as}</b></span>}
           </span>
           <span className="flex items-center gap-2">
             {e.created_name || t("พนักงาน", "Staff")}, {fmt(e.created_at)}{e.updated_at !== e.created_at && ` (${t("แก้ไขแล้ว", "edited")})`}
