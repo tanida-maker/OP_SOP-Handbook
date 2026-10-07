@@ -1,16 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ClipboardList, Download, ListChecks, Loader2, PieChart, Presentation, Radio } from "lucide-react";
+import { ClipboardList, Download, ListChecks, Loader2, PieChart, Presentation, Radio, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/components/LanguageProvider";
 import {
   Q4_AREA_HELP, Q4_BRANCHES, Q4_CATEGORIES, Q4_CATEGORY_NAMES, Q4_CLOSED, Q4_PRIORITIES,
   Q4_STATUSES, Q4_STATUS_TH, Q4_TEAMS, q4AreasFor,
-  type Q4Entry, type Q4Plan, type Q4Priority, type Q4Review, type Q4TeamMember, type Q4Analysis,
+  type Q4Entry, type Q4Plan, type Q4Priority, type Q4Review, type Q4TeamMember, type Q4Analysis, type Q4Task,
 } from "@/lib/q4";
 
-type Tab = "form" | "list" | "summary" | "present";
+type Tab = "form" | "list" | "summary" | "present" | "team";
 type Draft = {
   branch: string; service_area: string; category: string; period: string;
   issue: string; impact: string; support: string; prep: string; priority: Q4Priority | ""; notes: string;
@@ -43,6 +43,7 @@ export default function Q4App({
   const [reviews, setReviews] = useState<Record<string, Q4Review>>({});
   const [plans, setPlans] = useState<Record<string, Q4Plan>>({});
   const [notes, setNotes] = useState<Record<string, Record<string, string>>>({});
+  const [tasks, setTasks] = useState<Record<string, Record<string, Q4Task>>>({});
   const [loading, setLoading] = useState(true);
   const [live, setLive] = useState(false);
   const [loadErr, setLoadErr] = useState("");
@@ -68,6 +69,10 @@ export default function Q4App({
       (nm[x.entry_id] = nm[x.entry_id] || {})[x.team] = x.note;
     });
     setNotes(nm);
+    const tk = await supabase.from("q4_team_tasks").select("entry_id, team, assignee, assignee_email, assignee_name");
+    const tkm: Record<string, Record<string, Q4Task>> = {};
+    ((tk.data ?? []) as Q4Task[]).forEach((x) => { (tkm[x.entry_id] = tkm[x.entry_id] || {})[x.team] = x; });
+    setTasks(tkm);
     const rm: Record<string, Q4Review> = {};
     (r.data ?? []).forEach((x) => { rm[(x as Q4Review).entry_id] = x as Q4Review; });
     setReviews(rm);
@@ -76,11 +81,14 @@ export default function Q4App({
     setPlans(pm);
     const an = await supabase.from("q4_analysis").select("*").order("created_at", { ascending: false }).limit(1);
     setAnalysis(((an.data ?? [])[0] as Q4Analysis | undefined) ?? null);
+    let mine: string[] = [];
     if (userId) {
       const tm = await supabase.from("q4_team_members").select("team").eq("user_id", userId);
-      setMyTeams((tm.data ?? []).map((x) => (x as { team: string }).team));
+      mine = (tm.data ?? []).map((x) => (x as { team: string }).team);
+      setMyTeams(mine);
     }
-    if (isAdmin) {
+    if (isAdmin || mine.length) {
+      // admins get every team, team members only their own teams (filtered in SQL)
       const lm = await supabase.rpc("q4_list_team_members");
       setTeamMembers((lm.data ?? []) as Q4TeamMember[]);
     }
@@ -101,6 +109,7 @@ export default function Q4App({
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_plans" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_team_members" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_team_notes" }, () => schedule())
+      .on("postgres_changes", { event: "*", schema: "sop", table: "q4_team_tasks" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_analysis" }, () => schedule())
       .subscribe((status) => setLive(status === "SUBSCRIBED"));
     return () => {
@@ -191,17 +200,40 @@ export default function Q4App({
 
   // Team member (not admin): may change status + action of issues assigned to their team.
   // Lark notification (group + reporter DM) when the status really changed. Never blocks the save.
-  async function notifyLark(id: string, prev: string, next: string, prevTeams: string[], nextTeams: string[]) {
+  async function notifyLark(id: string, prev: string, next: string, prevTeams: string[], nextTeams: string[], assigned = false) {
     const added = nextTeams.some((x) => !prevTeams.includes(x));
-    if (prev === next && !added) return;
+    if (prev === next && !added && !assigned) return;
     try {
       const res = await fetch("/api/q4/notify", {
         method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ entry_id: id, prev_status: prev, prev_teams: prevTeams }),
+        body: JSON.stringify({ entry_id: id, prev_status: prev, prev_teams: prevTeams, assigned }),
       });
       const j = await res.json().catch(() => ({}));
       if (j.group === "sent" || j.branch === "sent" || j.dm === "sent") flash(t("อัปเดตแล้ว และแจ้ง Lark แล้ว", "Updated and sent to Lark"));
     } catch { /* notification is best-effort */ }
+  }
+
+  // Team workspace: status + delegate to other teams + team comment + person in the team, in one save.
+  async function saveTask(id: string, team: string, status: string, addTeams: string[], note: string, assigneeEmail: string) {
+    const prev = reviews[id]?.status ?? "New";
+    const prevTeams = reviews[id]?.teams ?? [];
+    const teams = Array.from(new Set([...prevTeams, team, ...addTeams]));
+    const u = await supabase.from("q4_reviews").update({ status, teams, updated_as: team }).eq("entry_id", id).select("entry_id");
+    if (u.error || !u.data?.length) { flash(t("อัปเดตไม่สำเร็จ (ไม่มีสิทธิ์ในเรื่องนี้)", "Update failed (no permission)")); return false; }
+    const err = await writeNotes(id, { [team]: note });
+    if (err) { flash(t("บันทึกความเห็นไม่สำเร็จ: ", "Comment failed: ") + err); return false; }
+    let assigned = false;
+    const cur = (tasks[id]?.[team]?.assignee_email ?? "").toLowerCase();
+    if (assigneeEmail.trim().toLowerCase() !== cur) {
+      const r = await supabase.rpc("q4_assign_task", { p_entry: id, p_team: team, p_email: assigneeEmail.trim() || null });
+      if (r.error) { flash(t("มอบหมายผู้รับงานไม่สำเร็จ: ", "Assign failed: ") + r.error.message); return false; }
+      if (r.data === "not_found") { flash(t("ไม่พบบัญชีอีเมลนี้ (ต้องเคย Login ระบบตารางงาน)", "No account with this e-mail")); return false; }
+      assigned = true;
+    }
+    flash(t("อัปเดตแล้ว", "Updated"));
+    loadAll();
+    notifyLark(id, prev, status, prevTeams, teams, assigned);
+    return true;
   }
 
   // Upsert non-empty notes, delete emptied ones, for the given teams only.
@@ -386,6 +418,7 @@ export default function Q4App({
           ["list", `${t("รายการทั้งหมด", "All issues")}${entries.length ? ` (${entries.length})` : ""}`, ListChecks],
           ["summary", t("สรุปผล", "Summary"), PieChart],
           ["present", t("Presentation", "Presentation"), Presentation],
+          ...((isAdmin || myTeams.length) ? [["team", t("ทีม Support", "Support team"), Users] as const] : []),
         ] as const).map(([k, label, Icon]) => (
           <button
             key={k}
@@ -418,7 +451,7 @@ export default function Q4App({
           entries={entries} reviews={reviews} loading={loading} userId={userId} isAdmin={isAdmin}
           statusOf={statusOf} teamsOf={teamsOf} fBranch={fBranch} setFBranch={setFBranch} fTeam={fTeam} setFTeam={setFTeam}
           onEdit={startEdit} onDelete={remove} onReview={saveReview}
-          myTeams={myTeams} onTeamReview={saveTeamReview} notes={notes}
+          myTeams={myTeams} onTeamReview={saveTeamReview} notes={notes} tasks={tasks}
         />
       )}
       {tab === "summary" && (
@@ -432,6 +465,14 @@ export default function Q4App({
       )}
 
       {tab === "present" && <PresentationView />}
+      {tab === "team" && (
+        <MyTeamView
+          isAdmin={isAdmin} myTeams={myTeams} members={teamMembers} userId={userId}
+          entries={entries} statusOf={statusOf} teamsOf={teamsOf} notes={notes} tasks={tasks} onSaveTask={saveTask}
+          onAdd={addTeamMember} onRemove={removeTeamMember}
+          onOpenList={(team) => { setFTeam(team); setTab("list"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+        />
+      )}
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-[#14232E] px-4 py-2.5 text-sm text-white shadow-lg">
@@ -600,8 +641,9 @@ function FormView({
 /* ====================================================================== */
 function ListView({
   entries, reviews, loading, userId, isAdmin, statusOf, teamsOf, fBranch, setFBranch, fTeam, setFTeam, onEdit, onDelete, onReview,
-  myTeams, onTeamReview, notes,
+  myTeams, onTeamReview, notes, tasks,
 }: {
+  tasks: Record<string, Record<string, Q4Task>>;
   myTeams: string[]; onTeamReview: (id: string, status: string, teams: string[], updatedAs: string, teamNotes: Record<string, string>) => void;
   notes: Record<string, Record<string, string>>;
   entries: Q4Entry[]; reviews: Record<string, Q4Review>; loading: boolean; userId: string | null; isAdmin: boolean;
@@ -717,7 +759,7 @@ function ListView({
       ) : (
         <div className="space-y-3">
           {rows.map((e) => (
-            <TagCard key={`${e.id}-${reviews[e.id]?.updated_at ?? ""}-${JSON.stringify(notes[e.id] ?? {})}`} teamNotes={notes[e.id] ?? {}} e={e} r={reviews[e.id]} status={statusOf(e)}
+            <TagCard key={`${e.id}-${reviews[e.id]?.updated_at ?? ""}-${JSON.stringify(notes[e.id] ?? {})}`} teamNotes={notes[e.id] ?? {}} teamTasks={tasks[e.id] ?? {}} e={e} r={reviews[e.id]} status={statusOf(e)}
               canEdit={!!userId && e.created_by === userId} canDelete={isAdmin} isAdmin={isAdmin}
               teams={teamsOf(e)} canTeamReview={!isAdmin && teamsOf(e).some((x) => myTeams.includes(x))}
               myTeams={myTeams}
@@ -738,9 +780,9 @@ function Empty({ title, body }: { title: string; body: string }) {
 }
 
 function TagCard({
-  e, r, status, teams, myTeams, teamNotes, canEdit, canDelete, isAdmin, canTeamReview, onEdit, onDelete, onReview, onTeamReview,
+  e, r, status, teams, myTeams, teamNotes, teamTasks, canEdit, canDelete, isAdmin, canTeamReview, onEdit, onDelete, onReview, onTeamReview,
 }: {
-  teams: string[]; myTeams: string[]; teamNotes: Record<string, string>;
+  teams: string[]; myTeams: string[]; teamNotes: Record<string, string>; teamTasks: Record<string, Q4Task>;
   e: Q4Entry; r?: Q4Review; status: string; canEdit: boolean; canDelete: boolean; isAdmin: boolean;
   canTeamReview: boolean; onTeamReview: (id: string, status: string, teams: string[], updatedAs: string, teamNotes: Record<string, string>) => void;
   onEdit: () => void; onDelete: () => void; onReview: (id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>, updatedAs?: string) => void;
@@ -754,7 +796,7 @@ function TagCard({
   const setNote = (tm: string, v: string) => setNd((cur) => ({ ...cur, [tm]: v }));
   const myOwn = teams.filter((x) => myTeams.includes(x));
   const [asWho, setAsWho] = useState(isAdmin ? "" : myOwn[0] ?? "");
-  const noteList = teams.filter((tm) => teamNotes[tm]);
+  const noteList = teams.filter((tm) => teamNotes[tm] || teamTasks[tm]);
   const [action, setAction] = useState(r?.action ?? "");
 
   const flow: [string, string | null, boolean][] = [
@@ -794,7 +836,9 @@ function TagCard({
         {noteList.length > 0 && (
           <div className="mb-2 space-y-1 rounded-lg border border-border px-3 py-2 text-sm">
             {noteList.map((tm) => (
-              <p key={tm}><b className="mr-1 inline-block rounded bg-[#CFE2F3] px-1.5 text-xs text-[#14232E]">{tm}</b>{teamNotes[tm]}</p>
+              <p key={tm}><b className="mr-1 inline-block rounded bg-[#CFE2F3] px-1.5 text-xs text-[#14232E]">{tm}</b>
+                {teamTasks[tm] && <span className="mr-1 text-xs font-semibold text-muted">👤 {teamTasks[tm].assignee_name || teamTasks[tm].assignee_email}</span>}
+                {teamNotes[tm]}</p>
             ))}
           </div>
         )}
@@ -1728,6 +1772,163 @@ function PresentationView() {
           </div>
           <p className="mt-[2.5%] text-[1.1em] text-[#5B6C79]">เตรียมความพร้อม Q4 &amp; ปีใหม่ · 2 / 2</p>
         </section>
+      </div>
+    </div>
+  );
+}
+
+/* ====================================================================== */
+/* My team: team members manage their own team (add people by e-mail)     */
+/* ====================================================================== */
+function MyTeamView({
+  isAdmin, myTeams, members, userId, entries, statusOf, teamsOf, notes, tasks, onSaveTask, onAdd, onRemove, onOpenList,
+}: {
+  isAdmin: boolean; myTeams: string[]; members: Q4TeamMember[]; userId: string | null;
+  entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamsOf: (e: Q4Entry) => string[];
+  notes: Record<string, Record<string, string>>; tasks: Record<string, Record<string, Q4Task>>;
+  onSaveTask: (id: string, team: string, status: string, addTeams: string[], note: string, assigneeEmail: string) => Promise<boolean>;
+  onAdd: (email: string, team: string) => void; onRemove: (m: Q4TeamMember) => void; onOpenList: (team: string) => void;
+}) {
+  const t = useT();
+  const teams = isAdmin ? Q4_TEAMS : myTeams;
+  const [team, setTeam] = useState(teams[0] ?? "");
+  const [draft, setDraft] = useState("");
+  const [showClosed, setShowClosed] = useState(false);
+
+  if (!teams.length) {
+    return <div className="rounded-xl border border-dashed border-border px-4 py-12 text-center text-muted">{t("คุณยังไม่ได้อยู่ในทีมใด ขอให้ Admin หรือคนในทีมเพิ่มอีเมลของคุณ", "You are not in any team yet")}</div>;
+  }
+  const list = members.filter((m) => m.team === team);
+  const rank: Record<string, number> = { High: 0, Medium: 1, Low: 2 };
+  const mine = entries.filter((e) => teamsOf(e).includes(team));
+  const shown = mine.filter((e) => showClosed || !Q4_CLOSED.has(statusOf(e)))
+    .sort((a, b) => rank[a.priority] - rank[b.priority] || a.created_at.localeCompare(b.created_at));
+  const open = mine.filter((e) => !Q4_CLOSED.has(statusOf(e))).length;
+  const high = mine.filter((e) => e.priority === "High" && !Q4_CLOSED.has(statusOf(e))).length;
+  const done = mine.filter((e) => statusOf(e) === "Completed").length;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-2">
+        {teams.map((x) => (
+          <button key={x} onClick={() => setTeam(x)}
+            className={`rounded-lg border px-3 py-1.5 text-sm font-semibold ${team === x ? "border-[#14232E] bg-[#14232E] text-[#CFE2F3]" : "border-border bg-surface"}`}>
+            {x}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+        {/* ---------- tasks ---------- */}
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-lg font-bold">
+              {t("งานของทีม", "Team issues")} {team}
+              <span className="ml-2 text-sm font-normal text-muted">{t("ค้าง", "open")} {open} · High {high} · {t("ปิดแล้ว", "done")} {done}</span>
+            </h2>
+            <label className="flex items-center gap-1.5 text-sm text-muted">
+              <input type="checkbox" checked={showClosed} onChange={(e) => setShowClosed(e.target.checked)} /> {t("แสดงงานที่ปิดแล้ว", "Show closed")}
+            </label>
+          </div>
+          {!shown.length ? (
+            <div className="rounded-xl border border-dashed border-border px-4 py-10 text-center text-muted">{t("ไม่มีงานค้างของทีมนี้", "No open issues")}</div>
+          ) : shown.map((e) => (
+            <TeamTaskRow key={`${e.id}-${statusOf(e)}-${notes[e.id]?.[team] ?? ""}-${tasks[e.id]?.[team]?.assignee_email ?? ""}-${teamsOf(e).join("|")}`}
+              e={e} team={team} status={statusOf(e)} teams={teamsOf(e)} note={notes[e.id]?.[team] ?? ""}
+              assignee={tasks[e.id]?.[team]?.assignee_email ?? ""} members={list} onSave={onSaveTask} />
+          ))}
+          <button onClick={() => onOpenList(team)} className="text-sm font-semibold text-brand-600 hover:underline">
+            {t("ดูการ์ดแบบเต็มในแท็บรายการทั้งหมด", "Open full cards")} →
+          </button>
+        </div>
+
+        {/* ---------- members ---------- */}
+        <aside className="h-fit space-y-3 rounded-xl border border-border bg-surface p-4">
+          <h3 className="font-bold">{t("สมาชิกทีม", "Members")} {team} ({list.length})</h3>
+          <p className="text-xs text-muted">{t("คนในทีมเพิ่มสมาชิกเองได้ด้วยอีเมลที่ใช้ Login ไม่ต้องผ่าน Admin", "Team members can add people by login e-mail")}</p>
+          {!list.length ? <p className="text-sm text-muted">-</p> : (
+            <ul className="divide-y divide-border rounded-lg border border-border">
+              {list.map((m) => (
+                <li key={`${m.user_id}-${m.team}`} className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
+                  <span className="min-w-0">
+                    <b className="block truncate">{m.full_name || m.email}{m.user_id === userId ? ` (${t("คุณ", "you")})` : ""}</b>
+                    {m.full_name && <span className="block truncate text-xs text-muted">{m.email}</span>}
+                  </span>
+                  {m.user_id !== userId && (
+                    <button onClick={() => onRemove(m)} className="shrink-0 rounded-md border border-border px-2 py-0.5 text-xs text-danger hover:bg-surface-2">{t("นำออก", "Remove")}</button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="flex gap-2">
+            <input className="min-w-0 flex-1 rounded-lg border border-border bg-surface px-2.5 py-2 text-sm" type="email"
+              placeholder={t("อีเมลที่ใช้ Login", "Login e-mail")} value={draft} onChange={(e) => setDraft(e.target.value)} />
+            <button disabled={!draft.trim()} onClick={() => { onAdd(draft.trim(), team); setDraft(""); }}
+              className="rounded-lg bg-[#14232E] px-3 py-2 text-sm font-semibold text-[#CFE2F3] disabled:opacity-50">{t("เพิ่ม", "Add")}</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+function TeamTaskRow({
+  e, team, status, teams, note, assignee, members, onSave,
+}: {
+  e: Q4Entry; team: string; status: string; teams: string[]; note: string; assignee: string; members: Q4TeamMember[];
+  onSave: (id: string, team: string, status: string, addTeams: string[], note: string, assigneeEmail: string) => Promise<boolean>;
+}) {
+  const t = useT();
+  const [st, setSt] = useState(status);
+  const [nt, setNt] = useState(note);
+  const [who, setWho] = useState(assignee);
+  const [add, setAdd] = useState<string[]>([]);
+  const [busy, setBusy] = useState(false);
+  const listId = `q4-members-${team.replace(/[^a-z0-9]/gi, "")}`;
+  const input = "mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text";
+  return (
+    <div className="rounded-xl border border-border bg-surface p-3">
+      <div className="mb-2 flex flex-wrap items-center gap-2 text-sm">
+        <b className="rounded bg-[#14232E] px-2 py-0.5 text-[#CFE2F3]">{e.branch}</b>
+        <span className={`rounded px-1.5 py-0.5 text-xs font-bold text-white ${PRI_STYLE[e.priority]}`}>{e.priority}</span>
+        <span className="font-semibold">{short(e.category)}</span>
+        <span className="text-xs text-muted">· {teams.join(", ")}</span>
+      </div>
+      <p className="mb-2 text-sm"><span className="text-muted">{t("ต้องการให้ Support:", "Support needed:")}</span> {e.support}</p>
+      <div className="grid gap-2 md:grid-cols-[150px_200px_minmax(0,1fr)]">
+        <label className="text-xs text-muted">{t("สถานะ", "Status")}
+          <select className={input} value={st} onChange={(x) => setSt(x.target.value)}>
+            {Q4_STATUSES.map((s) => <option key={s} value={s}>{s}{s === "Completed" ? ` (${t("ปิดงาน", "close")})` : ""}</option>)}
+          </select>
+        </label>
+        <label className="text-xs text-muted">{t("ผู้รับงานในทีม (อีเมล)", "Assignee (e-mail)")}
+          <input className={input} list={listId} value={who} onChange={(x) => setWho(x.target.value)} placeholder={t("เลือกหรือพิมพ์อีเมล", "Pick or type e-mail")} />
+          <datalist id={listId}>{members.map((m) => <option key={m.user_id} value={m.email}>{m.full_name || m.email}</option>)}</datalist>
+        </label>
+        <label className="text-xs text-muted">{t(`ความคืบหน้าทีม ${team}`, `${team} progress`)}
+          <input className={input} value={nt} onChange={(x) => setNt(x.target.value)} placeholder={t("ทำแล้ว / จะทำ / กำหนดเสร็จ", "Done / next / due")} />
+        </label>
+      </div>
+      <details className="mt-2 text-xs">
+        <summary className="cursor-pointer font-semibold text-muted">{t("มอบหมายต่อให้ทีมอื่น", "Delegate to another team")}{add.length ? ` (${add.join(", ")})` : ""}</summary>
+        <div className="mt-1.5 flex flex-wrap gap-1.5">
+          {Q4_TEAMS.filter((x) => !teams.includes(x)).map((x) => {
+            const on = add.includes(x);
+            return (
+              <button key={x} type="button" onClick={() => setAdd((c) => (on ? c.filter((y) => y !== x) : [...c, x]))}
+                className={`rounded-md border px-2 py-0.5 font-semibold ${on ? "border-[#14232E] bg-[#14232E] text-[#CFE2F3]" : "border-border bg-surface"}`}>
+                {on ? "✓ " : ""}{x}
+              </button>
+            );
+          })}
+        </div>
+      </details>
+      <div className="mt-2 flex justify-end">
+        <button disabled={busy} onClick={async () => { setBusy(true); await onSave(e.id, team, st, add, nt, who); setBusy(false); }}
+          className="rounded-md bg-[#14232E] px-4 py-1.5 text-sm font-semibold text-[#CFE2F3] disabled:opacity-50">
+          {busy ? t("กำลังบันทึก", "Saving") : t("บันทึก", "Save")}
+        </button>
       </div>
     </div>
   );
