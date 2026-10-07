@@ -126,3 +126,10 @@ export interface Q4TeamMember {
      model: string | null;
      created_at: string;
    }
+export interface Q4Task {
+  entry_id: string;
+  team: string;
+  assignee: string | null;
+  assignee_email: string | null;
+  assignee_name: string | null;
+}
