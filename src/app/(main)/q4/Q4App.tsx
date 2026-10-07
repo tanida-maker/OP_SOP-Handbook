@@ -42,6 +42,7 @@ export default function Q4App({
   const [entries, setEntries] = useState<Q4Entry[]>([]);
   const [reviews, setReviews] = useState<Record<string, Q4Review>>({});
   const [plans, setPlans] = useState<Record<string, Q4Plan>>({});
+  const [notes, setNotes] = useState<Record<string, Record<string, string>>>({});
   const [loading, setLoading] = useState(true);
   const [live, setLive] = useState(false);
   const [loadErr, setLoadErr] = useState("");
@@ -53,14 +54,20 @@ export default function Q4App({
 
   // ---------- data ----------
   const loadAll = useCallback(async () => {
-    const [e, r, p] = await Promise.all([
+    const [e, r, p, n] = await Promise.all([
       supabase.from("q4_entries").select("*").order("created_at", { ascending: false }),
       supabase.from("q4_reviews").select("*"),
       supabase.from("q4_plans").select("*"),
+      supabase.from("q4_team_notes").select("entry_id, team, note"),
     ]);
     if (e.error) { setLoadErr(e.error.message); setLoading(false); return; }
     setLoadErr("");
     setEntries((e.data ?? []) as Q4Entry[]);
+    const nm: Record<string, Record<string, string>> = {};
+    ((n.data ?? []) as { entry_id: string; team: string; note: string }[]).forEach((x) => {
+      (nm[x.entry_id] = nm[x.entry_id] || {})[x.team] = x.note;
+    });
+    setNotes(nm);
     const rm: Record<string, Q4Review> = {};
     (r.data ?? []).forEach((x) => { rm[(x as Q4Review).entry_id] = x as Q4Review; });
     setReviews(rm);
@@ -93,6 +100,7 @@ export default function Q4App({
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_reviews" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_plans" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_team_members" }, () => schedule())
+      .on("postgres_changes", { event: "*", schema: "sop", table: "q4_team_notes" }, () => schedule())
       .on("postgres_changes", { event: "*", schema: "sop", table: "q4_analysis" }, () => schedule())
       .subscribe((status) => setLive(status === "SUBSCRIBED"));
     return () => {
@@ -182,12 +190,28 @@ export default function Q4App({
   }
 
   // Team member (not admin): may change status + action of issues assigned to their team.
-  async function saveTeamReview(id: string, status: string, action: string) {
-    const { data, error } = await supabase.from("q4_reviews")
-      .update({ status, action: action.trim() || null })
-      .eq("entry_id", id).select("entry_id");
-    if (error || !data?.length) flash(t("อัปเดตไม่สำเร็จ (ไม่มีสิทธิ์ในเรื่องนี้)", "Update failed (no permission)"));
-    else { flash(t("อัปเดตสถานะแล้ว", "Status updated")); loadAll(); }
+  // Upsert non-empty notes, delete emptied ones, for the given teams only.
+  async function writeNotes(id: string, teamNotes: Record<string, string>) {
+    const up = Object.entries(teamNotes).filter(([, v]) => v.trim()).map(([team, v]) => ({ entry_id: id, team, note: v.trim() }));
+    const del = Object.entries(teamNotes).filter(([, v]) => !v.trim()).map(([team]) => team);
+    if (up.length) {
+      const r = await supabase.from("q4_team_notes").upsert(up, { onConflict: "entry_id,team" });
+      if (r.error) return r.error.message;
+    }
+    if (del.length) {
+      const r = await supabase.from("q4_team_notes").delete().eq("entry_id", id).in("team", del);
+      if (r.error) return r.error.message;
+    }
+    return null;
+  }
+
+  // Team member (not admin): status of an issue assigned to their team + their own team's comment.
+  async function saveTeamReview(id: string, status: string, teamNotes: Record<string, string>) {
+    const { data, error } = await supabase.from("q4_reviews").update({ status }).eq("entry_id", id).select("entry_id");
+    if (error || !data?.length) { flash(t("อัปเดตไม่สำเร็จ (ไม่มีสิทธิ์ในเรื่องนี้)", "Update failed (no permission)")); return; }
+    const err = await writeNotes(id, teamNotes);
+    if (err) flash(t("บันทึกความเห็นทีมไม่สำเร็จ: ", "Team comment failed: ") + err);
+    else { flash(t("อัปเดตแล้ว", "Updated")); loadAll(); }
   }
 
   // Save a summary that an admin produced in claude.ai (pasted back) so every team can read it.
@@ -214,12 +238,18 @@ export default function Q4App({
     if (error) flash(t("ลบไม่สำเร็จ", "Remove failed")); else { flash(t("นำออกแล้ว", "Removed")); loadAll(); }
   }
 
-  async function saveReview(id: string, status: string, teams: string[], action: string) {
+  async function saveReview(id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>) {
     const { error } = await supabase.from("q4_reviews").upsert({
       entry_id: id, status, teams, team: teams[0] ?? null, action: action.trim() || null,
       updated_by: userId, updated_at: new Date().toISOString(),
     });
-    if (error) flash(t("อัปเดตไม่สำเร็จ: ", "Update failed: ") + error.message);
+    if (error) { flash(t("อัปเดตไม่สำเร็จ: ", "Update failed: ") + error.message); return; }
+    // drop comments of teams that were un-assigned
+    const removed = Object.keys(notes[id] ?? {}).filter((tm) => !teams.includes(tm));
+    const all: Record<string, string> = { ...teamNotes };
+    removed.forEach((tm) => { all[tm] = ""; });
+    const err = await writeNotes(id, all);
+    if (err) flash(t("บันทึกความเห็นทีมไม่สำเร็จ: ", "Team comment failed: ") + err);
     else { flash(t("อัปเดตสถานะแล้ว", "Status updated")); loadAll(); }
   }
 
@@ -245,13 +275,14 @@ export default function Q4App({
     const head = [
       "No.", "Branch / Team", "Service Area", "Category", "Issue / Situation from Previous Year", "Impact",
       "Support Required from Central", "Priority", "Proposed Solution / Preparation", "Responsible Team",
-      "Status", "Additional Notes", "Period", "Central Action", "Submitted By", "Submitted At",
+      "Status", "Additional Notes", "Period", "Central Action", "Team Comments", "Submitted By", "Submitted At",
     ];
     const rows = [...entries]
       .sort((a, b) => a.created_at.localeCompare(b.created_at))
       .map((e, i) => [
         String(i + 1), e.branch, e.service_area, e.category, e.issue, e.impact, e.support, e.priority,
         e.prep ?? "", teamOf(e), statusOf(e), e.notes ?? "", e.period ?? "", reviews[e.id]?.action ?? "",
+        Object.entries(notes[e.id] ?? {}).map(([tm, v]) => `${tm}: ${v}`).join(" | "),
         e.created_name ?? "", fmt(e.created_at),
       ]);
     const cell = (v: string) => `"${String(v).replace(/"/g, '""')}"`;
@@ -364,7 +395,7 @@ export default function Q4App({
           entries={entries} reviews={reviews} loading={loading} userId={userId} isAdmin={isAdmin}
           statusOf={statusOf} teamsOf={teamsOf} fBranch={fBranch} setFBranch={setFBranch} fTeam={fTeam} setFTeam={setFTeam}
           onEdit={startEdit} onDelete={remove} onReview={saveReview}
-          myTeams={myTeams} onTeamReview={saveTeamReview}
+          myTeams={myTeams} onTeamReview={saveTeamReview} notes={notes}
         />
       )}
       {tab === "summary" && (
@@ -546,14 +577,15 @@ function FormView({
 /* ====================================================================== */
 function ListView({
   entries, reviews, loading, userId, isAdmin, statusOf, teamsOf, fBranch, setFBranch, fTeam, setFTeam, onEdit, onDelete, onReview,
-  myTeams, onTeamReview,
+  myTeams, onTeamReview, notes,
 }: {
-  myTeams: string[]; onTeamReview: (id: string, status: string, action: string) => void;
+  myTeams: string[]; onTeamReview: (id: string, status: string, teamNotes: Record<string, string>) => void;
+  notes: Record<string, Record<string, string>>;
   entries: Q4Entry[]; reviews: Record<string, Q4Review>; loading: boolean; userId: string | null; isAdmin: boolean;
   statusOf: (e: Q4Entry) => string; teamsOf: (e: Q4Entry) => string[];
   fBranch: string; setFBranch: (b: string) => void; fTeam: string; setFTeam: (t: string) => void;
   onEdit: (e: Q4Entry) => void; onDelete: (e: Q4Entry) => void;
-  onReview: (id: string, status: string, teams: string[], action: string) => void;
+  onReview: (id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>) => void;
 }) {
   const t = useT();
   const [q, setQ] = useState("");
@@ -662,7 +694,7 @@ function ListView({
       ) : (
         <div className="space-y-3">
           {rows.map((e) => (
-            <TagCard key={`${e.id}-${reviews[e.id]?.updated_at ?? ""}`} e={e} r={reviews[e.id]} status={statusOf(e)}
+            <TagCard key={`${e.id}-${reviews[e.id]?.updated_at ?? ""}-${JSON.stringify(notes[e.id] ?? {})}`} teamNotes={notes[e.id] ?? {}} e={e} r={reviews[e.id]} status={statusOf(e)}
               canEdit={!!userId && e.created_by === userId} canDelete={isAdmin} isAdmin={isAdmin}
               teams={teamsOf(e)} canTeamReview={!isAdmin && teamsOf(e).some((x) => myTeams.includes(x))}
               myTeams={myTeams}
@@ -683,18 +715,22 @@ function Empty({ title, body }: { title: string; body: string }) {
 }
 
 function TagCard({
-  e, r, status, teams, myTeams, canEdit, canDelete, isAdmin, canTeamReview, onEdit, onDelete, onReview, onTeamReview,
+  e, r, status, teams, myTeams, teamNotes, canEdit, canDelete, isAdmin, canTeamReview, onEdit, onDelete, onReview, onTeamReview,
 }: {
-  teams: string[]; myTeams: string[];
+  teams: string[]; myTeams: string[]; teamNotes: Record<string, string>;
   e: Q4Entry; r?: Q4Review; status: string; canEdit: boolean; canDelete: boolean; isAdmin: boolean;
-  canTeamReview: boolean; onTeamReview: (id: string, status: string, action: string) => void;
-  onEdit: () => void; onDelete: () => void; onReview: (id: string, status: string, teams: string[], action: string) => void;
+  canTeamReview: boolean; onTeamReview: (id: string, status: string, teamNotes: Record<string, string>) => void;
+  onEdit: () => void; onDelete: () => void; onReview: (id: string, status: string, teams: string[], action: string, teamNotes: Record<string, string>) => void;
 }) {
   const t = useT();
   const [st, setSt] = useState(status);
   const [sel, setSel] = useState<string[]>(teams);
   const toggleTeam = (x: string) => setSel((cur) => (cur.includes(x) ? cur.filter((y) => y !== x) : [...cur, x]));
   const teamLabel = teams.join(", ");
+  const [nd, setNd] = useState<Record<string, string>>(teamNotes);
+  const setNote = (tm: string, v: string) => setNd((cur) => ({ ...cur, [tm]: v }));
+  const myOwn = teams.filter((x) => myTeams.includes(x));
+  const noteList = teams.filter((tm) => teamNotes[tm]);
   const [action, setAction] = useState(r?.action ?? "");
 
   const flow: [string, string | null, boolean][] = [
@@ -731,6 +767,13 @@ function TagCard({
             <b>Central action{teamLabel ? ` (${teamLabel})` : ""}:</b> {r.action}
           </div>
         )}
+        {noteList.length > 0 && (
+          <div className="mb-2 space-y-1 rounded-lg border border-border px-3 py-2 text-sm">
+            {noteList.map((tm) => (
+              <p key={tm}><b className="mr-1 inline-block rounded bg-[#CFE2F3] px-1.5 text-xs text-[#14232E]">{tm}</b>{teamNotes[tm]}</p>
+            ))}
+          </div>
+        )}
         {isAdmin && (
           <div className="mb-3 space-y-2 rounded-lg bg-surface-2 p-3">
             <div>
@@ -747,6 +790,18 @@ function TagCard({
                 })}
               </div>
             </div>
+            {sel.length > 0 && (
+              <div className="space-y-1.5">
+                <span className="text-xs text-muted">{t("ความเห็น / งานของแต่ละทีม", "Comment per team")}</span>
+                {sel.map((tm) => (
+                  <label key={tm} className="grid grid-cols-[120px_minmax(0,1fr)] items-center gap-2 text-xs font-semibold">
+                    <span className="truncate">{tm}</span>
+                    <input className="w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm font-normal text-text" value={nd[tm] ?? ""}
+                      onChange={(x) => setNote(tm, x.target.value)} placeholder={t(`สิ่งที่ทีม ${tm} ต้องทำ / กำหนดเสร็จ`, `What ${tm} should do, by when`)} />
+                  </label>
+                ))}
+              </div>
+            )}
             <div className="grid gap-2 md:grid-cols-[170px_minmax(0,1fr)_auto] md:items-end">
               <label className="text-xs text-muted">{t("สถานะ", "Status")}
                 <select className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={st} onChange={(x) => setSt(x.target.value)}>
@@ -757,7 +812,7 @@ function TagCard({
                 <input className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={action}
                   onChange={(x) => setAction(x.target.value)} placeholder={t("สิ่งที่ส่วนกลางจะทำ กำหนดเสร็จ", "What Central will do, by when")} />
               </label>
-              <button onClick={() => onReview(e.id, st, sel, action)} className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
+              <button onClick={() => onReview(e.id, st, sel, action, Object.fromEntries(sel.map((tm) => [tm, nd[tm] ?? ""])))} className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
                 {t("บันทึก", "Save")}
               </button>
             </div>
@@ -773,11 +828,15 @@ function TagCard({
                 {Q4_STATUSES.map((s) => <option key={s}>{s}</option>)}
               </select>
             </label>
-            <label className="text-xs text-muted">{t("ความคืบหน้า / สิ่งที่ทีมจะทำ", "Progress / action")}
-              <input className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={action}
-                onChange={(x) => setAction(x.target.value)} placeholder={t("สิ่งที่ทีมทำแล้ว / จะทำ กำหนดเสร็จ", "What the team did / will do, by when")} />
-            </label>
-            <button onClick={() => onTeamReview(e.id, st, action)} className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
+            <div className="space-y-1.5">
+              {myOwn.map((tm) => (
+                <label key={tm} className="block text-xs text-muted">{t(`ความคืบหน้าทีม ${tm}`, `${tm} progress`)}
+                  <input className="mt-0.5 w-full rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text" value={nd[tm] ?? ""}
+                    onChange={(x) => setNote(tm, x.target.value)} placeholder={t("สิ่งที่ทีมทำแล้ว / จะทำ กำหนดเสร็จ", "What the team did / will do, by when")} />
+                </label>
+              ))}
+            </div>
+            <button onClick={() => onTeamReview(e.id, st, Object.fromEntries(myOwn.map((tm) => [tm, nd[tm] ?? ""])))} className="rounded-md bg-[#14232E] px-3 py-1.5 text-sm font-semibold text-[#CFE2F3]">
               {t("บันทึก", "Save")}
             </button>
           </div>
@@ -1105,15 +1164,15 @@ function mdToHtml(md: string): string {
 
 /* Playbook: first-step solutions and suggested team per category (free, no AI). */
 const PLAYBOOK: Record<string, { team: string; steps: string[] }> = {
-  "Operation / งานหน้าสาขา": { team: "OP", steps: ["ทบทวน Workflow รับฝาก-คืนช่วง Peak และจุดที่เกิด Bottleneck", "เตรียมเคาน์เตอร์/จุดรับฝากชั่วคราว ป้ายบอกทาง และระบบคิว"] },
-  "Guest Service / งานบริการหน้าสาขา": { team: "OP", steps: ["ทำ Guideline/Script หน้าเคาน์เตอร์ช่วง Peak", "Briefing ทีม Guest Service ก่อนเข้า Peak"] },
-  "Porter / งานขนย้ายกระเป๋า": { team: "OP", steps: ["วาง Shift/OT Porter ตามช่วงเที่ยวบินหนาแน่น", "ตรวจและเพิ่ม Trolley / อุปกรณ์ขนย้าย กำหนดจุด Loading ให้ชัด"] },
+  "Operation / งานหน้าสาขา": { team: "OP Manager", steps: ["ทบทวน Workflow รับฝาก-คืนช่วง Peak และจุดที่เกิด Bottleneck", "เตรียมเคาน์เตอร์/จุดรับฝากชั่วคราว ป้ายบอกทาง และระบบคิว"] },
+  "Guest Service / งานบริการหน้าสาขา": { team: "OP Manager", steps: ["ทำ Guideline/Script หน้าเคาน์เตอร์ช่วง Peak", "Briefing ทีม Guest Service ก่อนเข้า Peak"] },
+  "Porter / งานขนย้ายกระเป๋า": { team: "OP Manager", steps: ["วาง Shift/OT Porter ตามช่วงเที่ยวบินหนาแน่น", "ตรวจและเพิ่ม Trolley / อุปกรณ์ขนย้าย กำหนดจุด Loading ให้ชัด"] },
   "Customer / ปัญหาหรือ Case ลูกค้า": { team: "Online-CS", steps: ["ทำ Script และขั้นตอน Service Recovery (Delay / Lost / Damage / Refund)", "กำหนดช่องทาง Escalation และผู้ตัดสินใจช่วง Peak"] },
   "Staffing / Manpower": { team: "HR", steps: ["วางแผนกำลังคน OT และพนักงานเสริมช่วง Peak", "จัด Backup ข้ามสาขาและรายชื่อสำรอง"] },
   "System / IT": { team: "IT", steps: ["ตรวจอุปกรณ์ Internet สำรอง EDC Printer Scanner ก่อน Peak", "กำหนด Contact IT และขั้นตอนเมื่อระบบล่ม"] },
   "Stock / Material": { team: "MS - Logistic", steps: ["ตรวจ Stock Tag / Receipt / ถุง / Packaging ทุกสาขา", "สั่งเพิ่มล่วงหน้าและกำหนดรอบส่งของก่อน Peak"] },
   "Transport / Delivery": { team: "MS - Logistic", steps: ["วางแผนรถและ Runner สำรองช่วง Peak", "ทบทวน Cut-off และช่องทางประสานงานสาขา-Transport"] },
-  "SOP / Training": { team: "OP", steps: ["ปรับ SOP/WI ที่พนักงานยังไม่มั่นใจ", "จัด Training / Simulation / Checklist ก่อนปีใหม่"] },
+  "SOP / Training": { team: "OP Manager", steps: ["ปรับ SOP/WI ที่พนักงานยังไม่มั่นใจ", "จัด Training / Simulation / Checklist ก่อนปีใหม่"] },
   "Emergency / Service Recovery": { team: "Management", steps: ["ทำ Emergency Plan: ระบบล่ม คนไม่พอ กระเป๋าตกค้าง สาขาปิด", "ซ้อมขั้นตอนและแจ้งผู้รับผิดชอบแต่ละกรณี"] },
   "Branch / Facility": { team: "Management", steps: ["ตรวจพื้นที่ Counter Storage ไฟฟ้า แอร์ แสงสว่างก่อน Peak", "ประสานห้าง/สนามบินเรื่องพื้นที่เสริม"] },
   "Equipment / Tools": { team: "MS - Logistic", steps: ["ตรวจอุปกรณ์ประจำสาขาและซ่อม/เปลี่ยนก่อน Peak", "เตรียมอุปกรณ์สำรองไว้ส่วนกลาง"] },
@@ -1121,7 +1180,7 @@ const PLAYBOOK: Record<string, { team: string; steps: string[] }> = {
   "Media / Content / Filming": { team: "Marketing / Media", steps: ["วางตารางถ่ายทำไม่ให้ชนช่วง Peak", "แจ้งสาขาล่วงหน้าและกำหนดพื้นที่ถ่ายทำ"] },
   "Communication / Coordination": { team: "Management", steps: ["กำหนด Contact point และกลุ่มสื่อสารช่วง Peak", "สื่อสารเรื่องสำคัญให้ทุกสาขาเข้าใจตรงกันก่อนเข้า Peak"] },
   "Security / Safety": { team: "Management", steps: ["ทบทวนความปลอดภัยของกระเป๋าและการเข้า-ออกพื้นที่", "ตรวจ CCTV และขั้นตอนเมื่อเกิดเหตุ"] },
-  "Other / อื่นๆ": { team: "OP", steps: ["พิจารณารายกรณีในที่ประชุมส่วนกลาง"] },
+  "Other / อื่นๆ": { team: "OP Manager", steps: ["พิจารณารายกรณีในที่ประชุมส่วนกลาง"] },
 };
 const DUE: Record<string, string> = { High: "ก่อน 1 ธ.ค.", Medium: "1-20 ธ.ค.", Low: "ทบทวนหลัง Peak" };
 
@@ -1141,7 +1200,7 @@ function computeAuto(entries: Q4Entry[], statusOf: (e: Q4Entry) => string, teams
   const byTeam: Record<string, Q4Entry[]> = {};
   open.forEach((e) => {
     const ts = teamsOf(e);
-    (ts.length ? ts : [PLAYBOOK[e.category]?.team ?? "OP"]).forEach((tm) => { (byTeam[tm] = byTeam[tm] || []).push(e); });
+    (ts.length ? ts : [PLAYBOOK[e.category]?.team ?? "OP Manager"]).forEach((tm) => { (byTeam[tm] = byTeam[tm] || []).push(e); });
   });
   const teams: TeamPlan[] = Object.entries(byTeam).map(([team, items]) => {
     items.sort((a, b) => rank[a.priority] - rank[b.priority] || a.branch.localeCompare(b.branch));
