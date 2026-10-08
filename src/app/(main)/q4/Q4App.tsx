@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { UserCog, ClipboardList, Download, ListChecks, Loader2, PieChart, Presentation, Radio, Users } from "lucide-react";
+import { UserCog, NotebookText, ClipboardList, Download, ListChecks, Loader2, PieChart, Presentation, Radio, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/components/LanguageProvider";
 import {
@@ -10,7 +10,7 @@ import {
   type Q4Entry, type Q4Plan, type Q4Priority, type Q4Review, type Q4TeamMember, type Q4Analysis, type Q4Task, type Q4Attachment,
 } from "@/lib/q4";
 
-type Tab = "form" | "list" | "summary" | "present" | "team" | "users";
+type Tab = "form" | "list" | "summary" | "present" | "team" | "users" | "meet";
 type Q4Role = "review" | "assign" | "edit" | null;
 type Draft = {
   branch: string; service_area: string; category: string; period: string;
@@ -499,8 +499,9 @@ export default function Q4App({
           ["summary", t("สรุปผล", "Summary"), PieChart],
           ["present", t("Presentation", "Presentation"), Presentation],
           ...((seesAll || myTeams.length || external) ? [["team", t("ทีม Support", "Support team"), Users] as const] : []),
+          ["meet", t("Minute Meeting", "Minute Meeting"), NotebookText],
           ...(isAdmin ? [["users", t("ผู้ใช้งาน Q4", "Q4 users"), UserCog] as const] : []),
-        ] as const).filter(([k]) => (k !== "form" || canSubmit) && (!limited || k === "summary" || k === "present" || k === "team")).map(([k, label, Icon]) => (
+        ] as const).filter(([k]) => (k !== "form" || canSubmit) && (!limited || k === "summary" || k === "present" || k === "team" || k === "meet")).map(([k, label, Icon]) => (
           <button
             key={k}
             onClick={() => setTab(k)}
@@ -547,6 +548,7 @@ export default function Q4App({
 
       {tab === "present" && <PresentationView />}
       {tab === "users" && isAdmin && <UsersView userId={userId} flash={flash} />}
+      {tab === "meet" && <MeetingsView canEdit={isAdmin} userId={userId} flash={flash} />}
       {tab === "team" && (
         <MyTeamView
           isAdmin={isAdmin} seesAll={seesAll} canAssign={canAssign} myTeams={myTeams} members={teamMembers} userId={userId}
@@ -1324,22 +1326,45 @@ const escHtml = (x: string) =>
 
 // Minimal, safe markdown -> HTML (headings, bullets, bold). Input is escaped first.
 function mdToHtml(md: string): string {
+  // Safe mini-markdown: # / ## / ### headings, - bullets, 1. numbered lists, | tables |, **bold**, --- rule.
   const out: string[] = [];
-  let inList = false;
+  let list: "" | "ul" | "ol" = "";
+  let table: string[][] = [];
   const inline = (x: string) => escHtml(x).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+  const closeList = () => { if (list) { out.push(`</${list}>`); list = ""; } };
+  const flushTable = () => {
+    if (!table.length) return;
+    const [head, ...body] = table;
+    out.push(`<table><thead><tr>${head.map((c) => `<th>${inline(c)}</th>`).join("")}</tr></thead><tbody>${
+      body.map((r) => `<tr>${r.map((c) => `<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`);
+    table = [];
+  };
   for (const raw of md.split(/\r?\n/)) {
     const l = raw.trim();
+    if (l.startsWith("|")) {
+      closeList();
+      const cells = l.replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+      if (!cells.every((c) => /^:?-{2,}:?$/.test(c))) table.push(cells);
+      continue;
+    }
+    flushTable();
     const bullet = /^[-*•]\s+/.test(l);
-    if (!bullet && inList) { out.push("</ul>"); inList = false; }
-    if (bullet) {
-      if (!inList) { out.push("<ul>"); inList = true; }
-      out.push(`<li>${inline(l.replace(/^[-*•]\s+/, ""))}</li>`);
-    } else if (l.startsWith("### ")) out.push(`<h4>${inline(l.slice(4))}</h4>`);
+    const num = /^\d+[.)]\s+/.test(l);
+    if (bullet || num) {
+      const want = bullet ? "ul" : "ol";
+      if (list !== want) { closeList(); out.push(`<${want}>`); list = want; }
+      out.push(`<li>${inline(l.replace(bullet ? /^[-*•]\s+/ : /^\d+[.)]\s+/, ""))}</li>`);
+      continue;
+    }
+    closeList();
+    if (/^-{3,}$/.test(l)) out.push("<hr/>");
+    else if (l.startsWith("### ")) out.push(`<h4>${inline(l.slice(4))}</h4>`);
     else if (l.startsWith("## ")) out.push(`<h3>${inline(l.slice(3))}</h3>`);
     else if (l.startsWith("# ")) out.push(`<h3>${inline(l.slice(2))}</h3>`);
     else if (l) out.push(`<p>${inline(l)}</p>`);
   }
-  if (inList) out.push("</ul>");
+  flushTable();
+  closeList();
   return out.join("");
 }
 
@@ -1471,7 +1496,7 @@ td.b{font-weight:700;white-space:nowrap}.pri{color:#fff;border-radius:4px;paddin
   setTimeout(() => w.print(), 300);
 }
 
-const proseCls = "mt-3 border-t border-border pt-3 text-[15px] leading-relaxed [&_b]:font-bold [&_h3]:mb-1.5 [&_h3]:mt-5 [&_h3]:border-b-2 [&_h3]:border-[#E23744] [&_h3]:pb-1 [&_h3]:text-lg [&_h3]:font-bold [&_h4]:mb-1 [&_h4]:mt-3 [&_h4]:font-bold [&_li]:my-0.5 [&_p]:my-1 [&_ul]:list-disc [&_ul]:pl-5";
+const proseCls = "mt-3 border-t border-border pt-3 text-[15px] leading-relaxed [&_b]:font-bold [&_h3]:mb-1.5 [&_h3]:mt-5 [&_h3]:border-b-2 [&_h3]:border-[#E23744] [&_h3]:pb-1 [&_h3]:text-lg [&_h3]:font-bold [&_h4]:mb-1 [&_h4]:mt-3 [&_h4]:font-bold [&_li]:my-0.5 [&_p]:my-1 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_table]:my-2 [&_table]:w-full [&_table]:border-collapse [&_table]:text-sm [&_th]:bg-[#14232E] [&_th]:px-3 [&_th]:py-1.5 [&_th]:text-left [&_th]:text-white [&_td]:border-b [&_td]:border-border [&_td]:px-3 [&_td]:py-1.5 [&_td]:align-top [&_hr]:my-4 [&_hr]:border-border";
 
 function AutoSummaryPanel({
   entries, statusOf, teamsOf,
@@ -2188,6 +2213,212 @@ function UsersView({ userId, flash }: { userId: string | null; flash: (m: string
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+/* ====================================================================== */
+/* Minute Meeting: meeting minutes + files; Q4 admins write, everyone reads */
+/* ====================================================================== */
+type Meeting = { id: string; title: string; meeting_date: string; content: string; updated_at: string };
+type MeetingFile = { id: string; meeting_id: string; path: string; name: string; mime: string | null; size: number | null; uploaded_by: string | null };
+
+function MeetingsView({ canEdit, userId, flash }: { canEdit: boolean; userId: string | null; flash: (m: string) => void }) {
+  const t = useT();
+  const supabase = useMemo(() => createClient(), []);
+  const [rows, setRows] = useState<Meeting[]>([]);
+  const [files, setFiles] = useState<MeetingFile[]>([]);
+  const [sel, setSel] = useState<string>("");
+  const [edit, setEdit] = useState<null | { id: string | null; title: string; date: string; content: string }>(null);
+  const [preview, setPreview] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  const load = useCallback(async () => {
+    const [m, f] = await Promise.all([
+      supabase.from("q4_meetings").select("id, title, meeting_date, content, updated_at").order("meeting_date", { ascending: false }),
+      supabase.from("q4_meeting_files").select("*").order("created_at"),
+    ]);
+    const list = (m.data ?? []) as Meeting[];
+    setRows(list);
+    setFiles((f.data ?? []) as MeetingFile[]);
+    setSel((cur) => (cur && list.some((x) => x.id === cur) ? cur : list[0]?.id ?? ""));
+  }, [supabase]);
+  useEffect(() => {
+    const id = setTimeout(load, 0);
+    const ch = supabase.channel("q4-meetings")
+      .on("postgres_changes", { event: "*", schema: "sop", table: "q4_meetings" }, () => load())
+      .on("postgres_changes", { event: "*", schema: "sop", table: "q4_meeting_files" }, () => load())
+      .subscribe();
+    return () => { clearTimeout(id); supabase.removeChannel(ch); };
+  }, [supabase, load]);
+
+  const cur = rows.find((x) => x.id === sel) ?? null;
+  const curFiles = files.filter((f) => f.meeting_id === sel);
+  const html = useMemo(() => (cur ? mdToHtml(cur.content) : ""), [cur]);
+  const today = new Date().toISOString().slice(0, 10);
+  const dateTh = (d: string) => { try { return new Date(`${d}T00:00:00`).toLocaleDateString("th-TH", { dateStyle: "long" }); } catch { return d; } };
+
+  async function save() {
+    if (!edit || !edit.title.trim() || !edit.date) return;
+    setBusy(true);
+    const row = { title: edit.title.trim(), meeting_date: edit.date, content: edit.content, updated_by: userId, updated_at: new Date().toISOString() };
+    const r = edit.id
+      ? await supabase.from("q4_meetings").update(row).eq("id", edit.id).select("id").single()
+      : await supabase.from("q4_meetings").insert({ ...row, created_by: userId }).select("id").single();
+    setBusy(false);
+    if (r.error) { flash(t("บันทึกไม่สำเร็จ: ", "Save failed: ") + r.error.message); return; }
+    flash(t("บันทึกการประชุมแล้ว", "Meeting saved"));
+    setEdit(null); setPreview(false);
+    await load();
+    setSel((r.data as { id: string }).id);
+  }
+  async function remove(m: Meeting) {
+    if (!confirm(t(`ลบ "${m.title}" ใช่ไหม`, `Delete "${m.title}"?`))) return;
+    const paths = files.filter((f) => f.meeting_id === m.id).map((f) => f.path);
+    const d = await supabase.from("q4_meetings").delete().eq("id", m.id);
+    if (d.error) { flash(t("ลบไม่สำเร็จ", "Delete failed")); return; }
+    if (paths.length) await supabase.storage.from("q4-files").remove(paths);
+    flash(t("ลบแล้ว", "Deleted")); load();
+  }
+  async function upload(list: FileList) {
+    if (!cur) return;
+    let ok = 0;
+    for (const file of Array.from(list)) {
+      if (file.size > 10 * 1024 * 1024) { flash(t(`${file.name} ใหญ่เกิน 10 MB`, `${file.name} is over 10 MB`)); continue; }
+      const path = `meetings/${cur.id}/${crypto.randomUUID()}-${file.name.replace(/[^\w.\-]+/g, "_").slice(-80)}`;
+      const up = await supabase.storage.from("q4-files").upload(path, file, { contentType: file.type || undefined });
+      if (up.error) { flash(t("อัปโหลดไม่สำเร็จ: ", "Upload failed: ") + up.error.message); continue; }
+      const ins = await supabase.from("q4_meeting_files").insert({ meeting_id: cur.id, path, name: file.name, mime: file.type || null, size: file.size, uploaded_by: userId });
+      if (ins.error) { await supabase.storage.from("q4-files").remove([path]); flash(ins.error.message); continue; }
+      ok++;
+    }
+    if (ok) { flash(t(`อัปโหลดแล้ว ${ok} ไฟล์`, `Uploaded ${ok}`)); load(); }
+  }
+  async function openF(f: MeetingFile, download: boolean) {
+    const r = await supabase.storage.from("q4-files").createSignedUrl(f.path, 3600, download ? { download: f.name } : undefined);
+    if (r.error || !r.data) { flash(t("เปิดไฟล์ไม่สำเร็จ", "Could not open")); return; }
+    if (download) window.location.assign(r.data.signedUrl); else window.open(r.data.signedUrl, "_blank", "noopener");
+  }
+  async function removeF(f: MeetingFile) {
+    if (!confirm(t(`ลบไฟล์ ${f.name} ใช่ไหม`, `Delete ${f.name}?`))) return;
+    const d = await supabase.from("q4_meeting_files").delete().eq("id", f.id);
+    if (d.error) { flash(t("ลบไม่สำเร็จ", "Delete failed")); return; }
+    await supabase.storage.from("q4-files").remove([f.path]);
+    load();
+  }
+
+  const inp = "w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm";
+  return (
+    <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
+      {/* ---------- meeting list ---------- */}
+      <aside className="h-fit space-y-2">
+        {canEdit && (
+          <button onClick={() => { setEdit({ id: null, title: "", date: today, content: "" }); setPreview(false); }}
+            className="w-full rounded-lg bg-[#E23744] px-3 py-2 text-sm font-semibold text-white">
+            + {t("เพิ่มการประชุม", "New meeting")}
+          </button>
+        )}
+        {!rows.length && <p className="text-sm text-muted">{t("ยังไม่มีบันทึกการประชุม", "No meetings yet")}</p>}
+        {rows.map((m) => {
+          const upcoming = m.meeting_date > today;
+          return (
+            <button key={m.id} onClick={() => { setSel(m.id); setEdit(null); }}
+              className={`w-full rounded-lg border px-3 py-2 text-left text-sm ${sel === m.id && !edit ? "border-[#14232E] bg-[#14232E] text-[#CFE2F3]" : "border-border bg-surface hover:border-brand-400"}`}>
+              <span className="block text-xs opacity-80">
+                {dateTh(m.meeting_date)}{upcoming ? ` · ${t("นัดหมาย", "Upcoming")}` : ""}
+              </span>
+              <span className="line-clamp-2 font-semibold">{m.title}</span>
+            </button>
+          );
+        })}
+      </aside>
+
+      {/* ---------- editor ---------- */}
+      {edit ? (
+        <div className={`${card} space-y-3`}>
+          <h2 className="text-lg font-bold">{edit.id ? t("แก้ไขบันทึกการประชุม", "Edit minutes") : t("การประชุมใหม่", "New meeting")}</h2>
+          <div className="grid gap-2 md:grid-cols-[minmax(0,1fr)_200px]">
+            <input className={inp} placeholder={t("หัวข้อการประชุม", "Title")} value={edit.title} onChange={(e) => setEdit({ ...edit, title: e.target.value })} />
+            <input className={inp} type="date" value={edit.date} onChange={(e) => setEdit({ ...edit, date: e.target.value })} />
+          </div>
+          <div className="flex gap-2 text-sm">
+            <button onClick={() => setPreview(false)} className={`rounded-md px-3 py-1 ${!preview ? "bg-[#14232E] text-[#CFE2F3]" : "border border-border"}`}>{t("เขียน", "Write")}</button>
+            <button onClick={() => setPreview(true)} className={`rounded-md px-3 py-1 ${preview ? "bg-[#14232E] text-[#CFE2F3]" : "border border-border"}`}>{t("ดูตัวอย่าง", "Preview")}</button>
+          </div>
+          {preview ? (
+            <div className={proseCls} dangerouslySetInnerHTML={{ __html: mdToHtml(edit.content) }} />
+          ) : (
+            <>
+              <textarea className={`${inp} min-h-[420px] font-mono text-[13px] leading-relaxed`} value={edit.content}
+                onChange={(e) => setEdit({ ...edit, content: e.target.value })}
+                placeholder={t("วางเนื้อหาสรุปการประชุม หรือวาระการประชุมครั้งหน้า", "Paste the minutes or next meeting agenda")} />
+              <p className="text-xs text-muted">
+                {t("รูปแบบ: ## หัวข้อ · ### หัวข้อย่อย · - รายการ · 1. ลำดับ · **ตัวหนา** · | ตาราง | ตาราง | · --- เส้นคั่น", "Format: ## heading · - bullet · 1. numbered · **bold** · | table |")}
+              </p>
+            </>
+          )}
+          <div className="flex gap-2">
+            <button disabled={busy || !edit.title.trim()} onClick={save} className="rounded-lg bg-[#14232E] px-4 py-2 text-sm font-semibold text-[#CFE2F3] disabled:opacity-50">
+              {busy ? t("กำลังบันทึก…", "Saving…") : t("บันทึก", "Save")}
+            </button>
+            <button onClick={() => { setEdit(null); setPreview(false); }} className="rounded-lg border border-border px-4 py-2 text-sm font-semibold">{t("ยกเลิก", "Cancel")}</button>
+          </div>
+          {!edit.id && <p className="text-xs text-muted">{t("แนบไฟล์ (PDF / สไลด์ / รูป) ได้หลังกดบันทึก", "Attach files after saving")}</p>}
+        </div>
+      ) : cur ? (
+        /* ---------- viewer ---------- */
+        <div className={card}>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-sm text-muted">{dateTh(cur.meeting_date)}{cur.meeting_date > today ? ` · ${t("การประชุมครั้งหน้า", "Next meeting")}` : ""}</p>
+              <h2 className="text-xl font-extrabold">{cur.title}</h2>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button onClick={() => printSummary(cur.title, dateTh(cur.meeting_date), html)} className="rounded-lg border border-border px-3 py-2 text-sm font-semibold">
+                {t("พิมพ์ / บันทึก PDF", "Print / PDF")}
+              </button>
+              {canEdit && (
+                <>
+                  <button onClick={() => { setEdit({ id: cur.id, title: cur.title, date: cur.meeting_date, content: cur.content }); setPreview(false); }}
+                    className="rounded-lg bg-[#14232E] px-3 py-2 text-sm font-semibold text-[#CFE2F3]">{t("แก้ไข", "Edit")}</button>
+                  <button onClick={() => remove(cur)} className="rounded-lg border border-border px-3 py-2 text-sm font-semibold text-danger">{t("ลบ", "Delete")}</button>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-3 rounded-lg border border-dashed border-border p-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="text-xs font-semibold text-muted">📎 {t("ไฟล์แนบ", "Attachments")} ({curFiles.length})</span>
+              {canEdit && (
+                <label className="cursor-pointer rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-semibold hover:bg-surface-2">
+                  + {t("อัปโหลด PDF / สไลด์ / รูป", "Upload")}
+                  <input type="file" multiple className="hidden" accept="image/*,application/pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx"
+                    onChange={(e) => { if (e.target.files?.length) upload(e.target.files); e.target.value = ""; }} />
+                </label>
+              )}
+            </div>
+            {curFiles.length > 0 && (
+              <ul className="mt-1.5 space-y-1">
+                {curFiles.map((f) => (
+                  <li key={f.id} className="flex flex-wrap items-center gap-2 text-xs">
+                    <span>{f.mime?.startsWith("image/") ? "🖼️" : "📄"}</span>
+                    <button onClick={() => openF(f, false)} className="max-w-[320px] truncate font-semibold text-brand-600 hover:underline">{f.name}</button>
+                    <button onClick={() => openF(f, true)} className="rounded border border-border px-1.5 py-0.5 hover:bg-surface-2">{t("ดาวน์โหลด", "Download")}</button>
+                    {canEdit && <button onClick={() => removeF(f)} className="rounded border border-border px-1.5 py-0.5 text-danger hover:bg-surface-2">{t("ลบ", "Delete")}</button>}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {cur.content.trim()
+            ? <div className={proseCls} dangerouslySetInnerHTML={{ __html: html }} />
+            : <p className="mt-3 text-sm text-muted">{t("ยังไม่มีเนื้อหา", "No content yet")}</p>}
+        </div>
+      ) : (
+        <div className="rounded-xl border border-dashed border-border px-4 py-12 text-center text-muted">{t("เลือกการประชุมจากรายการด้านซ้าย", "Pick a meeting")}</div>
+      )}
     </div>
   );
 }
