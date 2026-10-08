@@ -6,7 +6,7 @@ import { NextResponse, type NextRequest } from "next/server";
 const Q4_MODE = process.env.NEXT_PUBLIC_APP_MODE === "q4";
 
 // Paths that do NOT require a logged-in user.
-const PUBLIC_PREFIXES = ["/login", "/auth", "/_next", "/favicon", "/icon", "/manifest"];
+const PUBLIC_PREFIXES = ["/login", "/auth", "/_next", "/favicon", "/icon", "/manifest", "/api/q4/register"];
 
 function isPublic(pathname: string) {
   return PUBLIC_PREFIXES.some((p) => pathname === p || pathname.startsWith(p));
