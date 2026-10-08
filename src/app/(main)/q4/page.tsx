@@ -20,6 +20,7 @@ export default async function Q4Page({
       initialTab={tab}
       initialTeam={sp.team ?? ""}
       external={user?.app_metadata?.q4_external === true}
+      company={user?.app_metadata?.q4_company === true}
     />
   );
 }

@@ -33,13 +33,18 @@ const short = (cat: string) => cat.split(" / ")[0];
 const UNASSIGNED = "__none";
 
 export default function Q4App({
-  userId, isAdmin, fullName, initialTab = "form", initialTeam = "", external = false,
-}: { userId: string | null; isAdmin: boolean; fullName: string; initialTab?: Tab; initialTeam?: string; external?: boolean }) {
+  userId, isAdmin, fullName, initialTab = "form", initialTeam = "", external = false, company = false,
+}: { userId: string | null; isAdmin: boolean; fullName: string; initialTab?: Tab; initialTeam?: string; external?: boolean; company?: boolean }) {
   const t = useT();
   const supabase = useMemo(() => createClient(), []);
 
   // External Support members (invited by e-mail) only get Summary / Presentation / Support team
-  const [tab, setTab] = useState<Tab>(external && !["summary", "present", "team"].includes(initialTab) ? "team" : initialTab);
+  // Access levels: Scheduling staff = all tabs · company e-mail = all but the form · other invited = 3 tabs
+  const limited = external && !company;
+  const canSubmit = !external;
+  const [tab, setTab] = useState<Tab>(
+    limited && !["summary", "present", "team"].includes(initialTab) ? "team"
+      : !canSubmit && initialTab === "form" ? "list" : initialTab);
   const [entries, setEntries] = useState<Q4Entry[]>([]);
   const [reviews, setReviews] = useState<Record<string, Q4Review>>({});
   const [plans, setPlans] = useState<Record<string, Q4Plan>>({});
@@ -468,7 +473,7 @@ export default function Q4App({
             return (
               <button
                 key={b}
-                onClick={() => { if (external) return; setFBranch(b); setTab("list"); }}
+                onClick={() => { if (limited) return; setFBranch(b); setTab("list"); }}
                 className={`flex min-h-[60px] flex-col justify-between rounded-md p-2 text-left transition ${
                   s ? "bg-[#CFE2F3] text-[#14232E]" : "border border-dashed border-[#3A5163] text-[#7F97AA] hover:border-[#CFE2F3]"
                 } ${s?.hi ? "shadow-[inset_0_-3px_0_#E23744]" : ""}`}
@@ -489,7 +494,7 @@ export default function Q4App({
           ["summary", t("สรุปผล", "Summary"), PieChart],
           ["present", t("Presentation", "Presentation"), Presentation],
           ...((isAdmin || myTeams.length || external) ? [["team", t("ทีม Support", "Support team"), Users] as const] : []),
-        ] as const).filter(([k]) => !external || k === "summary" || k === "present" || k === "team").map(([k, label, Icon]) => (
+        ] as const).filter(([k]) => (k !== "form" || canSubmit) && (!limited || k === "summary" || k === "present" || k === "team")).map(([k, label, Icon]) => (
           <button
             key={k}
             onClick={() => setTab(k)}
@@ -539,7 +544,7 @@ export default function Q4App({
         <MyTeamView
           isAdmin={isAdmin} myTeams={myTeams} members={teamMembers} userId={userId}
           entries={entries} statusOf={statusOf} teamsOf={teamsOf} notes={notes} tasks={tasks} onSaveTask={saveTask}
-          files={files} fileOps={fileOps} external={external}
+          files={files} fileOps={fileOps} external={limited}
           onAdd={addTeamMember} onRemove={removeTeamMember}
           onOpenList={(team) => { setFTeam(team); setTab("list"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
         />
