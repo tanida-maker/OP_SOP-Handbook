@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { FileText } from "lucide-react";
 import LoginForm from "./LoginForm";
+import CompanyAccess from "./CompanyAccess";
 import Logo from "@/components/Logo";
 import T from "@/components/T";
 
@@ -57,6 +58,8 @@ export default function LoginPage() {
           </Suspense>
         </div>
 
+        {Q4_MODE && <CompanyAccess />}
+
         {Q4_MODE && (
           <div className="mt-4 rounded-2xl border border-border bg-surface p-5 text-sm shadow-sm">
             <p className="mb-2 font-bold text-text">
@@ -92,7 +95,7 @@ export default function LoginPage() {
             </p>
             <ol className="list-decimal space-y-1.5 pl-5 text-muted">
               <li>
-                <T th="เข้าสู่ระบบด้วย Google (Gmail / อีเมลบริษัท) หรือกด “ส่งลิงก์เข้าสู่ระบบทางอีเมล” ด้วยอีเมลที่หัวหน้าทีมเพิ่มไว้ ไม่ต้องมีบัญชีระบบตารางงาน แล้วเปิดแท็บ “ทีม Support”" en="Sign in with Google (Gmail / company e-mail) or the e-mail login link, using the address your team lead added. No Scheduling account needed. Then open the “Support team” tab" />
+                <T th="อีเมลบริษัท: เปิดใช้งานในกล่องด้านบนได้เอง · Gmail / ภายนอก: ให้หัวหน้าทีมเพิ่มอีเมลก่อน แล้วเข้าสู่ระบบด้วย Google หรือลิงก์ทางอีเมล และเปิดแท็บ “ทีม Support”" en="Sign in with Google (Gmail / company e-mail) or the e-mail login link, using the address your team lead added. No Scheduling account needed. Then open the “Support team” tab" />
               </li>
               <li>
                 <T th="เลือกทีมของคุณ ดูงานที่มอบหมาย เรียงงาน High ก่อน" en="Pick your team to see its assigned issues, High first" />
