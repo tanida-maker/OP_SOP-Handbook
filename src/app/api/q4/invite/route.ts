@@ -39,7 +39,9 @@ export async function POST(req: Request) {
   if (found.data) userId = found.data as string;
   else {
     // app_metadata (not user-editable) marks the account as an external Support member: Q4 only
-    const c = await admin.auth.admin.createUser({ email, email_confirm: true, app_metadata: { q4_external: true, invited_to: team } });
+    const domains = (process.env.Q4_COMPANY_DOMAINS || "airportels.asia,airportels.co").split(",").map((d) => d.trim().toLowerCase());
+    const company = domains.includes(email.split("@")[1] ?? "");
+    const c = await admin.auth.admin.createUser({ email, email_confirm: true, app_metadata: { q4_external: true, q4_company: company, invited_to: team } });
     if (c.error || !c.data.user) return NextResponse.json({ error: c.error?.message ?? "create_failed" }, { status: 500 });
     userId = c.data.user.id;
     created = true;
