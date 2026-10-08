@@ -21,8 +21,11 @@ export async function POST(req: Request) {
   if (!team || !Q4_TEAMS.includes(team)) return NextResponse.json({ error: "bad_team" }, { status: 400 });
 
   if (!isAdmin) {
-    const m = await supabase.schema("sop").rpc("q4_is_team_member", { p_team: team });
-    if (m.error || m.data !== true) return NextResponse.json({ error: "not_allowed" }, { status: 403 });
+    const [qa, m] = await Promise.all([
+      supabase.schema("sop").rpc("q4_admin"),
+      supabase.schema("sop").rpc("q4_is_team_member", { p_team: team }),
+    ]);
+    if (qa.data !== true && m.data !== true) return NextResponse.json({ error: "not_allowed" }, { status: 403 });
   }
 
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
