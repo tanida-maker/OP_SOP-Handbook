@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ClipboardList, Download, ListChecks, Loader2, PieChart, Presentation, Radio, Users } from "lucide-react";
+import { UserCog, ClipboardList, Download, ListChecks, Loader2, PieChart, Presentation, Radio, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/components/LanguageProvider";
 import {
@@ -10,7 +10,8 @@ import {
   type Q4Entry, type Q4Plan, type Q4Priority, type Q4Review, type Q4TeamMember, type Q4Analysis, type Q4Task, type Q4Attachment,
 } from "@/lib/q4";
 
-type Tab = "form" | "list" | "summary" | "present" | "team";
+type Tab = "form" | "list" | "summary" | "present" | "team" | "users";
+type Q4Role = "review" | "assign" | "edit" | null;
 type Draft = {
   branch: string; service_area: string; category: string; period: string;
   issue: string; impact: string; support: string; prep: string; priority: Q4Priority | ""; notes: string;
@@ -33,14 +34,18 @@ const short = (cat: string) => cat.split(" / ")[0];
 const UNASSIGNED = "__none";
 
 export default function Q4App({
-  userId, isAdmin, fullName, initialTab = "form", initialTeam = "", external = false, company = false,
-}: { userId: string | null; isAdmin: boolean; fullName: string; initialTab?: Tab; initialTeam?: string; external?: boolean; company?: boolean }) {
+  userId, isAdmin: sopAdmin, fullName, initialTab = "form", initialTeam = "", external = false, company = false, role = null,
+}: { userId: string | null; isAdmin: boolean; fullName: string; initialTab?: Tab; initialTeam?: string; external?: boolean; company?: boolean; role?: Q4Role }) {
+  // Q4 roles (User Management): edit = Q4 admin · assign = assign teams / status · review = see all, read-only
+  const isAdmin = sopAdmin || role === "edit";
+  const canAssign = isAdmin || role === "assign";
+  const seesAll = canAssign || role === "review";
   const t = useT();
   const supabase = useMemo(() => createClient(), []);
 
   // External Support members (invited by e-mail) only get Summary / Presentation / Support team
   // Access levels: Scheduling staff = all tabs · company e-mail = all but the form · other invited = 3 tabs
-  const limited = external && !company;
+  const limited = external && !company && !role;
   const canSubmit = !external;
   const [tab, setTab] = useState<Tab>(
     limited && !["summary", "present", "team"].includes(initialTab) ? "team"
@@ -98,13 +103,13 @@ export default function Q4App({
       mine = (tm.data ?? []).map((x) => (x as { team: string }).team);
       setMyTeams(mine);
     }
-    if (isAdmin || mine.length) {
+    if (seesAll || mine.length) {
       // admins get every team, team members only their own teams (filtered in SQL)
       const lm = await supabase.rpc("q4_list_team_members");
       setTeamMembers((lm.data ?? []) as Q4TeamMember[]);
     }
     setLoading(false);
-  }, [supabase, userId, isAdmin]);
+  }, [supabase, userId, seesAll]);
 
   const reloadTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
@@ -493,7 +498,8 @@ export default function Q4App({
           ["list", `${t("รายการทั้งหมด", "All issues")}${entries.length ? ` (${entries.length})` : ""}`, ListChecks],
           ["summary", t("สรุปผล", "Summary"), PieChart],
           ["present", t("Presentation", "Presentation"), Presentation],
-          ...((isAdmin || myTeams.length || external) ? [["team", t("ทีม Support", "Support team"), Users] as const] : []),
+          ...((seesAll || myTeams.length || external) ? [["team", t("ทีม Support", "Support team"), Users] as const] : []),
+          ...(isAdmin ? [["users", t("ผู้ใช้งาน Q4", "Q4 users"), UserCog] as const] : []),
         ] as const).filter(([k]) => (k !== "form" || canSubmit) && (!limited || k === "summary" || k === "present" || k === "team")).map(([k, label, Icon]) => (
           <button
             key={k}
@@ -523,7 +529,7 @@ export default function Q4App({
       )}
       {tab === "list" && (
         <ListView
-          entries={entries} reviews={reviews} loading={loading} userId={userId} isAdmin={isAdmin}
+          entries={entries} reviews={reviews} loading={loading} userId={userId} isAdmin={isAdmin} canAssign={canAssign}
           statusOf={statusOf} teamsOf={teamsOf} fBranch={fBranch} setFBranch={setFBranch} fTeam={fTeam} setFTeam={setFTeam}
           onEdit={startEdit} onDelete={remove} onReview={saveReview}
           myTeams={myTeams} onTeamReview={saveTeamReview} notes={notes} tasks={tasks}
@@ -540,9 +546,10 @@ export default function Q4App({
       )}
 
       {tab === "present" && <PresentationView />}
+      {tab === "users" && isAdmin && <UsersView userId={userId} flash={flash} />}
       {tab === "team" && (
         <MyTeamView
-          isAdmin={isAdmin} myTeams={myTeams} members={teamMembers} userId={userId}
+          isAdmin={isAdmin} seesAll={seesAll} canAssign={canAssign} myTeams={myTeams} members={teamMembers} userId={userId}
           entries={entries} statusOf={statusOf} teamsOf={teamsOf} notes={notes} tasks={tasks} onSaveTask={saveTask}
           files={files} fileOps={fileOps} external={limited}
           onAdd={addTeamMember} onRemove={removeTeamMember}
@@ -716,13 +723,13 @@ function FormView({
 /* List                                                                   */
 /* ====================================================================== */
 function ListView({
-  entries, reviews, loading, userId, isAdmin, statusOf, teamsOf, fBranch, setFBranch, fTeam, setFTeam, onEdit, onDelete, onReview,
+  entries, reviews, loading, userId, isAdmin, canAssign, statusOf, teamsOf, fBranch, setFBranch, fTeam, setFTeam, onEdit, onDelete, onReview,
   myTeams, onTeamReview, notes, tasks,
 }: {
   tasks: Record<string, Record<string, Q4Task>>;
   myTeams: string[]; onTeamReview: (id: string, status: string, teams: string[], updatedAs: string, teamNotes: Record<string, string>) => void;
   notes: Record<string, Record<string, string>>;
-  entries: Q4Entry[]; reviews: Record<string, Q4Review>; loading: boolean; userId: string | null; isAdmin: boolean;
+  entries: Q4Entry[]; reviews: Record<string, Q4Review>; loading: boolean; userId: string | null; isAdmin: boolean; canAssign: boolean;
   statusOf: (e: Q4Entry) => string; teamsOf: (e: Q4Entry) => string[];
   fBranch: string; setFBranch: (b: string) => void; fTeam: string; setFTeam: (t: string) => void;
   onEdit: (e: Q4Entry) => void; onDelete: (e: Q4Entry) => void;
@@ -800,7 +807,7 @@ function ListView({
         </label>
       </div>
 
-      {!isAdmin && myTeams.length > 0 && (
+      {!canAssign && myTeams.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[#E23744]/30 bg-[#E23744]/5 px-4 py-3 text-sm">
           <span>{t("คุณเป็นผู้รับผิดชอบทีม", "You handle team")}</span>
           {myTeams.map((tm) => {
@@ -836,8 +843,8 @@ function ListView({
         <div className="space-y-3">
           {rows.map((e) => (
             <TagCard key={`${e.id}-${reviews[e.id]?.updated_at ?? ""}-${JSON.stringify(notes[e.id] ?? {})}`} teamNotes={notes[e.id] ?? {}} teamTasks={tasks[e.id] ?? {}} e={e} r={reviews[e.id]} status={statusOf(e)}
-              canEdit={!!userId && e.created_by === userId} canDelete={isAdmin} isAdmin={isAdmin}
-              teams={teamsOf(e)} canTeamReview={!isAdmin && teamsOf(e).some((x) => myTeams.includes(x))}
+              canEdit={!!userId && e.created_by === userId} canDelete={isAdmin} isAdmin={canAssign}
+              teams={teamsOf(e)} canTeamReview={!canAssign && teamsOf(e).some((x) => myTeams.includes(x))}
               myTeams={myTeams}
               onEdit={() => onEdit(e)} onDelete={() => onDelete(e)} onReview={onReview} onTeamReview={onTeamReview} />
           ))}
@@ -1857,18 +1864,20 @@ function PresentationView() {
 /* My team: team members manage their own team (add people by e-mail)     */
 /* ====================================================================== */
 function MyTeamView({
-  isAdmin, myTeams, members, userId, entries, statusOf, teamsOf, notes, tasks, onSaveTask, onAdd, onRemove, onOpenList,
+  isAdmin, seesAll, canAssign, myTeams, members, userId, entries, statusOf, teamsOf, notes, tasks, onSaveTask, onAdd, onRemove, onOpenList,
   files, fileOps, external,
 }: {
   files: Record<string, Q4Attachment[]>; fileOps: FileOps; external: boolean;
-  isAdmin: boolean; myTeams: string[]; members: Q4TeamMember[]; userId: string | null;
+  isAdmin: boolean; seesAll: boolean; canAssign: boolean; myTeams: string[]; members: Q4TeamMember[]; userId: string | null;
   entries: Q4Entry[]; statusOf: (e: Q4Entry) => string; teamsOf: (e: Q4Entry) => string[];
   notes: Record<string, Record<string, string>>; tasks: Record<string, Record<string, Q4Task>>;
   onSaveTask: (id: string, team: string, status: string, addTeams: string[], note: string, assigneeEmail: string) => Promise<boolean>;
   onAdd: (email: string, team: string) => void; onRemove: (m: Q4TeamMember) => void; onOpenList: (team: string) => void;
 }) {
   const t = useT();
-  const teams = isAdmin ? Q4_TEAMS : myTeams;
+  const teams = seesAll ? Q4_TEAMS : myTeams;
+  const canWork = (tm: string) => canAssign || myTeams.includes(tm);
+  const canManage = (tm: string) => isAdmin || myTeams.includes(tm);
   const [team, setTeam] = useState(teams[0] ?? "");
   const [draft, setDraft] = useState("");
   const [showClosed, setShowClosed] = useState(false);
@@ -1914,7 +1923,7 @@ function MyTeamView({
             <TeamTaskRow key={`${e.id}-${statusOf(e)}-${notes[e.id]?.[team] ?? ""}-${tasks[e.id]?.[team]?.assignee_email ?? ""}-${teamsOf(e).join("|")}`}
               e={e} team={team} status={statusOf(e)} teams={teamsOf(e)} note={notes[e.id]?.[team] ?? ""}
               assignee={tasks[e.id]?.[team]?.assignee_email ?? ""} members={list} onSave={onSaveTask}
-              files={files[e.id] ?? []} fileOps={fileOps} userId={userId} isAdmin={isAdmin} />
+              files={files[e.id] ?? []} fileOps={fileOps} userId={userId} isAdmin={isAdmin} readOnly={!canWork(team)} />
           ))}
           {!external && (
             <button onClick={() => onOpenList(team)} className="text-sm font-semibold text-brand-600 hover:underline">
@@ -1935,19 +1944,19 @@ function MyTeamView({
                     <b className="block truncate">{m.full_name || m.email}{m.user_id === userId ? ` (${t("คุณ", "you")})` : ""}</b>
                     {m.full_name && <span className="block truncate text-xs text-muted">{m.email}</span>}
                   </span>
-                  {m.user_id !== userId && (
+                  {m.user_id !== userId && canManage(team) && (
                     <button onClick={() => onRemove(m)} className="shrink-0 rounded-md border border-border px-2 py-0.5 text-xs text-danger hover:bg-surface-2">{t("นำออก", "Remove")}</button>
                   )}
                 </li>
               ))}
             </ul>
           )}
-          <div className="flex gap-2">
+          {canManage(team) && <div className="flex gap-2">
             <input className="min-w-0 flex-1 rounded-lg border border-border bg-surface px-2.5 py-2 text-sm" type="email"
               placeholder={t("อีเมลที่ใช้ Login", "Login e-mail")} value={draft} onChange={(e) => setDraft(e.target.value)} />
             <button disabled={!draft.trim()} onClick={() => { onAdd(draft.trim(), team); setDraft(""); }}
               className="rounded-lg bg-[#14232E] px-3 py-2 text-sm font-semibold text-[#CFE2F3] disabled:opacity-50">{t("เพิ่ม", "Add")}</button>
-          </div>
+          </div>}
         </aside>
       </div>
     </div>
@@ -1955,9 +1964,9 @@ function MyTeamView({
 }
 
 function TeamTaskRow({
-  e, team, status, teams, note, assignee, members, onSave, files, fileOps, userId, isAdmin,
+  e, team, status, teams, note, assignee, members, onSave, files, fileOps, userId, isAdmin, readOnly,
 }: {
-  files: Q4Attachment[]; fileOps: FileOps; userId: string | null; isAdmin: boolean;
+  files: Q4Attachment[]; fileOps: FileOps; userId: string | null; isAdmin: boolean; readOnly: boolean;
   e: Q4Entry; team: string; status: string; teams: string[]; note: string; assignee: string; members: Q4TeamMember[];
   onSave: (id: string, team: string, status: string, addTeams: string[], note: string, assigneeEmail: string) => Promise<boolean>;
 }) {
@@ -2006,13 +2015,15 @@ function TeamTaskRow({
           })}
         </div>
       </details>
-      <AttachmentBox files={files} fileOps={fileOps} entryId={e.id} team={team} userId={userId} isAdmin={isAdmin} canUpload />
+      <AttachmentBox files={files} fileOps={fileOps} entryId={e.id} team={team} userId={userId} isAdmin={isAdmin} canUpload={!readOnly} />
+      {readOnly ? <p className="mt-2 text-right text-xs text-muted">{t("ดูอย่างเดียว (Review)", "Read-only (Review)")}</p> : (
       <div className="mt-2 flex justify-end">
         <button disabled={busy} onClick={async () => { setBusy(true); await onSave(e.id, team, st, add, nt, who); setBusy(false); }}
           className="rounded-md bg-[#14232E] px-4 py-1.5 text-sm font-semibold text-[#CFE2F3] disabled:opacity-50">
           {busy ? t("กำลังบันทึก", "Saving") : t("บันทึก", "Save")}
         </button>
       </div>
+      )}
     </div>
   );
 }
@@ -2064,6 +2075,119 @@ function AttachmentBox({
           ))}
         </ul>
       )}
+    </div>
+  );
+}
+
+/* ====================================================================== */
+/* Q4 User Management (Q4 admins): people who see many teams, by e-mail   */
+/* ====================================================================== */
+type Q4RoleRow = { user_id: string; email: string; name: string | null; role: "review" | "assign" | "edit"; added_at: string };
+const ROLE_INFO: Record<string, { th: string; en: string; desc: string }> = {
+  review: { th: "Review", en: "Review", desc: "ดูทุกแท็บ ทุกทีม (ยกเว้นฟอร์ม) อ่านอย่างเดียว" },
+  assign: { th: "Assign Team", en: "Assign Team", desc: "Review + มอบหมายทีม อัปเดตสถานะ และ Central action ได้ทุกเรื่อง" },
+  edit: { th: "Edit", en: "Edit", desc: "แก้ไขได้ทั้งหมดแบบ Admin ของ Q4 รวมจัดการผู้ใช้" },
+};
+
+function UsersView({ userId, flash }: { userId: string | null; flash: (m: string) => void }) {
+  const t = useT();
+  const supabase = useMemo(() => createClient(), []);
+  const [rows, setRows] = useState<Q4RoleRow[]>([]);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [role, setRole] = useState<"review" | "assign" | "edit">("review");
+  const [busy, setBusy] = useState(false);
+
+  const load = useCallback(async () => {
+    const r = await supabase.from("q4_roles").select("user_id, email, name, role, added_at").order("added_at");
+    setRows((r.data ?? []) as Q4RoleRow[]);
+  }, [supabase]);
+  useEffect(() => { const id = setTimeout(load, 0); return () => clearTimeout(id); }, [load]);
+
+  async function add() {
+    setBusy(true);
+    try {
+      const res = await fetch("/api/q4/users", {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), name: name.trim(), role }),
+      });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        flash(j.error === "not_allowed" ? t("เฉพาะ Admin ของ Q4", "Q4 admins only")
+          : j.error === "missing_service_key" ? t("ยังไม่ได้ตั้งค่า SUPABASE_SERVICE_ROLE_KEY", "Service key missing")
+          : t("เพิ่มไม่สำเร็จ: ", "Failed: ") + (j.error ?? res.status));
+      } else {
+        flash(j.created ? t(`เพิ่ม ${email} แล้ว (บัญชีใหม่ ใช้ Google หรือลิงก์ทางอีเมลเข้าได้เลย)`, `Added ${email} (new account)`) : t(`ตั้งสิทธิ์ ${email} แล้ว`, `Role set for ${email}`));
+        setEmail(""); setName(""); load();
+      }
+    } finally { setBusy(false); }
+  }
+  async function change(r: Q4RoleRow, next: string) {
+    const u = await supabase.from("q4_roles").update({ role: next }).eq("user_id", r.user_id);
+    if (u.error) flash(t("เปลี่ยนสิทธิ์ไม่สำเร็จ", "Change failed")); else { flash(t("เปลี่ยนสิทธิ์แล้ว", "Role changed")); load(); }
+  }
+  async function remove(r: Q4RoleRow) {
+    if (!confirm(t(`ยกเลิกสิทธิ์ของ ${r.name || r.email} ใช่ไหม`, `Remove ${r.email}?`))) return;
+    const d = await supabase.from("q4_roles").delete().eq("user_id", r.user_id);
+    if (d.error) flash(t("ลบไม่สำเร็จ", "Remove failed")); else { flash(t("ยกเลิกสิทธิ์แล้ว", "Removed")); load(); }
+  }
+
+  const inp = "rounded-lg border border-border bg-surface px-3 py-2 text-sm";
+  return (
+    <div className="space-y-4">
+      <div className={card}>
+        <h2 className="text-lg font-bold">{t("ผู้ใช้งาน Q4 (ไม่ต้องมีบัญชีระบบตารางงาน)", "Q4 users (no Scheduling account needed)")}</h2>
+        <p className="mb-3 text-sm text-muted">{t("สำหรับคนที่ต้องเห็นหลายทีม เช่น CEO / MD / BD / Management ใช้ Gmail หรืออีเมลบริษัทก็ได้ เมื่อเพิ่มแล้วเข้าสู่ระบบด้วย Google หรือลิงก์ทางอีเมลได้ทันที", "For people who need to see many teams (CEO, MD, BD, Management). Gmail or company e-mail.")}</p>
+        <div className="grid gap-2 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_200px_auto]">
+          <input className={inp} type="email" placeholder={t("อีเมล (Gmail หรืออีเมลบริษัท)", "E-mail")} value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className={inp} placeholder={t("ชื่อ / ตำแหน่ง เช่น คุณเอ (CEO)", "Name / title")} value={name} onChange={(e) => setName(e.target.value)} />
+          <select className={inp} value={role} onChange={(e) => setRole(e.target.value as "review" | "assign" | "edit")}>
+            {Object.entries(ROLE_INFO).map(([k, v]) => <option key={k} value={k}>{v.th}</option>)}
+          </select>
+          <button disabled={busy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())} onClick={add}
+            className="rounded-lg bg-[#14232E] px-4 py-2 text-sm font-semibold text-[#CFE2F3] disabled:opacity-50">
+            {busy ? t("กำลังเพิ่ม…", "Adding…") : t("เพิ่ม", "Add")}
+          </button>
+        </div>
+        <ul className="mt-3 grid gap-1 text-xs text-muted md:grid-cols-3">
+          {Object.entries(ROLE_INFO).map(([k, v]) => <li key={k}><b className="text-text">{v.th}:</b> {v.desc}</li>)}
+        </ul>
+      </div>
+
+      <div className={card}>
+        <h3 className="mb-2 font-bold">{t("รายชื่อ", "Users")} ({rows.length})</h3>
+        {!rows.length ? <p className="text-sm text-muted">{t("ยังไม่มีผู้ใช้", "No users yet")}</p> : (
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-sm">
+              <thead><tr>
+                {[t("ชื่อ", "Name"), t("อีเมล", "E-mail"), "Role", t("เพิ่มเมื่อ", "Added"), ""].map((h) => (
+                  <th key={h} className="border-b border-border px-2.5 py-2 text-left text-xs font-semibold text-muted">{h}</th>
+                ))}
+              </tr></thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr key={r.user_id}>
+                    <td className="border-b border-border px-2.5 py-2 font-semibold">{r.name || "-"}</td>
+                    <td className="border-b border-border px-2.5 py-2 text-muted">{r.email}</td>
+                    <td className="border-b border-border px-2.5 py-2">
+                      <select className="rounded-md border border-border bg-surface px-2 py-1 text-sm" value={r.role}
+                        disabled={r.user_id === userId} onChange={(e) => change(r, e.target.value)}>
+                        {Object.entries(ROLE_INFO).map(([k, v]) => <option key={k} value={k}>{v.th}</option>)}
+                      </select>
+                    </td>
+                    <td className="border-b border-border px-2.5 py-2 text-xs text-muted">{fmt(r.added_at)}</td>
+                    <td className="border-b border-border px-2.5 py-2 text-right">
+                      {r.user_id !== userId && (
+                        <button onClick={() => remove(r)} className="rounded-md border border-border px-2 py-0.5 text-xs text-danger hover:bg-surface-2">{t("ยกเลิกสิทธิ์", "Remove")}</button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

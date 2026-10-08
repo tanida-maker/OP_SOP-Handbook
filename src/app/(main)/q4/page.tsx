@@ -9,9 +9,11 @@ export default async function Q4Page({
 }: {
   searchParams: Promise<{ tab?: string; team?: string }>;
 }) {
-  const { user, isAdmin, fullName } = await getSessionUser();
+  const { user, isAdmin, fullName, supabase } = await getSessionUser();
+  const r = user ? await supabase.schema("sop").rpc("q4_my_role") : null;
+  const role = (r && !r.error && typeof r.data === "string" ? r.data : null) as "review" | "assign" | "edit" | null;
   const sp = await searchParams;
-  const tab = sp.tab === "list" || sp.tab === "summary" || sp.tab === "present" || sp.tab === "team" ? sp.tab : "form";
+  const tab = sp.tab === "list" || sp.tab === "summary" || sp.tab === "present" || sp.tab === "team" || sp.tab === "users" ? sp.tab : "form";
   return (
     <Q4App
       userId={user?.id ?? null}
@@ -21,6 +23,7 @@ export default async function Q4Page({
       initialTeam={sp.team ?? ""}
       external={user?.app_metadata?.q4_external === true}
       company={user?.app_metadata?.q4_company === true}
+      role={role}
     />
   );
 }
